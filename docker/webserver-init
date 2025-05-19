@@ -20,7 +20,9 @@ chown ${WSUSER} ${DBROOT}/media
 chown ${WSUSER} ${SSCAPEDIR}/sscape/static/assets
 chown ${WSUSER} ${SSCAPEDIR}/sscape/static/examples
 chown ${WSUSER} ${SSCAPEDIR}/sscape/static/bootstrap
-chmod -R u=rwX,go=rX ${SSCAPEDIR}/sscape/static/examples/ ${SSCAPEDIR}/sscape/static/assets ${SSCAPEDIR}/sscape/static/bootstrap
+chmod -R u=rwX,go=rX ${SSCAPEDIR}/sscape/static/examples
+chmod -R u=rwX,go=rX ${SSCAPEDIR}/sscape/static/assets
+chmod -R u=rwX,go=rX ${SSCAPEDIR}/sscape/static/bootstrap
 
 OPENCV_FILE="$SSCAPEDIR/sscape/static/assets/opencv.js"
 if [[ -f "$OPENCV_FILE" ]]; then
