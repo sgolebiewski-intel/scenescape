@@ -133,15 +133,15 @@ RUN : \
 COPY --chown=${USER_ID} editor/js $SCENESCAPE_HOME/sscape/static/js/editor
 COPY --chown=${USER_ID} editor/images $SCENESCAPE_HOME/sscape/static/images
 COPY --chown=${USER_ID} editor/css $SCENESCAPE_HOME/sscape/static/css
-COPY --chown=${USER_ID} jslibs/assets $SCENESCAPE_HOME/sscape/static/assets
-COPY --chown=${USER_ID} jslibs/examples $SCENESCAPE_HOME/sscape/static/examples
-COPY --chown=${USER_ID} jslibs/bootstrap $SCENESCAPE_HOME/sscape/static/bootstrap
-RUN : \
-    ; chmod -R u=rwX,go=rX $SCENESCAPE_HOME/sscape/static/js/editor/ \
-    $SCENESCAPE_HOME/sscape/static/examples/ \
-    ; OPENCV_SHA=$(openssl dgst -sha256 -binary $SCENESCAPE_HOME/sscape/static/assets/opencv.js | openssl base64) \
-    ; sed -i "s|sha256-opencv|sha256-$OPENCV_SHA|g" /etc/apache2/sites-available/000-default.conf \
-    ;
+# COPY --chown=${USER_ID} jslibs/assets $SCENESCAPE_HOME/sscape/static/assets
+# COPY --chown=${USER_ID} jslibs/examples $SCENESCAPE_HOME/sscape/static/examples
+# COPY --chown=${USER_ID} jslibs/bootstrap $SCENESCAPE_HOME/sscape/static/bootstrap
+# RUN : \
+#     ; chmod -R u=rwX,go=rX $SCENESCAPE_HOME/sscape/static/js/editor/ \
+#     $SCENESCAPE_HOME/sscape/static/examples/ \
+#     ; OPENCV_SHA=$(openssl dgst -sha256 -binary $SCENESCAPE_HOME/sscape/static/assets/opencv.js | openssl base64) \
+#     ; sed -i "s|sha256-opencv|sha256-$OPENCV_SHA|g" /etc/apache2/sites-available/000-default.conf \
+#     ;
 
 ADD SceneScape.tar $SCENESCAPE_HOME/
 RUN : \

@@ -20,7 +20,7 @@ MEDIADIR=../media
 DOCSDIR=../docs
 DATASETS=../datasets
 USERVIDEODIR=../videos
-JSLIBDIR=jslibs
+JSLIBDIR=../sscape
 MQTTUSERS="percebro.auth=cameras controller.auth=scenectrl browser.auth=webuser calibration.auth=calibration"
 AUTHFILES=$(addprefix $(SECRETSDIR)/,$(shell echo $(MQTTUSERS) | sed -e 's/=[^ ]*//g'))
 CURL_FLAGS=--connect-timeout 5 --max-time 120 --retry 5 --retry-delay 0

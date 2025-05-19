@@ -17,6 +17,22 @@ echo Waiting for database
 
 mkdir -p ${DBROOT}/media
 chown ${WSUSER} ${DBROOT}/media
+chown ${WSUSER} ${SSCAPEDIR}/sscape/static/assets
+chown ${WSUSER} ${SSCAPEDIR}/sscape/static/examples
+chown ${WSUSER} ${SSCAPEDIR}/sscape/static/bootstrap
+chmod -R u=rwX,go=rX ${SSCAPEDIR}/sscape/static/examples/ ${SSCAPEDIR}/sscape/static/assets ${SSCAPEDIR}/sscape/static/bootstrap
+
+OPENCV_FILE="$SSCAPEDIR/sscape/static/assets/opencv.js"
+if [[ -f "$OPENCV_FILE" ]]; then
+  echo "Generating SHA256 for opencv.js..."
+  OPENCV_SHA=$(openssl dgst -sha256 -binary "$OPENCV_FILE" | openssl base64)
+  echo "Updating Apache config with new SHA..."
+  sed -i "s|sha256-opencv|sha256-$OPENCV_SHA|g" /etc/apache2/sites-available/000-default.conf
+else
+  echo "ERROR: $OPENCV_FILE not found!"
+  exit 1
+fi
+
 chmod a+rX ${DBROOT}/media
 mkdir -p ${SSCAPEDIR}/media
 chown www-data.www-data ${SSCAPEDIR}/media
