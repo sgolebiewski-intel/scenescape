@@ -127,7 +127,7 @@ RUN useradd -r -m -s /bin/bash $WSUSER && \
     chmod a+rX /home/$WSUSER
 
 # Copy Python environment from builder
-COPY --from=builder /usr/local/lib/python3.*/dist-packages /usr/local/lib/python3.*/dist-packages
+COPY --from=builder /usr/local/lib/python3.10/dist-packages /usr/local/lib/python3.10/dist-packages
 COPY --from=builder /tmp/sscape $SCENESCAPE_HOME/sscape
 COPY --from=builder /tmp/manage.py $SCENESCAPE_HOME/
 COPY --from=builder /usr/local/lib/python3.10/dist-packages/fast_geometry /usr/local/lib/python3.10/dist-packages/fast_geometry
