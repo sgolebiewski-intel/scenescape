@@ -26,15 +26,6 @@ MODEL_INSTALLER_LOG_FILE=$(BUILD_DIR)/$(IMAGE)-model-installer.log
 
 default: broker model-installer-img install-models secrets
 
-interface: Dockerfile-interface firefox-profile.tar geckodriver.tar.gz
-	env BUILDKIT_PROGRESS=plain \
-	  docker build $(REBUILDFLAGS) -f $< \
-	    --build-arg http_proxy=$(http_proxy) \
-	    --build-arg https_proxy=$(https_proxy) \
-	    --build-arg no_proxy=$(no_proxy) \
-	    --rm -t $(IMAGE)-interface:$(VERSION) .. -f ./Dockerfile-interface \
-	&& docker tag $(IMAGE)-interface:$(VERSION) $(IMAGE)-interface:latest
-
 broker: Dockerfile-broker
 	@echo "------- STARTING BUILD OF IMAGE: $(IMAGE)-broker:$(VERSION) -------"
 	@-env BUILDKIT_PROGRESS=plain \

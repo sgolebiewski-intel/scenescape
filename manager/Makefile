@@ -85,6 +85,29 @@ build-image: Dockerfile
 	    exit 1; \
 	fi
 
+.PHONY: build-test-image
+build-test-image: Dockerfile
+	@echo "------- STARTING BUILD OF TEST IMAGE: $(IMAGE)-test:$(VERSION) -------"
+	@mkdir -p $(BUILD_DIR)
+	@-env BUILDKIT_PROGRESS=plain \
+	  docker build --target manager-test \
+	    --build-arg http_proxy=$(http_proxy) \
+	    --build-arg https_proxy=$(https_proxy) \
+	    --build-arg no_proxy=$(no_proxy) \
+	    --build-arg CERTDOMAIN=$(CERTDOMAIN) \
+	    --build-arg USER_ID=$$UID \
+	    --build-arg FORCE_VAAPI=$(FORCE_VAAPI) \
+	    --rm -t $(IMAGE)-test:$(VERSION) .. -f ./Dockerfile 2>&1 | tee $(BUILD_DIR)/$(IMAGE)-test.log; \
+	status=$${PIPESTATUS[0]}; \
+	if [ $$status -eq 0 ]; then \
+	    docker tag $(IMAGE)-test:$(VERSION) $(IMAGE)-test:latest; \
+	    echo -e "\033[0;32m------- BUILD OF TEST IMAGE $(IMAGE)-test:$(VERSION) COMPLETED SUCCESSFULLY -------\033[0m"; \
+	    echo "Log file created at $(BUILD_DIR)/$(IMAGE)-test.log"; \
+	else \
+	    echo -e "\033[0;31m------- BUILD OF TEST IMAGE $(IMAGE)-test:$(VERSION) FAILED. CHECK $(BUILD_DIR)/$(IMAGE)-test.log FOR DETAILS. -------\033[0m"; \
+	    exit 1; \
+	fi
+
 .PHONY: rebuild
 rebuild:
 	$(MAKE) REBUILDFLAGS="--no-cache"

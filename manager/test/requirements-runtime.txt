@@ -1,15 +1,13 @@
-# Keep package list in alphabetical order
-selenium
-paho-mqtt
-opencv-python
 coverage
+opencv-python
+paho-mqtt
 pillow
-pybind11
+pytz
 pytest
 pytest-html
 pytest-metadata
-pytz
 pyvirtualdisplay
 scipy>=1.4.0
+selenium
 shapely
 requests
