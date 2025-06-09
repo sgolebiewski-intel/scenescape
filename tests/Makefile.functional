@@ -1,8 +1,8 @@
 add-orphaned-cameras: # SAIL-T468
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_add_orphaned_cameras.py, 'pgserver web scene', true, /run/secrets/controller.auth)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_add_orphaned_cameras.py, 'pgserver web scene', true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 api-large-strings: # SAIL-T706
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_api_large_strings.py, 'pgserver web scene', true)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_api_large_strings.py, 'pgserver web scene', true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 auto-calibration:  # SAIL-T478
 	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml:$(COMPOSE)/queuing_video.yml:$(COMPOSE)/camcalibration.yml, tests/functional/tc_auto_calibration.py, 'pgserver web scene', true,/run/secrets/browser.auth,/workspace/tests/calibrationdb.tar.bz2)
@@ -13,20 +13,20 @@ acl-check:  # SAIL-T479
 child-scenes: # SAIL-T542
 	$(eval IMAGE_OLD=$(IMAGE_INTERFACE))
 	$(eval IMAGE_INTERFACE=$(IMAGE))
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_child_scenes.py, 'pgserver web scene', true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-controller)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_child_scenes.py, 'pgserver web scene', true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 	$(eval IMAGE_INTERFACE=$(IMAGE_OLD))
 
 geospatial-ingest-publish: # SAIL-T610
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_geospatial_ingest_publish.py, 'pgserver web scene', true, /run/secrets/controller.auth)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_geospatial_ingest_publish.py, 'pgserver web scene', true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 mqtt-roi: # SAIL-T477
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_roi_mqtt.py, 'pgserver web scene', true, /run/secrets/controller.auth)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_roi_mqtt.py, 'pgserver web scene', true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 mqtt-sensor-roi: # SAIL-T577
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_mqtt_sensor_roi.py,'pgserver web scene',true, /run/secrets/controller.auth)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_mqtt_sensor_roi.py,'pgserver web scene',true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 mqtt-slow-sensor-roi: # SAIL-T578
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_mqtt_slow_sensor_roi.py,'pgserver web scene',true, /run/secrets/controller.auth)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_mqtt_slow_sensor_roi.py,'pgserver web scene',true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 mqtt-tripwire: # SAIL-T485
 	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_tripwire_mqtt.py, 'pgserver web scene', true, /run/secrets/controller.auth)
@@ -44,11 +44,11 @@ reid-performance-degradation: # SAIL-T663
 	$(eval IMAGE_INTERFACE=$(IMAGE_OLD))
 
 rest-test: # SAIL-T581
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/functional/tc_rest_test.py, 'pgserver web', true)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/functional/tc_rest_test.py, 'pgserver web', true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 sensors-send-events: # SAIL-T573
 	$(eval IMAGE_INTERFACE=$(IMAGE))
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_sensors_send_mqtt_messages.py, 'pgserver web scene', true, /run/secrets/controller.auth)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_sensors_send_mqtt_messages.py, 'pgserver web scene', true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 vdms-similarity-search: # SAIL-T636
 	$(eval IMAGE_OLD=$(IMAGE_INTERFACE))

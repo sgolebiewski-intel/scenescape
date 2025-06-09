@@ -66,7 +66,7 @@ RUN : \
         python3-pip \
         python3-scipy \
         sudo \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Runtime dependencies
 COPY ./manager/requirements-runtime.txt /tmp

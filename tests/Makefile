@@ -14,7 +14,7 @@ SHELL=/bin/bash
 IMAGE=scenescape
 IMAGE_INTERFACE=$(IMAGE)-interface
 BASE_IMAGE=$(IMAGE)-manager
-VERSION:=$(shell cat ../manager/version.txt)
+VERSION:=$(shell cat ../version.txt)
 
 TEST_DATA=test_data
 TESTS_DIRECTORY=tests
@@ -172,10 +172,6 @@ randomly-failing-tests: \
 
 # Not sorted alphabetically on purpose
 basic-acceptance-tests: \
-  newlines-check \
-  python-indent-check \
-  deploy \
-  regenerate-makefiles \
   infra-tests \
   geometry-conformance \
 
@@ -281,7 +277,7 @@ april-tag-setup: # SAIL-T596
 	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/camcalibration.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/queuing_video.yml:$(COMPOSE)/retail_video.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_april_tag_setup.py, 'pgserver broker scene ntpserv retail-video queuing-video camcalibration web',sample_data/exampledb.tar.bz2)
 
 bounding-box: # SAIL-T506
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/retail_video.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_bounding_box.py,'pgserver web retail-video scene', true,/run/secrets/browser.auth)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/retail_video.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_bounding_box.py,'pgserver web retail-video scene', true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 calibrate-all-sensor-types: # SAIL-T574
 	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_calibrate_all_sensor_types.py, 'pgserver')
@@ -311,7 +307,7 @@ check-openvino-version: # SAIL-T486
 	  ; echo END TEST $@
 
 delete-roi-mqtt: # SAIL-T526
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_roi_mqtt.py, 'pgserver scene',true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-interface)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_roi_mqtt.py, 'pgserver scene',true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 delete-sensor-mqtt: # SAIL-T529
 	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_sensor_mqtt.py,'pgserver scene',true, /run/secrets/controller.auth)
@@ -323,7 +319,7 @@ delete-sensors: # SAIL-T462
 	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_sensors.py, 'pgserver')
 
 delete-tripwire-mqtt: # SAIL-T527
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_tripwire_mqtt.py,'pgserver scene',true, /run/secrets/controller.auth)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_tripwire_mqtt.py,'pgserver scene',true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 different-formats-maps: # SAIL-T453
 	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_different_formats_maps.py, 'pgserver')
@@ -351,10 +347,10 @@ manual-camera-calibration: # SAIL-T519
 	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_manual_camera_calibration.py, 'pgserver')
 
 mqtt-auth: # SAIL-T511
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/security/system/negative_mqtt_insecure_auth.py)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/security/system/negative_mqtt_insecure_auth.py,'',true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 mqtt-cert: # SAIL-T511
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/security/system/negative_mqtt_insecure_cert.py)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/security/system/negative_mqtt_insecure_cert.py,'',true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 mqtt-large-messages: # SAIL-T579
 	$(eval LOGFILE=$(TEST_DATA)/$@-$(shell date -u +"%F-%T").log)
@@ -391,10 +387,10 @@ object-crud: # SAIL-T522
 	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_object_crud.py, 'pgserver')
 
 out-of-box: # SAIL-T501
-	$(call common-recipe, sample_data/docker-compose-example.yml, tests/ui/tc_out_of_box.py,'pgserver web queuing-video retail-video scene',true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-interface)
+	$(call common-recipe, sample_data/docker-compose-example.yml, tests/ui/tc_out_of_box.py,'pgserver web queuing-video retail-video scene',true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 out-of-box-no-ntp: # SAIL-T501
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver_default.yml:$(COMPOSE)/retail_video_no_ntp.yml:$(COMPOSE)/queuing_video_no_ntp.yml:$(COMPOSE)/scene_no_ntp.yml:$(COMPOSE)/web.yml, tests/ui/tc_out_of_box.py,'pgserver web queuing-video retail-video scene',true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-interface)
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver_default.yml:$(COMPOSE)/retail_video_no_ntp.yml:$(COMPOSE)/queuing_video_no_ntp.yml:$(COMPOSE)/scene_no_ntp.yml:$(COMPOSE)/web.yml, tests/ui/tc_out_of_box.py,'pgserver web queuing-video retail-video scene',true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 persistence: # SAIL-T454
 	$(eval DBROOT=$(TEST_DATA)/db_$@)
