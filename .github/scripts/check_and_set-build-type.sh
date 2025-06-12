@@ -1,6 +1,8 @@
 #!/bin/bash
 # SPDX-FileCopyrightText: (C) 2025 Intel Corporation
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: LicenseRef-Intel-Edge-Software
+# This file is licensed under the Limited Edge Software Distribution License Agreement.
+# See the LICENSE file in the root of this repository for details.
 
 set -euo pipefail
 
@@ -62,7 +64,7 @@ case "${GITHUB_EVENT_NAME:-}" in
 esac
 
 # Set BUILD_TYPE for other steps
-echo "BUILD_TYPE=$BUILD_TYPE" >> "$GITHUB_ENV"
+echo "build_type=$BUILD_TYPE" >> "$GITHUB_OUTPUT"
 echo "☛☛☛ Current build type: $BUILD_TYPE ☚☚☚"
 
 # Extract JIRA release version from file

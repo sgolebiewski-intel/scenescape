@@ -11,7 +11,7 @@
 # This software and the related documents are provided as is, with no express
 # or implied warranties, other than those that are expressly stated in the License.
 
-TEST_NAME="SAIL-T496"
+TEST_NAME="NEX-T10414"
 echo "Executing: ${TEST_NAME}"
 
 TESTBASE="tests/perf_tests/"
@@ -36,7 +36,7 @@ then
   then
     INFMODELS='retail+reid'
   fi
-  docker/scenescape-start --image scenescape-percebro --shell percebro/percebro -i sample_data/apriltag-cam1.mp4 --intrinsics {\"fov\":70} --mqttid camera1 -i sample_data/apriltag-cam2.mp4 --intrinsics {\"fov\":70} --mqttid camera2 -i sample_data/apriltag-cam3.mp4 --intrinsics {\"fov\":70} --mqttid camera3 -m ${INFMODELS} --debug --frames 1000 --preprocess
+  tools/scenescape-start --image scenescape-percebro --shell percebro/percebro -i sample_data/apriltag-cam1.mp4 --intrinsics {\"fov\":70} --mqttid camera1 -i sample_data/apriltag-cam2.mp4 --intrinsics {\"fov\":70} --mqttid camera2 -i sample_data/apriltag-cam3.mp4 --intrinsics {\"fov\":70} --mqttid camera3 -m ${INFMODELS} --debug --frames 1000 --preprocess
   echo "finished percebro execution"
 fi
 
