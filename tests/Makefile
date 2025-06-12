@@ -13,11 +13,7 @@ SHELL=/bin/bash
 .SHELLFLAGS=-o pipefail -c
 IMAGE=scenescape
 IMAGE_INTERFACE=$(IMAGE)-interface
-<<<<<<< HEAD
 BASE_IMAGE=$(IMAGE)-manager-test
-=======
-BASE_IMAGE=$(IMAGE)-manager
->>>>>>> main
 VERSION:=$(shell cat ../version.txt)
 
 TEST_DATA=test_data
@@ -310,13 +306,8 @@ check-openvino-version: # NEX-T10407
 	  ; echo "MAKE_TARGET: $@" | tee -ia $(LOGFILE) \
 	  ; echo END TEST $@
 
-<<<<<<< HEAD
-delete-roi-mqtt: # SAIL-T526
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_roi_mqtt.py, 'pgserver scene',true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
-=======
 delete-roi-mqtt: # NEX-T10430
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_roi_mqtt.py, 'pgserver scene',true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-interface)
->>>>>>> main
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_roi_mqtt.py, 'pgserver scene',true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 delete-sensor-mqtt: # NEX-T10432
 	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_sensor_mqtt.py,'pgserver scene',true, /run/secrets/controller.auth)
@@ -327,13 +318,8 @@ delete-sensor-scene: # NEX-T10397
 delete-sensors: # NEX-T10399
 	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_sensors.py, 'pgserver')
 
-<<<<<<< HEAD
-delete-tripwire-mqtt: # SAIL-T527
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_tripwire_mqtt.py,'pgserver scene',true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
-=======
 delete-tripwire-mqtt: # NEX-T10431
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_tripwire_mqtt.py,'pgserver scene',true, /run/secrets/controller.auth)
->>>>>>> main
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_tripwire_mqtt.py,'pgserver scene',true, /run/secrets/controller.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 different-formats-maps: # NEX-T10392
 	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_different_formats_maps.py, 'pgserver')
@@ -360,19 +346,11 @@ malformed-json:
 manual-camera-calibration: # NEX-T10426
 	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_manual_camera_calibration.py, 'pgserver')
 
-<<<<<<< HEAD
-mqtt-auth: # SAIL-T511
+mqtt-auth: # NEX-T10423
 	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/security/system/negative_mqtt_insecure_auth.py,'',true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
-mqtt-cert: # SAIL-T511
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/security/system/negative_mqtt_insecure_cert.py,'',true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-manager-test)
-=======
-mqtt-auth: # NEX-T10423
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/security/system/negative_mqtt_insecure_auth.py)
-
 mqtt-cert: # NEX-T10423
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/security/system/negative_mqtt_insecure_cert.py)
->>>>>>> main
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/security/system/negative_mqtt_insecure_cert.py,'',true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 mqtt-large-messages: # NEX-T10462
 	$(eval LOGFILE=$(TEST_DATA)/$@-$(shell date -u +"%F-%T").log)
@@ -408,19 +386,11 @@ newlines-check: # NEX-T10511
 object-crud: # NEX-T10429
 	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_object_crud.py, 'pgserver')
 
-<<<<<<< HEAD
-out-of-box: # SAIL-T501
+out-of-box: # NEX-T10417
 	$(call common-recipe, sample_data/docker-compose-example.yml, tests/ui/tc_out_of_box.py,'pgserver web queuing-video retail-video scene',true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
-out-of-box-no-ntp: # SAIL-T501
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver_default.yml:$(COMPOSE)/retail_video_no_ntp.yml:$(COMPOSE)/queuing_video_no_ntp.yml:$(COMPOSE)/scene_no_ntp.yml:$(COMPOSE)/web.yml, tests/ui/tc_out_of_box.py,'pgserver web queuing-video retail-video scene',true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-manager-test)
-=======
-out-of-box: # NEX-T10417
-	$(call common-recipe, sample_data/docker-compose-example.yml, tests/ui/tc_out_of_box.py,'pgserver web queuing-video retail-video scene',true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-interface)
-
 out-of-box-no-ntp: # NEX-T10417
-	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver_default.yml:$(COMPOSE)/retail_video_no_ntp.yml:$(COMPOSE)/queuing_video_no_ntp.yml:$(COMPOSE)/scene_no_ntp.yml:$(COMPOSE)/web.yml, tests/ui/tc_out_of_box.py,'pgserver web queuing-video retail-video scene',true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-interface)
->>>>>>> main
+	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver_default.yml:$(COMPOSE)/retail_video_no_ntp.yml:$(COMPOSE)/queuing_video_no_ntp.yml:$(COMPOSE)/scene_no_ntp.yml:$(COMPOSE)/web.yml, tests/ui/tc_out_of_box.py,'pgserver web queuing-video retail-video scene',true,/run/secrets/browser.auth,tests/testdb.tar.bz2,scenescape-manager-test)
 
 persistence: # NEX-T10393
 	$(eval DBROOT=$(TEST_DATA)/db_$@)
