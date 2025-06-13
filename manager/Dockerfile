@@ -29,11 +29,6 @@ RUN : \
         python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# SceneScape requirements
-COPY ./manager/requirements-buildtime.txt /tmp
-RUN pip3 install --upgrade --no-cache-dir \
-        -r /tmp/requirements-buildtime.txt
-
 # ---------- Manager Runtime Stage ------------------
 FROM ubuntu:22.04 AS manager-runtime
 
@@ -178,8 +173,6 @@ RUN : \
         wget \
         libpci-dev \
         libnss3-tools \
-        python3 \
-        python3-pip \
         software-properties-common \
         unzip \
         xserver-xephyr \
@@ -195,8 +188,8 @@ Pin-Priority: 1000 \n\
     ; rm -rf /var/lib/apt/lists/*
 
 # Install Python test dependencies
-COPY ./manager/test/requirements-runtime.txt /tmp
-RUN pip3 install --upgrade --no-cache-dir -r /tmp/requirements-runtime.txt
+COPY ./manager/test/requirements-test.txt /tmp
+RUN pip3 install --upgrade --no-cache-dir -r /tmp/requirements-test.txt
 
 ADD ./manager/test/geckodriver.tar.gz /usr/local/bin/
 
