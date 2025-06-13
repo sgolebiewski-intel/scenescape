@@ -14,17 +14,21 @@ RUNTIME_OS_IMAGE = ubuntu:22.04
 TARGET = manager-runtime
 SHELL = /bin/bash
 CERTDOMAIN = scenescape.intel.com
-DBDIR = ../db
-MIGRATIONSDIR = ../migrations
-MEDIADIR = ../media
-DATASETS = ../datasets
-USERVIDEODIR = ../videos
 JSLIBDIR = src/static
 CURL_FLAGS = --connect-timeout 5 --max-time 120 --retry 5 --retry-delay 0
 FORCE_VAAPI ?= 0
 THREEJS_VERSION = 168
+SECRETSDIR ?= ./secrets
 
 include ../common.mk
+
+default: build-image
+
+build-image: jslibraries jsm-examples Dockerfile
+
+.PHONY: test-build
+test-build: test/geckodriver.tar.gz
+	$(MAKE) IMAGE="scenescape-manager-test" TARGET="manager-test"
 
 define JSMEXAMPLES
 fonts/helvetiker_regular.typeface.json \
@@ -60,34 +64,7 @@ define axios-asset-recipe =
 	  && curl -f $(CURL_FLAGS) --location --create-dirs --output $@ $${URL}/$${PKG}
 endef
 
-default: build-image
-
-build-image: jslibraries jsm-examples Dockerfile database-dirs user-dirs
-
-.PHONY: test-build
-test-build:
-	$(MAKE) IMAGE="scenescape-manager-test" TARGET="manager-test"
-
-$(DBDIR):
-	mkdir -p $@
-
-$(MIGRATIONSDIR):
-	mkdir -p $@
-
-$(MEDIADIR):
-	mkdir -p $@
-
-$(DATASETS):
-	mkdir -p $@
-
-$(USERVIDEODIR):
-	mkdir -p $@
-
-user-dirs: $(USERVIDEODIR)
-
 jsm-examples: $(JSMEXAMPLES)
-
-database-dirs: $(DBDIR) $(MIGRATIONSDIR) $(MEDIADIR) $(DATASETS)
 
 $(JSMEXAMPLES):
 	$(eval RELPATH=$@)
@@ -195,3 +172,24 @@ $(JSLIBDIR)/assets/opencv.js:
 $(JSLIBDIR)/assets/doxygen-awesome.css:
 	URL=https://raw.githubusercontent.com/jothepro/doxygen-awesome-css/main && PKG=$$(basename $@) \
 	  && curl -f $(CURL_FLAGS) --location --create-dirs --output $@ $${URL}/$${PKG}
+
+django-secrets: $(SECRETSDIR)/django/secrets.py
+
+$(SECRETSDIR)/django/secrets.py:
+	mkdir -p $(SECRETSDIR)/django
+	echo -n SECRET_KEY= > $@
+	python3 -c 'import secrets; print("\x27" + "".join([secrets.choice("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)") for i in range(50)]) + "\x27")' >> $@
+	echo "DATABASE_PASSWORD='$${DBPASS:-$$(openssl rand -base64 12)}'" >> $@
+	chmod 0600 $@
+
+test/geckodriver.tar.gz:
+	@echo "Downloading geckodriver..."
+	@set -e \
+		; BASE_URL=https://github.com/mozilla/geckodriver/releases \
+		; GVERSION=$$(curl -sL -o /dev/null -w '%{url_effective}' \
+			"$${BASE_URL}/latest" \
+			| sed -e 's,.*/,,') \
+		; mkdir -p test \
+		; curl -sL \
+			"$${BASE_URL}/download/$${GVERSION}/geckodriver-$${GVERSION}-linux64.tar.gz" \
+			--output "test/geckodriver.tar.gz"

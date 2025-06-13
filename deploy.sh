@@ -120,7 +120,7 @@ if [ "${SKIPYML}" != "1" ] ; then
 
     if [ "${SKIPYML}" != "1" ] ; then
         rm -f docker-compose.yml
-        make -C docker ../docker-compose.yml
+        make docker-compose.yml
     fi
 fi
 
@@ -220,7 +220,7 @@ echo Building SceneScape
 echo '########################################'
 
 make -C docs clean
-make build CERTPASS="${CERTPASS}" DBPASS="${DBPASS}"
+make CERTPASS="${CERTPASS}" DBPASS="${DBPASS}"
 
 if manager/tools/upgrade-database --check ; then
     UPGRADEDB=0
@@ -264,14 +264,5 @@ if manager/tools/upgrade-database --check ; then
 fi
 
 if [ "${SKIP_BRINGUP}" != "1" ] ; then
-    echo
-    echo '########################################'
-    echo Launching SceneScape
-    echo '########################################'
-
-    env SUPASS="${SUPASS}" docker compose up -d
-
-    echo
-    echo To stop SceneScape, type:
-    echo "    docker compose down"
+    make demo
 fi

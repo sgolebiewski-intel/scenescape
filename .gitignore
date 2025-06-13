@@ -7,6 +7,7 @@
 *.tar
 *~
 .coverage_*
+.env
 .pytest_cache
 .vscode
 __pycache__
@@ -17,15 +18,10 @@ datasets
 db
 db.sqlite3
 db-backup-*
-docker/.mosquitto-go-auth-build
 manager/src/static/assets
 manager/src/static/bootstrap*
 manager/src/static/examples
-docker/geckodriver.tar.gz
-docker/jslibs
-docker/l_openvino*
-docker/LICENSE
-docker/mosquitto-go-auth
+manager/secrets
 docker-compose.yml
 kubernetes/setup/
 media
@@ -33,7 +29,8 @@ migrations
 models
 pvd-mqtt/detect
 sample_data/xREF_*
-secrets
 test_data
 test_reports/
+!tests/interface/firefox-profile.tar
+tests/interface/geckodriver.tar.gz
 tests/perf_tests/input/*.json
