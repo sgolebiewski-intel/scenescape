@@ -12,7 +12,7 @@
 # or implied warranties, other than those that are expressly stated in the License.
 
 import json
-from manager import views
+from manager.src.django import views
 from scene_common.geometry import Point
 from unittest.mock import Mock
 from django.test import TestCase
