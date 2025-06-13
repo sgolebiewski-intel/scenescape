@@ -86,16 +86,16 @@ if [ ! -e ${RUNSECRETS} -a -n "${SECRETSDIR}" -a -d "${SECRETSDIR}" ] ; then
     echo Found some secrets
     ln -s ${SECRETSDIR} ${RUNSECRETS}
 fi
-# if [ -e ${RUNSECRETS}/certs/scenescape-ca.pem ] ; then
-#     PROFILEDIR=${WSHOME}/.mozilla/firefox/scenescape.default
-#     sudo -u ${WSUSER} certutil -A \
-#          -d ${PROFILEDIR} \
-#          -i ${RUNSECRETS}/certs/scenescape-ca.pem \
-#          -t TCu,Cuw,Tuw \
-#          -n "SceneScape Root CA"
-# else
-#     ls -Fla ${RUNSECRETS}
-# fi
+if [ -e ${RUNSECRETS}/certs/scenescape-ca.pem ] ; then
+    PROFILEDIR=${WSHOME}/.mozilla/firefox/scenescape.default
+    sudo -u ${WSUSER} certutil -A \
+         -d ${PROFILEDIR} \
+         -i ${RUNSECRETS}/certs/scenescape-ca.pem \
+         -t TCu,Cuw,Tuw \
+         -n "SceneScape Root CA"
+else
+    ls -Fla ${RUNSECRETS}
+fi
 
 if [ -n "${WAITPID}" ] ; then
     IFS=' '
