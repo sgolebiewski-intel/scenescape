@@ -820,11 +820,13 @@ class PoseEstimator(Detector):
 
       hpe_bounds = [None] * 4
       published_pose = []
+      detected_points = 0
       for point, score in zip(points, points_scores):
         if len(point) == 0 or score == 0:
           published_pose.append(())
           continue
 
+        detected_points += 1
         point_x, point_y = point[0], point[1]
         published_pose.append((point_x, point_y))
 
@@ -837,31 +839,25 @@ class PoseEstimator(Detector):
         if hpe_bounds[3] is None or point_y > hpe_bounds[3]:
           hpe_bounds[3] = point_y
 
-      if hpe_bounds[0] == None:
+      # Only draw bounding box if at least 3 points are detected
+      if detected_points < 4 or hpe_bounds[0] is None:
         continue
 
-      if self.hasKeypoints(published_pose,
-                          ('Right-Hip', 'Right-Knee', 'Right-Ankle',
-                          'Left-Hip', 'Left-Knee', 'Left-Ankle')) \
-          or self.hasKeypoints(published_pose,
-                              ('Right-Shoulder', 'Right-Elbow', 'Right-Wrist',
-                              'Left-Shoulder', 'Left-Elbow', 'Left-Wrist')):
+      bounds = Rectangle(origin=Point(hpe_bounds[0], hpe_bounds[1]),
+                         opposite=Point(hpe_bounds[2], hpe_bounds[3]))
+      if bounds.width == 0 or bounds.height == 0:
+        continue
 
-        bounds = Rectangle(origin=Point(hpe_bounds[0], hpe_bounds[1]),
-                           opposite=Point(hpe_bounds[2], hpe_bounds[3]))
-        if bounds.width == 0 or bounds.height == 0:
-          continue
-
-        comw = bounds.width / 3
-        comh = bounds.height / 4
-        center_of_mass = Rectangle(origin=Point(bounds.x + comw, bounds.y + comh),
-                                   size=(comw, comh))
-        person = {'id': len(people) + 1,
-                  'category': 'person',
-                  'bounding_box': bounds.asDict,
-                  'center_of_mass': center_of_mass.asDict,
-                  'pose': published_pose}
-        people.append(person)
+      comw = bounds.width / 3
+      comh = bounds.height / 4
+      center_of_mass = Rectangle(origin=Point(bounds.x + comw, bounds.y + comh),
+                                 size=(comw, comh))
+      person = {'id': len(people) + 1,
+                'category': 'person',
+                'bounding_box': bounds.asDict,
+                'center_of_mass': center_of_mass.asDict,
+                'pose': published_pose}
+      people.append(person)
 
     return people
 

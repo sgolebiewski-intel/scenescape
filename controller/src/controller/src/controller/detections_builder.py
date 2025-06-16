@@ -71,6 +71,17 @@ def prepareObjDict(scene, obj, update_visibility):
     if update_visibility:
       computeCameraBounds(scene, aobj, obj_dict)
 
+  # --- Add this block to include boundingBoxPixels and cameraID ---
+  if hasattr(aobj, 'vectors') and aobj.vectors:
+    vector = aobj.vectors[0]
+    cam = getattr(vector, 'camera', None)
+    bbox = getattr(aobj, 'boundingBoxPixels', None)
+    if cam and hasattr(cam, 'cameraID') and bbox:
+      # bbox should be a dict or object with x, y, width, height
+      obj_dict['bounding_box_px'] = bbox.asDict if hasattr(bbox, 'asDict') else bbox
+      obj_dict['bounding_box_camera_id'] = cam.cameraID
+  # ---------------------------------------------------------------
+
   if len(aobj.chain_data.regions):
     obj_dict['regions'] = aobj.chain_data.regions
   if len(aobj.chain_data.sensors):
