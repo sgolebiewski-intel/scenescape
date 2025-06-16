@@ -10,7 +10,7 @@
 # or implied warranties, other than those that are expressly stated in the License.
 
 SHELL=/bin/bash
-SECRETSDIR ?= ../secrets
+SECRETSDIR ?= ../../manager/secrets
 CASECRETSDIR ?= $(SECRETSDIR)
 HOST ?= default
 HOSTSUFFIX ?=
@@ -123,3 +123,6 @@ $(SECRETSDIR)/certs/%.crt: $(SECRETSDIR)/certs/%.csr
 	  sed -e "s/##SAN##/$${SUBJECT_ALT_NAMES}/" \
 	  -e "s/##KEYUSAGE##/$(KEY_USAGE)/" \
 	  openssl.cnf)
+
+clean:
+	@rm -rf $(SECRETSDIR)/certs $(CASECRETSDIR)/ca

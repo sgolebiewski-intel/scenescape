@@ -17,7 +17,7 @@ try:
 except ModuleNotFoundError:
   pass
 
-TEST_NAME = "SAIL-T579"
+TEST_NAME = "NEX-T10462"
 TOPIC = "test/large-message"
 MESSAGE_COUNT = 100
 MOSQUITTO_CONF = """
@@ -174,7 +174,7 @@ def main():
         break
 
     try:
-      cmd = ["docker/scenescape-start",
+      cmd = ["tools/scenescape-start",
              "--network", project_name + "_" + network_name,
              os.path.relpath(__file__),
              "--broker", "broker.scenescape.intel.com"]

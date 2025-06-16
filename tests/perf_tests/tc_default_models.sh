@@ -11,7 +11,7 @@
 # This software and the related documents are provided as is, with no express
 # or implied warranties, other than those that are expressly stated in the License.
 
-TEST_NAME="SAIL-T487"
+TEST_NAME="NEX-T10408"
 echo "Executing: ${TEST_NAME}"
 
 MODELS_DEFAULT=(hpe retail pv0078 pv1016 pv0001 v0002 retail+reid tesseract td0001 pv2000 pv2001 pv2002 v0200 v0201 v0202 retail+trresnet)
@@ -21,12 +21,12 @@ INPUTS="${TESTBASE}/input/20_a.JPG"
 VIDEO_FRAMES=10
 STATUS=1
 
-make -C docker install-models MODELS=all
+make -C  ../model_installer install-models MODELS=all
 
 for model in "${MODELS_DEFAULT[@]}"
 do
     echo "Testing model: ${model}"
-    docker/scenescape-start percebro/percebro -m $model -i $INPUTS \
+    tools/scenescape-start percebro/percebro -m $model -i $INPUTS \
                             --modelconfig percebro/config/model-config.json \
                             --intrinsics={\"fov\":70} \
                             --frames $VIDEO_FRAMES --preprocess

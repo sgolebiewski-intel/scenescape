@@ -126,7 +126,7 @@ Create a new service called `video0` that matches the following configuration (r
      - "broker.scenescape.intel.com"
     privileged: true
     volumes:
-     - ./models:/opt/intel/openvino/deployment_tools/intel_models
+     - ./model_installer/models:/opt/intel/openvino/deployment_tools/intel_models
     secrets:
      - certs
      - percebro.auth
@@ -180,7 +180,7 @@ Copy the entire secrets folder from the scene controller to each of the other co
 For example, from the terminal on each of the video pipeline computers run the following command from within the Intel® SceneScape project directory:
 
 ```
-~/scenescape$ rsync -aP <user>@<scene_controller_IP>:scenescape/secrets .
+~/scenescape$ rsync -aP <user>@<scene_controller_IP>:scenescape/manager/secrets .
 ```
 On the computers running the video pipeline for each IP camera, edit `docker-compose.yml` and remove all services *except* the `video` services.
 
@@ -211,7 +211,7 @@ On the computers processing the video feeds, configure docker-compose.yml to con
     privileged: true
     volumes:
      - ./:/workspace
-     - ./models:/opt/intel/openvino/deployment_tools/intel_models
+     - ./model_installer/models:/opt/intel/openvino/deployment_tools/intel_models
     secrets:
      - certs
      - percebro.auth

@@ -14,7 +14,7 @@ BROKERIMAGE=scenescape-broker
 CAMCALIBIMAGE=scenescape-camcalibration
 CAMERAIMAGE=scenescape-percebro
 CONTROLLERIMAGE=scenescape-controller
-VERSION:=$(shell cat ../manager/version.txt)
+VERSION:=$(shell cat ../version.txt)
 NAMESPACE=scenescape
 WORKINGDIR=$(shell dirname $(shell pwd))
 ORGANIZATION?=
@@ -135,8 +135,7 @@ clean-kind-registry:
 # build scenescape docker images, download models for init-models
 # note, will make unneeded secrets in secrets/ as well
 build:
-	make -C ../certificates CERTPASS=$(CERTPASS)
-	make -C ../docker FORCE_VAAPI=$(FORCE_VAAPI)
+	make -C .. CERTPASS=$(CERTPASS) FORCE_VAAPI=$(FORCE_VAAPI)
 
 push:
 	docker tag $(ORGANIZATION)$(IMAGE):$(VERSION) $(REGISTRY)/$(IMAGE):$(VERSION)
@@ -169,7 +168,7 @@ build-init-images:
 
 # build scenescape-sources image
 build-sources-image:
-	make -C ../docker sources
+	make -C .. build-sources-image
 
 push-init-images:
 	docker tag $(ORGANIZATION)init-secrets:$(VERSION) $(REGISTRY)/init-secrets:$(VERSION)

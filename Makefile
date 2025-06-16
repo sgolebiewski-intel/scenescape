@@ -1,29 +1,118 @@
-# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
-# SPDX-License-Identifier: Apache-2.0
+# Copyright (C) 2025 Intel Corporation
+#
+# This software and the related documents are Intel copyrighted materials,
+# and your use of them is governed by the express license under which they
+# were provided to you ("License"). Unless the License provides otherwise,
+# you may not use, modify, copy, publish, distribute, disclose or transmit
+# this software or the related documents without Intel's prior written permission.
+#
+# This software and the related documents are provided as is, with no express
+# or implied warranties, other than those that are expressly stated in the License.
 
+# ================ Makefile for Intel® SceneScape ====================
+
+# =========================== Variables ==============================
+SHELL := /bin/bash
+
+# Build folders
 COMMON_FOLDER := scene_common
-SUB_FOLDERS := docker controller autocalibration manager percebro
+IMAGE_FOLDERS := autocalibration broker controller manager model_installer percebro
+
+# Build flas
 EXTRA_BUILD_FLAGS :=
+REBUILDFLAGS :=
+
+# Image variables
+IMAGE_PREFIX := scenescape
+SOURCES_IMAGE := $(IMAGE_PREFIX)-sources
+VERSION := $(shell cat ./version.txt)
+
+# User configurable variables
+# - User can adjust build output folder (defaults to $PWD/build)
+BUILD_DIR ?= $(PWD)/build
+# - User can adjust folders being built (defaults to all)
+FOLDERS ?= $(IMAGE_FOLDERS)
+# - User can adjust number of parallel jobs (defaults to CPU count)
+JOBS ?= $(shell nproc)
+# - User can adjust the target branch
 TARGET_BRANCH ?= $(if $(CHANGE_TARGET),$(CHANGE_TARGET),$(BRANCH_NAME))
-SHELL:=/bin/bash
-
-ifeq ($(or $(findstring DAILY,$(BUILD_TYPE)),$(findstring TAG,$(BUILD_TYPE))),true)
-	EXTRA_BUILD_FLAGS := rebuild
-endif
-ifeq ($(or $(TARGET_BRANCH)),rc beta-rc)
-	EXTRA_BUILD_FLAGS := rebuild
+# Ensure BUILD_DIR path is absolute, so that it works correctly in recursive make calls
+ifeq ($(filter /%,$(BUILD_DIR)),)
+override BUILD_DIR := $(PWD)/$(BUILD_DIR)
 endif
 
-default: build
+# Secrets building variables
+SECRETSDIR ?= $(PWD)/manager/secrets
+MQTTUSERS := "percebro.auth=cameras controller.auth=scenectrl browser.auth=webuser calibration.auth=calibration"
+AUTHFILES := $(addprefix $(SECRETSDIR)/,$(shell echo $(MQTTUSERS) | sed -e 's/=[^ ]*//g'))
+CERTDOMAIN := scenescape.intel.com
 
-.PHONY: build
-build: check-tag build-certificates build-images
+# ========================= Default Target ===========================
+
+default: build-all
+
+.PHONY: build-all
+build-all: init-secrets build-images install-models
+
+# ============================== Help ================================
+
+.PHONY: help
+help:
+	@echo ""
+	@echo "Intel® SceneScape version $(VERSION)"
+	@echo ""
+	@echo "Available targets:"
+	@echo "  build-all         (default) Build secrets, all images, and install models"
+	@echo "  build-images                Build all microservice images in parallel"
+	@echo "  init-secrets                Generate secrets and certificates"
+	@echo "  <image folder>              Build a specific microservice image (autocalibration, broker, etc.)"
+	@echo ""
+	@echo "  demo                        Start the SceneScape demo (requires the SUPASS environment variable"
+	@echo "                              to be set as the super user password for logging into Intel® SceneScape)"
+	@echo ""
+	@echo "  list-dependencies           List all apt/pip dependencies for all microservices"
+	@echo "  build-sources-image         Build the image with 3rd party sources"
+	@echo "  install-models              Install custom OpenVINO Zoo models using model_installer"
+	@echo ""
+	@echo "  rebuild                     Clean and build all images"
+	@echo "  rebuild-all                 Clean and build everything including secrets and volumes"
+	@echo ""
+	@echo "  clean                       Clean images and build artifacts (logs etc.)"
+	@echo "  clean-all                   Clean everything including volumes, secrets and models"
+	@echo "  clean-volumes               Remove all project Docker volumes"
+	@echo "  clean-secrets               Remove all generated secrets"
+	@echo "  clean-models                Remove all installed models"
+	@echo ""
+	@echo "  run_tests                   Run all tests"
+	@echo "  run_basic_acceptance_tests  Run basic acceptance tests"
+	@echo "  run_performance_tests       Run performance tests"
+	@echo "  run_stability_tests         Run stability tests"
+	@echo ""
+	@echo "Usage:"
+	@echo "  - Use 'SUPASS=<password> make build-all demo' to build Intel® SceneScape and run demo."
+	@echo ""
+	@echo "Tips:"
+	@echo "  - Use 'make BUILD_DIR=<path>' to change build output folder (default is './build')."
+	@echo "  - Use 'make JOBS=N' to build Intel® SceneScape images using N parallel processes."
+	@echo "  - Use 'make FOLDERS=\"<list of image folders>\"' to build specific image folders."
+	@echo "  - Image folders can be: $(IMAGE_FOLDERS)"
+	@echo ""
+
+# ========================== CI specific =============================
+
+ifneq (,$(filter DAILY TAG,$(BUILD_TYPE)))
+  EXTRA_BUILD_FLAGS := rebuild
+endif
+
+ifneq (,$(filter rc beta-rc,$(TARGET_BRANCH)))
+  EXTRA_BUILD_FLAGS := rebuild
+endif
 
 .PHONY: check-tag
 check-tag:
 ifeq ($(BUILD_TYPE),TAG)
 	@echo "Checking if tag matches version.txt..."
-	@if grep --quiet $(BRANCH_NAME) version.txt; then \
+	@if grep --quiet "$(BRANCH_NAME)" version.txt; then \
 		echo "Perfect - Tag and Version is matching"; \
 	else \
 		echo "There is some mismatch between Tag and Version"; \
@@ -31,48 +120,197 @@ ifeq ($(BUILD_TYPE),TAG)
 	fi
 endif
 
-.PHONY: build-certificates
-build-certificates:
-	@make -C certificates CERTPASS=$$(openssl rand -base64 12)
+# ========================= Build Images =============================
+
+$(BUILD_DIR):
+	mkdir -p $@
 
 # Build common base image
 .PHONY: build-common
 build-common:
+	@echo "==> Building common base image..."
 	@$(MAKE) -C $(COMMON_FOLDER) http_proxy=$(http_proxy) $(EXTRA_BUILD_FLAGS)
-	@echo "DONE"
+	@echo "DONE ==> Building common base image"
 
-# Build docker images for all microservices
+# Build targets for each service folder
+.PHONY: $(IMAGE_FOLDERS)
+$(IMAGE_FOLDERS):
+	@echo "====> Building folder $@..."
+	@$(MAKE) -C $@ BUILD_DIR=$(BUILD_DIR) http_proxy=$(http_proxy) https_proxy=$(https_proxy) no_proxy=$(no_proxy) $(EXTRA_BUILD_FLAGS)
+	@echo "DONE ====> Building folder $@"
+
+# Dependency on the common base image
+autocalibration controller manager percebro: build-common
+
+# Parallel wrapper handles parallel builds of folders specified in FOLDERS variable
 .PHONY: build-images
-build-images: build-common
-	@echo "Building docker images in parallel..."
-	@trap 'echo "Interrupted! Exiting..."; exit 1' INT; \
-	for dir in $(SUB_FOLDERS); do \
-		$(MAKE) http_proxy=$(http_proxy) -C $$dir $(EXTRA_BUILD_FLAGS) & \
-	done; wait
-	@$(MAKE) -C docker ../docker-compose.yml
-	@echo "DONE"
+build-images: $(BUILD_DIR)
+	@echo "==> Running parallel builds of folders: $(FOLDERS)"
+# Use a trap to catch errors and print logs if any error occurs in parallel build
+	@set -e; trap 'grep --color=auto -i -r --include="*.log" "^error" $(BUILD_DIR) || true' EXIT; \
+	$(MAKE) -j$(JOBS) $(FOLDERS)
+	@echo "DONE ==> Parallel builds of folders: $(FOLDERS)"
 
-.PHONY: list-dependencies
-list-dependencies:
-	@echo "Listing dependencies for all microservices..."
-	for dir in $(SUB_FOLDERS); do \
-		$(MAKE) -C $$dir list-deps; \
-	done
-#TODO: generate a summary files with all dependencies
-	@echo "DONE"
+# ===================== Cleaning and Rebuilding =======================
+
+.PHONY: rebuild
+rebuild: clean build-images
+
+.PHONY: rebuild-all
+rebuild-all: clean-all build-all
 
 .PHONY: clean
 clean:
-	@echo "Cleaning up all microservices..."
-	for dir in $(SUB_FOLDERS); do \
+	@echo "==> Cleaning up all build artifacts..."
+	@for dir in $(FOLDERS); do \
 		$(MAKE) -C $$dir clean; \
 	done
 	@echo "Cleaning common folder..."
 	@$(MAKE) -C $(COMMON_FOLDER) clean
-	@echo "DONE"
-	@echo "Cleaning certificates..."
-	@make -C certificates clean
-	@echo "DONE"
+	@-rm -rf $(BUILD_DIR)
+	@echo "DONE ==> Cleaning up all build artifacts"
 
-.PHONY: rebuild
-rebuild: clean build
+.PHONY: clean-all
+clean-all: clean clean-secrets clean-volumes clean-models
+	@echo "==> Cleaning all..."
+	@-rm -f docker-compose.yml .env
+	@echo "DONE ==> Cleaning all"
+
+.PHONY: clean-models
+clean-models:
+	@echo "==> Cleaning up all models..."
+	@-rm -rf model_installer/models
+	@docker volume rm -f $${COMPOSE_PROJECT_NAME:-scenescape}_vol-models
+	@echo "DONE ==> Cleaning up all models"
+
+.PHONY: clean-volumes
+clean-volumes:
+	@echo "==> Cleaning up all volumes..."
+	@docker compose down -v
+	@echo "DONE ==> Cleaning up all volumes"
+
+.PHONY: clean-secrets
+clean-secrets:
+	@echo "==> Cleaning secrets..."
+	@-rm -rf $(SECRETSDIR)
+	@echo "DONE ==> Cleaning secrets"
+
+# ===================== 3rd Party Dependencies =======================
+.PHONY: list-dependencies
+list-dependencies: $(BUILD_DIR)
+	@echo "==> Listing dependencies for all microservices..."
+	@set -e; \
+	for dir in $(IMAGE_FOLDERS); do \
+		$(MAKE) -C $$dir list-dependencies; \
+	done
+	@-find . -type f -name '*-apt-deps.txt' -exec cat {} + | sort | uniq > $(BUILD_DIR)/scenescape-all-apt-deps.txt
+	@-find . -type f -name '*-pip-deps.txt' -exec cat {} + | sort | uniq > $(BUILD_DIR)/scenescape-all-pip-deps.txt
+	@echo "The following dependency lists have been generated:"
+	@find $(BUILD_DIR) -name '*-deps.txt' -print
+	@echo "DONE ==> Listing dependencies for all microservices"
+
+.PHONY: build-sources-image
+build-sources-image: sources.Dockerfile
+	@echo "==> Building the image with 3rd party sources..."
+	env BUILDKIT_PROGRESS=plain \
+	  docker build $(REBUILDFLAGS) -f $< \
+	    --build-arg http_proxy=$(http_proxy) \
+	    --build-arg https_proxy=$(https_proxy) \
+	    --build-arg no_proxy=$(no_proxy) \
+	    --rm -t $(SOURCES_IMAGE):$(VERSION) . \
+	&& docker tag $(SOURCES_IMAGE):$(VERSION) $(SOURCES_IMAGE):latest
+	@echo "DONE ==> Building the image with 3rd party sources"
+
+# ======================= Model Installer ============================
+
+.PHONY: install-models
+install-models:
+	@$(MAKE) -C model_installer install-models
+
+# =========================== Run Tests ==============================
+
+.PHONY: run_tests
+run_tests:
+	@echo "Running tests..."
+	$(MAKE) --trace -C  tests -j 1 SUPASS=$(SUPASS) || (echo "Tests failed" && exit 1)
+	@echo "DONE ==> Running tests"
+
+.PHONY: run_performance_tests
+run_performance_tests:
+	@echo "Running performance tests..."
+	$(MAKE) -C tests performance_tests -j 1 SUPASS=$(SUPASS) || (echo "Performance tests failed" && exit 1)
+	@echo "DONE ==> Running performance tests"
+
+.PHONY: run_stability_tests
+run_stability_tests:
+	@echo "Running stability tests..."
+ifeq ($(BUILD_TYPE),DAILY)
+	@$(MAKE) -C tests system-stability SUPASS=$(SUPASS) HOURS=4
+else
+	@$(MAKE) -C tests system-stability SUPASS=$(SUPASS)
+endif
+	@echo "DONE ==> Running stability tests"
+
+.PHONY: run_basic_acceptance_tests
+run_basic_acceptance_tests:
+	@echo "Running basic acceptance tests..."
+	$(MAKE) --trace -C tests basic-acceptance-tests -j 1 SUPASS=$(SUPASS) || (echo "Basic acceptance tests failed" && exit 1)
+	@echo "DONE ==> Running basic acceptance tests"
+
+# ===================== Docker Compose Demo ==========================
+
+.PHONY: demo
+demo: docker-compose.yml .env
+	@if [ -z "$$SUPASS" ]; then \
+	    echo "Please set the SUPASS environment variable before starting the demo for the first time."; \
+	    echo "The SUPASS environment variable is the super user password for logging into Intel® SceneScape."; \
+	    exit 1; \
+	fi
+	docker compose up -d
+	@echo ""
+	@echo "To stop SceneScape, type:"
+	@echo "    docker compose down"
+
+docker-compose.yml: ./sample_data/docker-compose-example.yml
+	@cp $< $@
+
+.env:
+	@echo "SECRETSDIR=$(SECRETSDIR)" > $@
+	@echo "VERSION=$(VERSION)" >> $@
+
+# ======================= Secrets Management =========================
+
+.PHONY: init-secrets
+init-secrets: $(SECRETSDIR) certificates authfiles django-secrets
+
+$(SECRETSDIR):
+	mkdir -p $@
+	chmod go-rwx $(SECRETSDIR)
+
+.PHONY: $(SECRETSDIR) certificates
+certificates:
+	@make -C ./tools/certificates CERTPASS=$$(openssl rand -base64 12) SECRETSDIR=$(SECRETSDIR) CERTDOMAIN=$(CERTDOMAIN)
+
+%.auth:
+	@set -e; \
+	MQTTUSERS=$(MQTTUSERS); \
+	for uid in $${MQTTUSERS}; do \
+	    JSONFILE=$${uid%=*}; \
+	    USERPASS=$${uid##*=}; \
+	    case $${USERPASS} in \
+	        *:* ) ;; \
+	        * ) USERPASS=$${USERPASS}:$$(openssl rand -base64 12); \
+	    esac; \
+	    USER=$${USERPASS%:*}; \
+	    PASS=$${USERPASS##*:}; \
+	    if [ $(SECRETSDIR)/$${JSONFILE} = $@ ]; then \
+	        echo '{"user": "'$${USER}'", "password": "'$${PASS}'"}' > $@; \
+	        chmod 0600 $@; \
+	    fi; \
+	done
+
+authfiles: $(SECRETSDIR) $(AUTHFILES)
+
+.PHONY: django-secrets
+django-secrets:
+	$(MAKE) -C manager django-secrets SECRETSDIR=$(SECRETSDIR)

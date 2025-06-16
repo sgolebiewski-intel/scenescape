@@ -48,24 +48,31 @@ ENV SCENESCAPE_HOME=/home/$WSUSER/SceneScape
 ARG FORCE_VAAPI
 
 RUN : \
+&& apt-get update \
+    && apt-get install -y --no-install-recommends \
+        curl \
+        ca-certificates \
+    && install -d /usr/share/postgresql-common/pgdg \
+    && curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+    && echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt jammy-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         apache2 \
         bindfs \
         bzip2 \
-        curl \
         libegl1 \
         libgl1 \
-        libglib2.0 \
         libapache2-mod-wsgi-py3 \
         libapache2-mod-qos \
+        libglib2.0-0 \
+        libgomp1 \
         mosquitto-clients \
         netcat \
-        postgresql \
+        postgresql-15 \
         python-is-python3 \
         python3-pip \
-        python3-scipy \
         sudo \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Runtime dependencies
@@ -155,11 +162,6 @@ RUN OPENCV_SHA=$(openssl dgst -sha256 -binary "$SCENESCAPE_HOME/manager/static/a
     sed -i "s|sha256-opencv|sha256-${OPENCV_SHA}|g" /etc/apache2/sites-available/000-default.conf
 
 COPY ./manager/config/user_access_config.json $SCENESCAPE_HOME
-
-RUN : \
-    ; apt-get purge -y --auto-remove make g++ \
-    ; apt-get clean \
-    ;
 
 COPY ./manager/config/webserver-init \
      ./manager/config/database-init \
