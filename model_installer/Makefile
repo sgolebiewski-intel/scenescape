@@ -10,7 +10,7 @@
 # or implied warranties, other than those that are expressly stated in the License.
 
 IMAGE := scenescape-model-installer
-RUNTIME_OS_IMAGE := openvino/ubuntu22_dev:2024.6.0
+RUNTIME_OS_IMAGE := openvino/ubuntu22_dev:2025.2.0
 
 include ../common.mk
 
