@@ -46,7 +46,6 @@ RUN cd /tmp/controller \
     && ${BUILD_ENV_DIR}/bin/pip3 install --no-cache-dir ./dist/*.whl -vvv \
     && cd \
     && rm -rf /tmp/controller
-
 # -------------- Controller Runtime Stage --------------
 FROM ${RUNTIME_OS_IMAGE} AS scenescape-controller-runtime
 
@@ -103,3 +102,17 @@ COPY --chown=$WSUSER:$WSUSER ./controller/src/controller-cmd $SCENESCAPE_HOME/co
 COPY --chown=$WSUSER:$WSUSER ./controller/src/controller-init /usr/local/bin/
 
 ENTRYPOINT ["/usr/local/bin/controller-init"]
+
+# ---------- Controller Test Stage ------------------
+# This stage is meant to be used for test execution (not for final runtime)
+FROM scenescape-controller-runtime AS scenescape-controller-test
+USER root
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install Python test dependencies
+COPY ./controller/requirements-buildtime.txt /tmp/requirements-buildtime.txt
+RUN pip3 install --upgrade --no-cache-dir -r /tmp/requirements-buildtime.txt
+
+RUN : \
+    ; eval WSHOME=~$WSUSER \
+    ;
