@@ -46,6 +46,7 @@ RUN cd /tmp/controller \
     && ${BUILD_ENV_DIR}/bin/pip3 install --no-cache-dir ./dist/*.whl -vvv \
     && cd \
     && rm -rf /tmp/controller
+
 # -------------- Controller Runtime Stage --------------
 FROM ${RUNTIME_OS_IMAGE} AS scenescape-controller-runtime
 

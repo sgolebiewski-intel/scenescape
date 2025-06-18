@@ -234,7 +234,6 @@ COPY ./percebro/src/beancount.sh $SCENESCAPE_HOME/percebro/
 COPY ./percebro/src/model-config.json $SCENESCAPE_HOME/percebro/
 COPY ./tools/waitforbroker $SCENESCAPE_HOME/percebro/tools/
 COPY ./percebro/config/model-config.json $SCENESCAPE_HOME/percebro/
-
 # Set correct permisions
 RUN chown -R $WSUSER:$WSUSER $SCENESCAPE_HOME/percebro/ && chmod +x $SCENESCAPE_HOME/percebro/percebro
 
