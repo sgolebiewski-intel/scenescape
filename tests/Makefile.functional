@@ -9,7 +9,7 @@ auto-calibration:  # NEX-T10405
 
 child-scenes: # NEX-T10439
 	$(eval IMAGE_OLD=$(IMAGE_INTERFACE))
-	$(eval IMAGE_INTERFACE=$(IMAGE))
+	$(eval BASE_IMAGE=scenescape-controller-test)
 	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/functional/tc_child_scenes.py, 'pgserver web scene', true, /run/secrets/controller.auth)
 	$(eval IMAGE_INTERFACE=$(IMAGE_OLD))
 
