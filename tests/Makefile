@@ -121,7 +121,7 @@ define metric-recipe =
 	  ; fi \
 	  ; cd .. \
 	  ; mkdir -p $(shell dirname $(LOGFILE)) \
-	  ; tools/scenescape-start --image ${IMAGE}-controller pytest -s $(GENERATE_JUNITXML) $(TEST_SCRIPT) \
+	  ; tools/scenescape-start --image ${IMAGE}-controller-test pytest -s $(GENERATE_JUNITXML) $(TEST_SCRIPT) \
 	                                   $${METRIC} $${THRESHOLD} $${FRAME_RATE} \
 	                                   -o junit_suite_name=$(TEST_SUITE) | tee -i $(LOGFILE) \
 	  ; echo "MAKE_TARGET: $@" | tee -ia $(LOGFILE) \
@@ -155,11 +155,8 @@ broken-tests: \
   3d-camera-control-panel \
   april-tag-setup \
   auto-calibration \
-  metric-tests \
-  mqtt-large-messages \
   rtsp-stream \
   scene-performance-full \
-  sscape-unit \
   vdms-similarity-search \
   videosource-unit \
 
@@ -176,6 +173,7 @@ basic-acceptance-tests: \
 
 standard-tests: \
   functional-tests \
+  metric-tests \
   ui-tests \
   unit-tests \
 
@@ -192,6 +190,7 @@ _functional-tests: \
   geospatial-ingest-publish \
   mqtt-auth \
   mqtt-cert \
+  mqtt-large-messages \
   mqtt-roi \
   mqtt-sensor-roi \
   mqtt-slow-sensor-roi \
@@ -272,7 +271,7 @@ additional-floor-plans: # NEX-T10405
 	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_additional_floor_plans.py, 'pgserver')
 
 april-tag-setup: # NEX-T10477
-	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/camcalibration.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/queuing_video.yml:$(COMPOSE)/retail_video.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_april_tag_setup.py, 'pgserver broker scene ntpserv retail-video queuing-video camcalibration web',sample_data/exampledb.tar.bz2)
+	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/camcalibration.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/queuing_video.yml:$(COMPOSE)/retail_video.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_april_tag_setup.py, 'pgserver broker scene retail-video queuing-video camcalibration web',sample_data/exampledb.tar.bz2)
 
 bounding-box: # NEX-T10419
 	$(call common-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/retail_video.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_bounding_box.py,'pgserver web retail-video scene', true,/run/secrets/browser.auth)

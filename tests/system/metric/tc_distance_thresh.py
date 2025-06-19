@@ -11,8 +11,8 @@
 # This software and the related documents are provided as is, with no express
 # or implied warranties, other than those that are expressly stated in the License.
 
-import analytics.library.json_helper as json_helper
-import analytics.library.metrics as metrics
+import controller.tools.analytics.library.json_helper as json_helper
+import controller.tools.analytics.library.metrics as metrics
 import tests.common_test_utils as common
 from controller.detections_builder import buildDetectionsList
 from controller.scene import Scene

@@ -95,7 +95,7 @@ transform-unit: # NEX-T10512
 	$(call unit-recipe, transform, $(IMAGE)-manager-test)
 
 videosource-unit: # NEX-T10453
-	$(call unit-recipe, videosource, $(IMAGE)-percebro)
+	$(call unit-recipe, videosource, $(IMAGE)-percebro-test)
 
 views-unit: # NEX-T10479
 	$(call unit-django-recipe, views, $(IMAGE)-manager-test)
