@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Intel Corporation
+# Copyright (C) 2022-2023 Intel Corporation
 #
 # This software and the related documents are Intel copyrighted materials,
 # and your use of them is governed by the express license under which they
@@ -9,12 +9,16 @@
 # This software and the related documents are provided as is, with no express
 # or implied warranties, other than those that are expressly stated in the License.
 
-IMAGE := scenescape-controller
-RUNTIME_OS_IMAGE := ubuntu:22.04
-TARGET = scenescape-controller-runtime
+from setuptools import setup, find_packages
+import os
 
-include ../common.mk
-
-.PHONY: test-build
-test-build:
-	$(MAKE) IMAGE="scenescape-controller-test" TARGET="scenescape-controller-test"
+setup(
+    name='autocalibration',
+    package_dir={'': '.'},
+    packages=find_packages(),
+    python_requires='>=3.7',
+    license='Intel Confidential',
+    version='1.0.0',
+    author='Intel Corporation',
+    description='SceneScape core functionality',
+)
