@@ -150,8 +150,6 @@ broken-tests: \
   auto-calibration \
   rtsp-stream \
   scene-performance-full \
-  vdms-similarity-search \
-  videosource-unit \
 
 randomly-failing-tests: \
   3d-scene-control-panel \
@@ -192,6 +190,7 @@ _functional-tests: \
   percebro-3d-msgs \
   rest-test \
   sensors-send-events \
+  vdms-similarity-search \
 
 metric-tests:
 	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) -k
@@ -239,6 +238,7 @@ _unit-tests: \
   schema-unit \
   timestamp-unit \
   transform-unit \
+  videosource-unit \
   views-unit \
 
 include Makefile.sscape Makefile.functional Makefile.percebro Makefile.perf \
