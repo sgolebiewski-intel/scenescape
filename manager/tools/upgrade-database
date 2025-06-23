@@ -16,7 +16,7 @@ set -e
 SCENESCAPE_IMAGE=scenescape-manager
 DBDIR=db
 MIGRATIONSDIR=migrations
-SECRETSDIR=secrets
+SECRETSDIR=./manager/secrets
 CHECK_ONLY=0
 APPDIR=/workspace
 
@@ -49,6 +49,7 @@ function wait_for_container()
     CUR_WAIT=$(( $CUR_WAIT+1 ))
     if [[ $CUR_WAIT -ge $MAX_WAIT ]]
     then
+      docker logs ${CONTAINERNAME}
       echo "Warning: Failed detecting start of container $CONTAINERNAME."
       break
     fi
@@ -66,8 +67,8 @@ done
 
 NOW=$(date +"%y%m%d-%H%M%S")
 PG_CONTAINER=pg_backup
-PG_UID=$(stat -c '%u' ${DBDIR})
-PG_DB_VERSION=$(cat ${DBDIR}/PG_VERSION)
+#PG_UID=$(stat -c '%u' ${DBDIR})
+PG_DB_VERSION=15
 PG_NEW_VERSION=$(docker run --rm ${SCENESCAPE_IMAGE} /bin/sh -c \
                  'echo -n PG_NEW_VERSION= ; ls /usr/lib/postgresql' \
                      | awk -F= '/PG_NEW_VERSION/{print $2}' | tr -d '\015')
@@ -80,10 +81,19 @@ if [ "${PG_NEW_VERSION}" -le "${PG_DB_VERSION}" ] ; then
 
     docker run \
         --name ${PG_CONTAINER} \
-        --rm \
         -d \
         --workdir ${APPDIR} \
         -v ${PWD}:${APPDIR} \
+        -v ${SECRETSDIR}/django/secrets.py:/home/scenescape/SceneScape/manager/secrets.py \
+        -v ${SECRETSDIR}/browser.auth:/run/secrets/browser.auth \
+        -v ${SECRETSDIR}/calibration.auth:/run/secrets/calibration.auth \
+        -v ${SECRETSDIR}/controller.auth:/run/secrets/controller.auth \
+        -v ${SECRETSDIR}/percebro.auth:/run/secrets/percebro.auth \
+        -v ${SECRETSDIR}/certs:/run/secrets/certs \
+        -v ${SECRETSDIR}/ca:/run/secrets/ca \
+        -v scenescape_vol-db:/workspace/db \
+        -v scenescape_vol-migrations:/home/scenescape/SceneScape/sscape/migrations \
+        -v scenescape_vol-migrations:/workspace/migrations \
         --privileged \
         -e PYTHONPATH=${APPDIR} \
         ${SCENESCAPE_IMAGE} \
