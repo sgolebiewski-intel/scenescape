@@ -82,7 +82,7 @@ if [ "${PG_NEW_VERSION}" -le "${PG_DB_VERSION}" ] ; then
     docker run \
         --name ${PG_CONTAINER} \
         -d \
-        -- rm \
+        --rm \
         --workdir ${APPDIR} \
         -v ${PWD}:${APPDIR} \
         -v ${SECRETSDIR}/django/secrets.py:/home/scenescape/SceneScape/manager/secrets.py \
