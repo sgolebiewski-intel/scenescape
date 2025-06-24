@@ -49,7 +49,6 @@ services:
     restart: always
 
 volumes:
-  vol-media:
   vol-datasets:
   vol-netvlad_models:
     driver: local
