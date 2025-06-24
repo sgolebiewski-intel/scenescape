@@ -147,7 +147,6 @@ release-tests: \
 broken-tests: \
   3d-camera-control-panel \
   april-tag-setup \
-  auto-calibration \
   rtsp-stream \
   scene-performance-full \
 
@@ -166,8 +165,9 @@ standard-tests: \
   ui-tests \
   unit-tests \
 
-functional-tests:
-	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) -k
+functional-tests: \
+  auto-calibration \
+  $(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) -k \
 
 _functional-tests: \
   add-orphaned-cameras \
