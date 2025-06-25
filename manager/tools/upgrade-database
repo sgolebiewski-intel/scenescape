@@ -20,6 +20,13 @@ SECRETSDIR=./manager/secrets
 CHECK_ONLY=0
 APPDIR=/workspace
 
+# Check if database directories exist
+if [ ! -d "${DBDIR}" ] || [ ! -d "${MIGRATIONSDIR}" ]; then
+    echo "Database directories not found. No previous database installation detected."
+    echo "No upgrade or migration needed."
+    exit 0
+fi
+
 function wait_for_container()
 {
   CONTAINERNAME=$1
@@ -67,8 +74,8 @@ done
 
 NOW=$(date +"%y%m%d-%H%M%S")
 PG_CONTAINER=pg_backup
-#PG_UID=$(stat -c '%u' ${DBDIR})
-PG_DB_VERSION=$(docker run --rm -v scenescape_vol-db:/dbvol alpine:latest cat /dbvol/PG_VERSION | tr -d '\r\n')
+PG_UID=$(stat -c '%u' ${DBDIR})
+PG_DB_VERSION=$(cat ${DBDIR}/PG_VERSION)
 PG_NEW_VERSION=$(docker run --rm ${SCENESCAPE_IMAGE} /bin/sh -c \
                  'echo -n PG_NEW_VERSION= ; ls /usr/lib/postgresql' \
                      | awk -F= '/PG_NEW_VERSION/{print $2}' | tr -d '\015')
@@ -76,9 +83,11 @@ if [ -z "${PG_NEW_VERSION}" ] ; then
     echo Unknown Postgres version
     exit 1
 fi
+
 if [ "${PG_NEW_VERSION}" -le "${PG_DB_VERSION}" ] ; then
     echo Postgres server version ${PG_NEW_VERSION} is not newer than existing database version ${PG_DB_VERSION}
 
+    # Check if migration is needed for the same version
     docker run \
         --name ${PG_CONTAINER} \
         -d \
@@ -114,22 +123,27 @@ fi
 if [ ${CHECK_ONLY} = 1 ] ; then
     exit 0
 fi
+# Create backup of the old database files
+BACKUP=${DBDIR}-backup-${NOW}
+mkdir ${BACKUP}
+rsync -a ${DBDIR} ${MIGRATIONSDIR} ${BACKUP}/.
+echo "Old database has been backed up to: ${BACKUP}"
 
 DBPASS=$(sed -r -n -e "/DATABASE_PASSWORD=/s/.*'([^']+)'/\1/p" \
                  ${DBDIR}/../manager/secrets/django/secrets.py)
-BACKUP=${DBDIR}-backup-${NOW}
 
 docker stop ${PG_CONTAINER} >/dev/null 2>&1 || true
 
-mkdir ${BACKUP}
-rsync -a ${DBDIR} ${MIGRATIONSDIR} ${BACKUP}/.
-mv ${BACKUP}/${DBDIR}/pg_hba.conf ${BACKUP}/${DBDIR}/pg_hba.conf-orig
+# Make a copy of pg_hba.conf for the backup process
+echo "Preparing database backup configuration..."
+cp ${DBDIR}/pg_hba.conf ${BACKUP}/${DBDIR}/pg_hba.conf-orig
 cat > ${BACKUP}/${DBDIR}/pg_hba.conf <<EOF
 local all all trust
 host all all 0.0.0.0/0 trust
 EOF
 
 # Start postgres container using version that matches existing database
+echo "Starting PostgreSQL ${PG_DB_VERSION} container for backup..."
 docker run \
        --name ${PG_CONTAINER} \
        --rm \
@@ -144,72 +158,89 @@ docker run \
 
 wait_for_container ${PG_CONTAINER} "database system is ready to accept connections"
 
-# Create backup of database
+# Create SQL backup of database
+echo "Creating SQL backup of database..."
 docker exec ${PG_CONTAINER} /bin/bash -c 'su postgres -c "pg_dump -U scenescape"' \
        > ${BACKUP}.psql
+echo "SQL backup completed successfully."
 
 docker stop ${PG_CONTAINER}
 
-mv ${BACKUP}/${DBDIR}/pg_hba.conf-orig ${BACKUP}/${DBDIR}/pg_hba.conf
+# Clean up any existing volumes to prepare for upgrade
+echo "Preparing Docker volumes for upgraded database..."
+docker volume rm scenescape_vol-db scenescape_vol-migrations 2>/dev/null || true
+docker volume create scenescape_vol-db
+docker volume create scenescape_vol-migrations
+echo "Docker volumes created."
 
-NEWDB="${DBDIR}-v${PG_NEW_VERSION}-${NOW}"
-mkdir -p "${NEWDB}"
-rsync -a ${MIGRATIONSDIR} ${SECRETSDIR} ${NEWDB}/.
+# Create temporary container to initialize the volumes with old data
+echo "Initializing migration volume..."
+TEMP_CONTAINER=init_volumes
+docker run --name ${TEMP_CONTAINER} -d \
+    -v ${PWD}/${MIGRATIONSDIR}:/source/migrations \
+    -v scenescape_vol-migrations:/dest/migrations \
+    alpine:latest sleep 60
 
-if [ "${PG_NEW_VERSION}" -le "${PG_DB_VERSION}" ] ; then
-    echo Copying old database
-    rsync -a --delete "${DBDIR}" "${NEWDB}/."
-else
-    # Create new db using new version of postgres
-    mkdir -p "${NEWDB}/${DBDIR}"
-    PG_UID=$(stat -c '%u' ${NEWDB})
+# Copy data to volumes
+docker exec ${TEMP_CONTAINER} /bin/sh -c "cp -r /source/migrations/* /dest/migrations/"
+docker stop ${TEMP_CONTAINER}
+docker rm ${TEMP_CONTAINER}
 
-    docker run \
-           --name ${PG_CONTAINER} \
-           --rm \
-           -e POSTGRES_PASSWORD="${DBPASS}" \
-           -e POSTGRES_USER=scenescape \
-           -e POSTGRES_HOST_AUTH_METHOD=trust \
-           -e LANG=C.UTF-8 \
-           -v ${PWD}/${NEWDB}/${DBDIR}:/var/lib/postgresql/data \
-           --entrypoint="/bin/bash" \
-           -d \
-           postgres:${PG_NEW_VERSION} \
-           -c "usermod --uid=${PG_UID} postgres ; id postgres ; exec docker-entrypoint.sh postgres"
-
-    sleep 30
-
-    # Create new version of database from backup of old database
-    docker cp ${BACKUP}.psql ${PG_CONTAINER}:/tmp/$(basename ${BACKUP}.psql)
-    docker exec ${PG_CONTAINER} /bin/bash \
-           -c "su postgres -c 'psql -U scenescape -d scenescape < /tmp/$(basename ${BACKUP}.psql)'"
-    cp "${DBDIR}/pg_hba.conf" "${NEWDB}/${DBDIR}"
-
-    docker stop ${PG_CONTAINER}
-fi
-
-# Run migration
+# Start postgres container using the volume and new postgres version
+echo "Starting new PostgreSQL ${PG_NEW_VERSION} container..."
 docker run \
        --name ${PG_CONTAINER} \
        --rm \
+       -e POSTGRES_PASSWORD="${DBPASS}" \
+       -e POSTGRES_USER=scenescape \
+       -e POSTGRES_HOST_AUTH_METHOD=trust \
+       -e LANG=C.UTF-8 \
+       -v scenescape_vol-db:/var/lib/postgresql/data \
+       --entrypoint="/bin/bash" \
        -d \
-       --workdir ${APPDIR} \
-       -v ${PWD}:${APPDIR} \
-       -v ${PWD}/${NEWDB}/db:${APPDIR}/db \
-       -v ${PWD}/${NEWDB}/migrations:${APPDIR}/migrations \
-       --privileged \
-       -e PYTHONPATH=${APPDIR} \
-       ${SCENESCAPE_IMAGE} \
-       database
+       postgres:${PG_NEW_VERSION} \
+       -c "exec docker-entrypoint.sh postgres"
+
+wait_for_container ${PG_CONTAINER} "database system is ready to accept connections"
+
+# Create new version of database from backup of old database if needed
+if [ "${PG_NEW_VERSION}" -gt "${PG_DB_VERSION}" ]; then
+    docker cp ${BACKUP}.psql ${PG_CONTAINER}:/tmp/$(basename ${BACKUP}.psql)
+    docker exec ${PG_CONTAINER} /bin/bash \
+           -c "su postgres -c 'psql -U scenescape -d scenescape < /tmp/$(basename ${BACKUP}.psql)'"
+fi
+
+docker stop ${PG_CONTAINER}
+
+# Run migration using volumes
+docker run \
+    --name ${PG_CONTAINER} \
+    -d \
+    --workdir ${APPDIR} \
+    -v ${PWD}:${APPDIR} \
+    -v ${SECRETSDIR}/django/secrets.py:/home/scenescape/SceneScape/manager/secrets.py \
+    -v ${SECRETSDIR}/browser.auth:/run/secrets/browser.auth \
+    -v ${SECRETSDIR}/calibration.auth:/run/secrets/calibration.auth \
+    -v ${SECRETSDIR}/controller.auth:/run/secrets/controller.auth \
+    -v ${SECRETSDIR}/percebro.auth:/run/secrets/percebro.auth \
+    -v ${SECRETSDIR}/certs:/run/secrets/certs \
+    -v ${SECRETSDIR}/ca:/run/secrets/ca \
+    -v scenescape_vol-db:/workspace/db \
+    -v scenescape_vol-migrations:/home/scenescape/SceneScape/sscape/migrations \
+    -v scenescape_vol-migrations:/workspace/migrations \
+    --privileged \
+    -e PYTHONPATH=${APPDIR} \
+    ${SCENESCAPE_IMAGE} \
+    database
 
 wait_for_container ${PG_CONTAINER}
 
 docker exec -it ${PG_CONTAINER} /bin/bash manager/tools/migration
 docker stop ${PG_CONTAINER}
 
-rm -rf ${NEWDB}/${SECRETSDIR}
-
-echo "Database has been copied to: ${BACKUP}"
-echo "               backed up to: ${BACKUP}.psql"
+echo "Old database has been backed up to: ${BACKUP}"
+echo "                     SQL backup at: ${BACKUP}.psql"
 echo
-echo "Upgraded database for Postgres ${PG_NEW_VERSION} has been created: ${NEWDB}"
+echo "Upgraded database for Postgres ${PG_NEW_VERSION} has been created in Docker volumes:"
+echo "  - Database: scenescape_vol-db"
+echo "  - Migrations: scenescape_vol-migrations"
