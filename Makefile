@@ -253,8 +253,18 @@ install-models:
 
 # =========================== Run Tests ==============================
 
+.PHONY: setup_tests
+setup_tests:
+	@echo "Setting up test environment..."
+	@$(MAKE) -C manager test-build
+	@$(MAKE) -C controller test-build
+	@$(MAKE) -C autocalibration test-build
+	@$(MAKE) -C percebro test-build
+	mkdir -p test_data/netvlad_models
+	@echo "DONE ==> Setting up test environment"
+
 .PHONY: run_tests
-run_tests:
+run_tests: setup_tests
 	@echo "Running tests..."
 	$(MAKE) --trace -C manager test-build
 	$(MAKE) --trace -C controller test-build
