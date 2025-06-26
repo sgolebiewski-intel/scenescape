@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: (C) 2025 Intel Corporation
 # SPDX-License-Identifier: LicenseRef-Intel-Edge-Software
-# This file is licensed under the Limited Edge Software Distribution License Agreement.
+# This file is licensed under the Limited Edge Software Distribution
+# License Agreement.
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -30,7 +31,7 @@ author = 'Intel Corporation - Intel Confidential'
 
 # The full version, including alpha/beta/rc tags
 release = '1.1.0'
-version  = '1.1.0~scenescape'
+version = '1.1.0~scenescape'
 
 # -- General configuration ---------------------------------------------------
 
@@ -38,13 +39,13 @@ version  = '1.1.0~scenescape'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ["sphinx.ext.autodoc",
-             'sphinx.ext.doctest',
-             'sphinx.ext.napoleon',
-             'sphinx.ext.autosummary',
-             "sphinx.ext.viewcode",
-             "sphinx.ext.intersphinx",
-             "sphinx.ext.autosectionlabel",
-             "sphinx.ext.mathjax"]
+              'sphinx.ext.doctest',
+              'sphinx.ext.napoleon',
+              'sphinx.ext.autosummary',
+              "sphinx.ext.viewcode",
+              "sphinx.ext.intersphinx",
+              "sphinx.ext.autosectionlabel",
+              "sphinx.ext.mathjax"]
 
 autodoc_default_options = {
     "members": True,

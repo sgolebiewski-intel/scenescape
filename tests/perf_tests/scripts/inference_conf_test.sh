@@ -38,7 +38,7 @@ OUTPUTFILE3=$( echo $INPUT3 | sed -e 's/mp4/json/g' )
 EXTRA_ARGS="${EXTRA_ARGS} --preprocess"
 INPUT_LEN=""
 
-PROCESS_CMD="tests/perf_tests/scripts/process_result"
+PROCESS_CMD="tests/perf_tests/scripts/process_result.py"
 
 RESULT=0
 
