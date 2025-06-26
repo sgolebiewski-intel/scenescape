@@ -136,6 +136,7 @@ RUN echo '#!/bin/bash\n\
 set -e\n\
 chown -R $WSUSER:$WSUSER $NETVLAD_MODEL_DIR\n\
 echo "Checking NetVLAD model..."\n\
+python3 /usr/local/bin/download_models.py\n\
 exec "$@"\n' > /usr/local/bin/startup.sh && chmod +x /usr/local/bin/startup.sh
 
 ENTRYPOINT ["/usr/local/bin/startup.sh", "/usr/local/bin/camcalibration-init"]
