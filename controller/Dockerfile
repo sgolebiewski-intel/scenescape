@@ -111,8 +111,7 @@ USER root
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install Python test dependencies
-COPY ./controller/requirements-buildtime.txt /tmp/requirements-buildtime.txt
-RUN pip3 install --upgrade --no-cache-dir -r /tmp/requirements-buildtime.txt
+RUN pip3 install --upgrade --no-cache-dir coverage pytest
 
 RUN : \
     ; eval WSHOME=~$WSUSER \

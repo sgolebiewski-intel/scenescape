@@ -36,7 +36,6 @@ RUN export no_proxy= \
     tee /etc/apt/sources.list.d/intel-gpu-"${VERSION_CODENAME}".list
 
 # Install build dependencies
-COPY ./percebro/requirements-buildtime.txt /tmp
 RUN export no_proxy= \
     && apt-get update && apt-get install -y --no-install-recommends \
         checkinstall \
@@ -63,9 +62,8 @@ RUN export no_proxy= \
         libdrm-dev \
     && pip3 install --upgrade --no-cache-dir \
         --extra-index-url https://download.pytorch.org/whl/cpu \
-        -r /tmp/requirements-buildtime.txt && \
-    rm -rf /tmp/requirements-buildtime.txt && \
-    rm -rf /var/lib/apt/lists/*
+        pybind11 \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install openvino GPU drivers
 RUN : \
@@ -251,8 +249,7 @@ USER root
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install Python test dependencies
-COPY ./percebro/requirements-buildtime.txt /tmp/requirements-buildtime.txt
-RUN pip3 install --upgrade --no-cache-dir -r /tmp/requirements-buildtime.txt
+RUN pip3 install --upgrade --no-cache-dir coverage pytest
 
 RUN : \
     ; eval WSHOME=~$WSUSER \
