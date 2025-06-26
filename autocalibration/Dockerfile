@@ -143,7 +143,6 @@ ENTRYPOINT ["/usr/local/bin/startup.sh", "/usr/local/bin/camcalibration-init"]
 # ---------- Cam Calibration Test Stage ------------------
 # This stage is meant to be used for test execution (not for final runtime)
 FROM camcalibration-runtime AS camcalibration-test
-USER root
 ENV DEBIAN_FRONTEND=noninteractive
 ENV SKIP_MODEL_DOWNLOAD=1
 
