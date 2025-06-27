@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: (C) 2025 Intel Corporation
 # SPDX-License-Identifier: LicenseRef-Intel-Edge-Software
-# This file is licensed under the Limited Edge Software Distribution
-# License Agreement.
+# This file is licensed under the Limited Edge Software Distribution License Agreement.
 
 from SuperGluePretrainedNetwork.models.superglue import SuperGlue as SG
 import sys
@@ -13,18 +12,18 @@ sys.path.append(str(Path(__file__).parent / '../../third_party'))
 
 
 class SuperGlue(BaseModel):
-    default_conf = {
-        'weights': 'outdoor',
-        'sinkhorn_iterations': 100,
-        'match_threshold': 0.2,
-    }
-    required_inputs = [
-        'image0', 'keypoints0', 'scores0', 'descriptors0',
-        'image1', 'keypoints1', 'scores1', 'descriptors1',
-    ]
+  default_conf = {
+      'weights': 'outdoor',
+      'sinkhorn_iterations': 100,
+      'match_threshold': 0.2,
+  }
+  required_inputs = [
+      'image0', 'keypoints0', 'scores0', 'descriptors0',
+      'image1', 'keypoints1', 'scores1', 'descriptors1',
+  ]
 
-    def _init(self, conf):
-        self.net = SG(conf)
+  def _init(self, conf):
+    self.net = SG(conf)
 
-    def _forward(self, data):
-        return self.net(data)
+  def _forward(self, data):
+    return self.net(data)

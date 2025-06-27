@@ -154,7 +154,7 @@ if [ "${KEEP_DB}" != 1 ] ; then
 fi
 
 # Parse arguments for kubernetes to properly scale the containers
-IMAGE_SCALE=$(tests/kubernetes/parse-image-yaml.py $COMPOSE_FILES)
+IMAGE_SCALE=$(tests/kubernetes/parse-image-yaml $COMPOSE_FILES)
 for DEP_SCALE in ${IMAGE_SCALE[@]}; do
     IMG_NAME_OPTION="${DEP_SCALE%%=*}" # Extract the part before the '='
     IMG_SCALE="${DEP_SCALE#*=}" # Extract the part after the '='

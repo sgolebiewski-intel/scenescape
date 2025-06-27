@@ -360,7 +360,7 @@ native-tracker:
 	@set -ex \
 	  ; echo RUNNING TEST $@ \
 	  ; cd .. \
-	  ; tools/scenescape-start controller/tools/tracker/tracker-test.py controller/tools/tracker/standard-tests.json | tee -i $(LOGFILE) \
+	  ; tools/scenescape-start controller/tools/tracker/tracker-test controller/tools/tracker/standard-tests.json | tee -i $(LOGFILE) \
 	  ; echo "MAKE_TARGET: $@" | tee -ia $(LOGFILE) \
 	  ; echo END TEST $@
 

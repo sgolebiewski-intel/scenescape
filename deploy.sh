@@ -97,7 +97,7 @@ if [ "${SKIPYML}" != "1" ] ; then
                     break
                     ;;
                 [Nn]*)
-                    if ! tools/yaml_validator.py docker-compose.yml ; then
+                    if ! tools/yaml_validator docker-compose.yml ; then
                         echo "docker-compose.yml is not valid"
                         exit 1
                     fi
