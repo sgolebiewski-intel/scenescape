@@ -14,7 +14,7 @@ JSONFILE2=$( echo $INPUT2 | sed -e 's/mp4/json/g' )
 JSONFILE3=$( echo $INPUT3 | sed -e 's/mp4/json/g' )
 
 VIDEO_FRAMES=1781
-PERF_CMD="controller/tools/analytics/trackrate --frame 1500"
+PERF_CMD="controller/tools/analytics/trackrate.py --frame 1500"
 CONFIG="tests/perf_tests/config/config.json"
 PERF_STR="PERF"
 

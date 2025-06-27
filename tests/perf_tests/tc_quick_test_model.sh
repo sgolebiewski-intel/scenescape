@@ -25,7 +25,7 @@ fi
 tools/scenescape-start cat percebro/config/model-config.json
 
 echo "Testing model: test"
-tools/scenescape-start percebro/percebro -m test -i $INPUTS \
+tools/scenescape-start percebro/percebro.py -m test -i $INPUTS \
                           --intrinsics='{"fov":70}' \
                           --frames $VIDEO_FRAMES --preprocess --stats
 STATUS=$?
@@ -46,7 +46,7 @@ tools/scenescape-start sed -i 's/"test"/"test_model_new"/g' $EXAMPLE_MODEL_CONFI
 tools/scenescape-start cat $EXAMPLE_MODEL_CONFIG
 
 echo "Testing model: test_model_new"
-tools/scenescape-start percebro/percebro -m test_model_new -i $INPUTS \
+tools/scenescape-start percebro/percebro.py -m test_model_new -i $INPUTS \
                           --modelconfig $EXAMPLE_MODEL_CONFIG \
                           --intrinsics='{"fov":70}' \
                           --frames $VIDEO_FRAMES --preprocess --stats
@@ -65,7 +65,7 @@ tools/scenescape-start sed -i 's/"pedestrian-and-vehicle-detector-adas-0001"/"pe
 tools/scenescape-start cat $EXAMPLE_MODEL_CONFIG
 
 echo "Testing model: test_model_new"
-tools/scenescape-start percebro/percebro -m test_model_new -i $INPUTS \
+tools/scenescape-start percebro/percebro.py -m test_model_new -i $INPUTS \
                           --modelconfig $EXAMPLE_MODEL_CONFIG \
                           --intrinsics='{"fov":70}' \
                           --frames $VIDEO_FRAMES --preprocess --stats

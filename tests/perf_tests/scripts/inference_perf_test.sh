@@ -33,7 +33,7 @@ echo "TARGET FPS: ${TARGET_FPS}"
 echo "Using ${CVCORES} cores for OpenCV and ${OVCORES} cores for OpenVINO"
 
 
-CMD="percebro/src/percebro"
+CMD="percebro/src/percebro.py"
 CORESSTR="--cvcores ${CVCORES} --ovcores ${OVCORES} "
 EXTRA_ARGS="--stats --debug"
 INTRINSICS="{\"fov\":70}"

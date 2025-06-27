@@ -123,9 +123,9 @@ if [ ${START_CONTROLLER} = 1 ] ; then
 
     BROKERAUTH=${BROKERAUTH:-${RUNSECRETS}/controller.auth}
     RESTAUTH=${RESTAUTH:-${RUNSECRETS}/controller.auth}
-    ${SCENESCAPE_HOME}/tools/waitforbroker --brokerauth ${BROKERAUTH} ${BROKER}
+    ${SCENESCAPE_HOME}/tools/waitforbroker.py --brokerauth ${BROKERAUTH} ${BROKER}
 
-    ${SCENESCAPE_HOME}/controller-cmd \
+    ${SCENESCAPE_HOME}/controller-cmd.py \
         --restauth ${RESTAUTH} ${RESTURL} \
         --brokerauth ${BROKERAUTH} ${BROKER} \
         ${REWRITETIME} ${MAXLAG} $@ &

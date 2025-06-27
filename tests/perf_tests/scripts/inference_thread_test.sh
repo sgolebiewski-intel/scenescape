@@ -24,7 +24,7 @@ OVCORES=${OVCORES:-$OVCORES_DEFAULT}
 echo "Models: ${MODELS}"
 echo "Inputs: ${INPUTS}"
 
-CMD="percebro/src/percebro"
+CMD="percebro/src/percebro.py"
 EXTRA_ARGS="--stats --debug"
 INTRINSICS="{\"fov\":70}"
 

@@ -27,7 +27,7 @@ Use the `docker-compose.yml` file to specify camera intrinsic values.
   retail-video:
     ...
     command:
-      - "percebro"
+      - "percebro.py"
       - "--camera=sample_data/apriltag-cam1.mp4"
       - "--cameraid=camera1"
       - "--intrinsics={\"fov\":70}"
@@ -44,7 +44,7 @@ Use the `docker-compose.yml` file to specify camera intrinsic values.
   retail-video:
     ...
     command:
-      - "percebro"
+      - "percebro.py"
       - "--camera=sample_data/apriltag-cam1.mp4"
       - "--cameraid=camera1"
       - --intrinsics={"fx":800, "fy":800, "cx":640, "cy":360}

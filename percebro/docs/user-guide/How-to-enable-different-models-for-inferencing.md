@@ -216,7 +216,7 @@ Finally, in order to complete the system configuration, the relevant percebro co
     environment:
      - "DS_MODULE"
     command:
-     - "percebro"
+     - "percebro.py"
      - "--camera=parkingCamera1.mp4"
      - "--cameraid=camera1"
      - "--intrinsics={\"fov\":70}"

@@ -208,7 +208,7 @@ services:
         condition: service_started
     #  - ovms # Need to uncomment this to use ovms
     command:
-     - "percebro"
+     - "percebro.py"
      - "--camera=sample_data/apriltag-cam1.mp4"
      - "--cameraid=camera1"
      - "--intrinsics={\"fov\":70}"
@@ -244,7 +244,7 @@ services:
         condition: service_started
     #  - ovms # Need to uncomment this to use ovms
     command:
-     - "percebro"
+     - "percebro.py"
      - "--camera=sample_data/qcam1.mp4"
      - "--cameraid=atag-qcam1"
      - "--intrinsics={\"fx\":905,\"fy\":905,\"cx\":640,\"cy\":360}"
@@ -271,7 +271,7 @@ services:
     init: true
     networks:
       scenescape:
-    command: camcalibration --broker broker.scenescape.intel.com --resturl https://web.scenescape.intel.com:443/api/v1
+    command: camcalibration.py --broker broker.scenescape.intel.com --resturl https://web.scenescape.intel.com:443/api/v1
     depends_on:
       web:
         condition: service_healthy

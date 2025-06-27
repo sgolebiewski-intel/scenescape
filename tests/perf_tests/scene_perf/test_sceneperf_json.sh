@@ -36,7 +36,7 @@ export LOGSFORCONTAINER="${WAITFORCONTAINERS} mqtt_recorder "
 
 rm -f ${LOG}
 tests/runtest ${COMPOSE}/broker.yml:${COMPOSE}/mqtt_recorder.yml:${COMPOSE}/ntp.yml:${COMPOSE}/pgserver.yml:${COMPOSE}/scene.yml:${COMPOSE}/web.yml \
-              percebro/percsim ${TESTINPUTFILES} \
+              percebro/percsim.py ${TESTINPUTFILES} \
               --auth ${SECRETSDIR}/percebro.auth \
               --rootcert ${SECRETSDIR}/certs/scenescape-ca.pem \
               --rate ${TESTINPUTRATE} \

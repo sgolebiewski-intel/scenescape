@@ -116,7 +116,7 @@ class KubeClient():
       advanced_args.append(f"--resolution=[{msg['width']}, {msg['height']}]")
 
     args = [
-      "percebro", "--broker", f"broker.{self.ns}",
+      "percebro.py", "--broker", f"broker.{self.ns}",
       f"--camera={msg['command']}", f"--cameraid={msg['sensor_id']}",
       f"--intrinsics={self.handleIntrinsics(msg)}", f"--camerachain={msg['camerachain']}",
       *advanced_args,

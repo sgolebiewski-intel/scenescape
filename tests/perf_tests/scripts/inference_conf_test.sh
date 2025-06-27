@@ -18,7 +18,7 @@ echo "Conformance check ${CONFORMANCE_CHECK}"
 echo "Using REID model: ${CHECK_REID}"
 
 NUM_FRAMES=500
-CMD="percebro/src/percebro"
+CMD="percebro/src/percebro.py"
 CORESSTR="--cvcores ${CVCORES} --ovcores ${OVCORES} "
 MODEL_CONFIG="percebro/config/model-config.json"
 EXTRA_ARGS="--stats --debug --frames ${NUM_FRAMES}"
@@ -38,7 +38,7 @@ OUTPUTFILE3=$( echo $INPUT3 | sed -e 's/mp4/json/g' )
 EXTRA_ARGS="${EXTRA_ARGS} --preprocess"
 INPUT_LEN=""
 
-PROCESS_CMD="tests/perf_tests/scripts/process_result"
+PROCESS_CMD="tests/perf_tests/scripts/process_result.py"
 
 RESULT=0
 

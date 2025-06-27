@@ -193,7 +193,7 @@ retail-video:
      - ntpserv
      - ovms
     command:
-     - "percebro"
+     - "percebro.py"
      - "--camera=sample_data/apriltag-cam1.mp4"
      - "--cameraid=camera1"
      - "--intrinsics={\"fov\":70}"

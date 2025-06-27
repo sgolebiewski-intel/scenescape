@@ -345,7 +345,7 @@ Also specify the model (using the the name after `model` from the model-config) 
 
 ```
      command:
-      - "percebro"
+      - "percebro.py"
       ...
       - "--modelconfig=/opt/intel/openvino/deployment_tools/intel_models/my_model_config.json"
       - "--camerachain=mymodel"

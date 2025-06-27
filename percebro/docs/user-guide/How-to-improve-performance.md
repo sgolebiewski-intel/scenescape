@@ -66,7 +66,7 @@ For performance testing purposes it is useful to process a given image many time
         $ tools/scenescape-start --image scenescape-percebro:latest --shell
         usermod: no changes
         TIMEZONE IS /usr/share/zoneinfo/Etc/UTC
-        scenescape@hostname:/home/user/SceneScape$ percebro/percebro --camera path/to/image.jpg \
+        scenescape@hostname:/home/user/SceneScape$ percebro/percebro.py --camera path/to/image.jpg \
                 --camerachain pv0078 --debug --stats --frames 1000 >> log.txt
 
 See [below](#heterogeneous-performance-testing) for how to target inferencing on various available hardware.

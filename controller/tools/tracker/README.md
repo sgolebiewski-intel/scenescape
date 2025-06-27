@@ -2,7 +2,7 @@ I built a debugging tool for testing the scene controller. It allows single step
 
 First thing to do is preprocess the video files using percebro:
 
-               percebro/percebro --preprocess -i sample_data/apriltag-cam1.mp4 --mqttid camera1 -i sample_data/apriltag-cam2.mp4 --mqttid camera2 -m retail
+               percebro/percebro.py --preprocess -i sample_data/apriltag-cam1.mp4 --mqttid camera1 -i sample_data/apriltag-cam2.mp4 --mqttid camera2 -m retail
 
 That will create two json files with all of the output from inference done on every single frame. Next you need to create a scene.json file which describes the scene. Most of the values are what is in the database:
 
@@ -37,6 +37,6 @@ That will create two json files with all of the output from inference done on ev
 
 Then you can run the tracker:
 
-               tracker/tracker --config scene.json apriltag-cam1.json apriltag-cam2.json
+               tracker/tracker.py --config scene.json apriltag-cam1.json apriltag-cam2.json
 
 It will bring up a map window, push space to start and stop it. It will also bring up the video windows once it’s started.

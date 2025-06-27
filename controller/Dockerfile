@@ -14,8 +14,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN : \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-        libopencv-dev \
-        python3-venv \
+    libopencv-dev \
+    python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
 # create and set up Python virtual environment
@@ -36,7 +36,7 @@ RUN export OpenCV_DIR="/usr/lib/x86_64-linux-gnu/cmake/opencv4" \
     && cd dist \
     && ${BUILD_ENV_DIR}/bin/pip3 install --no-cache-dir ./*.whl \
     && cd \
-   && rm -rf /tmp/robot_vision
+    && rm -rf /tmp/robot_vision
 
 # Build main controller package
 COPY ./controller/src/controller /tmp/controller/controller
@@ -66,11 +66,11 @@ USER root
 RUN : \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-        libgl1 \
-        libopencv-contrib4.5d \
-        libpython3.10 \
-        netbase \
-        python3-pip \
+    libgl1 \
+    libopencv-contrib4.5d \
+    libpython3.10 \
+    netbase \
+    python3-pip \
     && rm -rf /usr/lib/x86_64-linux-gnu/libLLVM-15.so.1 \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -97,8 +97,8 @@ RUN : \
 
 COPY --chown=$WSUSER:$WSUSER ./controller/src/schema/metadata.schema.json $SCENESCAPE_HOME/schema/metadata.schema.json
 COPY --chown=$WSUSER:$WSUSER ./controller/config/tracker-config.json $SCENESCAPE_HOME/tracker-config.json
-COPY --chown=$WSUSER:$WSUSER --from=scenescape-common-base /tmp/tools/waitforbroker $SCENESCAPE_HOME/tools/waitforbroker
-COPY --chown=$WSUSER:$WSUSER ./controller/src/controller-cmd $SCENESCAPE_HOME/controller-cmd
+COPY --chown=$WSUSER:$WSUSER --from=scenescape-common-base /tmp/tools/waitforbroker.py $SCENESCAPE_HOME/tools/waitforbroker.py
+COPY --chown=$WSUSER:$WSUSER ./controller/src/controller-cmd.py $SCENESCAPE_HOME/controller-cmd.py
 COPY --chown=$WSUSER:$WSUSER ./controller/src/controller-init /usr/local/bin/
 
 ENTRYPOINT ["/usr/local/bin/controller-init"]

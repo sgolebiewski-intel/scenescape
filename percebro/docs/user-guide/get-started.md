@@ -34,7 +34,7 @@
   -v $(pwd)/manager/secrets/certs/scenescape-ca.pem:/run/secrets/certs/scenescape-ca.pem:ro \
   --name retail-video \
   scenescape-percebro \
-  percebro \
+  percebro.py \
   --camera=sample_data/apriltag-cam1.mp4 \
   --cameraid=camera1 \
   --intrinsics='{"fov":70}' \
@@ -73,8 +73,8 @@ To run Percebro directly and view its help documentation, first launch the Perce
 
     $ tools/scenescape-start --image scenescape-percebro:latest --shell
     scenescape@hostname:/home/user/SceneScape$ cd percebro/
-    scenescape@hostname:/home/user/SceneScape/percebro$ ./percebro -h
-    usage: percebro [-h] [--camerachain CAMERACHAIN] --camera CAMERA [--cameraid CAMERAID]
+    scenescape@hostname:/home/user/SceneScape/percebro$ ./percebro.py -h
+    usage: percebro.py [-h] [--camerachain CAMERACHAIN] --camera CAMERA [--cameraid CAMERAID]
                     [--sensor SENSOR] [--sensorchain SENSORCHAIN] [--sensorattrib SENSORATTRIB]
                     [-e THRESHOLD] [--window] [--usetimestamps] [--ntp NTP] [--virtual VIRTUAL]
                     [--debug] [--aspect ASPECT] [--intrinsics INTRINSICS] [--distortion DISTORTION]

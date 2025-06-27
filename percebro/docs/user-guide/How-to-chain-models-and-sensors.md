@@ -30,7 +30,7 @@ Note that in this case all models will run on the CPU by default, and that chain
 
 Example syntax for a sensorchain:
 
-    percebro/percebro --camera test_out_00.png --sensor Snsr0=[100,100,200,200] --sensorattrib trresnet --sensorchain td0001+trresnet --intrinsics=70 --debug --frames 200
+    percebro/percebro.py --camera test_out_00.png --sensor Snsr0=[100,100,200,200] --sensorattrib trresnet --sensorchain td0001+trresnet --intrinsics=70 --debug --frames 200
 
 Explanation of the 3 arguments:
 - **sensor:** Sensor ID to use for publishing. The values between brackets correspond to the sub frame (x, y, width and height) to crop and run inference on.

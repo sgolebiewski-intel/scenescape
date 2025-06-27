@@ -15,21 +15,21 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN : \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-        # Keep package list in alphabetical order
-        cmake \
-        curl \
-        g++ \
-        git \
-        libeigen3-dev \
-        libgtest-dev \
-        make \
-        # needed by fast_geometry
-        pkg-config \
-        pybind11-dev \
-        python3-pip \
-        # needed by fast_geometry
-        python3-scipy \
-        python-is-python3 \
+    # Keep package list in alphabetical order
+    cmake \
+    curl \
+    g++ \
+    git \
+    libeigen3-dev \
+    libgtest-dev \
+    make \
+    # needed by fast_geometry
+    pkg-config \
+    pybind11-dev \
+    python3-pip \
+    # needed by fast_geometry
+    python3-scipy \
+    python-is-python3 \
     && rm -rf /var/lib/apt/lists/*
 
 # install common dependencies
@@ -42,4 +42,4 @@ RUN : \
     && cd .. \
     && rm -rf scene_common
 
-COPY ./tools/waitforbroker /tmp/tools/waitforbroker
+COPY ./tools/waitforbroker.py /tmp/tools/waitforbroker.py

@@ -53,7 +53,7 @@ Before you begin, ensure the following:
 
    ```yaml
    command:
-     - "percebro"
+     - "percebro.py"
      ...
      - "--camerachain=retail+reid"
    ```

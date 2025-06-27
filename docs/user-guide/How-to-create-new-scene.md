@@ -116,7 +116,7 @@ Create a new service called `video0` that matches the following configuration (r
      - ntpserv
     #  - ovms # Need to uncomment this to use ovms
     command:
-     - "percebro"
+     - "percebro.py"
      - "--camera=0"
      - "--cameraid=video0"
      - "--intrinsics={\"fov\":70}"
@@ -141,7 +141,7 @@ For the second camera, copy/paste the **entire** `video0` service section and ch
   video1:
     # ...
     command:
-     - "percebro"
+     - "percebro.py"
      - "--camera=1"
      - "--cameraid=video1"
      - "--intrinsics={\"fov\":70}"
@@ -198,7 +198,7 @@ On the computers processing the video feeds, configure docker-compose.yml to con
      - ntpserv
     #  - ovms # Need to uncomment this to use ovms
     command:
-     - "percebro"
+     - "percebro.py"
      - "--camera=http://<user>:<password>@<camera_ip>/axis-cgi/mjpg/video.cgi"
      - "--cameraid=<camera_id>" # e.g. "video0" or "video1", depending on the camera
      - "--intrinsics={\"fov\":70}"

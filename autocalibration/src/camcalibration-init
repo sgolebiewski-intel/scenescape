@@ -134,7 +134,7 @@ if [ ${START_CAMCALIB} = 1 ] ; then
     chown -R "${WSUSER}.${WSUSER}" "${DBROOT}/datasets"
     map_dir "${DBROOT}/datasets" "${SSCAPEDIR}/datasets"
 
-    ${SSCAPEDIR}/camcalibration \
+    ${SSCAPEDIR}/camcalibration.py \
             --restauth ${RESTAUTH} ${RESTURL} \
             --brokerauth ${BROKERAUTH} ${BROKER} &
     WAITPID=$!

@@ -261,7 +261,7 @@ services:
     init: true
     networks:
       scenescape:
-    command: camcalibration --broker broker.scenescape.intel.com --resturl https://web.scenescape.intel.com:443/api/v1
+    command: camcalibration.py --broker broker.scenescape.intel.com --resturl https://web.scenescape.intel.com:443/api/v1
     depends_on:
       web:
         condition: service_healthy

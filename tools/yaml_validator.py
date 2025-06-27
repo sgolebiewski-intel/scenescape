@@ -16,7 +16,7 @@ class YAMLValidator:
 
   parser_schema = {
     'controller': {"path": "controller/src", "args":[]},
-    'percebro': {"path": "percebro/percebro", "args":[]},
+    'percebro': {"path": "percebro/percebro.py", "args":[]},
     'camcalibration': {"path": "autocalibration/src", "args":[]},
     'ntpserver': {"args":[]}
   }

@@ -104,7 +104,7 @@ camcalibration:
     - ntpserv
     - pgserver
     - scene
-  command: camcalibration --dbhost pgserver --ntp ntpserv --auth /run/secrets/percebro.auth --broker broker.scenescape.intel.com
+  command: camcalibration.py --dbhost pgserver --ntp ntpserv --auth /run/secrets/percebro.auth --broker broker.scenescape.intel.com
   privileged: true
   environment:
     EGL_PLATFORM: "surfaceless"

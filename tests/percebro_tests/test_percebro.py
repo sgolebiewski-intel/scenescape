@@ -396,7 +396,7 @@ def test_main(params):
   @param    params     param fixture which contains percebro arguments
 
   """
-  sys.argv = ['', 'percebro', '--camera', 'sample_data/apriltag-cam1.mp4',
+  sys.argv = ['', 'percebro.py', '--camera', 'sample_data/apriltag-cam1.mp4',
               '--cameraid', params['cameraid'], '--camerachain', 'apriltag',
               '--intrinsics', params['intrinsics'],
               '--modelconfig', 'model-config.json',
