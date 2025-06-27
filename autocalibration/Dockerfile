@@ -18,11 +18,10 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies (these change more frequently)
-COPY autocalibration/requirements-buildtime.txt /tmp/
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip3 install --upgrade \
     --extra-index-url https://download.pytorch.org/whl/cpu \
-    -r /tmp/requirements-buildtime.txt
+    pybind11 dt-apriltags
 
 # Create directories (this layer rarely changes)
 RUN mkdir -p /output /tmp/apriltag_build /tmp/apriltag /tmp/netvlad
@@ -146,20 +145,11 @@ ENTRYPOINT ["/usr/local/bin/startup.sh", "/usr/local/bin/camcalibration-init"]
 # ---------- Cam Calibration Test Stage ------------------
 # This stage is meant to be used for test execution (not for final runtime)
 FROM camcalibration-runtime AS camcalibration-test
-USER root
 ENV DEBIAN_FRONTEND=noninteractive
 ENV SKIP_MODEL_DOWNLOAD=1
 
 # Install Python test dependencies
-COPY ./autocalibration/requirements-buildtime.txt /tmp/requirements-buildtime.txt
-RUN pip3 install --upgrade --no-cache-dir -r /tmp/requirements-buildtime.txt
-
-COPY ./autocalibration/src/autocalibration /tmp/autocalibration/autocalibration
-COPY ./autocalibration/src/setup.py /tmp/autocalibration/setup.py
-RUN cd /tmp/autocalibration \
-    && python3 setup.py bdist_wheel \
-    && pip3 install --no-cache-dir ./dist/*.whl -vvv \
-    && cd
+RUN pip3 install --upgrade --no-cache-dir coverage pytest
 
 RUN : \
     ; eval WSHOME=~$WSUSER \
