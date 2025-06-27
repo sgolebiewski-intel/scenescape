@@ -347,7 +347,7 @@ prettier-check:
 .PHONY: format-python
 format-python:
 	@echo "==> Formatting Python files..."
-	@find . -name "*.py" -not -path "./venv/*" | xargs autopep8 --in-place --aggressive --aggressive || (echo "Python formatting failed" && exit 1)
+	@.github/resources/list_python_files.py | xargs autopep8 --in-place --aggressive --aggressive || (echo "Python formatting failed" && exit 1)
 	@echo "DONE ==> Formatting Python files"
 
 .PHONY: prettier-write

@@ -2,20 +2,24 @@
 
 # SPDX-FileCopyrightText: (C) 2023 - 2025 Intel Corporation
 # SPDX-License-Identifier: LicenseRef-Intel-Edge-Software
-# This file is licensed under the Limited Edge Software Distribution License Agreement.
+# This file is licensed under the Limited Edge Software Distribution
+# License Agreement.
 
 import tests.common_test_utils as common
 
 TEST_NAME = "NEX-T10512"
+
+
 def pytest_sessionstart():
-  """! Executes at the beginning of the session. """
+    """! Executes at the beginning of the session. """
 
-  print(f"Executing: {TEST_NAME}")
+    print(f"Executing: {TEST_NAME}")
 
-  return
+    return
+
 
 def pytest_sessionfinish(exitstatus):
-  """! Executes at the end of the session. """
+    """! Executes at the end of the session. """
 
-  common.record_test_result(TEST_NAME, exitstatus)
-  return
+    common.record_test_result(TEST_NAME, exitstatus)
+    return
