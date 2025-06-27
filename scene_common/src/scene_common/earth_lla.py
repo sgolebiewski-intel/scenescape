@@ -81,8 +81,8 @@ def convertECEFToLLA(ecef_pt):
         k = s + 1 + 1 / s
         P = F / (3 * (k**2) * (G**2))
         Q = math.sqrt(1 + 2 * (e_sq**2) * P)
-        r0 = -P * e_sq * p / (1 + Q) + math.sqrt(0.5 * a_sq * (1 + 1 / Q) - \
-                              P * (1 - e_sq) * Z_sq / (Q + Q**2) - 0.5 * P * p_sq)
+        r0 = -P * e_sq * p / (1 + Q) + math.sqrt(0.5 * a_sq * (1 + 1 / Q) -
+                                                 P * (1 - e_sq) * Z_sq / (Q + Q**2) - 0.5 * P * p_sq)
         U = math.sqrt((p - e_sq * r0)**2 + Z_sq)
         V = math.sqrt((p - e_sq * r0)**2 + (1 - e_sq) * Z_sq)
         z0 = b_sq * Z / (EQUATORIAL_RADIUS * V)

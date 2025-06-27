@@ -123,6 +123,8 @@ def lla_datafile(tmp_path):
     with open(tmp_file, 'w') as outfile:
         outfile.write(json.dumps(inputs, indent=2))
 
+    return tmp_file
+
 
 def test_convertLLAToECEF():
     a = earth_lla.EQUATORIAL_RADIUS
