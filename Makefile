@@ -302,7 +302,7 @@ lint-python-pylint:
 .PHONY: lint-python-flake8
 lint-python-flake8:
 	@echo "==> Linting Python files - flake8..."
-	@flake8 || (echo "Python linting failed" && exit 1)
+	@flake8 --max-line-length 89 || (echo "Python linting failed" && exit 1)
 	@echo "DONE ==> Linting Python files - flake8"
 
 .PHONY: lint-javascript
@@ -347,7 +347,7 @@ prettier-check:
 .PHONY: format-python
 format-python:
 	@echo "==> Formatting Python files..."
-	@.github/resources/list_python_files.py | xargs autopep8 --in-place --aggressive --aggressive || (echo "Python formatting failed" && exit 1)
+	@.github/resources/list_python_files.py | xargs black -l 89 || (echo "Python formatting failed" && exit 1)
 	@echo "DONE ==> Formatting Python files"
 
 .PHONY: prettier-write
