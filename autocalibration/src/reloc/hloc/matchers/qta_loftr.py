@@ -13,8 +13,7 @@ import torch
 from addict import Dict
 from ..utils.base_model import BaseModel
 
-sys.path.append(str(Path(__file__).parent /
-                    "../../third_party/QuadTreeAttention"))
+sys.path.append(str(Path(__file__).parent / "../../third_party/QuadTreeAttention"))
 
 # get_cfg_defaults():
 # ##############  ↓  LoFTR Pipeline  ↓  ##############
@@ -115,23 +114,25 @@ class QTA_LoFTR_(BaseModel):
             + ".ckpt"
         )
         self.net.load_state_dict(
-            torch.load(
-                ckpt_path,
-                map_location=torch.device("cpu"))["state_dict"])
+            torch.load(ckpt_path, map_location=torch.device("cpu"))["state_dict"]
+        )
 
     def _forward(self, data):
         self.net(data)
         # Assign matches to individual image pairs in batch
         b_ids = data["b_ids"]
-        batch_start = (b_ids.diff(prepend=-torch.ones(1,
-                                                      device=b_ids.device,
-                                                      dtype=b_ids.dtype),
-                                  append=torch.full((1,
-                                                     ),
-                                                    b_ids.shape[0],
-                                                    device=b_ids.device,
-                                                    dtype=b_ids.dtype),
-                                  ) .nonzero() .cpu() .numpy() .reshape(-1))
+        batch_start = (
+            b_ids.diff(
+                prepend=-torch.ones(1, device=b_ids.device, dtype=b_ids.dtype),
+                append=torch.full(
+                    (1,), b_ids.shape[0], device=b_ids.device, dtype=b_ids.dtype
+                ),
+            )
+            .nonzero()
+            .cpu()
+            .numpy()
+            .reshape(-1)
+        )
         bs = [None] * data["image0"].shape[0]
         for i, j in zip(batch_start[:-1], batch_start[1:]):
             bs[b_ids[i]] = (i, j)

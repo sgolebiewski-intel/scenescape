@@ -23,28 +23,23 @@ class Browser(Firefox):
         # Must remove proxy settings from environment otherwise Jenkins testing
         # fails
         for key in os.environ:
-            if 'proxy' in key or 'PROXY' in key:
+            if "proxy" in key or "PROXY" in key:
                 del os.environ[key]
 
         options = Options()
         if headless:
-            options.add_argument('--headless')
+            options.add_argument("--headless")
 
         options.add_argument("--window-size=1080,1920")
         s = Service("/usr/local/bin/geckodriver")
         super().__init__(options=options, service=s)
         return
 
-    def getPage(
-            self,
-            url,
-            expected_title,
-            retries=MAX_RETRIES,
-            delay=RETRY_DELAY):
-        '''
+    def getPage(self, url, expected_title, retries=MAX_RETRIES, delay=RETRY_DELAY):
+        """
         Will load the page at <url> and check to see if the title
         matches. Returns True/False.
-        '''
+        """
 
         print("Fetching page")
         retry = 0
@@ -67,18 +62,12 @@ class Browser(Firefox):
 
         return success
 
-    def login(
-            self,
-            user,
-            password,
-            weburl,
-            retries=MAX_RETRIES,
-            delay=RETRY_DELAY):
-        '''
+    def login(self, user, password, weburl, retries=MAX_RETRIES, delay=RETRY_DELAY):
+        """
         Tries to log in using the provided user & password. Returns
         True/False. If unable to find form fields or error message,
         raises an exception.
-        '''
+        """
         success = False
         retry = 0
         while True:
@@ -98,8 +87,7 @@ class Browser(Firefox):
                     field.clear()
                     field.send_keys(password)
 
-                    button = self.find_element(
-                        By.CSS_SELECTOR, "button.btn-primary")
+                    button = self.find_element(By.CSS_SELECTOR, "button.btn-primary")
                     button.click()
 
                     try:
@@ -122,10 +110,14 @@ class Browser(Firefox):
         return success
 
     def setViewportSize(self, width, height):
-        window_size = self.execute_script("""
+        window_size = self.execute_script(
+            """
         return [window.outerWidth - window.innerWidth + arguments[0],
           window.outerHeight - window.innerHeight + arguments[1]];
-        """, width, height)
+        """,
+            width,
+            height,
+        )
         return self.set_window_size(*window_size)
 
     def actionChains(self):

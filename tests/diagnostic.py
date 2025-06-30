@@ -27,7 +27,8 @@ class Diagnostic:
                 if val is not None:
                     defaults[option] = str(val)
             args = parser.parse_args(
-                [item for key in defaults for item in (key, defaults[key])])
+                [item for key in defaults for item in (key, defaults[key])]
+            )
         else:
             args = parser.parse_args()
         self.params = vars(args)
@@ -40,7 +41,7 @@ class Diagnostic:
         return SpecialParser()
 
     def _topicReceived(self, pahoClient, userdata, message):
-        data = json.loads(message.payload.decode('utf-8'))
+        data = json.loads(message.payload.decode("utf-8"))
         if data is not None:
             print("Topic received", message.topic, data)
             self._topicCondition.acquire()
@@ -78,9 +79,13 @@ class Diagnostic:
 class SpecialParser(ArgumentParser):
     def add_argument(self, *args, **kwargs):
         for val in args:
-            if isinstance(val, str) and len(val) and val[0] == '-' \
-               and val not in ("-h", "--help"):
-                if not hasattr(self, 'arguments'):
+            if (
+                isinstance(val, str)
+                and len(val)
+                and val[0] == "-"
+                and val not in ("-h", "--help")
+            ):
+                if not hasattr(self, "arguments"):
                     self.arguments = []
                 self.arguments.append(val)
         return super().add_argument(*args, **kwargs)

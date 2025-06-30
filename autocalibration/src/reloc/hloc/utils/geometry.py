@@ -39,10 +39,12 @@ def compute_epipolar_errors(qvec_r2t, tvec_r2t, p2d_r, p2d_t):
     E = vector_to_cross_product_matrix(T_r2t[:3, -1]) @ T_r2t[:3, :3]
     l2d_r2t = (E @ to_homogeneous(p2d_r).T).T
     l2d_t2r = (E.T @ to_homogeneous(p2d_t).T).T
-    errors_r = np.abs(np.sum(to_homogeneous(p2d_r) * l2d_t2r,
-                      axis=1)) / np.linalg.norm(l2d_t2r[:, :2], axis=1)
-    errors_t = np.abs(np.sum(to_homogeneous(p2d_t) * l2d_r2t,
-                      axis=1)) / np.linalg.norm(l2d_r2t[:, :2], axis=1)
+    errors_r = np.abs(np.sum(to_homogeneous(p2d_r) * l2d_t2r, axis=1)) / np.linalg.norm(
+        l2d_t2r[:, :2], axis=1
+    )
+    errors_t = np.abs(np.sum(to_homogeneous(p2d_t) * l2d_r2t, axis=1)) / np.linalg.norm(
+        l2d_r2t[:, :2], axis=1
+    )
     return E, errors_r, errors_t
 
 
@@ -100,14 +102,7 @@ def interpolate_scan(depth: Image, camera: Camera, kp: np.ndarray):
 
     # To maximize the number of points that have depth:
     # do bilinear interpolation first and then nearest for the remaining points
-    interp_lin = grid_sample(
-        scan,
-        kp,
-        align_corners=True,
-        mode="bilinear")[
-        0,
-        :,
-        0]
+    interp_lin = grid_sample(scan, kp, align_corners=True, mode="bilinear")[0, :, 0]
     interp_nn = torch.nn.functional.grid_sample(
         scan, kp, align_corners=True, mode="nearest"
     )[0, :, 0]
@@ -153,12 +148,8 @@ def interpolate_mesh(
         pose[:3, :3].T @ K_inv @ np.vstack((kp.T, np.ones((1, kp.shape[0]))))
     ).astype(np.float32)
     rays = Tensor.from_numpy(
-        np.hstack(
-            (np.repeat(
-                camera_center.T,
-                kp.shape[0],
-                axis=0),
-                ray_dirn.T)))
+        np.hstack((np.repeat(camera_center.T, kp.shape[0], axis=0), ray_dirn.T))
+    )
     rc_scene = get_raycasting_scene(str(mesh_path))
     result = rc_scene.cast_rays(rays)
     valid = result["t_hit"].isfinite().numpy()

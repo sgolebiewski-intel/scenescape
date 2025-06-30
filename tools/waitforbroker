@@ -21,16 +21,21 @@ mqtt.MQTT_ERR_AUTH = 5
 
 def build_argparser():
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--broker", default="broker.scenescape.intel.com:1883",
-                        help="hostname or IP of MQTT broker, optional :port")
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument(
-        "--brokerauth",
-        help="user:password or JSON file for MQTT authentication")
+        "--broker",
+        default="broker.scenescape.intel.com:1883",
+        help="hostname or IP of MQTT broker, optional :port",
+    )
+    parser.add_argument(
+        "--brokerauth", help="user:password or JSON file for MQTT authentication"
+    )
     parser.add_argument(
         "--rootcert",
         default="/run/secrets/certs/scenescape-ca.pem",
-        help="path to ca certificate")
+        help="path to ca certificate",
+    )
     parser.add_argument("--cert", help="path to client certificate")
     return parser
 
@@ -60,11 +65,8 @@ class WaitForBroker:
 
     def wait(self):
         pubsub = PubSub(
-            self.brokerauth,
-            self.cert,
-            self.rootcert,
-            self.broker,
-            keepalive=60)
+            self.brokerauth, self.cert, self.rootcert, self.broker, keepalive=60
+        )
         pubsub.onConnect = self.connected
         pubsub.loopStart()
         self.status = None
@@ -81,7 +83,7 @@ class WaitForBroker:
                     interval = None
                     self.status = "Connecting"
             except socket.gaierror:
-                self.status = f"\"{pubsub.broker}\" not found"
+                self.status = f'"{pubsub.broker}" not found'
             except OSError as ex:
                 if ex.errno == 99:
                     self.status = "Connection refused"
@@ -108,5 +110,5 @@ def main():
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main() or 0)

@@ -19,12 +19,12 @@ def validate_image(browser, scene_name, image_name):
     @return   BOOL          Boolean representing success.
     """
     validated = False
-    src = browser.find_element(
-        By.NAME,
-        scene_name).find_element(
-        By.CSS_SELECTOR,
-        "img.cover").get_attribute("src")
-    if image_name.split('.')[0] in src:
+    src = (
+        browser.find_element(By.NAME, scene_name)
+        .find_element(By.CSS_SELECTOR, "img.cover")
+        .get_attribute("src")
+    )
+    if image_name.split(".")[0] in src:
         print("Map uploaded for " + image_name)
         validated = True
         # browser.find_element(By.NAME, scene_name).find_element(By.NAME, "Edit").click()
@@ -55,7 +55,8 @@ def test_different_formats_scene_main(params, record_xml_attribute):
     map_image_dict = {
         "png_map_image": "SamplePngMap.png",
         "jpeg_map_image": "SampleJpegMap.jpeg",
-        "jpg_map_image": "SampleJpgMap.jpg"}
+        "jpg_map_image": "SampleJpgMap.jpg",
+    }
     scene_name = "Selenium Sample Scene"
     scale = 1000
     logged_in = common.check_page_login(browser, params)
@@ -64,20 +65,21 @@ def test_different_formats_scene_main(params, record_xml_attribute):
         try:
             print("Creating Scene with png format map...")
             map_image = os.path.join(
-                common.TEST_MEDIA_PATH,
-                map_image_dict["png_map_image"])
+                common.TEST_MEDIA_PATH, map_image_dict["png_map_image"]
+            )
             common.create_scene(browser, scene_name, scale, map_image)
             if scene_name in browser.page_source:
                 time.sleep(1)
                 validate_create = validate_image(
-                    browser, scene_name, map_image_dict["png_map_image"])
+                    browser, scene_name, map_image_dict["png_map_image"]
+                )
                 for key, value in map_image_dict.items():
                     if key == "png_map_image":
                         continue
                     map_image = os.path.join(common.TEST_MEDIA_PATH, value)
-                    browser.find_element(
-                        By.NAME, scene_name).find_element(
-                        By.NAME, "Edit").click()
+                    browser.find_element(By.NAME, scene_name).find_element(
+                        By.NAME, "Edit"
+                    ).click()
                     browser.find_element(By.ID, "id_map").send_keys(map_image)
                     browser.find_element(By.ID, "save").click()
                     validate_next = validate_image(browser, scene_name, value)
@@ -102,5 +104,5 @@ def test_different_formats_scene_main(params, record_xml_attribute):
     return exit_code
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(test_different_formats_scene_main() or 0)

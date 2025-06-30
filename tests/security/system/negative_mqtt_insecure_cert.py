@@ -23,7 +23,7 @@ def on_connect(mqttc, obj, flags, rc):
     global connected
     connected = True
     print("Connected")
-    topic = 'scenescape/#'
+    topic = "scenescape/#"
     mqttc.subscribe(topic, 0)
 
 
@@ -50,7 +50,7 @@ def test_mqtt_insecure_cert(record_xml_attribute):
     auth = "/run/secrets/percebro.auth"
 
     # mqtt broker info:
-    mqtt_broker = 'broker.scenescape.intel.com'
+    mqtt_broker = "broker.scenescape.intel.com"
     mqtt_port = 1883
 
     client = initializeMqttClient()
@@ -61,23 +61,24 @@ def test_mqtt_insecure_cert(record_xml_attribute):
     if os.path.exists(rootca):
         if certs is None:
             certs = {}
-        certs['ca_certs'] = rootca
+        certs["ca_certs"] = rootca
 
     if os.path.exists(auth):
         with open(auth) as json_file:
             data = json.load(json_file)
 
-        user = data['user']
-        pw = data['password']
+        user = data["user"]
+        pw = data["password"]
 
     else:
-        user = 'tmp'
-        pw = 'dummy'
+        user = "tmp"
+        pw = "dummy"
 
     print(
         "Note: Tester should verify Manually that user '{}' pw '{}' are the right secrets!".format(
-            user,
-            pw))
+            user, pw
+        )
+    )
 
     result = 1
     try:
@@ -101,8 +102,9 @@ def test_mqtt_insecure_cert(record_xml_attribute):
         if connected:
             print(
                 "{} Objects detected in {} seconds".format(
-                    objects_detected,
-                    TEST_WAIT_TIME))
+                    objects_detected, TEST_WAIT_TIME
+                )
+            )
 
             if objects_detected > TEST_MIN_DETECTIONS:
                 print("Test failed!")
@@ -120,5 +122,5 @@ def test_mqtt_insecure_cert(record_xml_attribute):
     return result
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(test_mqtt_insecure_cert() or 0)

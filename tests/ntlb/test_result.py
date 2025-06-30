@@ -17,7 +17,7 @@ class TestResult:
     # Suites seem to be code_check, infra, metric, perf, smoke, stability,
     # system, ui, unit
     SUITE_REMAP = {
-        'sscape': "unit",
+        "sscape": "unit",
     }
     MAKEFILE_IGNORE = ["percebro-unit"]
 
@@ -32,9 +32,9 @@ class TestResult:
         return
 
     def addCollection(self, name):
-        if not hasattr(self, 'collections'):
+        if not hasattr(self, "collections"):
             self.collections = []
-        if name[0] == '_':
+        if name[0] == "_":
             name = name[1:]
         self.collections.append(name)
         return
@@ -43,15 +43,18 @@ class TestResult:
     def suite(self):
         suite = None
 
-        if hasattr(self, 'collections'):
+        if hasattr(self, "collections"):
             suite = self.collections[0]
             suffix = "-tests"
             if suite.endswith(suffix):
-                suite = suite[:-len(suffix)]
+                suite = suite[: -len(suffix)]
 
         # Prefer Makefile name for suite if it is available
-        if self.target not in self.MAKEFILE_IGNORE \
-           and hasattr(self, 'makefile') and '.' in self.makefile:
+        if (
+            self.target not in self.MAKEFILE_IGNORE
+            and hasattr(self, "makefile")
+            and "." in self.makefile
+        ):
             base, ext = os.path.splitext(os.path.basename(self.makefile))
             if base == "Makefile":
                 suite = ext[1:]
@@ -65,7 +68,7 @@ class TestResult:
 
     @property
     def name(self):
-        if not hasattr(self, 'zephyrTestID'):
+        if not hasattr(self, "zephyrTestID"):
             return "unknown"
         return f"{self.zephyrTestID}"
 

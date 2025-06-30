@@ -12,19 +12,13 @@ import library.metrics as metrics
 
 
 def build_argparser():
-    """! command line arguments for plot_tracker_results.
-    """
+    """! command line arguments for plot_tracker_results."""
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument(
-        "ground_truth",
-        help="ground truth tracked data file",
-        type=str)
-    parser.add_argument(
-        "predicted",
-        help="predicted tracked data file",
-        type=str)
-    parser.add_argument('--convert_json', action='store_true')
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument("ground_truth", help="ground truth tracked data file", type=str)
+    parser.add_argument("predicted", help="predicted tracked data file", type=str)
+    parser.add_argument("--convert_json", action="store_true")
 
     return parser
 
@@ -68,20 +62,22 @@ def main():
     """
     args = build_argparser().parse_args()
     pred_data, pred_track_data, _ = json_helper.loadData(
-        args.predicted, args.convert_json)
+        args.predicted, args.convert_json
+    )
     gt_data, gt_track_data, gt_info = json_helper.loadData(args.ground_truth)
     pred_gid_map = metrics.getGIDLocs(pred_track_data)
     msoce, idc_error, std_velocity, std_max_velocity = getMetrics(
-        gt_data, pred_data, pred_gid_map, gt_track_data)
+        gt_data, pred_data, pred_gid_map, gt_track_data
+    )
 
     print()
-    print('Mean Square Object Count Error: \t{:0.5f}'.format(msoce))
-    print('ID Change Error (Mean ID Change Error): {:0.5f}'.format(idc_error))
-    print('Standard deviation velocity: \t\t{:0.5f}'.format(std_velocity))
-    print('max velocity: \t\t\t\t{:0.5f}'.format(std_max_velocity))
+    print("Mean Square Object Count Error: \t{:0.5f}".format(msoce))
+    print("ID Change Error (Mean ID Change Error): {:0.5f}".format(idc_error))
+    print("Standard deviation velocity: \t\t{:0.5f}".format(std_velocity))
+    print("max velocity: \t\t\t\t{:0.5f}".format(std_max_velocity))
 
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main() or 0)

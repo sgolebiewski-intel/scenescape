@@ -8,10 +8,16 @@
 import pytest
 from unittest.mock import patch
 
-from tests.sscape_tests.detector.conftest import pose_model, device, plugin, threshold, openvino_cores
+from tests.sscape_tests.detector.conftest import (
+    pose_model,
+    device,
+    plugin,
+    threshold,
+    openvino_cores,
+)
 from tests.sscape_tests.detector.config import no_keypoints_poses, ovms_hpe_model
 
-detectorClass = 'percebro.detector.Detector'
+detectorClass = "percebro.detector.Detector"
 
 
 def test_detect(pose_estimator, input_data):
@@ -43,9 +49,10 @@ def test_detect_none_input(pose_estimator, detected_poses):
     return
 
 
-@pytest.mark.parametrize("hpe_instance, model_config",
-                         [("pose_estimator", pose_model),
-                          ("ovms_hpe", ovms_hpe_model)])
+@pytest.mark.parametrize(
+    "hpe_instance, model_config",
+    [("pose_estimator", pose_model), ("ovms_hpe", ovms_hpe_model)],
+)
 def test_setParameters(hpe_instance, model_config, request):
     """! Verifies the output of 'percebro.detector.PoseEstimator.setParameters()' method.
 
@@ -65,9 +72,9 @@ def test_setParameters(hpe_instance, model_config, request):
     return
 
 
-@pytest.mark.parametrize("poses, has_keypoints",
-                         [("detected_poses", True),
-                          (no_keypoints_poses, False)])
+@pytest.mark.parametrize(
+    "poses, has_keypoints", [("detected_poses", True), (no_keypoints_poses, False)]
+)
 def test_postprocess(pose_estimator, poses, has_keypoints, request):
     """! Verifies the output of 'detector.PoseEstimator.postprocess()' method.
 
@@ -98,9 +105,9 @@ def verify_outputs(output):
     @param    output    Original output
     """
 
-    assert output['category'] == 'person'
-    assert output['bounding_box']
-    assert output['center_of_mass']
-    assert output['pose']
+    assert output["category"] == "person"
+    assert output["bounding_box"]
+    assert output["center_of_mass"]
+    assert output["pose"]
 
     return

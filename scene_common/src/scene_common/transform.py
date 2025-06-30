@@ -17,9 +17,23 @@ MAX_COPLANAR_DETERMINANT = 0.1
 
 
 class CameraIntrinsics:
-    INTRINSICS_KEYS = ('fx', 'fy', 'cx', 'cy')
-    DISTORTION_KEYS = ('k1', 'k2', 'p1', 'p2', 'k3', 'k4', 'k5', 'k6',
-                       's1', 's2', 's3', 's4', 'taux', 'tauy')
+    INTRINSICS_KEYS = ("fx", "fy", "cx", "cy")
+    DISTORTION_KEYS = (
+        "k1",
+        "k2",
+        "p1",
+        "p2",
+        "k3",
+        "k4",
+        "k5",
+        "k6",
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "taux",
+        "tauy",
+    )
 
     def __init__(self, intrinsics, distortion=None, resolution=None):
         if isinstance(intrinsics, dict):
@@ -30,9 +44,11 @@ class CameraIntrinsics:
             if len(intrinsics) == 1 or len(intrinsics) == 2:
                 fov = intrinsics
             elif len(intrinsics) == 4:
-                intrinsics = [[intrinsics[0], 0.0, intrinsics[2]],
-                              [0.0, intrinsics[1], intrinsics[3]],
-                              [0.0, 0.0, 1.0]]
+                intrinsics = [
+                    [intrinsics[0], 0.0, intrinsics[2]],
+                    [0.0, intrinsics[1], intrinsics[3]],
+                    [0.0, 0.0, 1.0],
+                ]
         else:
             fov = intrinsics
 
@@ -52,20 +68,16 @@ class CameraIntrinsics:
                 if len(distortion) not in [4, 5, 8, 12, 14]:
                     raise ValueError("Bad distortion value:", distortion)
                 distortion = np.pad(
-                    np.array(
-                        distortion,
-                        dtype=np.float64),
-                    (0,
-                     14 - len(distortion)),
-                    constant_values=0.0)
+                    np.array(distortion, dtype=np.float64),
+                    (0, 14 - len(distortion)),
+                    constant_values=0.0,
+                )
             elif isinstance(distortion, dict):
                 distortion = np.array(
-                    self.distortionDictToList(distortion),
-                    dtype=np.float64)
+                    self.distortionDictToList(distortion), dtype=np.float64
+                )
             else:
-                raise TypeError(
-                    "Unsupported distortion type",
-                    type(distortion))
+                raise TypeError("Unsupported distortion type", type(distortion))
         else:
             distortion = np.zeros(14)
         self.distortion = distortion
@@ -73,7 +85,8 @@ class CameraIntrinsics:
     def computeIntrinsicsFromFoV(self, resolution, fov):
         if not isarray(resolution) or len(resolution) != 2:
             raise ValueError(
-                "Resolution required to calculate intrinsics from field of view")
+                "Resolution required to calculate intrinsics from field of view"
+            )
         cx = resolution[0] / 2
         cy = resolution[1] / 2
         d = math.sqrt(cx * cx + cy * cy)
@@ -90,7 +103,7 @@ class CameraIntrinsics:
         if isinstance(fov, (list, tuple)):
             return fov
         elif isinstance(fov, str):
-            return fov.split(':') if ':' in fov else fov.split('x')
+            return fov.split(":") if ":" in fov else fov.split("x")
         return [fov]
 
     def _calculateFocalLengths(self, cx, cy, d, fov):
@@ -112,7 +125,8 @@ class CameraIntrinsics:
         if np.any(self.distortion != 0):
             h, w = image.shape[:2]
             map_x, map_y = cv2.initUndistortRectifyMap(
-                self.intrinsics, self.distortion, None, self.intrinsics, (w, h), 5)
+                self.intrinsics, self.distortion, None, self.intrinsics, (w, h), 5
+            )
             image_undistort = cv2.remap(image, map_x, map_y, cv2.INTER_LINEAR)
 
             return image_undistort
@@ -130,15 +144,21 @@ class CameraIntrinsics:
             h, w = image.shape[:2]
             self._createUndistortIntrinsics((w, h))
             self.map1, self.map2 = cv2.fisheye.initUndistortRectifyMap(
-                self.intrinsics, self.distortion[:4], np.eye(3), self.undistort_intrinsics,
-                (w * 2, h * 2), cv2.CV_16SC2)
+                self.intrinsics,
+                self.distortion[:4],
+                np.eye(3),
+                self.undistort_intrinsics,
+                (w * 2, h * 2),
+                cv2.CV_16SC2,
+            )
 
         new_image = cv2.remap(
             image,
             self.map1,
             self.map2,
             interpolation=cv2.INTER_LINEAR,
-            borderMode=cv2.BORDER_CONSTANT)
+            borderMode=cv2.BORDER_CONSTANT,
+        )
 
         if not hasattr(self, "crop"):
             mask = np.any(new_image != [0, 0, 0], axis=-1)
@@ -159,7 +179,7 @@ class CameraIntrinsics:
             self.unwarpIntrinsics[0, 0] = uw * self.unwarpIntrinsics[0, 0] / w
             self.unwarpIntrinsics[1, 1] = uh * self.unwarpIntrinsics[1, 1] / h
 
-        new_image = new_image[self.crop[0]:self.crop[1], self.crop[2]:self.crop[3]]
+        new_image = new_image[self.crop[0] : self.crop[1], self.crop[2] : self.crop[3]]
 
         return new_image
 
@@ -168,12 +188,15 @@ class CameraIntrinsics:
         if isinstance(point, Point):
             point = point.as2Dxy.asNumpyCartesian
         inverted = np.linalg.inv(self.undistort_intrinsics)
-        pt = np.array([point[0] +
-                       self.crop[2], point[1] +
-                       self.crop[0], 1]).reshape(3, 1)
+        pt = np.array([point[0] + self.crop[2], point[1] + self.crop[0], 1]).reshape(
+            3, 1
+        )
         pt = np.matmul(inverted, pt)[:2].reshape(-1, 1, 2)
-        return Point(cv2.fisheye.distortPoints(pt, self.intrinsics,
-                                               self.distortion).reshape(-1, 2))
+        return Point(
+            cv2.fisheye.distortPoints(pt, self.intrinsics, self.distortion).reshape(
+                -1, 2
+            )
+        )
 
     def infer3DCoordsFrom2DDetection(self, coords, distance=None):
         """Convert pixel coordinates to normalized image plane of the camera
@@ -185,12 +208,14 @@ class CameraIntrinsics:
 
         if isinstance(coords, Rectangle):
             origin = self.infer3DCoordsFrom2DDetection(coords.origin, distance)
-            opposite = self.infer3DCoordsFrom2DDetection(
-                coords.opposite, distance)
+            opposite = self.infer3DCoordsFrom2DDetection(coords.opposite, distance)
             return Rectangle(origin=origin, opposite=opposite)
 
-        undistorted_pt = cv2.undistortPoints(coords.as2Dxy.asNumpyCartesian.reshape(-1, 1, 2),
-                                             self.intrinsics, self.distortion)
+        undistorted_pt = cv2.undistortPoints(
+            coords.as2Dxy.asNumpyCartesian.reshape(-1, 1, 2),
+            self.intrinsics,
+            self.distortion,
+        )
         pt = Point(np.squeeze(undistorted_pt))
         if distance is not None:
             if math.isnan(distance):
@@ -204,13 +229,13 @@ class CameraIntrinsics:
         # FIXME - find a way to return fov and hfov/vfov if that is how
         # the user originally specified the intrinsics
         iData = {
-            'intrinsics': {
-                'fx': self.intrinsics[0][0],
-                'fy': self.intrinsics[1][1],
-                'cx': self.intrinsics[0][2],
-                'cy': self.intrinsics[1][2],
+            "intrinsics": {
+                "fx": self.intrinsics[0][0],
+                "fy": self.intrinsics[1][1],
+                "cx": self.intrinsics[0][2],
+                "cy": self.intrinsics[1][2],
             },
-            'distortion': dict(zip(self.DISTORTION_KEYS, self.distortion)),
+            "distortion": dict(zip(self.DISTORTION_KEYS, self.distortion)),
         }
 
         return iData
@@ -219,10 +244,10 @@ class CameraIntrinsics:
     def intrinsicsDictToList(iDict):
         if all(key in iDict for key in CameraIntrinsics.INTRINSICS_KEYS):
             iList = [iDict[key] for key in CameraIntrinsics.INTRINSICS_KEYS]
-        elif all(key in iDict for key in ('hfov', 'vfov')):
-            iList = [iDict['hfov'], iDict['vfov']]
-        elif 'fov' in iDict:
-            iList = [iDict['fov']]
+        elif all(key in iDict for key in ("hfov", "vfov")):
+            iList = [iDict["hfov"], iDict["vfov"]]
+        elif "fov" in iDict:
+            iList = [iDict["fov"]]
         else:
             raise ValueError("Invalid intrinsics:", iDict)
         return iList
@@ -253,8 +278,12 @@ class CameraPose:
           - 3d-2d point correspondence
         """
 
-        if cls == CameraPose and isinstance(pose, dict) \
-           and 'camera points' in pose and 'map points' in pose:
+        if (
+            cls == CameraPose
+            and isinstance(pose, dict)
+            and "camera points" in pose
+            and "map points" in pose
+        ):
             return PointCorrespondenceTransform(pose, intrinsics)
         return super().__new__(cls)
 
@@ -277,21 +306,18 @@ class CameraPose:
 
     def setPose(self, pose):
         """Set the pose of the camera"""
-        if isinstance(
-                pose,
-                np.ndarray) and (
-                pose.shape == (
-                3,
-                4) or pose.shape == (
-                    4,
-                4)):
+        if isinstance(pose, np.ndarray) and (
+            pose.shape == (3, 4) or pose.shape == (4, 4)
+        ):
             if pose.shape == (3, 4):
                 pose = np.vstack((pose, [0, 0, 0, 1]))
             self.pose_mat = pose
-        elif isinstance(pose, dict) \
-                and all(k in pose for k in ('translation', 'rotation', 'scale')):
-            self.pose_mat = self.poseToPoseMat(pose['translation'],
-                                               pose['rotation'], pose['scale'])
+        elif isinstance(pose, dict) and all(
+            k in pose for k in ("translation", "rotation", "scale")
+        ):
+            self.pose_mat = self.poseToPoseMat(
+                pose["translation"], pose["rotation"], pose["scale"]
+            )
         else:
             raise ValueError("Unable to understand pose", pose)
 
@@ -301,14 +327,13 @@ class CameraPose:
         self._extrinsicsRVecs = cv2.Rodrigues(rmat)[0]
 
         pdict = self._poseMatToPose(self.pose_mat)
-        self.translation = pdict['translation']
-        self.quaternion_rotation = pdict['quaternion_rotation']
-        self.euler_rotation = pdict['euler_rotation']
-        self.scale = pdict['scale']
+        self.translation = pdict["translation"]
+        self.quaternion_rotation = pdict["quaternion_rotation"]
+        self.euler_rotation = pdict["euler_rotation"]
+        self.scale = pdict["scale"]
 
-        if 'resolution' in pose and getattr(
-                self, 'intrinsics', None) is not None:
-            self.resolution = pose['resolution']
+        if "resolution" in pose and getattr(self, "intrinsics", None) is not None:
+            self.resolution = pose["resolution"]
             self._calculateRegionOfView(self.resolution)
         return
 
@@ -341,17 +366,15 @@ class CameraPose:
         return obj
 
     def transformSceneToCameraCoordinates(self, obj, cam_T, cam_R):
-        cam_pose_mat = np.vstack([
-            np.hstack([cam_R,
-                       cam_T.reshape([3, 1])]),
-            np.array([0, 0, 0, 1])
-        ])
+        cam_pose_mat = np.vstack(
+            [np.hstack([cam_R, cam_T.reshape([3, 1])]), np.array([0, 0, 0, 1])]
+        )
         cam_extrinsics = np.linalg.inv(cam_pose_mat)  # world 2 cam
         obj.transform(cam_extrinsics)
         return obj
 
-# FIXME - projectToMap and projectBounds must be consolidated into a
-# single method
+    # FIXME - projectToMap and projectBounds must be consolidated into a
+    # single method
     def projectToMap(self, obj_T, obj_R, map_obj, map_T, map_R):
         """!
         Project the object detection in 2D camera frame into 3D world coordinates
@@ -365,26 +388,25 @@ class CameraPose:
         """
 
         cam_T = self.translation.asNumpyCartesian
-        cam_R = Rotation.from_quat(np.radians(
-            self.quaternion_rotation)).as_matrix()
+        cam_R = Rotation.from_quat(np.radians(self.quaternion_rotation)).as_matrix()
         map_obj = self.transformObjectPoseInScene(map_obj, map_T, map_R)
         map_obj = self.transformSceneToCameraCoordinates(map_obj, cam_T, cam_R)
 
         scene = o3d.t.geometry.RaycastingScene()
         scene.add_triangles(map_obj)
         rays = o3d.core.Tensor(
-            [[0, 0, 0, obj_T[0], obj_T[1], obj_T[2]]], dtype=o3d.core.Dtype.Float32)
+            [[0, 0, 0, obj_T[0], obj_T[1], obj_T[2]]], dtype=o3d.core.Dtype.Float32
+        )
         rcast = scene.cast_rays(rays)
-        distance_ratio = rcast['t_hit'].numpy()[0]
+        distance_ratio = rcast["t_hit"].numpy()[0]
 
         if not distance_ratio == np.inf:
             obj_R = Rotation.from_quat(obj_R).as_matrix()
             obj_T = (distance_ratio * np.array(obj_T)).tolist()
             # object local z axis in camera csys
-            v1 = (obj_R @ np.array([0, 0, 1]
-                                   ).reshape([3, 1])).reshape([1, 3])[0]
+            v1 = (obj_R @ np.array([0, 0, 1]).reshape([3, 1])).reshape([1, 3])[0]
             # surface normal vector in camera csys
-            v2 = rcast['primitive_normals'].numpy()[0]
+            v2 = rcast["primitive_normals"].numpy()[0]
 
             obj_R = Rotation.from_matrix(
                 (rotationToTarget(v1, v2).as_matrix()) @ obj_R
@@ -403,16 +425,13 @@ class CameraPose:
         lw = bl.distance(br)
         # log.log("OBJECT SIZE %0.2fm x %0.2fm" % (lw, lh))
         # FIXME - return points in 3D
-        bounds = Rectangle(origin=Point(bl.x, 0),
-                           size=(lw, lh))
+        bounds = Rectangle(origin=Point(bl.x, 0), size=(lw, lh))
         shadow = (far_l, far_r, br, bl)
 
         basePoint = bl.midpoint(br)
-        baseLen = Point(
-            self.translation.x,
-            self.translation.y,
-            0,
-            polar=False).distance(basePoint)
+        baseLen = Point(self.translation.x, self.translation.y, 0, polar=False).distance(
+            basePoint
+        )
         baseAngle = math.degrees(math.atan2(self.translation.z, baseLen))
         return bounds, shadow, baseAngle
 
@@ -420,22 +439,29 @@ class CameraPose:
         # FIXME - speed this up. cv2.projectPoints is very time consuming.
         # 10000 runs:
         # 15.508s    {projectPoints}
-        pts, _ = cv2.projectPoints(point.asNumpyCartesian,
-                                   self._extrinsicsRVecs, self._extrinsicsTVecs,
-                                   self.intrinsics.intrinsics, self.intrinsics.distortion)
+        pts, _ = cv2.projectPoints(
+            point.asNumpyCartesian,
+            self._extrinsicsRVecs,
+            self._extrinsicsTVecs,
+            self.intrinsics.intrinsics,
+            self.intrinsics.distortion,
+        )
         return Point(np.squeeze(pts.reshape(-1, 2)))
 
     def projectEstimatedBoundsToCameraPixels(self, point, metricSize):
-        left = Line(point, Point(metricSize.width / 2,
-                                 self.angle - 90,
-                                 0, polar=True), relative=True)
-        top = Line(point, Point(metricSize.height, 0, 90, polar=True),
-                   relative=True)
+        left = Line(
+            point,
+            Point(metricSize.width / 2, self.angle - 90, 0, polar=True),
+            relative=True,
+        )
+        top = Line(point, Point(metricSize.height, 0, 90, polar=True), relative=True)
         sensor_pt = self.projectWorldPointToCameraPixels(point)
         sensor_left = self.projectWorldPointToCameraPixels(left.end)
         sensor_top = self.projectWorldPointToCameraPixels(top.end)
-        return Rectangle(origin=Point(sensor_left.x, sensor_top.y), size=(
-            (sensor_pt.x - sensor_left.x) * 2, sensor_pt.y - sensor_top.y))
+        return Rectangle(
+            origin=Point(sensor_left.x, sensor_top.y),
+            size=((sensor_pt.x - sensor_left.x) * 2, sensor_pt.y - sensor_top.y),
+        )
 
     def isBehindView(self, point):
         # FIXME - check if point is behind view
@@ -446,7 +472,8 @@ class CameraPose:
         """Calculate the bounds of camera view on the map"""
         self.frameSize = size
         r = self.intrinsics.infer3DCoordsFrom2DDetection(
-            Rectangle(origin=Point(0, 0), size=tuple(size)))
+            Rectangle(origin=Point(0, 0), size=tuple(size))
+        )
         ul, ur, bl, br = self._mapCameraViewCornersToWorld(r)
 
         # FIXME - having problems transforming upper right & upper left
@@ -470,8 +497,8 @@ class CameraPose:
         self.angle = (a1 + a2) / 2 + 180
         self.angle %= 360.0
         self.regionOfView = Region(
-            uuid=None, name=None, info=(
-                ul.as2Dxy, ur.as2Dxy, br.as2Dxy, bl.as2Dxy))
+            uuid=None, name=None, info=(ul.as2Dxy, ur.as2Dxy, br.as2Dxy, bl.as2Dxy)
+        )
         return
 
     def _mapCameraViewCornersToWorld(self, r):
@@ -485,25 +512,20 @@ class CameraPose:
     def _poseMatToPose(mat):
         rmat = mat[0:3, 0:3]
         cam_pos = mat[0:3, 3:4]  # also T_mat
-        rot = Rotation.from_matrix(rmat).as_euler('XYZ', degrees=True)
+        rot = Rotation.from_matrix(rmat).as_euler("XYZ", degrees=True)
 
-        scale = [mat[3, 3] *
-                 math.sqrt(rmat[0, 0]**2 +
-                           rmat[1, 0]**2 +
-                           rmat[2, 0]**2), mat[3, 3] *
-                 math.sqrt(rmat[0, 1]**2 +
-                           rmat[1, 1]**2 +
-                           rmat[2, 1]**2), mat[3, 3] *
-                 math.sqrt(rmat[0, 2]**2 +
-                           rmat[1, 2]**2 +
-                           rmat[2, 2]**2)]
+        scale = [
+            mat[3, 3] * math.sqrt(rmat[0, 0] ** 2 + rmat[1, 0] ** 2 + rmat[2, 0] ** 2),
+            mat[3, 3] * math.sqrt(rmat[0, 1] ** 2 + rmat[1, 1] ** 2 + rmat[2, 1] ** 2),
+            mat[3, 3] * math.sqrt(rmat[0, 2] ** 2 + rmat[1, 2] ** 2 + rmat[2, 2] ** 2),
+        ]
 
         pose = {
-            'translation': Point(cam_pos),
+            "translation": Point(cam_pos),
             # TEST ME - calculate quaternion
-            'quaternion_rotation': Rotation.from_matrix(rmat).as_quat(),
-            'euler_rotation': rot,
-            'scale': scale
+            "quaternion_rotation": Rotation.from_matrix(rmat).as_quat(),
+            "euler_rotation": rot,
+            "scale": scale,
         }
 
         return pose
@@ -513,8 +535,7 @@ class CameraPose:
         if len(rotation) == 4:
             rmat = Rotation.from_quat(rotation).as_matrix()
         else:
-            rmat = Rotation.from_euler(
-                'XYZ', rotation, degrees=True).as_matrix()
+            rmat = Rotation.from_euler("XYZ", rotation, degrees=True).as_matrix()
         tvecs = np.array(translation).reshape(3, -1)
         pose_mat = np.vstack((np.hstack((rmat, tvecs)), [0, 0, 0, 1]))
         diag_scale = np.diag(np.hstack([scale, [1]]))
@@ -528,15 +549,15 @@ class CameraPose:
             return np.array(array).reshape(-1, 4)
         elif transformType == "euler":
             return {
-                'translation': np.array(array[0:3]),
-                'rotation': np.array(array[3:6]),
-                'scale': np.array(array[6:9]),
+                "translation": np.array(array[0:3]),
+                "rotation": np.array(array[3:6]),
+                "scale": np.array(array[6:9]),
             }
         elif transformType == "quaternion":
             return {
-                'translation': np.array(array[0:3]),
-                'rotation': np.array(array[3:7]),
-                'scale': np.array(array[7:10]),
+                "translation": np.array(array[0:3]),
+                "rotation": np.array(array[3:7]),
+                "scale": np.array(array[7:10]),
             }
         elif transformType == "3d-2d point correspondence":
             # Points will be in the format
@@ -547,29 +568,38 @@ class CameraPose:
             if len(array) % 5 == 0:
                 split_length = (len(array) // 5) * 2
                 return {
-                    'camera points': np.array(array[:split_length]).reshape((split_length // 2, 2)),
-                    'map points': np.array(array[split_length:]).reshape((split_length // 2, 3)),
+                    "camera points": np.array(array[:split_length]).reshape(
+                        (split_length // 2, 2)
+                    ),
+                    "map points": np.array(array[split_length:]).reshape(
+                        (split_length // 2, 3)
+                    ),
                 }
             if len(array) % 4 == 0:
                 split_length = len(array) // 2
                 return {
-                    'camera points': np.array(array[:split_length]).reshape((split_length // 2, 2)),
-                    'map points': np.hstack((
-                        np.array(array[split_length:]).reshape((split_length // 2, 2)),
-                        np.zeros((split_length // 2, 1))
-                    )),
+                    "camera points": np.array(array[:split_length]).reshape(
+                        (split_length // 2, 2)
+                    ),
+                    "map points": np.hstack(
+                        (
+                            np.array(array[split_length:]).reshape(
+                                (split_length // 2, 2)
+                            ),
+                            np.zeros((split_length // 2, 1)),
+                        )
+                    ),
                 }
-            raise ValueError(
-                "Invalid array length for 3d-2d point correspondence")
+            raise ValueError("Invalid array length for 3d-2d point correspondence")
 
         raise ValueError("Unknown transformType")
 
     @property
     def asDict(self):
         return {
-            'translation': self.translation.asNumpyCartesian.tolist(),
-            'rotation': self.euler_rotation.tolist(),
-            'scale': self.scale,
+            "translation": self.translation.asNumpyCartesian.tolist(),
+            "rotation": self.euler_rotation.tolist(),
+            "scale": self.scale,
         }
 
     def __repr__(self):
@@ -592,43 +622,50 @@ def getPoseMatrix(sceneobj, rot_adjust=None):
     if rot_adjust is not None:
         rotation = rotation - rot_adjust
     pose_mat = CameraPose.poseToPoseMat(
-        sceneobj.mesh_translation, rotation, sceneobj.mesh_scale)
+        sceneobj.mesh_translation, rotation, sceneobj.mesh_scale
+    )
 
     return pose_mat
 
 
 class PointCorrespondenceTransform(CameraPose):
     def __init__(self, pose, intrinsics):
-        self.cameraPoints = np.array(pose['camera points'], dtype="float32")
-        self.mapPoints = np.array(pose['map points'], dtype="float32")
+        self.cameraPoints = np.array(pose["camera points"], dtype="float32")
+        self.mapPoints = np.array(pose["map points"], dtype="float32")
         if self.mapPoints.shape[1] == 2:
             self.mapPoints = np.hstack(
-                (self.mapPoints, np.zeros(
-                    (self.mapPoints.shape[0], 1))))
+                (self.mapPoints, np.zeros((self.mapPoints.shape[0], 1)))
+            )
         self.intrinsics = intrinsics
-        self.setResolution(pose['resolution'])
+        self.setResolution(pose["resolution"])
         return
 
     def calculatePoseMat(self):
         computation_method = cv2.SOLVEPNP_ITERATIVE
         # If the points are not coplanar, we need at least 6 points to calculate the pose
         # so we use an alternative computation method
-        if (not self.arePointsCoplanar(self.mapPoints)
-                and len(self.mapPoints < 6)):
+        if not self.arePointsCoplanar(self.mapPoints) and len(self.mapPoints < 6):
             computation_method = cv2.SOLVEPNP_P3P
 
-        _, rvec, tvec, = cv2.solvePnP(self.mapPoints, self.cameraPoints,
-                                      self.intrinsics.intrinsics, self.intrinsics.distortion,
-                                      flags=computation_method)
+        (
+            _,
+            rvec,
+            tvec,
+        ) = cv2.solvePnP(
+            self.mapPoints,
+            self.cameraPoints,
+            self.intrinsics.intrinsics,
+            self.intrinsics.distortion,
+            flags=computation_method,
+        )
         rmat = cv2.Rodrigues(rvec)[0]
-        pose_mat = np.linalg.inv(
-            np.vstack((np.hstack((rmat, tvec)), [0, 0, 0, 1])))
+        pose_mat = np.linalg.inv(np.vstack((np.hstack((rmat, tvec)), [0, 0, 0, 1])))
 
         pdict = self._poseMatToPose(pose_mat)
-        self.translation = pdict['translation']
-        self.quaternion_rotation = pdict['quaternion_rotation']
-        self.euler_rotation = pdict['euler_rotation']
-        self.scale = pdict['scale']
+        self.translation = pdict["translation"]
+        self.quaternion_rotation = pdict["quaternion_rotation"]
+        self.euler_rotation = pdict["euler_rotation"]
+        self.scale = pdict["scale"]
         self.pose_mat = pose_mat
         return
 
@@ -653,18 +690,16 @@ class PointCorrespondenceTransform(CameraPose):
         if len(points) == 5:
             for i in range(len(points)):
                 subset = [points[j] for j in range(len(points)) if j != i]
-                if abs(self.calculateDeterminant(subset)
-                       ) > MAX_COPLANAR_DETERMINANT:
+                if abs(self.calculateDeterminant(subset)) > MAX_COPLANAR_DETERMINANT:
                     return False
         elif len(points) == 4:
-            if abs(self.calculateDeterminant(points)
-                   ) > MAX_COPLANAR_DETERMINANT:
+            if abs(self.calculateDeterminant(points)) > MAX_COPLANAR_DETERMINANT:
                 return False
         return True
 
 
 def applyChildTransform(region, cameraPose):
-    """ Transforms the points in given region with the camera pose.
+    """Transforms the points in given region with the camera pose.
         of specified camera pose.
 
     @param    regions      list of regions
@@ -672,25 +707,26 @@ def applyChildTransform(region, cameraPose):
 
     @return transformed region
     """
-    if 'points' in region:
-        region['points'] = list(
-            map(lambda x: list(transform2DPoint(x, cameraPose)), region['points']))
-    if 'x' in region and 'y' in region:
-        region['x'], region['y'] = transform2DPoint(
-            (region['x'], region['y']), cameraPose)
+    if "points" in region:
+        region["points"] = list(
+            map(lambda x: list(transform2DPoint(x, cameraPose)), region["points"])
+        )
+    if "x" in region and "y" in region:
+        region["x"], region["y"] = transform2DPoint(
+            (region["x"], region["y"]), cameraPose
+        )
     return region
 
 
 def transform2DPoint(point, cameraPose):
-    """ Transforms a 2D point with specified camera pose.
+    """Transforms a 2D point with specified camera pose.
 
     @param    point      tuple of 2D point
     @param    cameraPose   camera pose
 
     @return transformed 2D point
     """
-    translation = np.reshape(
-        np.array([Point(point).asNumpyCartesian, (1, 1)]), -1)
+    translation = np.reshape(np.array([Point(point).asNumpyCartesian, (1, 1)]), -1)
     translation = np.matmul(cameraPose.pose_mat, translation)
     return translation[:2]
 
@@ -704,12 +740,15 @@ def convertToTransformMatrix(scene_pose_mat, rotation, translation):
     @return updated matrix in accordance with scenescape convention.
     """
     e_rot_0 = Rotation.from_quat(rotation).as_matrix()
-    e_tr_0 = np.vstack([np.hstack([e_rot_0, np.zeros((3, 1))]),
-                        np.array([0, 0, 0, 1])])
-    cam_to_world = np.array([[1., 0., 0., translation[0]],
-                            [0., 1., 0., translation[1]],
-                            [0., 0., 1., translation[2]],
-                            [0., 0., 0., 1.]])
+    e_tr_0 = np.vstack([np.hstack([e_rot_0, np.zeros((3, 1))]), np.array([0, 0, 0, 1])])
+    cam_to_world = np.array(
+        [
+            [1.0, 0.0, 0.0, translation[0]],
+            [0.0, 1.0, 0.0, translation[1]],
+            [0.0, 0.0, 1.0, translation[2]],
+            [0.0, 0.0, 0.0, 1.0],
+        ]
+    )
 
     cam_to_world = cam_to_world @ e_tr_0
     cam_to_world = scene_pose_mat @ cam_to_world
@@ -728,12 +767,17 @@ def normalize(vector):
 
 def rotationToTarget(v1, v2):
     """Compute rotation (in quaternion) from vector v1 to v2"""
-    quat = np.hstack([
-        np.cross(v1, v2),
-        np.array([
-                 (((np.linalg.norm(v1) ** 2) * (np.linalg.norm(v2) ** 2)) ** 0.5) + np.dot(v1, v2)
-                 ])
-    ])
+    quat = np.hstack(
+        [
+            np.cross(v1, v2),
+            np.array(
+                [
+                    (((np.linalg.norm(v1) ** 2) * (np.linalg.norm(v2) ** 2)) ** 0.5)
+                    + np.dot(v1, v2)
+                ]
+            ),
+        ]
+    )
     if np.linalg.norm(quat) <= 1e-6:
         return None
     quat = normalize(quat)

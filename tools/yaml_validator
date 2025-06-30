@@ -17,27 +17,27 @@ README_HELP = "upgrade-readme.md"
 class YAMLValidator:
 
     parser_schema = {
-        'controller': {"path": "controller/src", "args": []},
-        'percebro': {"path": "percebro/percebro", "args": []},
-        'camcalibration': {"path": "autocalibration/src", "args": []},
-        'ntpserver': {"args": []}
+        "controller": {"path": "controller/src", "args": []},
+        "percebro": {"path": "percebro/percebro", "args": []},
+        "camcalibration": {"path": "autocalibration/src", "args": []},
+        "ntpserver": {"args": []},
     }
     scenescape_init_schema = {
-        'global': [],
-        'webserver': [],
-        'controller': [],
-        'database': [],
-        'webserver': [],
-        'camcalibration': []
+        "global": [],
+        "webserver": [],
+        "controller": [],
+        "database": [],
+        "webserver": [],
+        "camcalibration": [],
     }
 
     images = {
-        'scenescape-manager',
-        'scenescape-controller',
-        'scenescape-percebro',
-        'scenescape-camcalibration',
-        'scenescape-broker',
-        'dockurr/chrony'
+        "scenescape-manager",
+        "scenescape-controller",
+        "scenescape-percebro",
+        "scenescape-camcalibration",
+        "scenescape-broker",
+        "dockurr/chrony",
     }
 
     def __init__(self, yaml_file):
@@ -58,16 +58,16 @@ class YAMLValidator:
 
     def validateImages(self):
         self.currentImages = set()
-        for key in self.yaml_json['services']:
-            image = self.yaml_json['services'][key]['image']
-            image = image.split(':')[0]
+        for key in self.yaml_json["services"]:
+            image = self.yaml_json["services"][key]["image"]
+            image = image.split(":")[0]
             self.currentImages.add(image)
         difference = self.images - self.currentImages
         return difference
 
     def loadYAML(self):
         try:
-            with open(self.yaml_file, 'r') as file:
+            with open(self.yaml_file, "r") as file:
                 print(f"Loading and Validating {self.yaml_file}")
                 return yaml.safe_load(file)
         except FileNotFoundError:
@@ -79,29 +79,26 @@ class YAMLValidator:
 
     def loadSchema(self):
         for key in self.scenescape_init_schema:
-            self.scenescape_init_schema[key] = self.getArgsfromScenescapeInit(
-                key)
+            self.scenescape_init_schema[key] = self.getArgsfromScenescapeInit(key)
 
         for key in self.parser_schema:
             self.parser_schema[key] = self.getParserArgs(key)
         return
 
     def getParserArgs(self, service):
-        path = self.parser_schema[service].get('path', None)
+        path = self.parser_schema[service].get("path", None)
         argument_names = []
         if path:
-            cmd = ['grep', '-r', PARSER_PATTERN, path]
+            cmd = ["grep", "-r", PARSER_PATTERN, path]
             process = subprocess.Popen(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True)
+                cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+            )
             stdout, stderr = process.communicate()
 
             if process.returncode != 0:
                 print(f"Error running cmd: {stderr}")
                 sys.exit(1)
-            argument_pattern = re.compile(r'--?[\w_-]+')
+            argument_pattern = re.compile(r"--?[\w_-]+")
             argument_names = argument_pattern.findall(stdout)
 
         return argument_names
@@ -111,12 +108,11 @@ class YAMLValidator:
             "sed",
             "-n",
             f"/# {service} options/,/#/p",
-            "manager/config/scenescape-init"]
+            "manager/config/scenescape-init",
+        ]
         process = subprocess.Popen(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True)
+            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+        )
         stdout, stderr = process.communicate()
 
         if process.returncode != 0:
@@ -131,17 +127,18 @@ class YAMLValidator:
 
     def preprocess(self):
         services_to_validate = {}
-        for key, value in self.yaml_json['services'].items():
-            if 'command' in value:
-                if isinstance(value['command'], list):
-                    args_list = value['command'][1:]
-                    service_key = value['command'][0]
+        for key, value in self.yaml_json["services"].items():
+            if "command" in value:
+                if isinstance(value["command"], list):
+                    args_list = value["command"][1:]
+                    service_key = value["command"][0]
                 else:
-                    args_list = value['command'].split()
+                    args_list = value["command"].split()
                     service_key = args_list[0]
 
                 service_value = [
-                    arg.split("=")[0] for arg in args_list if arg.startswith("-")]
+                    arg.split("=")[0] for arg in args_list if arg.startswith("-")
+                ]
 
                 if service_key not in services_to_validate:
                     services_to_validate[service_key] = []
@@ -151,16 +148,22 @@ class YAMLValidator:
     def validateService(self, command, value):
         for service in value:
             key, args = list(service.items())[0]
-            if command not in self.parser_schema and command not in self.scenescape_init_schema:
+            if (
+                command not in self.parser_schema
+                and command not in self.scenescape_init_schema
+            ):
                 self.exitWithHelp(f"Error: {key} not a valid service", command)
 
-            valid_args = (set(self.parser_schema.get(command, [])) |
-                          set(self.scenescape_init_schema.get(command, [])) |
-                          set(self.scenescape_init_schema.get('global', [])))
+            valid_args = (
+                set(self.parser_schema.get(command, []))
+                | set(self.scenescape_init_schema.get(command, []))
+                | set(self.scenescape_init_schema.get("global", []))
+            )
             for arg in args:
                 if arg not in valid_args:
                     self.exitWithHelp(
-                        f"Error: {arg} not a valid argument for {key}", command)
+                        f"Error: {arg} not a valid argument for {key}", command
+                    )
         return
 
     def exitWithHelp(self, error, service):

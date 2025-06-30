@@ -50,11 +50,7 @@ class GetiDetector(Detector):
                 image = self.preprocessColorspace(image)
 
                 dict_data, input_meta = self.detector.preprocess(image)
-                processed.append(
-                    IAData(
-                        dict_data['image'],
-                        input.id,
-                        input_meta))
+                processed.append(IAData(dict_data["image"], input.id, input_meta))
 
         return processed
 
@@ -69,15 +65,13 @@ class GetiDetector(Detector):
 
         input_meta = result.save
 
-        if 'boxes' in result.data:
-            res_shape = result.data['boxes'].shape
+        if "boxes" in result.data:
+            res_shape = result.data["boxes"].shape
             # Make bi-dimensional result vectors 3-dimensional so
             # detector.postprocess is happy
             if len(res_shape) == 2:
-                result.data['boxes'] = np.expand_dims(
-                    result.data['boxes'], axis=0)
-                result.data['labels'] = np.expand_dims(
-                    result.data['labels'], axis=0)
+                result.data["boxes"] = np.expand_dims(result.data["boxes"], axis=0)
+                result.data["labels"] = np.expand_dims(result.data["labels"], axis=0)
 
         try:
             predictions = self.detector.postprocess(result.data, input_meta)
@@ -99,8 +93,7 @@ class GetiDetector(Detector):
                 continue
 
             if self.categories[res.id] in self.blacklist:
-                log.debug(
-                    f"Skipping blacklisted category {self.categories[res.id]}")
+                log.debug(f"Skipping blacklisted category {self.categories[res.id]}")
                 continue
 
             bounds = [None] * 4
@@ -110,8 +103,7 @@ class GetiDetector(Detector):
             bounds[2] = rect[2]
             bounds[3] = rect[3]
             # Avoid reporting invalid detections (0 height or width)
-            if bounds[0] == bounds[2] \
-                    or bounds[1] == bounds[3]:
+            if bounds[0] == bounds[2] or bounds[1] == bounds[3]:
                 continue
 
             if bounds[2] < bounds[0]:
@@ -123,23 +115,20 @@ class GetiDetector(Detector):
                 bounds[0] = bounds[3]
                 bounds[3] = tmp
 
-            bound_box = Rectangle(origin=Point(bounds[0], bounds[1]),
-                                  opposite=Point(bounds[2], bounds[3]))
+            bound_box = Rectangle(
+                origin=Point(bounds[0], bounds[1]), opposite=Point(bounds[2], bounds[3])
+            )
             comw = bound_box.width / 3
             comh = bound_box.height / 4
             center_of_mass = Rectangle(
-                origin=Point(
-                    bound_box.x + comw,
-                    bound_box.y + comh),
-                size=(
-                    comw,
-                    comh))
+                origin=Point(bound_box.x + comw, bound_box.y + comh), size=(comw, comh)
+            )
             object = {
-                'id': len(found) + 1,
-                'category': self.categories[res.id],
-                'confidence': float(res.score),
-                'bounding_box': bound_box.asDict,
-                'center_of_mass': center_of_mass.asDict
+                "id": len(found) + 1,
+                "category": self.categories[res.id],
+                "confidence": float(res.score),
+                "bounding_box": bound_box.asDict,
+                "center_of_mass": center_of_mass.asDict,
             }
             found.append(object)
 
@@ -151,10 +140,7 @@ class GetiDetector(Detector):
         self.model_type = None
 
         # Assumes config.json can be found in same dir as model.xml/model.bin
-        params_file = os.path.join(
-            os.path.dirname(
-                self.model_path),
-            'config.json')
+        params_file = os.path.join(os.path.dirname(self.model_path), "config.json")
         if os.path.exists(params_file):
             with open(params_file, "r", encoding="utf8") as file:
                 parameters = json.load(file)
@@ -163,20 +149,20 @@ class GetiDetector(Detector):
             self.model_type = "ssd"
             self.model_params = None
         else:
-            if 'type_of_model' in parameters:
+            if "type_of_model" in parameters:
                 self.model_type = parameters["type_of_model"]
             else:
                 self.model_type = parameters["model_type"]
 
             if self.model_type.startswith("OTE_"):
-                self.model_type = self.model_type.replace('OTE_', "", 1)
+                self.model_type = self.model_type.replace("OTE_", "", 1)
 
             self.model_params = parameters["model_parameters"]
 
             if "labels" in self.model_params and isinstance(
-                    self.model_params["labels"], dict):
-                self.categories = self._loadCategories(
-                    self.model_params["labels"])
+                self.model_params["labels"], dict
+            ):
+                self.categories = self._loadCategories(self.model_params["labels"])
 
             # Empty out labels, they confuse the inference engine
             self.model_params["labels"] = []
@@ -192,18 +178,17 @@ class GetiDetector(Detector):
             model_type=self.model_type,
             preload=False,
             core=None,
-            configuration={
-                'confidence_threshold': self.threshold},
+            configuration={"confidence_threshold": self.threshold},
             max_num_requests=self.num_req,
-            nstreams=f'{
-                self.ov_cores}',
-            nthreads=f'{
-                self.ov_cores}',
-            device=self.device)
+            nstreams=f"{
+                self.ov_cores}",
+            nthreads=f"{
+                self.ov_cores}",
+            device=self.device,
+        )
         self.core = self.detector.inference_adapter.core
 
-        model_shape = list(
-            self.detector.inputs[self.detector.image_blob_name].shape)
+        model_shape = list(self.detector.inputs[self.detector.image_blob_name].shape)
 
         return
 
@@ -215,7 +200,8 @@ class GetiDetector(Detector):
 
         self.input_blob = next(iter(self.inputs_info))
         self.output_blob = next(
-            iter(self.detector.inference_adapter.get_output_layers()))
+            iter(self.detector.inference_adapter.get_output_layers())
+        )
 
         self.async_queue = []
         for i in range(self.num_req):

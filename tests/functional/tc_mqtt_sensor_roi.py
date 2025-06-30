@@ -43,18 +43,19 @@ class SensorMqttRoi(ROIMqtt):
 
     def createSensor(self, sensorData):
         res = self.rest.createSensor(sensorData)
-        assert res.statusCode == HTTPStatus.CREATED, (
-            res.statusCode, res.errors)
+        assert res.statusCode == HTTPStatus.CREATED, (res.statusCode, res.errors)
         return
 
     def runROIMqttPrepareExtra(self):
         topic = PubSub.formatTopic(PubSub.DATA_SENSOR, sensor_id=self.roiName)
         self.pubsub.addCallback(topic, self.sensorDataReceived)
 
-        sensor = {'scene': self.sceneUID,
-                  'name': self.roiName,
-                  'area': "poly",
-                  'points': self.roiPoints}
+        sensor = {
+            "scene": self.sceneUID,
+            "name": self.roiName,
+            "area": "poly",
+            "points": self.roiPoints,
+        }
 
         self.createSensor(sensor)
         # Give the scene controller some time to catch the first sensor message
@@ -80,15 +81,13 @@ class SensorMqttRoi(ROIMqtt):
         start_time = get_epoch_time()
         for location in objLocation:
             now = time.time()
-            camera_id = jdata['id']
-            jdata['timestamp'] = get_iso_time(now)
-            jdata['objects'][PERSON][0]['bounding_box']['y'] = location
+            camera_id = jdata["id"]
+            jdata["timestamp"] = get_iso_time(now)
+            jdata["objects"][PERSON][0]["bounding_box"]["y"] = location
             detection = json.dumps(jdata)
             self.pubsub.publish(
-                PubSub.formatTopic(
-                    PubSub.DATA_CAMERA,
-                    camera_id=camera_id),
-                detection)
+                PubSub.formatTopic(PubSub.DATA_CAMERA, camera_id=camera_id), detection
+            )
             time.sleep(1 / frame_rate)
             if now - start_time > self.sensorDelay:
                 start_time = now
@@ -100,7 +99,7 @@ class SensorMqttRoi(ROIMqtt):
     def eventReceived(self, pahoClient, userdata, message):
         region_data = json.loads(message.payload.decode("utf-8"))
 
-        if len(region_data['objects']):
+        if len(region_data["objects"]):
             self.handleRegionData(region_data)
 
         return
@@ -109,21 +108,20 @@ class SensorMqttRoi(ROIMqtt):
         if self.entered:
             scene_data = json.loads(message.payload.decode("utf-8"))
 
-            for obj in scene_data['objects']:
-                current_point = obj['translation']
-                scene_message_ts = get_epoch_time(scene_data['timestamp'])
+            for obj in scene_data["objects"]:
+                current_point = obj["translation"]
+                scene_message_ts = get_epoch_time(scene_data["timestamp"])
                 if not self.isWithinRectangle(
                     self.roiPoints[1],
                     self.roiPoints[3],
-                    (current_point[0],
-                     current_point[1])):
+                    (current_point[0], current_point[1]),
+                ):
                     self.exited = True
                     self.entered = False
                     self.exitedDetected = True
                     self.exitedTimestamp = scene_message_ts
-                    print('object exited region')
-                self.handleSceneSensorData(
-                    obj, scene_message_ts, self.exitedTimestamp)
+                    print("object exited region")
+                self.handleSceneSensorData(obj, scene_message_ts, self.exitedTimestamp)
                 if self.exited:
                     self.exitedTimestamp = None
                     self.enteredTimestamp = None
@@ -137,16 +135,13 @@ class SensorMqttRoi(ROIMqtt):
         return
 
     def pushSensorValue(self, sensor_name, value):
-        message_dict = {'timestamp': get_iso_time(),
-                        'id': sensor_name,
-                        'value': value}
+        message_dict = {"timestamp": get_iso_time(), "id": sensor_name, "value": value}
 
         # Publish the message to the sensor topic
         result = self.pubsub.publish(
-            PubSub.formatTopic(
-                PubSub.DATA_SENSOR,
-                sensor_id=sensor_name),
-            json.dumps(message_dict))
+            PubSub.formatTopic(PubSub.DATA_SENSOR, sensor_id=sensor_name),
+            json.dumps(message_dict),
+        )
         error_code = result[0]
         if error_code != 0:
             print(f"Failed to send sensor {sensor_name} value!")
@@ -163,34 +158,35 @@ class SensorMqttRoi(ROIMqtt):
         return found_error is False
 
     def handleRegionData(self, region_data):
-        if 'objects' not in region_data:
+        if "objects" not in region_data:
             print("No objects in region!")
 
-        current_point = region_data['objects'][0]['translation']
-        region_message_ts = get_epoch_time(region_data['timestamp'])
+        current_point = region_data["objects"][0]["translation"]
+        region_message_ts = get_epoch_time(region_data["timestamp"])
         if self.isWithinRectangle(
-            self.roiPoints[1],
-            self.roiPoints[3],
-            (current_point[0],
-             current_point[1])):
+            self.roiPoints[1], self.roiPoints[3], (current_point[0], current_point[1])
+        ):
             self.entered = True
             self.enteredDetected = True
-            print('object entered region')
+            print("object entered region")
             if self.enteredTimestamp is None:
                 self.enteredTimestamp = region_message_ts
 
         if self.entered and len(self.sensorHistory) > 0:
             start_idx, end_idx = self.findSensorIndexes(
-                self.enteredTimestamp, region_message_ts, self.exitedTimestamp)
+                self.enteredTimestamp, region_message_ts, self.exitedTimestamp
+            )
             if not self.handleEnteredExitedObjects(
-                    region_data['entered'], self.sensorHistory[start_idx:end_idx]):
+                region_data["entered"], self.sensorHistory[start_idx:end_idx]
+            ):
                 print("Found error in 'entered' objects!")
                 self.errorInSensor = True
             else:
                 self.checkedEntered += 1
 
             if not self.handleEnteredExitedObjects(
-                    region_data['exited'], self.sensorHistory[start_idx:end_idx]):
+                region_data["exited"], self.sensorHistory[start_idx:end_idx]
+            ):
                 print("Found error in 'exited' objects!")
                 self.errorInSensor = True
             else:
@@ -205,8 +201,9 @@ class SensorMqttRoi(ROIMqtt):
             if not found:
                 print(
                     "Warning: failed to find expected sensor value {} (TS {})".format(
-                        cur_sensor['value'],
-                        cur_sensor['timestamp']))
+                        cur_sensor["value"], cur_sensor["timestamp"]
+                    )
+                )
                 found_all = False
             else:
                 self.foundValid += 1
@@ -214,16 +211,18 @@ class SensorMqttRoi(ROIMqtt):
 
     def findSensorInObj(self, obj, sensor_entry, sensor_name):
         found = False
-        expected_sensor_ts = get_epoch_time(sensor_entry['timestamp'])
-        expected_sensor_value = sensor_entry['value']
+        expected_sensor_ts = get_epoch_time(sensor_entry["timestamp"])
+        expected_sensor_value = sensor_entry["value"]
 
-        if 'sensors' not in obj:
+        if "sensors" not in obj:
             print("Object missing sensor data {}".format(obj))
             return False
 
-        for sensor_info in obj['sensors'][sensor_name]:
-            if get_epoch_time(sensor_info[0]) == expected_sensor_ts \
-                    and sensor_info[1] == expected_sensor_value:
+        for sensor_info in obj["sensors"][sensor_name]:
+            if (
+                get_epoch_time(sensor_info[0]) == expected_sensor_ts
+                and sensor_info[1] == expected_sensor_value
+            ):
                 found = True
                 break
         return found
@@ -234,9 +233,11 @@ class SensorMqttRoi(ROIMqtt):
 
         if self.entered and len(self.sensorHistory) > 0:
             start_idx, end_idx = self.findSensorIndexes(
-                self.enteredTimestamp, scene_message_ts, exited_timestamp)
+                self.enteredTimestamp, scene_message_ts, exited_timestamp
+            )
             found_all = self.findAllSensorsInRange(
-                obj, self.sensorHistory[start_idx:end_idx])
+                obj, self.sensorHistory[start_idx:end_idx]
+            )
 
             if found_all:
                 self.missedValues = 0
@@ -259,7 +260,7 @@ class SensorMqttRoi(ROIMqtt):
         end_idx = len(self.sensorHistory) - 1
 
         for cur_idx, sensor in enumerate(self.sensorHistory):
-            cur_sensor_ts = get_epoch_time(sensor['timestamp'])
+            cur_sensor_ts = get_epoch_time(sensor["timestamp"])
             if (cur_sensor_ts - SENSOR_PROC_DELAY) <= entered_ts:
                 start_idx = cur_idx
             if exited_ts is not None:
@@ -276,11 +277,7 @@ class SensorMqttRoi(ROIMqtt):
 
 
 def test_sensor_roi_mqtt(request, record_xml_attribute):
-    test = SensorMqttRoi(
-        TEST_NAME,
-        request,
-        SENSOR_DELAY,
-        record_xml_attribute)
+    test = SensorMqttRoi(TEST_NAME, request, SENSOR_DELAY, record_xml_attribute)
     test.runROIMqtt()
     assert test.exitCode == 0
     return test.exitCode
@@ -290,5 +287,5 @@ def main():
     return test_sensor_roi_mqtt(None, None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     os._exit(main() or 0)

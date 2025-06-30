@@ -20,8 +20,8 @@ def validate_object_crud(browser, file_path=None):
     @return   BOOL                Boolean representing successfully verifying CRUD operations
                                   on an object.
     """
-    OBJECT_NAME = 'Test 3D Object'
-    OBJECT_NAME_2 = 'Test 3D Object-2'
+    OBJECT_NAME = "Test 3D Object"
+    OBJECT_NAME_2 = "Test 3D Object-2"
     initial_loop_value = round(random.uniform(0.1, 10), 1)
 
     # Create 3D object
@@ -31,30 +31,39 @@ def validate_object_crud(browser, file_path=None):
     browser.find_element(By.ID, "obj-manage-{0}".format(OBJECT_NAME)).click()
 
     # Verify correct object detail loaded
-    assert common.selenium_wait_for_elements(
-        browser, (By.ID, "id_name")).get_attribute("value") == OBJECT_NAME
+    assert (
+        common.selenium_wait_for_elements(browser, (By.ID, "id_name")).get_attribute(
+            "value"
+        )
+        == OBJECT_NAME
+    )
 
     # Based if it's a 3D object, check if the appropriate fields exists and
     # update all fields
     common_elements = "#id_tracking_radius, #id_x_size, #id_y_size, #id_z_size"
-    specific_3d_elements = "#id_rotation_x, #id_rotation_y, #id_rotation_z, [id^=id_translation], #id_scale"
+    specific_3d_elements = (
+        "#id_rotation_x, #id_rotation_y, #id_rotation_z, [id^=id_translation], #id_scale"
+    )
     common_dropdowns = ["id_project_to_map", "id_rotation_from_velocity"]
 
-    assert len(browser.find_elements(By.CSS_SELECTOR, common_elements)) == 4, \
-        'Not found all common options'
+    assert (
+        len(browser.find_elements(By.CSS_SELECTOR, common_elements)) == 4
+    ), "Not found all common options"
 
     for elem_id in common_dropdowns:
         select = Select(browser.find_element(By.ID, elem_id))
-        select.select_by_visible_text('Yes')
+        select.select_by_visible_text("Yes")
 
     if file_path:
         browser.find_element(By.ID, "id_model_3d").send_keys(file_path)
         common_elements += f", {specific_3d_elements}"
-        assert len(browser.find_elements(By.CSS_SELECTOR, specific_3d_elements)
-                   ) != 0, 'Not found any 3D options when a 3D model file was used!'
+        assert (
+            len(browser.find_elements(By.CSS_SELECTOR, specific_3d_elements)) != 0
+        ), "Not found any 3D options when a 3D model file was used!"
     else:
-        assert len(browser.find_elements(By.CSS_SELECTOR, specific_3d_elements)
-                   ) == 0, 'Some 3D elements were found when no 3D model file was used!'
+        assert (
+            len(browser.find_elements(By.CSS_SELECTOR, specific_3d_elements)) == 0
+        ), "Some 3D elements were found when no 3D model file was used!"
 
     fld_id = browser.find_element(By.ID, "id_name")
     fld_id.clear()
@@ -70,47 +79,49 @@ def validate_object_crud(browser, file_path=None):
         verify_elems.append(elem.get_attribute("id"))
         loop_value += 1
 
-    browser.find_element(
-        By.CSS_SELECTOR,
-        "input[value='Update Object']").click()
+    browser.find_element(By.CSS_SELECTOR, "input[value='Update Object']").click()
 
     # Load updated object detail
     assert common.selenium_wait_for_elements(
-        browser, (By.ID, "obj-manage-{0}".format(OBJECT_NAME_2)))
+        browser, (By.ID, "obj-manage-{0}".format(OBJECT_NAME_2))
+    )
     browser.find_element(By.ID, "obj-manage-{0}".format(OBJECT_NAME_2)).click()
 
     # Verify object detail updated
-    assert common.selenium_wait_for_elements(
-        browser, (By.ID, "id_name")).get_attribute("value") == OBJECT_NAME_2
+    assert (
+        common.selenium_wait_for_elements(browser, (By.ID, "id_name")).get_attribute(
+            "value"
+        )
+        == OBJECT_NAME_2
+    )
 
     loop_value = initial_loop_value
     for elem_id in verify_elems:
         assert common.selenium_wait_for_elements(
-            browser, (By.ID, elem_id)).get_attribute("value") == str(loop_value)
+            browser, (By.ID, elem_id)
+        ).get_attribute("value") == str(loop_value)
         loop_value += 1
 
     if file_path:
-        log.info('3D object updated!')
+        log.info("3D object updated!")
         # Verify 3D model present using file name
         browser.find_element(By.LINK_TEXT, file_path.split("/")[-1])
         # Test remove 3D model
-        browser.find_element(By.ID, 'model_3d-clear_id').click()
-        browser.find_element(
-            By.CSS_SELECTOR,
-            "input[value='Update Object']").click()
-        log.info('3D model removed!')
+        browser.find_element(By.ID, "model_3d-clear_id").click()
+        browser.find_element(By.CSS_SELECTOR, "input[value='Update Object']").click()
+        log.info("3D model removed!")
 
         # Load updated object detail
         assert common.selenium_wait_for_elements(
-            browser, (By.ID, "obj-manage-{0}".format(OBJECT_NAME_2)))
-        browser.find_element(
-            By.ID, "obj-manage-{0}".format(OBJECT_NAME_2)).click()
+            browser, (By.ID, "obj-manage-{0}".format(OBJECT_NAME_2))
+        )
+        browser.find_element(By.ID, "obj-manage-{0}".format(OBJECT_NAME_2)).click()
 
     # Check checkbox to remove 3D model is not shown
-    assert len(browser.find_elements(By.ID, 'model_3d-clear_id')) == 0
+    assert len(browser.find_elements(By.ID, "model_3d-clear_id")) == 0
 
     assert common.delete_object_library(browser, OBJECT_NAME_2)
-    log.info('Object deleted!')
+    log.info("Object deleted!")
 
     return True
 
@@ -129,7 +140,8 @@ def test_object_crud(params, record_xml_attribute):
     try:
         log.info("Executing: " + TEST_NAME)
         log.info(
-            "Test that the user can perform CRUD operations on objects with and without a 3D model.")
+            "Test that the user can perform CRUD operations on objects with and without a 3D model."
+        )
 
         browser = Browser()
         assert common.check_page_login(browser, params)
@@ -137,7 +149,8 @@ def test_object_crud(params, record_xml_attribute):
         files = ["/workspace/tests/ui/test_media/box.glb", None]
         for file in files:
             log.info(
-                f"Testing and validating CRUD operations on 3D object where file = {file}...")
+                f"Testing and validating CRUD operations on 3D object where file = {file}..."
+            )
             assert validate_object_crud(browser, file)
 
         exit_code = 0

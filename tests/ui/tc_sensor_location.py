@@ -19,13 +19,11 @@ def change_sensor_location(browser, sensor_name):
     """
     retVal = False
     browser.find_element(
-        By.CSS_SELECTOR,
-        ".navbar-nav > .nav-item:nth-child(3) > .nav-link").click()
+        By.CSS_SELECTOR, ".navbar-nav > .nav-item:nth-child(3) > .nav-link"
+    ).click()
     browser.find_element(
-        By.XPATH,
-        "//*[text()='" +
-        sensor_name +
-        "']/parent::tr/td[4]/a").click()
+        By.XPATH, "//*[text()='" + sensor_name + "']/parent::tr/td[4]/a"
+    ).click()
     map_canvas = browser.find_elements(By.ID, "svgout")
     if map_canvas is None:
         return retVal
@@ -34,9 +32,7 @@ def change_sensor_location(browser, sensor_name):
     sensor = sensor_draggable[-1]
 
     action = browser.actionChains()
-    action.drag_and_drop_by_offset(
-        sensor, 10, random.randint(
-            50, 80)).perform()
+    action.drag_and_drop_by_offset(sensor, 10, random.randint(50, 80)).perform()
     time.sleep(1)
     print("Changed the Sensor Location")
     browser.find_element(By.NAME, "save").click()
@@ -52,21 +48,19 @@ def verify_sensor_location(browser, sensor_name):
     @param    sensor_name   Name of the sensor.
     @return   BOOL          Boolean representing action success.
     """
-    old_x_value = '138'
-    old_y_value = '188'
+    old_x_value = "138"
+    old_y_value = "188"
     retVal = False
     browser.find_element(
-        By.CSS_SELECTOR,
-        ".navbar-nav > .nav-item:nth-child(3) > .nav-link").click()
+        By.CSS_SELECTOR, ".navbar-nav > .nav-item:nth-child(3) > .nav-link"
+    ).click()
     browser.find_element(
-        By.XPATH,
-        "//*[text()='" +
-        sensor_name +
-        "']/parent::tr/td[4]/a").click()
+        By.XPATH, "//*[text()='" + sensor_name + "']/parent::tr/td[4]/a"
+    ).click()
     browser.execute_script("window.scrollTo(0,100);")
     sensor_coord = browser.find_element(By.CSS_SELECTOR, ".is-handle")
-    x_value = sensor_coord.get_attribute('x')
-    y_value = sensor_coord.get_attribute('y')
+    x_value = sensor_coord.get_attribute("x")
+    y_value = sensor_coord.get_attribute("y")
     if x_value != old_x_value and y_value != old_y_value:
         print(f"Location persists: x= '{x_value}' y= '{y_value}'")
         retVal = True
@@ -95,8 +89,7 @@ def test_sensor_location_main(params, record_xml_attribute):
         assert common.check_page_login(browser, params)
         assert common.check_db_status(browser)
 
-        common.create_sensor_from_scene(
-            browser, sensor_id, sensor_name, scene_name)
+        common.create_sensor_from_scene(browser, sensor_id, sensor_name, scene_name)
         assert change_sensor_location(browser, sensor_name)
         assert verify_sensor_location(browser, sensor_name)
         exit_code = 0

@@ -24,15 +24,16 @@ class Command(BaseCommand):
         while True:
             try:
                 conn = psycopg2.connect(
-                    "dbname='" +
-                    settings.DATABASES['default']['NAME'] +
-                    "' user='" +
-                    settings.DATABASES['default']['USER'] +
-                    "' host='" +
-                    settings.DATABASES['default']['HOST'] +
-                    "' password='" +
-                    settings.DATABASES['default']['PASSWORD'] +
-                    "'")
+                    "dbname='"
+                    + settings.DATABASES["default"]["NAME"]
+                    + "' user='"
+                    + settings.DATABASES["default"]["USER"]
+                    + "' host='"
+                    + settings.DATABASES["default"]["HOST"]
+                    + "' password='"
+                    + settings.DATABASES["default"]["PASSWORD"]
+                    + "'"
+                )
                 tables_av = {}
                 # This first loop waits for the tables to exist.
                 # If one of the tables in the DB doesnt exist, it will end up

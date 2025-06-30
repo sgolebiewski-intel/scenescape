@@ -15,10 +15,21 @@ class PolarArithmeticError(ArithmeticError):
 
 
 class Point:
-    def __init__(self, a=None, b=None, c=None, polar=False,
-                 x=None, y=None, z=None,
-                 length=None, angle=None,
-                 radius=None, azimuth=None, inclination=None):
+    def __init__(
+        self,
+        a=None,
+        b=None,
+        c=None,
+        polar=False,
+        x=None,
+        y=None,
+        z=None,
+        length=None,
+        angle=None,
+        radius=None,
+        azimuth=None,
+        inclination=None,
+    ):
         """Represents a 2D or 3D polar or cartesian coordinate. Is able to do
         conversions between types and simple operations like comparison
         and addition.
@@ -63,20 +74,19 @@ class Point:
             raise ValueError("No coordinates")
         self.polar = polar
         if isinstance(a, dict):
-            if 'length' in a:
-                self._point = (a['length'], a['angle'], None)
+            if "length" in a:
+                self._point = (a["length"], a["angle"], None)
                 polar = True
-            elif 'radius' in a:
-                self._point = (a['radius'], a['azimuth'], a['inclination'])
+            elif "radius" in a:
+                self._point = (a["radius"], a["azimuth"], a["inclination"])
                 polar = True
-            elif 'z' in a:
-                self._point = (a['x'], a['y'], a['z'])
+            elif "z" in a:
+                self._point = (a["x"], a["y"], a["z"])
             else:
-                self._point = (a['x'], a['y'], None)
+                self._point = (a["x"], a["y"], None)
         elif isinstance(a, (list, tuple)):
             if None in a:
-                raise ValueError(
-                    "Passed arguments do not make a coordinate", type(a), a)
+                raise ValueError("Passed arguments do not make a coordinate", type(a), a)
             self._point = tuple(a)
             if len(self._point) < 3:
                 self._point = tuple((list(self._point) + [None] * 3)[:3])
@@ -89,19 +99,21 @@ class Point:
         elif b is not None:
             self._point = (a, b, c)
         else:
-            raise ValueError(
-                "Passed arguments do not make a coordinate", type(a), a)
+            raise ValueError("Passed arguments do not make a coordinate", type(a), a)
         return
 
     def midpoint(self, other):
         if self.is3D != other.is3D:
             raise TypeError("Cannot mix 2D and 3D points")
         if self.is3D:
-            return self.__class__(self.x + (other.x - self.x) / 2,
-                                  self.y + (other.y - self.y) / 2,
-                                  self.z + (other.z - self.z) / 2)
-        return self.__class__(self.x + (other.x - self.x) / 2,
-                              self.y + (other.y - self.y) / 2)
+            return self.__class__(
+                self.x + (other.x - self.x) / 2,
+                self.y + (other.y - self.y) / 2,
+                self.z + (other.z - self.z) / 2,
+            )
+        return self.__class__(
+            self.x + (other.x - self.x) / 2, self.y + (other.y - self.y) / 2
+        )
 
     def withinRadius(self, pt, radius):
         if self.is3D:
@@ -122,8 +134,11 @@ class Point:
             return self._point[1]
 
         if self.is3D:
-            return self.radius * math.cos(math.radians(self.inclination)) \
+            return (
+                self.radius
+                * math.cos(math.radians(self.inclination))
                 * math.sin(math.radians(self.azimuth))
+            )
         return self.radius * math.sin(math.radians(self.angle))
 
     @property
@@ -131,8 +146,11 @@ class Point:
         if not self.is3D:
             raise TypeError("Cannot get Z from 2D point")
         if self.polar:
-            return self.radius * math.sin(math.radians(self.inclination)) \
+            return (
+                self.radius
+                * math.sin(math.radians(self.inclination))
                 * math.cos(math.radians(self.azimuth))
+            )
         return self._point[2]
 
     @property
@@ -171,10 +189,7 @@ class Point:
 
         if self.is3D:
             squared = self._point[0] ** 2 + self._point[1] ** 2
-            angle = math.degrees(
-                math.atan2(
-                    math.sqrt(squared),
-                    self._point[2]))
+            angle = math.degrees(math.atan2(math.sqrt(squared), self._point[2]))
         else:
             angle = math.degrees(math.atan2(self._point[0], self._point[1]))
         angle = 90 - angle
@@ -211,7 +226,7 @@ class Point:
 
     @property
     def asNumpyCartesian(self):
-        if not hasattr(self, '_numpyCartesian'):
+        if not hasattr(self, "_numpyCartesian"):
             if not self.polar:
                 coords = 2
                 if self.is3D:
@@ -225,7 +240,7 @@ class Point:
 
     @property
     def asNumpyPolar(self):
-        if not hasattr(self, '_numpyPolar'):
+        if not hasattr(self, "_numpyPolar"):
             if self.polar:
                 coords = 2
                 if self.is3D:
@@ -233,20 +248,21 @@ class Point:
                 self._numpyPolar = np.float64(self._point[:coords])
             elif self.is3D:
                 self._numpyPolar = np.float64(
-                    (self.radius, self.azimuth, self.inclination))
+                    (self.radius, self.azimuth, self.inclination)
+                )
             else:
                 self._numpyPolar = np.float64((self.length, self.angle))
         return self._numpyPolar
 
     @property
     def asSgPoint(self):
-        if not hasattr(self, '_sgPoint'):
+        if not hasattr(self, "_sgPoint"):
             self._sgPoint = sgPoint(*self.as2Dxy.asNumpyCartesian)
         return self._sgPoint
 
     @property
     def asKey(self):
-        if not hasattr(self, '_key'):
+        if not hasattr(self, "_key"):
             arr = self.asNumpyCartesian * 100
             self._key = tuple(arr.astype(int))
         return self._key
@@ -276,15 +292,15 @@ class Point:
 
     def __arithmetic(self, other, op):
         if self.polar:
-            raise PolarArithmeticError(
-                "Can't perform operation on polar coordinates")
+            raise PolarArithmeticError("Can't perform operation on polar coordinates")
         length = 2
         if self.is3D:
             length += 1
         if isinstance(other, Point):
             other = other._point
-        return self.__class__([op(a, b) for a, b in zip(
-            self._point[:length], other[:length])])
+        return self.__class__(
+            [op(a, b) for a, b in zip(self._point[:length], other[:length])]
+        )
 
     def __add__(self, other):
         return self.__arithmetic(other, operator.add)
@@ -293,14 +309,12 @@ class Point:
         return self.__arithmetic(other, operator.sub)
 
     def __eq__(self, other):
-        return self.is3D == other.is3D and math.isclose(
-            self.x,
-            other.x) and math.isclose(
-            self.y,
-            other.y) and (
-            not self.is3D or math.isclose(
-                self.z,
-                other.z))
+        return (
+            self.is3D == other.is3D
+            and math.isclose(self.x, other.x)
+            and math.isclose(self.y, other.y)
+            and (not self.is3D or math.isclose(self.z, other.z))
+        )
 
     def __repr__(self):
         return "%s: %s" % (self.__class__.__name__, self.log)
@@ -338,15 +352,22 @@ class Line:
         rad_zero = True
         # Radius is greater than 1e-5 if at least one of the members is greater
         # than 1e-5 (or all three are 5e-6, or 2 of them are 7e-6)
-        if parchk[0] > 1e-5 or parchk[0] < -1e-5 or parchk[1] > 1e-5 or parchk[1] < - \
-                1e-5 or parchk[2] > 1e-5 or parchk[2] < -1e-5:
+        if (
+            parchk[0] > 1e-5
+            or parchk[0] < -1e-5
+            or parchk[1] > 1e-5
+            or parchk[1] < -1e-5
+            or parchk[2] > 1e-5
+            or parchk[2] < -1e-5
+        ):
             rad_zero = False
         if rad_zero:
             return None
 
         # Radius is def greater since we already know parchk[i] > 1e-5
-        ma = ((np.dot(A, C) * np.dot(C, B)) - (np.dot(A, B) * np.dot(C, C))) \
-            / ((np.dot(B, B) * np.dot(C, C)) - (np.dot(C, B) * np.dot(C, B)))
+        ma = ((np.dot(A, C) * np.dot(C, B)) - (np.dot(A, B) * np.dot(C, C))) / (
+            (np.dot(B, B) * np.dot(C, C)) - (np.dot(C, B) * np.dot(C, B))
+        )
         mb = (ma * np.dot(C, B) + np.dot(A, C)) / np.dot(C, C)
 
         Pa = a0 + B * ma
@@ -359,7 +380,8 @@ class Line:
         if self.is3D:
             shortest = self.shortestLineBetween(aLine)
             if shortest is not None and np.isclose(
-                    shortest.length, 0, rtol=1e-05, atol=1e-08, equal_nan=False):
+                shortest.length, 0, rtol=1e-05, atol=1e-08, equal_nan=False
+            ):
                 return shortest._origin
             return None
 
@@ -373,8 +395,10 @@ class Line:
         if div == 0:
             return None
 
-        d = (det(self._origin.asNumpyCartesian, self._end.asNumpyCartesian),
-             det(aLine._origin.asNumpyCartesian, aLine._end.asNumpyCartesian))
+        d = (
+            det(self._origin.asNumpyCartesian, self._end.asNumpyCartesian),
+            det(aLine._origin.asNumpyCartesian, aLine._end.asNumpyCartesian),
+        )
         x = det(d, xdiff) / div
         y = det(d, ydiff) / div
         return Point((x, y))

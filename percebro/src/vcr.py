@@ -25,14 +25,14 @@ class VCR:
         self.recording = tempfile.NamedTemporaryFile(suffix=".mp4")
         cmd = ["ffmpeg", "-y", "-an", "-i", self.url, self.recording.name]
         log.debug("STARTING", cmd)
-        _thread.start_new_thread(self.runCommand, (cmd, ))
+        _thread.start_new_thread(self.runCommand, (cmd,))
 
         # FIXME - set a timer to stop automatically after a few minutes to
         # prevent filling disk
         return
 
     def stopCapture(self):
-        if getattr(self, 'controllingTTY', None) is not None:
+        if getattr(self, "controllingTTY", None) is not None:
             os.write(self.controllingTTY, b"q")
             log.debug("STOPPED", self.recording.name)
         return
@@ -41,8 +41,9 @@ class VCR:
         err = None
         self.controllingTTY, worker = pty.openpty()
         log.info(" ".join(cmd))
-        with subprocess.Popen(cmd, stdin=worker, stdout=worker, stderr=worker,
-                              close_fds=True) as p:
+        with subprocess.Popen(
+            cmd, stdin=worker, stdout=worker, stderr=worker, close_fds=True
+        ) as p:
             m = os.fdopen(self.controllingTTY, "rb")
             os.close(worker)
 
@@ -63,13 +64,20 @@ class VCR:
         return err
 
     def publishVideo(self, pubsub, topic):
-        if getattr(self, 'controllingTTY', None) is not None \
-           or not hasattr(self, 'recording'):
+        if getattr(self, "controllingTTY", None) is not None or not hasattr(
+            self, "recording"
+        ):
             return
 
         pubsub.sendFile(topic, self.recording)
         return
 
     def publishVideoInNewThread(self, pubsub, topic):
-        _thread.start_new_thread(self.publishVideo, (pubsub, topic, ))
+        _thread.start_new_thread(
+            self.publishVideo,
+            (
+                pubsub,
+                topic,
+            ),
+        )
         return

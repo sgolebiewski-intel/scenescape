@@ -29,32 +29,30 @@ def build_argparser():
     parser = argparse.ArgumentParser()
     parser.add_argument("camera", help="IP/hostname of camera")
     parser.add_argument(
-        "commands",
-        nargs="*",
-        help="commands to execute: [ptz][+-]<float>")
-    parser.add_argument("--auth", default="admin:admin123",
-                        help="user:pass to authenticate as")
+        "commands", nargs="*", help="commands to execute: [ptz][+-]<float>"
+    )
     parser.add_argument(
-        "--presets",
-        default="presets.json",
-        help="file with saved positions")
+        "--auth", default="admin:admin123", help="user:pass to authenticate as"
+    )
     parser.add_argument(
-        "--flag",
-        action="store_true",
-        help="flag to do something")
+        "--presets", default="presets.json", help="file with saved positions"
+    )
+    parser.add_argument("--flag", action="store_true", help="flag to do something")
     return parser
 
 
 def ptzEqual(ptz1, ptz2):
-    return ptz1.Position.PanTilt.x == ptz2.Position.PanTilt.x \
-        and ptz1.Position.PanTilt.y == ptz2.Position.PanTilt.y \
+    return (
+        ptz1.Position.PanTilt.x == ptz2.Position.PanTilt.x
+        and ptz1.Position.PanTilt.y == ptz2.Position.PanTilt.y
         and ptz1.Position.Zoom.x == ptz2.Position.Zoom.x
+    )
 
 
 def moveCamera(ptz, token, pan=None, tilt=None, zoom=None):
-    status = ptz.GetStatus({'ProfileToken': token})
+    status = ptz.GetStatus({"ProfileToken": token})
 
-    request = ptz.create_type('AbsoluteMove')
+    request = ptz.create_type("AbsoluteMove")
     request.ProfileToken = token
     request.Position = status.Position
     if pan is not None:
@@ -69,9 +67,13 @@ def moveCamera(ptz, token, pan=None, tilt=None, zoom=None):
     last = status
     while True:
         time.sleep(1)
-        current = ptz.GetStatus({'ProfileToken': token})
-        print("Now at", current.Position.PanTilt.x, current.Position.PanTilt.y,
-              current.Position.Zoom.x)
+        current = ptz.GetStatus({"ProfileToken": token})
+        print(
+            "Now at",
+            current.Position.PanTilt.x,
+            current.Position.PanTilt.y,
+            current.Position.Zoom.x,
+        )
         if ptzEqual(current, request) or ptzEqual(current, last) or tries > 3:
             break
         tries += 1
@@ -103,9 +105,9 @@ def main():
 
     cam_ip = args.camera
     cam_port = 80
-    if cam_ip.find(':') >= 0:
-        idx = cam_ip.find(':')
-        cam_port = int(cam_ip[idx + 1:])
+    if cam_ip.find(":") >= 0:
+        idx = cam_ip.find(":")
+        cam_port = int(cam_ip[idx + 1 :])
         cam_ip = cam_ip[:idx]
 
     presets = None
@@ -116,19 +118,19 @@ def main():
                 presets = p[cam_ip]
                 print("PRESETS LOADED", presets)
 
-    idx = args.auth.find(':')
+    idx = args.auth.find(":")
     if idx < 0:
         print("Need both user and password separated by a colon for authentication")
         exit(1)
 
     user = args.auth[:idx]
-    password = args.auth[idx + 1:]
+    password = args.auth[idx + 1 :]
 
-    print('Attempting connection to ' + cam_ip)
+    print("Attempting connection to " + cam_ip)
     mycam = ONVIFCamera(cam_ip, cam_port, user, password, wsdl_path)
     hostname = mycam.devicemgmt.GetHostname()
 
-    print('Connected to ' + hostname.Name)
+    print("Connected to " + hostname.Name)
 
     ptz = mycam.create_ptz_service()
     media = mycam.create_media_service()
@@ -153,17 +155,17 @@ def main():
             val = float(cmd[1:])
 
             # FIXME - if relative then do relative movement
-            if cmd[0] == 't':
+            if cmd[0] == "t":
                 if tilt is not None:
                     moveCamera(ptz, token, pan=pan, tilt=tilt, zoom=zoom)
                     pan = tilt = zoom = None
                 tilt = val
-            elif cmd[0] == 'p':
+            elif cmd[0] == "p":
                 if pan is not None:
                     moveCamera(ptz, token, pan=pan, tilt=tilt, zoom=zoom)
                     pan = tilt = zoom = None
                 pan = val
-            elif cmd[0] == 'z':
+            elif cmd[0] == "z":
                 if zoom is not None:
                     moveCamera(ptz, token, pan=pan, tilt=tilt, zoom=zoom)
                     pan = tilt = zoom = None
@@ -192,5 +194,5 @@ def main():
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main() or 0)

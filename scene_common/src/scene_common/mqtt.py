@@ -42,6 +42,7 @@ class _Topic(Enum):
     SYS_CHILDSCENE_STATUS = auto()
     SYS_PERCEBRO_STATUS = auto()
 
+
 # Really gross way to put above constants directly into PubSub class
 
 
@@ -56,39 +57,70 @@ for key in _Topic:
 class PubSub(_PubSubTopicBase):
     _TopicTemplates = {
         _Topic.CHANNEL: Template(TOPIC_BASE + "/channel/${channel}"),
-        _Topic.CMD_AUTOCALIB_SCENE: Template(TOPIC_BASE + "/cmd/autocalibration/scene/${scene_id}"),
+        _Topic.CMD_AUTOCALIB_SCENE: Template(
+            TOPIC_BASE + "/cmd/autocalibration/scene/${scene_id}"
+        ),
         _Topic.CMD_CAMERA: Template(TOPIC_BASE + "/cmd/camera/${camera_id}"),
         _Topic.CMD_DATABASE: Template(TOPIC_BASE + "/cmd/database"),
         _Topic.CMD_KUBECLIENT: Template(TOPIC_BASE + "/cmd/kubeclient"),
         _Topic.CMD_SCENE_UPDATE: Template(TOPIC_BASE + "/cmd/scene/update/${scene_id}"),
-        _Topic.DATA_AUTOCALIB_CAM_POSE: Template(TOPIC_BASE + "/autocalibration/camera/pose/${camera_id}"),
+        _Topic.DATA_AUTOCALIB_CAM_POSE: Template(
+            TOPIC_BASE + "/autocalibration/camera/pose/${camera_id}"
+        ),
         _Topic.DATA_CAMERA: Template(TOPIC_BASE + "/data/camera/${camera_id}"),
-        _Topic.DATA_EXTERNAL: Template(TOPIC_BASE + "/external/${scene_id}/${thing_type}"),
-        _Topic.DATA_REGION: Template(TOPIC_BASE + "/data/region/${scene_id}/${region_id}/${thing_type}"),
+        _Topic.DATA_EXTERNAL: Template(
+            TOPIC_BASE + "/external/${scene_id}/${thing_type}"
+        ),
+        _Topic.DATA_REGION: Template(
+            TOPIC_BASE + "/data/region/${scene_id}/${region_id}/${thing_type}"
+        ),
         _Topic.DATA_REGULATED: Template(TOPIC_BASE + "/regulated/scene/${scene_id}"),
-        _Topic.DATA_SCENE: Template(TOPIC_BASE + "/data/scene/${scene_id}/${thing_type}"),
+        _Topic.DATA_SCENE: Template(
+            TOPIC_BASE + "/data/scene/${scene_id}/${thing_type}"
+        ),
         _Topic.DATA_SENSOR: Template(TOPIC_BASE + "/data/sensor/${sensor_id}"),
-        _Topic.EVENT: Template(TOPIC_BASE + "/event/${region_type}/${scene_id}/${region_id}/${event_type}"),
-        _Topic.IMAGE_CALIBRATE: Template(TOPIC_BASE + "/image/calibration/camera/${camera_id}"),
+        _Topic.EVENT: Template(
+            TOPIC_BASE + "/event/${region_type}/${scene_id}/${region_id}/${event_type}"
+        ),
+        _Topic.IMAGE_CALIBRATE: Template(
+            TOPIC_BASE + "/image/calibration/camera/${camera_id}"
+        ),
         _Topic.IMAGE_CAMERA: Template(TOPIC_BASE + "/image/camera/${camera_id}"),
-        _Topic.SYS_AUTOCALIB_STATUS: Template(TOPIC_BASE + "/sys/autocalibration/status"),
-        _Topic.SYS_CHILDSCENE_STATUS: Template(TOPIC_BASE + "/sys/child/status/${scene_name}"),
-        _Topic.SYS_PERCEBRO_STATUS: Template(TOPIC_BASE + "/sys/percebro/status/${camera_id}"),
+        _Topic.SYS_AUTOCALIB_STATUS: Template(
+            TOPIC_BASE + "/sys/autocalibration/status"
+        ),
+        _Topic.SYS_CHILDSCENE_STATUS: Template(
+            TOPIC_BASE + "/sys/child/status/${scene_name}"
+        ),
+        _Topic.SYS_PERCEBRO_STATUS: Template(
+            TOPIC_BASE + "/sys/percebro/status/${camera_id}"
+        ),
     }
 
-    def __init__(self, auth, cert, rootca, broker, port=None, keepalive=60,
-                 insecure=False, transport="tcp", userdata=None):
+    def __init__(
+        self,
+        auth,
+        cert,
+        rootca,
+        broker,
+        port=None,
+        keepalive=60,
+        insecure=False,
+        transport="tcp",
+        userdata=None,
+    ):
         self.broker = broker
         self.port = port
         self.keepalive = keepalive
 
-        if self.broker is not None and ':' in self.broker:
+        if self.broker is not None and ":" in self.broker:
             if self.port is not None:
                 raise ValueError(
                     "Port specified both in broker and port argument",
                     self.broker,
-                    self.port)
-            self.broker, self.port = self.broker.split(':')
+                    self.port,
+                )
+            self.broker, self.port = self.broker.split(":")
             self.port = int(self.port)
 
         if self.port is None:
@@ -98,14 +130,13 @@ class PubSub(_PubSubTopicBase):
         if rootca is not None and os.path.exists(rootca):
             if certs is None:
                 certs = {}
-            if 'ca_certs' not in certs:
-                certs['ca_certs'] = rootca
+            if "ca_certs" not in certs:
+                certs["ca_certs"] = rootca
         if cert is not None:
             if certs is None:
                 certs = {}
 
-        self.client = initializeMqttClient(
-            transport=transport, userdata=userdata)
+        self.client = initializeMqttClient(transport=transport, userdata=userdata)
         if not self.checkTlsConnection(certs, transport, userdata):
             return
 
@@ -114,14 +145,14 @@ class PubSub(_PubSubTopicBase):
             if os.path.exists(auth):
                 with open(auth) as json_file:
                     data = json.load(json_file)
-                user = data['user']
-                pw = data['password']
+                user = data["user"]
+                pw = data["password"]
             else:
-                sep = auth.find(':')
+                sep = auth.find(":")
                 if sep < 0:
                     raise ValueError("Invalid user/password")
                 user = auth[:sep]
-                pw = auth[sep + 1:]
+                pw = auth[sep + 1 :]
             self.client.username_pw_set(user, pw)
 
         return
@@ -141,16 +172,16 @@ class PubSub(_PubSubTopicBase):
             return topic
 
         regex = re.escape(template)
-        regex = regex.replace(r'\$\{thing_type\}', r'([^/]+)')
-        regex = regex.replace(r'\$\{camera_id\}', r'([^/]+)')
-        regex = regex.replace(r'\$\{scene_id\}', r'([^/]+)')
-        regex = regex.replace(r'\$\{channel\}', r'([^/]+)')
-        regex = regex.replace(r'\$\{scene_name\}', r'([^/]+)')
-        regex = regex.replace(r'\$\{region_id\}', r'([^/]+)')
-        regex = regex.replace(r'\$\{sensor_id\}', r'([^/]+)')
-        regex = regex.replace(r'\$\{region_type\}', r'([^/]+)')
-        regex = regex.replace(r'\$\{event_type\}', r'([^/]+)')
-        pattern = re.compile(f'^{regex}$', re.IGNORECASE)
+        regex = regex.replace(r"\$\{thing_type\}", r"([^/]+)")
+        regex = regex.replace(r"\$\{camera_id\}", r"([^/]+)")
+        regex = regex.replace(r"\$\{scene_id\}", r"([^/]+)")
+        regex = regex.replace(r"\$\{channel\}", r"([^/]+)")
+        regex = regex.replace(r"\$\{scene_name\}", r"([^/]+)")
+        regex = regex.replace(r"\$\{region_id\}", r"([^/]+)")
+        regex = regex.replace(r"\$\{sensor_id\}", r"([^/]+)")
+        regex = regex.replace(r"\$\{region_type\}", r"([^/]+)")
+        regex = regex.replace(r"\$\{event_type\}", r"([^/]+)")
+        pattern = re.compile(f"^{regex}$", re.IGNORECASE)
 
         match = pattern.fullmatch(topic)
         if match:
@@ -172,8 +203,7 @@ class PubSub(_PubSubTopicBase):
             return True
 
         except Exception as e:
-            self.client = initializeMqttClient(
-                transport=transport, userdata=userdata)
+            self.client = initializeMqttClient(transport=transport, userdata=userdata)
             return False
 
     def connect(self):
@@ -276,56 +306,56 @@ class PubSub(_PubSubTopicBase):
 
     def wrapCallback(self, function):
         """Wraps callback functions that are a passed into the internal client object so that
-           callbacks can make use of the PubSub object instead of the default client.
+        callbacks can make use of the PubSub object instead of the default client.
         """
+
         def wrapper(*args, **kwargs):
             modified_args = list(args)
             modified_args[0] = self
             return function(*modified_args, **kwargs)
+
         return wrapper
 
     @staticmethod
     def formatTopic(topic_id, **kwargs):
         """Creates a topic string using named identifiers passed as
-           arguments.
+        arguments.
         """
 
         for key, val in kwargs.items():
-            if isinstance(val, str) and '/' in val:
+            if isinstance(val, str) and "/" in val:
                 raise ValueError("Slashes not allowed in", key)
         return PubSub._TopicTemplates[topic_id].substitute(kwargs)
 
     @staticmethod
     def parseTopic(topic_string):
         """Parses received topic and splits it out into a dictionary with
-           named identifiers and the values they were set to.
+        named identifiers and the values they were set to.
         """
 
-        topic_split = topic_string.split('/')
+        topic_split = topic_string.split("/")
         best_match = best_variables = None
         best_score = 0
         for key, templ in PubSub._TopicTemplates.items():
-            vsplit = templ.template.split('/')
+            vsplit = templ.template.split("/")
             if len(vsplit) != len(topic_split):
                 continue
 
             static_score = var_score = 0
             var_positions = []
-            for idx, (v_element, t_element) in enumerate(
-                    zip(vsplit, topic_split)):
+            for idx, (v_element, t_element) in enumerate(zip(vsplit, topic_split)):
                 if v_element == t_element:
                     static_score += 1
                 elif v_element.startswith("$"):
                     var_positions.append(idx)
                     var_score += 1
-            if static_score + var_score == len(vsplit) \
-               and static_score > best_score:
+            if static_score + var_score == len(vsplit) and static_score > best_score:
                 best_match = key
                 best_variables = var_positions
 
         if best_match is not None:
             parsed = {"_topic_id": best_match}
-            vsplit = PubSub._TopicTemplates[best_match].template.split('/')
+            vsplit = PubSub._TopicTemplates[best_match].template.split("/")
             for idx in best_variables:
                 parsed[vsplit[idx][2:-1]] = topic_split[idx]
             return parsed
@@ -373,12 +403,7 @@ class PubSub(_PubSubTopicBase):
 
         file.seek(0)
         for idx in range(chunkCount):
-            header = struct.pack(
-                CHUNK_HEADER,
-                totalSize,
-                CHUNK_SIZE,
-                chunkCount,
-                idx)
+            header = struct.pack(CHUNK_HEADER, totalSize, CHUNK_SIZE, chunkCount, idx)
             data = file.read(CHUNK_SIZE)
             print("Publishing chunk:", idx, chunkCount, len(data), topic)
             self.publish(topic, header + data, qos=2)
@@ -415,13 +440,13 @@ class PubSub(_PubSubTopicBase):
         chunkCount = header[2]
         idx = header[3]
 
-        if not hasattr(self, 'remaining') or self.remaining is None:
+        if not hasattr(self, "remaining") or self.remaining is None:
             self.remaining = list(range(chunkCount))
             self.received = bytearray(totalSize)
 
         if idx in self.remaining:
             offset = idx * chunkSize
-            self.received[offset:offset + len(data)] = data
+            self.received[offset : offset + len(data)] = data
             self.remaining.remove(idx)
             self.complete = len(self.remaining) == 0
 
@@ -431,7 +456,7 @@ class PubSub(_PubSubTopicBase):
 
 
 def initializeMqttClient(**kwargs):
-    if hasattr(mqtt, 'CallbackAPIVersion'):
+    if hasattr(mqtt, "CallbackAPIVersion"):
         return mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, **kwargs)
     else:
         return mqtt.Client(**kwargs)

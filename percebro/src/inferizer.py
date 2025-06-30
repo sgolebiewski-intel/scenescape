@@ -15,6 +15,7 @@ from detector_geti import GetiDetector
 from detector_motion import MotionKnnDetector, MotionMog2Detector
 from detector_ocr import TextDetector, TextRecognition, TrOCR
 from detector_tesseract import TesseractDetector
+
 try:
     from detector_yolo import YoloV8Detector
 except ImportError as e:
@@ -33,40 +34,42 @@ class InferenceParameters:
 
 class Inferizer:
     engine_mapping = {
-        'ATagDetector': ATagDetector,
-        'Detector': Detector,
-        'Detector3D': Detector3D,
-        'DetectorDS': DetectorDS,
-        'GetiDetector': GetiDetector,
-        'MotionKnnDetector': MotionKnnDetector,
-        'MotionMog2Detector': MotionMog2Detector,
-        'PoseEstimator': PoseEstimator,
-        'REIDDetector': REIDDetector,
-        'TesseractDetector': TesseractDetector,
-        'TextDetector': TextDetector,
-        'TextRecognition': TextRecognition,
-        'TrOCR': TrOCR,
-        'YoloV8Detector': YoloV8Detector
+        "ATagDetector": ATagDetector,
+        "Detector": Detector,
+        "Detector3D": Detector3D,
+        "DetectorDS": DetectorDS,
+        "GetiDetector": GetiDetector,
+        "MotionKnnDetector": MotionKnnDetector,
+        "MotionMog2Detector": MotionMog2Detector,
+        "PoseEstimator": PoseEstimator,
+        "REIDDetector": REIDDetector,
+        "TesseractDetector": TesseractDetector,
+        "TextDetector": TextDetector,
+        "TextRecognition": TextRecognition,
+        "TrOCR": TrOCR,
+        "YoloV8Detector": YoloV8Detector,
     }
 
     # Valid config entries for model-config:
-    valid_entries = ['blacklist',
-                     'categories',
-                     'colorspace',
-                     'directory',
-                     'external_id',
-                     'history',
-                     'keep_aspect',
-                     'model_path',
-                     'nms_threshold',
-                     'normalize_input',
-                     'normalized_output',
-                     'output_order',
-                     'password_file',
-                     'pattern',
-                     'secondary_model_path',
-                     'threshold',
-                     'xml']
+    valid_entries = [
+        "blacklist",
+        "categories",
+        "colorspace",
+        "directory",
+        "external_id",
+        "history",
+        "keep_aspect",
+        "model_path",
+        "nms_threshold",
+        "normalize_input",
+        "normalized_output",
+        "output_order",
+        "password_file",
+        "pattern",
+        "secondary_model_path",
+        "threshold",
+        "xml",
+    ]
 
     def __init__(self, spec, params, device="CPU"):
         self.params = params
@@ -74,7 +77,7 @@ class Inferizer:
         self.dependencies = None
 
         # FIXME - allow specifying threshold in `spec`
-        specParams = spec.split('=')
+        specParams = spec.split("=")
         self.modelID = specParams[0]
         if len(specParams) > 1:
             self.device = specParams[1]
@@ -95,21 +98,21 @@ class Inferizer:
             device = "CPU"
 
         vdict = self.modelWithName(self.modelID)
-        self.engine = vdict['engine'](asynchronous=True, distributed=dist)
+        self.engine = vdict["engine"](asynchronous=True, distributed=dist)
 
         log.info("Starting model", self.modelID, "on", device)
 
         modelConfig = self.modelID
 
         if isinstance(vdict, dict) and len(vdict) > 1:
-            modelConfig = {'model': self.modelID}
+            modelConfig = {"model": self.modelID}
             modelConfig.update(vdict)
 
         if dist == Distributed.OVMS:
             config = {
-                'model': self.modelID,
-                'external_id': vdict['external_id'],
-                'ovmshost': self.params.ovmshost
+                "model": self.modelID,
+                "external_id": vdict["external_id"],
+                "ovmshost": self.params.ovmshost,
             }
 
             if isinstance(modelConfig, dict):
@@ -117,11 +120,12 @@ class Inferizer:
             else:
                 modelConfig = config
 
-            if 'categories' not in modelConfig and 'categories' in vdict:
-                modelConfig['categories'] = vdict['categories']
+            if "categories" not in modelConfig and "categories" in vdict:
+                modelConfig["categories"] = vdict["categories"]
 
-        self.engine.setParameters(modelConfig, device, None,
-                                  self.params.threshold, self.params.ovcores)
+        self.engine.setParameters(
+            modelConfig, device, None, self.params.threshold, self.params.ovcores
+        )
 
         return
 
@@ -136,12 +140,12 @@ class Inferizer:
         Inferizer.visionModels = {}
         for cfg in data:
             mdict = {
-                'engine': Inferizer.engine_mapping.get(cfg['engine']),
+                "engine": Inferizer.engine_mapping.get(cfg["engine"]),
             }
             for entry in Inferizer.valid_entries:
                 if entry in cfg:
                     mdict[entry] = cfg[entry]
-            Inferizer.visionModels[cfg['model']] = mdict
+            Inferizer.visionModels[cfg["model"]] = mdict
 
         return
 

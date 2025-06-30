@@ -24,15 +24,13 @@ class Pushover:
             "message": message,
         }
         if sound:
-            parms['sound'] = sound
+            parms["sound"] = sound
         if priority:
-            parms['priority'] = priority
+            parms["priority"] = priority
         if image is not None:
             log.info("Sending image")
             ret, jpeg = cv2.imencode(".jpg", image)
-            files = {
-                "attachment": ("image.jpg", jpeg, "image/jpeg")
-            }
+            files = {"attachment": ("image.jpg", jpeg, "image/jpeg")}
         else:
             files = None
 

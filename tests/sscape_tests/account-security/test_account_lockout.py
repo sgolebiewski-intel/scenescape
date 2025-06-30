@@ -14,16 +14,17 @@ class AccountLockoutTestCase(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_superuser(
-            'test_user', 'test_user@intel.com', 'testpassword')
+            "test_user", "test_user@intel.com", "testpassword"
+        )
 
     def test_account_is_locked(self):
         self.factory = RequestFactory()
-        request = self.factory.get('/')
+        request = self.factory.get("/")
         attempt = 0
-        while (attempt < AXES_FAILURE_LIMIT):
+        while attempt < AXES_FAILURE_LIMIT:
             response = self.client.post(
-                reverse('sign_in'), data={
-                    'username': 'test_user', 'password': 'wrong'})
+                reverse("sign_in"), data={"username": "test_user", "password": "wrong"}
+            )
             attempt += 1
 
         self.assertEqual(response.status_code, 302)

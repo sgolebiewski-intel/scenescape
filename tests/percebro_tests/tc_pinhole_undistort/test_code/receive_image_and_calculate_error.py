@@ -20,59 +20,45 @@ parser = argparse.ArgumentParser()
 
 # Test parameters
 parser.add_argument(
-    "--original_image_file",
-    type=str,
-    help="Original image directory",
-    required=True)
+    "--original_image_file", type=str, help="Original image directory", required=True
+)
 parser.add_argument(
-    "--output_image_file",
-    type=str,
-    help="Output image directory",
-    required=True)
+    "--output_image_file", type=str, help="Output image directory", required=True
+)
 parser.add_argument(
-    "--output_json_file",
-    type=str,
-    help="Output json directory",
-    required=True)
-parser.add_argument(
-    "--camera_name",
-    type=str,
-    help="Camera name",
-    required=True)
+    "--output_json_file", type=str, help="Output json directory", required=True
+)
+parser.add_argument("--camera_name", type=str, help="Camera name", required=True)
 
 # MQTT parameters
 parser.add_argument(
-    "--broker_url",
+    "--broker_url", type=str, help="Broker host", default="broker.scenescape.intel.com"
+)
+parser.add_argument("--broker_port", type=int, help="Broker port", default=1883)
+parser.add_argument(
+    "--auth", type=str, help="Auth", default="/run/secrets/percebro.auth"
+)
+parser.add_argument(
+    "--rootcert",
     type=str,
-    help="Broker host",
-    default="broker.scenescape.intel.com")
+    help="Rootcert",
+    default="/run/secrets/certs/scenescape-ca.pem",
+)
 parser.add_argument(
-    "--broker_port",
-    type=int,
-    help="Broker port",
-    default=1883)
-parser.add_argument(
-    "--auth",
-    type=str,
-    help="Auth",
-    default="/run/secrets/percebro.auth")
-parser.add_argument("--rootcert", type=str, help="Rootcert",
-                    default="/run/secrets/certs/scenescape-ca.pem")
-parser.add_argument(
-    "--connection_timeout",
-    type=int,
-    help="Connection timeout",
-    default=60)
+    "--connection_timeout", type=int, help="Connection timeout", default=60
+)
 parser.add_argument(
     "--recieve_image_soft_timeout",
     type=int,
     help="Recieve image soft timeout",
-    default=10)
+    default=10,
+)
 parser.add_argument(
     "--recieve_image_hard_timeout",
     type=int,
     help="Recieve image hard timeout",
-    default=60)
+    default=60,
+)
 
 IMAGE_RECIEVED = False
 OUTPUT_IMAGE_FILE = None
@@ -93,8 +79,7 @@ def findCheckerboardCorners(image):
 
     # If corners are found, add object points and image points
     if ret:
-        corners2 = cv2.cornerSubPix(
-            gray, corners, (11, 11), (-1, -1), criteria)
+        corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
         return corners2
     return corners
 
@@ -115,10 +100,8 @@ def calculateMse(img1, img2):
 
 def sendImageCMD(client, camera_name):
     client.publish(
-        PubSub.formatTopic(
-            PubSub.CMD_CAMERA,
-            camera_id=camera_name),
-        "sendImage")
+        PubSub.formatTopic(PubSub.CMD_CAMERA, camera_id=camera_name), "sendImage"
+    )
 
 
 def onConnect(client, userdata, flags, rc):
@@ -133,7 +116,8 @@ def compareImage(original_image, output_image):
 
     if original_corners is not None and output_corners is not None:
         reprojection_error = calculate_reprojection_error(
-            original_corners, output_corners)
+            original_corners, output_corners
+        )
         return mean_square_error, reprojection_error
     else:
         return mean_square_error, None
@@ -142,15 +126,15 @@ def compareImage(original_image, output_image):
 def onMessage(client, userdata, message):
     global IMAGE_RECIEVED
     global OUTPUT_IMAGE_FILE
-    msg = json.loads(str(message.payload.decode('utf-8')))
+    msg = json.loads(str(message.payload.decode("utf-8")))
     topic = str(message.topic)
 
     print(topic)
 
-    topic_type = topic.split('/')[0:-1]
-    if (topic_type == ['scenescape', 'image', 'camera']):
-        camera_name = topic.split('/')[-1]
-        recieved_image = json2im(msg['image'])
+    topic_type = topic.split("/")[0:-1]
+    if topic_type == ["scenescape", "image", "camera"]:
+        camera_name = topic.split("/")[-1]
+        recieved_image = json2im(msg["image"])
         # Save the recieved image
         cv2.imwrite(OUTPUT_IMAGE_FILE, recieved_image)
         IMAGE_RECIEVED = True
@@ -158,18 +142,19 @@ def onMessage(client, userdata, message):
 
 def startClient(params, camera_name):
     client = PubSub(
-        params['auth'],
+        params["auth"],
         None,
-        params['rootcert'],
-        params['broker_url'],
-        params['broker_port'])
+        params["rootcert"],
+        params["broker_url"],
+        params["broker_port"],
+    )
     client.onMessage = onMessage
     client.onConnect = onConnect
 
     client.connect()
     print("connecting to broker... ")
 
-    subscription = 'scenescape/image/camera/' + camera_name
+    subscription = "scenescape/image/camera/" + camera_name
 
     client.subscribe(subscription)
 
@@ -193,10 +178,10 @@ def main(args):
         sys.exit(1)
 
     param = {
-        'auth': args.auth,
-        'rootcert': args.rootcert,
-        'broker_url': args.broker_url,
-        'broker_port': args.broker_port
+        "auth": args.auth,
+        "rootcert": args.rootcert,
+        "broker_url": args.broker_url,
+        "broker_port": args.broker_port,
     }
 
     # Start time
@@ -208,23 +193,27 @@ def main(args):
 
     while True:
         current_time = time.time()
-        if (client.isConnected == False):
-            if (current_time - start_time > args.connection_timeout):
+        if client.isConnected == False:
+            if current_time - start_time > args.connection_timeout:
                 print("Connection timeout")
                 break
         else:
-            if (IMAGE_RECIEVED == False):
-                if (current_time -
-                    start_time > args.recieve_image_soft_timeout and current_time -
-                        start_time < args.recieve_image_hard_timeout):
+            if IMAGE_RECIEVED == False:
+                if (
+                    current_time - start_time > args.recieve_image_soft_timeout
+                    and current_time - start_time < args.recieve_image_hard_timeout
+                ):
                     print(
-                        "Image not recieved within soft time out, sending image command")
+                        "Image not recieved within soft time out, sending image command"
+                    )
                     sendImageCMD(client, args.camera_name)
                     time.sleep(1)
-                elif (current_time - start_time > args.recieve_image_hard_timeout):
-                    with open(args.output_json_file, 'a') as f:
-                        json.dump({"input_image": args.camera_name,
-                                  "image_recieved": "false"}, f)
+                elif current_time - start_time > args.recieve_image_hard_timeout:
+                    with open(args.output_json_file, "a") as f:
+                        json.dump(
+                            {"input_image": args.camera_name, "image_recieved": "false"},
+                            f,
+                        )
                         f.write("\n")
                     print("Image not recieved within hard timeout, exiting...")
                     break
@@ -234,21 +223,30 @@ def main(args):
                 output_image = cv2.imread(args.output_image_file)
 
                 mean_square_error, reprojection_error = compareImage(
-                    original_image, output_image)
+                    original_image, output_image
+                )
 
-                with open(args.output_json_file, 'a') as f:
+                with open(args.output_json_file, "a") as f:
                     if reprojection_error is None:
-                        json.dump({"input_image": args.camera_name,
-                                   "image_recieved": "true",
-                                   "mean_square_error": mean_square_error},
-                                  f)
+                        json.dump(
+                            {
+                                "input_image": args.camera_name,
+                                "image_recieved": "true",
+                                "mean_square_error": mean_square_error,
+                            },
+                            f,
+                        )
                         f.write("\n")
                     else:
-                        json.dump({"input_image": args.camera_name,
-                                   "image_recieved": "true",
-                                   "mean_square_error": mean_square_error,
-                                   "reprojection_error": reprojection_error},
-                                  f)
+                        json.dump(
+                            {
+                                "input_image": args.camera_name,
+                                "image_recieved": "true",
+                                "mean_square_error": mean_square_error,
+                                "reprojection_error": reprojection_error,
+                            },
+                            f,
+                        )
                         f.write("\n")
                 print("Image recieved and compared successfully")
                 break

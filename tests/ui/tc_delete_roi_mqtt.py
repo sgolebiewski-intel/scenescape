@@ -15,8 +15,9 @@ from scene_common.rest_client import RESTClient
 from scene_common.mqtt import PubSub
 from scene_common.timestamp import get_iso_time
 
-ROI_DATA_PATH = os.path.join(os.path.dirname(
-    os.path.realpath(__file__)), "test_media/roi_data.txt")
+ROI_DATA_PATH = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), "test_media/roi_data.txt"
+)
 # Constant for a ROI polygon (triangle) at coordinate (50, -200)
 ROI_NAME = "Polygon"
 ROI_ORIGIN_X = -50
@@ -49,11 +50,12 @@ def on_message(mqttc, obj, msg):
 
 
 def getRegionUid(rest, re_name):
-    res = rest.getRegions({'name': re_name})
+    res = rest.getRegions({"name": re_name})
     assert res[
-        "results"], f"getRegions REST call hasn't returned any results for {re_name}!"
+        "results"
+    ], f"getRegions REST call hasn't returned any results for {re_name}!"
     # Get the uid of the first result
-    return res["results"][0]['uid']
+    return res["results"][0]["uid"]
 
 
 def test_roi_mqtt(params, record_xml_attribute):
@@ -68,12 +70,17 @@ def test_roi_mqtt(params, record_xml_attribute):
 
     exit_code = 1
 
-    rest = RESTClient(params['resturl'], rootcert=params['rootcert'])
-    assert rest.authenticate(params['user'], params['password'])
+    rest = RESTClient(params["resturl"], rootcert=params["rootcert"])
+    assert rest.authenticate(params["user"], params["password"])
 
     try:
-        client = PubSub(params['auth'], None, params['rootcert'],
-                        params['broker_url'], params['broker_port'])
+        client = PubSub(
+            params["auth"],
+            None,
+            params["rootcert"],
+            params["broker_url"],
+            params["broker_port"],
+        )
         client.onConnect = on_connect
         client.onMessage = on_message
         client.connect()
@@ -95,7 +102,8 @@ def test_roi_mqtt(params, record_xml_attribute):
             region_type="region",
             event_type="objects",
             scene_id=common.TEST_SCENE_ID,
-            region_id=re_uid)
+            region_id=re_uid,
+        )
         client.subscribe(topic, 0)
 
         # Delete ROI
@@ -115,15 +123,14 @@ def test_roi_mqtt(params, record_xml_attribute):
             else:
                 jdata = json.loads(line.strip())
                 camera_id = jdata["id"]
-                jdata['timestamp'] = get_iso_time()
+                jdata["timestamp"] = get_iso_time()
                 line = json.dumps(jdata)
 
-                print('Sending frame {} id {}'.format(current_line, camera_id))
+                print("Sending frame {} id {}".format(current_line, camera_id))
                 client.publish(
-                    PubSub.formatTopic(
-                        PubSub.DATA_CAMERA,
-                        camera_id=camera_id),
-                    line.strip())
+                    PubSub.formatTopic(PubSub.DATA_CAMERA, camera_id=camera_id),
+                    line.strip(),
+                )
                 time.sleep(1 / 10)
                 current_line += 1
 

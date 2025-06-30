@@ -38,8 +38,8 @@ num_sensors = 0
 num_models = 0
 
 
-class MQTTParams():
-    """! Contains the tests MQTT parameters. """
+class MQTTParams:
+    """! Contains the tests MQTT parameters."""
 
     def __init__(self):
         """! Initialize the MQTTParams object.
@@ -47,13 +47,13 @@ class MQTTParams():
         """
         self.rootca = "/run/secrets/certs/scenescape-ca.pem"
         self.auth = "/run/secrets/percebro.auth"
-        self.mqtt_broker = 'broker.scenescape.intel.com'
+        self.mqtt_broker = "broker.scenescape.intel.com"
         self.mqtt_port = 1883
         return None
 
 
-class SensorState():
-    """! Contains the state and state update methods for a single sensor. """
+class SensorState:
+    """! Contains the state and state update methods for a single sensor."""
 
     def __init__(self, model, sensor, model_avg_fps, model_cur_fps):
         """! Initialize the SensorState object.
@@ -90,13 +90,20 @@ class SensorState():
         """! Prints the current sensor state.
         @return   None.
         """
-        print("Model {} Sensor {} has unexpected current {:.2f} average {:.2f}".format(
-            self.model, self.sensor, self.m_s_deviation, self.m_s_current, self.m_s_average))
+        print(
+            "Model {} Sensor {} has unexpected current {:.2f} average {:.2f}".format(
+                self.model,
+                self.sensor,
+                self.m_s_deviation,
+                self.m_s_current,
+                self.m_s_average,
+            )
+        )
         return None
 
 
-class TestState():
-    """! Contains the tests current state. """
+class TestState:
+    """! Contains the tests current state."""
 
     def __init__(self, params):
         """! Initialize the TestState object.
@@ -146,11 +153,11 @@ class TestState():
         """! Get test length and set related variables.
         @return   Bool                  True if valid time otherwise false.
         """
-        self.test_time_hrs = float(self.params['hours'])
+        self.test_time_hrs = float(self.params["hours"])
         if (self.test_time_hrs <= 0) or (self.test_time_hrs >= (24 * 7)):
             print("Need a valid test run time")
             return False
-        self.test_time_secs = (self.test_time_hrs * 60 * 60)
+        self.test_time_secs = self.test_time_hrs * 60 * 60
         return True
 
     def update_min_max_fps(self, model_sensor_count):
@@ -170,11 +177,18 @@ class TestState():
         print()
         print(
             "[{:.02f}% at {}] Runtime elapsed {} remaining {} (ending at {})".format(
-                percentageRun, self.now_time.strftime("%c"), str(
-                    self.running_time), str(
-                    self.remaining_time), self.end_time.strftime("%c")))
-        print("{} Objects detected in last {} seconds (Min {} Max {})".format(
-            objects_detected, TEST_WAIT_TIME, self.min_fps, self.max_fps))
+                percentageRun,
+                self.now_time.strftime("%c"),
+                str(self.running_time),
+                str(self.remaining_time),
+                self.end_time.strftime("%c"),
+            )
+        )
+        print(
+            "{} Objects detected in last {} seconds (Min {} Max {})".format(
+                objects_detected, TEST_WAIT_TIME, self.min_fps, self.max_fps
+            )
+        )
         return None
 
     def login_failed(self):
@@ -184,9 +198,8 @@ class TestState():
         login_fail = True
         browser = Browser()
         if browser.login(
-                self.params['user'],
-                self.params['password'],
-                self.params['weburl']):
+            self.params["user"], self.params["password"], self.params["weburl"]
+        ):
             login_fail = False
         else:
             print("Test browser login failed!")
@@ -198,9 +211,12 @@ class TestState():
         @return   check_failed            Bool True if enough messages, otherwise False.
         """
         check_failed = False
-        if (self.min_fps < TEST_MIN_MESSAGES):
-            print("Test failed to receive enough messages!. Seems stuck at time {} (min {})".format(
-                str(self.running_time), self.min_fps))
+        if self.min_fps < TEST_MIN_MESSAGES:
+            print(
+                "Test failed to receive enough messages!. Seems stuck at time {} (min {})".format(
+                    str(self.running_time), self.min_fps
+                )
+            )
             check_failed = True
         return check_failed
 
@@ -209,9 +225,12 @@ class TestState():
         @return   check_failed            Bool True if a sensor message frequency varies enough, otherwise False.
         """
         check_failed = False
-        if (self.variation_in_fps):
-            print("Test failed stable message check!. Seems stuck at time {} (variation {})".format(
-                str(self.running_time), self.variation_in_fps))
+        if self.variation_in_fps:
+            print(
+                "Test failed stable message check!. Seems stuck at time {} (variation {})".format(
+                    str(self.running_time), self.variation_in_fps
+                )
+            )
             check_failed = True
         return check_failed
 
@@ -219,9 +238,7 @@ class TestState():
         """! Checks if the test is finished.
         @return   Bool                    True if time remains, False otherwise.
         """
-        return (
-            self.remaining_time.seconds > 0) and (
-            self.remaining_time.days >= 0)
+        return (self.remaining_time.seconds > 0) and (self.remaining_time.days >= 0)
 
 
 def handle_mqtt_sensor_topic(msg):
@@ -231,8 +248,8 @@ def handle_mqtt_sensor_topic(msg):
     """
     global model_list
     global num_models
-    topic_split = msg.topic.split('/')
-    objects = msg.payload.decode('utf-8')['objects']
+    topic_split = msg.topic.split("/")
+    objects = msg.payload.decode("utf-8")["objects"]
     if objects == {}:
         return None
     for category in objects:
@@ -252,8 +269,13 @@ def setup_mqtt_client(mqtt_params):
     @param    mqtt_params             MQTTParams object.
     @return   client                  Connected MQTT client.
     """
-    client = PubSub(mqtt_params.auth, None, mqtt_params.rootca,
-                    mqtt_params.mqtt_broker, mqtt_params.mqtt_port)
+    client = PubSub(
+        mqtt_params.auth,
+        None,
+        mqtt_params.rootca,
+        mqtt_params.mqtt_broker,
+        mqtt_params.mqtt_port,
+    )
     client.onMessage = on_message
     client.onConnect = on_connect
     client.connect()
@@ -284,9 +306,10 @@ def update_model_avg_fps(model_avg_fps, model_cur_fps, current_cycle):
     @return   None.
     """
     for sensor in model_avg_fps:
-        model_avg_fps[sensor] = (model_avg_fps[sensor]
-                                 * (current_cycle - 1)) + model_cur_fps[sensor]
-        model_avg_fps[sensor] /= (current_cycle)
+        model_avg_fps[sensor] = (
+            model_avg_fps[sensor] * (current_cycle - 1)
+        ) + model_cur_fps[sensor]
+        model_avg_fps[sensor] /= current_cycle
     return None
 
 
@@ -302,7 +325,8 @@ def update_avg_msg(avg_fps, state):
         for model in avg_fps:
             for sensor in avg_fps[model]:
                 avg_msg += "{}:{} at {:.2f} ".format(
-                    model, sensor, avg_fps[model][sensor])
+                    model, sensor, avg_fps[model][sensor]
+                )
     return avg_msg
 
 
@@ -318,12 +342,8 @@ def update_avg_fps(avg_fps, cur_fps, state):
         for model in avg_fps:
             model_avg_fps = avg_fps[model]
             model_cur_fps = cur_fps[model]
-            state = update_sensor_avg_fps(
-                model, model_avg_fps, model_cur_fps, state)
-            update_model_avg_fps(
-                model_avg_fps,
-                model_cur_fps,
-                state.current_cycle)
+            state = update_sensor_avg_fps(model, model_avg_fps, model_cur_fps, state)
+            update_model_avg_fps(model_avg_fps, model_cur_fps, state.current_cycle)
     else:
         avg_fps = copy.deepcopy(cur_fps)
     return avg_fps, state
@@ -369,7 +389,7 @@ def on_connect(mqttc, obj, flags, rc):
     global connected
     connected = True
     print("Connected")
-    topic = 'scenescape/#'
+    topic = "scenescape/#"
     mqttc.subscribe(topic, 0)
     return None
 
@@ -387,7 +407,7 @@ def on_message(mqttc, obj, msg):
         print("First msg received (Topic {})".format(msg.topic))
         test_started = True
     topic = PubSub.parseTopic(msg.topic)
-    if topic['_topic_id'] == PubSub.DATA_CAMERA:
+    if topic["_topic_id"] == PubSub.DATA_CAMERA:
         handle_mqtt_sensor_topic(msg)
     objects_detected += 1
     return
@@ -404,8 +424,7 @@ def test_sscape_stability(params, record_xml_attribute):
     global model_list
     record_xml_attribute("name", TEST_NAME)
     print("Executing: " + TEST_NAME)
-    print("Trying user {} password {}".format(
-        params['user'], params['password']))
+    print("Trying user {} password {}".format(params["user"], params["password"]))
     mqtt_params = MQTTParams()
     state = TestState(params)
     result = 1
@@ -420,7 +439,7 @@ def test_sscape_stability(params, record_xml_attribute):
     print("Test starting at {}".format(state.start_time.strftime("%c")))
     print("Running for {} hours".format(state.test_time_hrs))
     print("End at {}".format(state.end_time.strftime("%c")))
-    while (state.done == False):
+    while state.done == False:
         objects_detected = 0
         collect_mqtt_msgs(client)
         state.update_now_time()
@@ -432,7 +451,11 @@ def test_sscape_stability(params, record_xml_attribute):
             avg_fps, state = update_avg_fps(avg_fps, cur_fps, state)
             avg_msg = update_avg_msg(avg_fps, state)
 
-            if state.enough_messages() or state.stable_messages() or state.login_failed():
+            if (
+                state.enough_messages()
+                or state.stable_messages()
+                or state.login_failed()
+            ):
                 state.done = True
             else:
                 print(avg_msg, " log-in ok")

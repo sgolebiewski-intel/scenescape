@@ -9,10 +9,14 @@ import cv2
 from percebro.videosource import VideoSource
 
 
-@pytest.mark.parametrize("videoPath, distortion",
-                         [("sample_data/apriltag-cam1.mp4", np.zeros(4)),
-                          ("sample_data/Demo.png", np.zeros(4)),
-                          ("sample_data/Demo.png", [0, 0, 0, 0])])
+@pytest.mark.parametrize(
+    "videoPath, distortion",
+    [
+        ("sample_data/apriltag-cam1.mp4", np.zeros(4)),
+        ("sample_data/Demo.png", np.zeros(4)),
+        ("sample_data/Demo.png", [0, 0, 0, 0]),
+    ],
+)
 def test_init(camIntrinsics, videoPath, distortion):
     """! Verifies the instance of the VideoSource class
 
@@ -26,9 +30,13 @@ def test_init(camIntrinsics, videoPath, distortion):
     return
 
 
-@pytest.mark.parametrize("intrinsics, videoPath, distortion",
-                         [([1271, 1271, 320, 240], "0", "Bad distortion"),
-                          ([1271, 1271, 320, 240], "sample_data/Demo.png", np.zeros(3))])
+@pytest.mark.parametrize(
+    "intrinsics, videoPath, distortion",
+    [
+        ([1271, 1271, 320, 240], "0", "Bad distortion"),
+        ([1271, 1271, 320, 240], "sample_data/Demo.png", np.zeros(3)),
+    ],
+)
 def test_bad_init(intrinsics, videoPath, distortion):
     """! Verify ValueError thrown when initializing with bad params
 
@@ -69,9 +77,10 @@ def test_setEndPosition(videoSourceObj):
     return
 
 
-@pytest.mark.parametrize("isFile, aspect, unwarp, cam",
-                         [(True, False, False, False), (False,
-                                                        True, True, True)])
+@pytest.mark.parametrize(
+    "isFile, aspect, unwarp, cam",
+    [(True, False, False, False), (False, True, True, True)],
+)
 def test_capture(getFrame, videoSourceObj, isFile, aspect, unwarp, cam):
     """! Verifies the output of 'capture' function
 
@@ -111,12 +120,11 @@ def test_setResolution(videoSourceObj):
     return
 
 
-@pytest.mark.parametrize("videoPath, distortion",
-                         [("sample_data/apriltag-cam1.mp4", np.zeros(4))])
+@pytest.mark.parametrize(
+    "videoPath, distortion", [("sample_data/apriltag-cam1.mp4", np.zeros(4))]
+)
 def test_getResolution(camIntrinsics, videoPath, distortion):
-    """! Verifies the output of 'getResolution' function
-
-    """
+    """! Verifies the output of 'getResolution' function"""
     obj = VideoSource(videoPath, camIntrinsics, distortion)
     expectedSize = (640, 480)
     frameWidth, frameHeight = obj.getResolution()

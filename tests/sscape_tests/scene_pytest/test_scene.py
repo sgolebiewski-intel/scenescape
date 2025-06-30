@@ -15,7 +15,7 @@ from scene_common.timestamp import get_epoch_time
 name = "test"
 mapFile = "sample_data/HazardZoneSceneLarge.png"
 scale = 1000
-detections = frame['objects']
+detections = frame["objects"]
 
 
 def test_init(scene_obj, scene_obj_with_scale):
@@ -32,7 +32,7 @@ def test_init(scene_obj, scene_obj_with_scale):
     return
 
 
-@pytest.mark.parametrize("jdata", [(jdata)])
+@pytest.mark.parametrize("jdata", [jdata])
 def test_processCameraData(scene_obj, camera_obj, jdata):
     """! Verifies the output of 'Scene.processCameraData' method.
 

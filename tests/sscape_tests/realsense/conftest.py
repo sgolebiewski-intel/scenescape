@@ -20,13 +20,13 @@ TEST_NAME = "NEX-T10455"
 
 
 def pytest_sessionstart():
-    """! Executes at the beginning of the session. """
+    """! Executes at the beginning of the session."""
     print("Executing: " + TEST_NAME)
     return
 
 
 def pytest_sessionfinish(exitstatus):
-    """! Executes at the end of the session. """
+    """! Executes at the end of the session."""
 
     common.record_test_result(TEST_NAME, exitstatus)
     return
@@ -37,11 +37,13 @@ realsenseAlign = "percebro.realsense.rs.align"
 
 
 def start_rs_cam(cam):
-    """! Executes the method start() on camera object RSCamera """
-    with patch(realsensePipeline, return_value=MagicMock()), \
-            patch(realsenseAlign, return_value=MagicMock()):
+    """! Executes the method start() on camera object RSCamera"""
+    with patch(realsensePipeline, return_value=MagicMock()), patch(
+        realsenseAlign, return_value=MagicMock()
+    ):
         cam.start()
     return
+
 
 ################################################################
 # Fixtures
@@ -50,24 +52,26 @@ def start_rs_cam(cam):
 
 @pytest.fixture(scope="module")
 def rs_image():
-    """! Returns a RSImage object. """
+    """! Returns a RSImage object."""
     return RSImage(MagicMock())
 
 
 @pytest.fixture(scope="module")
 def rs_cam(test_params):
-    """! Returns a RSCamera object. """
-    with patch(realsensePipeline, return_value=MagicMock()), \
-            patch(realsenseAlign, return_value=MagicMock()):
+    """! Returns a RSCamera object."""
+    with patch(realsensePipeline, return_value=MagicMock()), patch(
+        realsenseAlign, return_value=MagicMock()
+    ):
         rs_cam = RSCamera(test_params.cam_serial_1)
     return rs_cam
 
 
 @pytest.fixture(scope="module")
 def rs_cam_nopipe(test_params):
-    """! Returns a RSCamera object with pipeline set to None. """
-    with patch(realsensePipeline, return_value=MagicMock()), \
-            patch(realsenseAlign, return_value=MagicMock()):
+    """! Returns a RSCamera object with pipeline set to None."""
+    with patch(realsensePipeline, return_value=MagicMock()), patch(
+        realsenseAlign, return_value=MagicMock()
+    ):
         rs_cam = RSCamera(test_params.cam_serial_1)
     rs_cam.pipeline = None
     return rs_cam
@@ -75,14 +79,15 @@ def rs_cam_nopipe(test_params):
 
 @pytest.fixture(scope="module")
 def cam_intrinsics():
-    """! Returns a camera intrinsics object with fixed parameters. """
+    """! Returns a camera intrinsics object with fixed parameters."""
     return CamIntrinsics(0.01, 0.01, 0.2, 0.1)
 
 
 @pytest.fixture(scope="module")
 def test_params():
-    """! Returns predefined test parameters object. """
+    """! Returns predefined test parameters object."""
     return TestParams()
+
 
 ################################################################
 # Classes
@@ -90,7 +95,7 @@ def test_params():
 
 
 class TestParams:
-    """! Data structure for predefined test parameters. """
+    """! Data structure for predefined test parameters."""
 
     def __init__(self):
         self.cam_serial_1 = "1234"
@@ -102,15 +107,15 @@ class TestParams:
 
 
 class CamIntrinsics:
-    """! Test class defining the camera intrinsics for a test. """
+    """! Test class defining the camera intrinsics for a test."""
 
     def __init__(self, fx, fy, ppx, ppy):
         """!
-          Initializing CamIntrinsics object.
-          fx: FLOAT focal length along the x-dimension.
-          fy: FLOAT focal length along the y-dimension.
-          ppx: FLOAT sensor size in the x-dimension.
-          ppy: FLOAT sensor size in the y-dimension.
+        Initializing CamIntrinsics object.
+        fx: FLOAT focal length along the x-dimension.
+        fy: FLOAT focal length along the y-dimension.
+        ppx: FLOAT sensor size in the x-dimension.
+        ppy: FLOAT sensor size in the y-dimension.
         """
         self.fx = fx
         self.fy = fy
@@ -119,17 +124,16 @@ class CamIntrinsics:
         return
 
     def get_distortion_matrix(self):
-        """! Returns a numpy array representing camera distortion. """
+        """! Returns a numpy array representing camera distortion."""
         return np.array([0, 0, 0, 0, 0], dtype=np.float32)
 
     def get_intrinsics_matrix(self):
-        """! Returns a numpy array representing camera intrinsics. """
-        return np.array(
-            [[self.fx, 0, self.ppx], [0, self.fy, self.ppy], [0, 0, 1]])
+        """! Returns a numpy array representing camera intrinsics."""
+        return np.array([[self.fx, 0, self.ppx], [0, self.fy, self.ppy], [0, 0, 1]])
 
 
 class Output_v4l2_ctrl:
-    """! Returns STDOUT for CMD v4l2_ctrl. """
+    """! Returns STDOUT for CMD v4l2_ctrl."""
 
     def __init__(self, stdout):
         self.stdout = stdout
@@ -137,7 +141,7 @@ class Output_v4l2_ctrl:
 
 
 class FakeCTX:
-    """! Fakes a realsense context. """
+    """! Fakes a realsense context."""
 
     def __init__(self, devices):
         self._devices = devices
@@ -152,7 +156,7 @@ class FakeCTX:
 
 
 class FakeCam:
-    """! Fakes a realsense camera. """
+    """! Fakes a realsense camera."""
 
     def __init__(self, info):
         self._info = info
@@ -163,7 +167,7 @@ class FakeCam:
 
 
 class FakeStreamProfile:
-    """! Fakes a stream profile. """
+    """! Fakes a stream profile."""
 
     def __init__(self, cam_intrinsics):
         self.intrinsics = cam_intrinsics
@@ -174,7 +178,7 @@ class FakeStreamProfile:
 
 
 class FakeStream:
-    """! Fakes a stream. """
+    """! Fakes a stream."""
 
     def __init__(self, type, cam_intrinsics):
         self.type = type
@@ -189,7 +193,7 @@ class FakeStream:
 
 
 class FakeColorFrame:
-    """! Fakes a color frame. """
+    """! Fakes a color frame."""
 
     def __init__(self, height, width):
         self.height = height

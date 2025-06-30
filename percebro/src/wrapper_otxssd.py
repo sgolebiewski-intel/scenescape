@@ -9,12 +9,15 @@ from model_api.models.utils import Detection
 
 
 class OTXSSDModel(SSD):
-    __model__ = 'OTX_SSD'
+    __model__ = "OTX_SSD"
 
     def __init__(self, model_adapter, configuration=None, preload=False):
         super(SSD, self).__init__(model_adapter, configuration, preload)
-        self.image_info_blob_name = self.image_info_blob_names[0] if len(
-            self.image_info_blob_names) == 1 else None
+        self.image_info_blob_name = (
+            self.image_info_blob_names[0]
+            if len(self.image_info_blob_names) == 1
+            else None
+        )
 
         self.output_parser = BatchBoxesLabelsParser(
             self.outputs,
@@ -35,12 +38,7 @@ class OTXSSDModel(SSD):
 class BatchBoxesLabelsParser:
     """Batched output parser."""
 
-    def __init__(
-            self,
-            layers,
-            input_size,
-            labels_layer="labels",
-            default_label=0):
+    def __init__(self, layers, input_size, labels_layer="labels", default_label=0):
         try:
             self.labels_layer = find_layer_by_name(labels_layer, layers)
         except ValueError:
@@ -57,8 +55,11 @@ class BatchBoxesLabelsParser:
 
     @staticmethod
     def find_layer_bboxes_output(layers):
-        filter_outputs = [name for name, data in layers.items() if len(
-            data.shape) == 3 and data.shape[-1] == 5]
+        filter_outputs = [
+            name
+            for name, data in layers.items()
+            if len(data.shape) == 3 and data.shape[-1] == 5
+        ]
         return filter_outputs[0]
 
     def __call__(self, outputs):
@@ -73,21 +74,12 @@ class BatchBoxesLabelsParser:
         if self.labels_layer:
             labels = outputs[self.labels_layer]
         else:
-            labels = np.full(
-                len(bboxes),
-                self.default_label,
-                dtype=bboxes.dtype)
+            labels = np.full(len(bboxes), self.default_label, dtype=bboxes.dtype)
         if labels.shape[0] == 1:
             labels = labels[0]
 
         detections = [
-            Detection(
-                *bbox,
-                score,
-                label) for label,
-            score,
-            bbox in zip(
-                labels,
-                scores,
-                bboxes)]
+            Detection(*bbox, score, label)
+            for label, score, bbox in zip(labels, scores, bboxes)
+        ]
         return detections

@@ -32,31 +32,38 @@ def build_argparser():
         "--verbose",
         "-v",
         action="store_true",
-        help="Get output from RTSP server started by the program")
-    parser.add_argument("--size", "-s", default=None,
-                        help="Frame size to be streamed (WxH)")
+        help="Get output from RTSP server started by the program",
+    )
+    parser.add_argument(
+        "--size", "-s", default=None, help="Frame size to be streamed (WxH)"
+    )
     parser.add_argument(
         "--encoder",
         "-c",
-        default='copy',
-        help="Output video encoder to use for streaming. (See ffmpeg -codecs)")
+        default="copy",
+        help="Output video encoder to use for streaming. (See ffmpeg -codecs)",
+    )
     parser.add_argument(
         "--base_name",
         default=None,
-        help="Stream basename to use. Each stream will get a suffix id. By default will use the filename (without extension).")
+        help="Stream basename to use. Each stream will get a suffix id. By default will use the filename (without extension).",
+    )
     parser.add_argument(
         "--server",
         default=None,
-        help="External RTSP server. If not specified, the program will start RTSP server")
+        help="External RTSP server. If not specified, the program will start RTSP server",
+    )
     parser.add_argument(
         "--start_id",
         default=1,
         type=int,
-        help="Camera id to start streaming at. Useful for when you already have another instance streaming and just want to add some more streams.")
+        help="Camera id to start streaming at. Useful for when you already have another instance streaming and just want to add some more streams.",
+    )
     parser.add_argument(
         "--extra",
         help="Extra parameters to pass to the transcoding session",
-        default=None)
+        default=None,
+    )
 
     return parser
 
@@ -65,20 +72,21 @@ streamer_procs = []
 
 
 def stream_videos(
-        videos,
-        start_idx=1,
-        size=None,
-        out_encoder='copy',
-        rtsp_server_name='127.0.0.1',
-        extra_args=None,
-        base_name=None):
+    videos,
+    start_idx=1,
+    size=None,
+    out_encoder="copy",
+    rtsp_server_name="127.0.0.1",
+    extra_args=None,
+    base_name=None,
+):
     commands = []
     rtspAddressBase = 8554
 
     stream_names = []
     for vid in videos:
 
-        cur_stream_name = ''
+        cur_stream_name = ""
         if base_name is not None:
             cur_stream_name = base_name + str(start_idx)
             start_idx += 1
@@ -95,58 +103,61 @@ def stream_videos(
         stream_names.append(cur_stream_name)
 
         detected_fps = stream_get_fps(vid)
-        rtsp_cmd = 'rtsp://' + rtsp_server_name + ':' + \
-            str(rtspAddressBase) + '/' + cur_stream_name
+        rtsp_cmd = (
+            "rtsp://"
+            + rtsp_server_name
+            + ":"
+            + str(rtspAddressBase)
+            + "/"
+            + cur_stream_name
+        )
 
-        print(
-            "Video {} at URI: {} at {} fps".format(
-                vid,
-                rtsp_cmd,
-                detected_fps))
+        print("Video {} at URI: {} at {} fps".format(vid, rtsp_cmd, detected_fps))
 
         command_extract = [
-            'ffmpeg',
-            '-stream_loop',
-            '-1',
-            '-i',
+            "ffmpeg",
+            "-stream_loop",
+            "-1",
+            "-i",
             vid,
-            '-fflags',
-            '+genpts',
-            '-r',
+            "-fflags",
+            "+genpts",
+            "-r",
             str(detected_fps),
-            '-c:v',
-            'copy',
-            '-an',
-            '-f',
-            'mpegts',
-            'pipe:1']
+            "-c:v",
+            "copy",
+            "-an",
+            "-f",
+            "mpegts",
+            "pipe:1",
+        ]
         command_stream = [
-            'ffmpeg',
-            '-re',
-            '-f',
-            'mpegts',
-            '-i',
-            'pipe:0',
-            '-fflags',
-            '+genpts',
-            '-r',
+            "ffmpeg",
+            "-re",
+            "-f",
+            "mpegts",
+            "-i",
+            "pipe:0",
+            "-fflags",
+            "+genpts",
+            "-r",
             str(detected_fps),
-            '-c:v',
-            out_encoder]
+            "-c:v",
+            out_encoder,
+        ]
 
         if size is not None:
-            command_stream.extend(['-s', size])
+            command_stream.extend(["-s", size])
 
-        command_extract.extend(['-loglevel', 'error'])
-        command_stream.extend(['-loglevel', 'error'])
+        command_extract.extend(["-loglevel", "error"])
+        command_stream.extend(["-loglevel", "error"])
 
         if extra_args is not None:
-            extras_arr = extra_args.split(' ')
+            extras_arr = extra_args.split(" ")
             for i in extras_arr:
                 command_stream.append(i)
 
-        command_stream.extend(
-            ['-f', 'rtsp', '-rtsp_transport', 'tcp', rtsp_cmd])
+        command_stream.extend(["-f", "rtsp", "-rtsp_transport", "tcp", rtsp_cmd])
 
         commands.append([command_extract, command_stream])
 
@@ -158,11 +169,7 @@ def stream_videos(
 
 
 def run_command(command, wait=True):
-    cmd_proc = Popen(
-        command,
-        stdout=PIPE,
-        stderr=STDOUT,
-        universal_newlines=True)
+    cmd_proc = Popen(command, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
     cmd_out = cmd_proc.communicate()[0]
     cmd_proc.stdout.close()
     cmd_proc.wait()
@@ -198,37 +205,38 @@ def wait_for_command(command, expected=None, not_expected=None, max_time=10):
     return command_success
 
 
-rtsp_container_name = 'rtsp-streamer-server'
+rtsp_container_name = "rtsp-streamer-server"
 
 
 def start_rtsp(verbose=False):
     server_name = None
-    image_name = 'aler9/rtsp-simple-server'
-    command = ['docker', 'pull', image_name]
+    image_name = "aler9/rtsp-simple-server"
+    command = ["docker", "pull", image_name]
     run_command(command)
 
     command = [
-        'docker',
-        'run',
-        '--rm',
-        '--network=host',
-        '--name',
+        "docker",
+        "run",
+        "--rm",
+        "--network=host",
+        "--name",
         rtsp_container_name,
-        image_name]
+        image_name,
+    ]
 
     if verbose:
         Popen(command)
     else:
         Popen(command, stderr=DEVNULL, stdout=DEVNULL)
 
-    rtsp_server_ok = wait_for_command(['docker',
-                                       'logs',
-                                       rtsp_container_name],
-                                      expected='listener opened on :8554',
-                                      max_time=10)
+    rtsp_server_ok = wait_for_command(
+        ["docker", "logs", rtsp_container_name],
+        expected="listener opened on :8554",
+        max_time=10,
+    )
 
     if rtsp_server_ok:
-        server_name = getfqdn() or '127.0.0.1'
+        server_name = getfqdn() or "127.0.0.1"
 
     return server_name
 
@@ -237,10 +245,11 @@ def stop_rtsp(forced=False):
     # Sometimes the rtsp container catches the Ctrl+C, so it could be dead
     # already
     rtsp_killed = wait_for_command(
-        ['docker', 'ps'], not_expected=rtsp_container_name, max_time=2)
+        ["docker", "ps"], not_expected=rtsp_container_name, max_time=2
+    )
 
     if not rtsp_killed:
-        command = ['docker', 'kill', rtsp_container_name]
+        command = ["docker", "kill", rtsp_container_name]
         Popen(command, stderr=None, stdout=None).wait()
 
 
@@ -253,11 +262,11 @@ def stop_streamers():
 
 def stream_get_fps(stream_file):
     stream_fps = 30
-    stream_info_out = run_command(['ffmpeg', '-i', stream_file])
+    stream_info_out = run_command(["ffmpeg", "-i", stream_file])
 
-    stream_info_out = stream_info_out.split('\n')
+    stream_info_out = stream_info_out.split("\n")
     for line in stream_info_out:
-        if 'fps' in line:
+        if "fps" in line:
 
             matchstr = re.search(r", (\d*\.*\d+) fps,", line)
             if matchstr is not None:
@@ -303,7 +312,7 @@ def main(argv, arc):
 
         if rtsp_server_name is None:
             rtsp_server_name = start_rtsp(args.verbose)
-            server_started = (rtsp_server_name is not None)
+            server_started = rtsp_server_name is not None
             if not server_started:
                 print("Failed opening RTSP server!")
                 return 1
@@ -315,7 +324,8 @@ def main(argv, arc):
             size=args.size,
             out_encoder=args.encoder,
             extra_args=args.extra,
-            base_name=args.base_name)
+            base_name=args.base_name,
+        )
         wait_for_streamers()
     except Exception as e:
         print("Error raised: ", e)
@@ -331,5 +341,5 @@ def main(argv, arc):
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv, len(sys.argv))

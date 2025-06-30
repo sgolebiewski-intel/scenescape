@@ -26,36 +26,39 @@ class Command(BaseCommand):
         ss_scene = scene.scenescapeScene
         scene.scenescapeSceneUpdateRegions(ss_scene)
 
-        config = {'name': scene.name}
+        config = {"name": scene.name}
         if scene.map:
-            config['map'] = os.path.basename(scene.map.path)
+            config["map"] = os.path.basename(scene.map.path)
         if scene.scale:
-            config['scale'] = scene.scale
+            config["scale"] = scene.scale
 
         if len(ss_scene.sensors):
-            config['sensors'] = {}
+            config["sensors"] = {}
             for name in ss_scene.sensors:
                 sensor = ss_scene.sensors[name]
                 sdict = {}
                 if hasattr(sensor.pose, "camCoords"):
-                    sdict['camera points'] = sensor.pose.camCoords
-                    sdict['map points'] = sensor.pose.mapCoords
+                    sdict["camera points"] = sensor.pose.camCoords
+                    sdict["map points"] = sensor.pose.mapCoords
                 if sensor.pose.intrinsics:
                     # FIXME - convert to fov if possible
                     intrins = sensor.pose.intrinsics.intrinsics
-                    sdict['intrinsics'] = [intrins[0, 0],
-                                           intrins[1, 1], intrins[0, 2], intrins[1, 2]]
+                    sdict["intrinsics"] = [
+                        intrins[0, 0],
+                        intrins[1, 1],
+                        intrins[0, 2],
+                        intrins[1, 2],
+                    ]
                 if hasattr(sensor.pose, "resolution"):
-                    sdict['width'] = sensor.pose.resolution[0]
-                    sdict['height'] = sensor.pose.resolution[1]
-                config['sensors'][name] = sdict
+                    sdict["width"] = sensor.pose.resolution[0]
+                    sdict["height"] = sensor.pose.resolution[1]
+                config["sensors"][name] = sdict
 
         if len(ss_scene.regions):
-            config['regions'] = {}
+            config["regions"] = {}
             for name in ss_scene.regions:
                 region = ss_scene.regions[name]
-                config['regions'][name] = [(pt.x, pt.y)
-                                           for pt in region.points]
+                config["regions"][name] = [(pt.x, pt.y) for pt in region.points]
 
         pretty = json.dumps(config, indent=4)
         pretty = re.sub(r"\[\s+", r"[", pretty)
@@ -64,8 +67,8 @@ class Command(BaseCommand):
         pretty = re.sub(r",\s+\[", r", [", pretty)
         pretty = re.sub(r"([0-9]+)\.0([^0-9])", r"\1\2", pretty)
 
-        if options['config']:
-            with open(options['config'], "w") as f:
+        if options["config"]:
+            with open(options["config"], "w") as f:
                 f.write(pretty)
                 f.write("\n")
         else:

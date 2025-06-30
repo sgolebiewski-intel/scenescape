@@ -20,27 +20,24 @@ class OrphanedSensorTest(FunctionalTest):
     def __init__(self, testName, request, recordXMLAttribute):
         super().__init__(testName, request, recordXMLAttribute)
 
-        self.existingSceneUID = self.params['scene_id']
+        self.existingSceneUID = self.params["scene_id"]
         self.newSceneName = "automated-scene1"
 
-        self.rest = RESTClient(
-            self.params['resturl'],
-            rootcert=self.params['rootcert'])
-        assert self.rest.authenticate(
-            self.params['user'], self.params['password'])
+        self.rest = RESTClient(self.params["resturl"], rootcert=self.params["rootcert"])
+        assert self.rest.authenticate(self.params["user"], self.params["password"])
         return
 
     def _isSensorAvailable(self, sensorID):
         getAllSensors = self.rest.getSensors({})
 
-        for sensor in getAllSensors['results']:
-            if sensor['uid'] == sensorID:
+        for sensor in getAllSensors["results"]:
+            if sensor["uid"] == sensorID:
                 return True
 
         return False
 
     def verifyOrphanedSensors(self):
-        """ Verifies that sensor can exist even if the scene associated with it is deleted.
+        """Verifies that sensor can exist even if the scene associated with it is deleted.
         Also verifies that the orphaned sensor can be assigned to another scene.
 
         Steps:
@@ -57,35 +54,38 @@ class OrphanedSensorTest(FunctionalTest):
 
         try:
             log.info(f"Generating a new scene: {self.newSceneName}")
-            newScene = self.rest.createScene({'name': self.newSceneName})
+            newScene = self.rest.createScene({"name": self.newSceneName})
             assert newScene, (newScene.statusCode, newScene.errors)
 
-            sensorData = testCases['Sensor']['create'][0][0]
-            log.info(
-                f"Generating a new sensor with the following data: {sensorData}")
-            sensorData['scene'] = newScene['uid']
+            sensorData = testCases["Sensor"]["create"][0][0]
+            log.info(f"Generating a new sensor with the following data: {sensorData}")
+            sensorData["scene"] = newScene["uid"]
             newSensor = self.rest.createSensor(sensorData)
             assert newSensor, (newSensor.statusCode, newSensor.errors)
 
             log.info(
-                f"Make sure the sensor is available in the sensor list after deleting associated scene")
-            assert self.rest.deleteScene(newScene['uid'])
-            assert self._isSensorAvailable(newSensor['uid'])
+                f"Make sure the sensor is available in the sensor list after deleting associated scene"
+            )
+            assert self.rest.deleteScene(newScene["uid"])
+            assert self._isSensorAvailable(newSensor["uid"])
 
             log.info(f"Assign the orphaned sensor to an existing scene")
-            existingScene = self.rest.getScenes({'id': self.existingSceneUID})
-            assert existingScene['results'], (
-                existingScene.statusCode, existingScene.errors)
-            sceneID = existingScene['results'][0]['uid']
+            existingScene = self.rest.getScenes({"id": self.existingSceneUID})
+            assert existingScene["results"], (
+                existingScene.statusCode,
+                existingScene.errors,
+            )
+            sceneID = existingScene["results"][0]["uid"]
 
-            sensorData['scene'] = sceneID
-            updateNewSensor = self.rest.updateSensor(
-                newSensor['uid'], sensorData)
-            assert updateNewSensor and updateNewSensor['scene'] == sceneID, \
-                (updateNewSensor.statusCode, updateNewSensor.errors)
+            sensorData["scene"] = sceneID
+            updateNewSensor = self.rest.updateSensor(newSensor["uid"], sensorData)
+            assert updateNewSensor and updateNewSensor["scene"] == sceneID, (
+                updateNewSensor.statusCode,
+                updateNewSensor.errors,
+            )
 
             log.info("Make sure that the sensor is still available")
-            assert self._isSensorAvailable(newSensor['uid'])
+            assert self._isSensorAvailable(newSensor["uid"])
 
             self.exitCode = 0
 
@@ -106,5 +106,5 @@ def main():
     return test_orphaned_sensors(None, None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     os._exit(main() or 0)

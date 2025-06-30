@@ -17,16 +17,16 @@ def stream_videos(video_count):
     rtspAddressBase = 8554
 
     while current_cmd < video_count:
-        rtsp_cmd = 'rtsp://127.0.0.1:' + \
-            str(rtspAddressBase) + '/cam' + str(current_cmd)
+        rtsp_cmd = "rtsp://127.0.0.1:" + str(rtspAddressBase) + "/cam" + str(current_cmd)
         command = [
-            'vlc',
-            '--no-embedded-video',
-            '--width',
-            '640',
-            '--height',
-            '480',
-            rtsp_cmd]
+            "vlc",
+            "--no-embedded-video",
+            "--width",
+            "640",
+            "--height",
+            "480",
+            rtsp_cmd,
+        ]
         commands.append(command)
         current_cmd += 1
         rtspAddressBase += 2
@@ -43,10 +43,11 @@ def main(argv, arc):
         videos = my_utils.find_videos(argv[1])
         if len(videos) == 0:
             print(
-                "No video with valid extentions could be found in the provided directory")
+                "No video with valid extentions could be found in the provided directory"
+            )
         else:
             stream_videos(len(videos))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv, len(sys.argv))

@@ -36,7 +36,8 @@ def test_del_sensor_scene_main(params, record_xml_attribute):
         print("Creating Scene " + scene_name)
         assert common.create_scene(browser, scene_name, scale, map_image)
         assert common.create_sensor_from_scene(
-            browser, sensor_id, sensor_name, scene_name)
+            browser, sensor_id, sensor_name, scene_name
+        )
         assert common.delete_scene(browser, scene_name)
 
         time.sleep(1)

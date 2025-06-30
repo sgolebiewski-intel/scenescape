@@ -17,11 +17,13 @@ try:
 except ImportError:
     import subprocess
     import sys
+
     subprocess.check_call([sys.executable, "-m", "pip", "install", "psutil"])
     # Make sure that if Python doesn't have the import directory in the search
     # path, refresh it
     import site
     from importlib import reload
+
     reload(site)
     import psutil
 
@@ -37,28 +39,22 @@ class REIDPerformanceDegradation(BackendFunctionalTest):
 
         self.connected = False
         self.scenes_updates = {
-            "3bc091c7-e449-46a0-9540-29c499bca18c": {
-                "updated": False
-            },
-            "302cf49a-97ec-402d-a324-c5077b280b7b": {
-                "updated": False
-            }
+            "3bc091c7-e449-46a0-9540-29c499bca18c": {"updated": False},
+            "302cf49a-97ec-402d-a324-c5077b280b7b": {"updated": False},
         }
         self.performance_db = []
 
         self.client = PubSub(
-            self.params["auth"],
-            None,
-            self.params["rootcert"],
-            self.params["broker_url"])
+            self.params["auth"], None, self.params["rootcert"], self.params["broker_url"]
+        )
         self.client.onConnect = self.on_connect
         for sc_uid in self.scenes_updates:
             self.client.addCallback(
                 PubSub.formatTopic(
-                    PubSub.DATA_SCENE,
-                    scene_id=sc_uid,
-                    thing_type="person"),
-                self.on_scene_message)
+                    PubSub.DATA_SCENE, scene_id=sc_uid, thing_type="person"
+                ),
+                self.on_scene_message,
+            )
         self.client.connect()
         self.client.loopStart()
 
@@ -73,9 +69,8 @@ class REIDPerformanceDegradation(BackendFunctionalTest):
         log.info("Connected to MQTT Broker")
         for sc_uid in self.scenes_updates:
             topic = PubSub.formatTopic(
-                PubSub.DATA_SCENE,
-                scene_id=sc_uid,
-                thing_type="person")
+                PubSub.DATA_SCENE, scene_id=sc_uid, thing_type="person"
+            )
             mqttc.subscribe(topic, 0)
             log.info("Subscribed to the topic {}".format(topic))
         return
@@ -83,7 +78,7 @@ class REIDPerformanceDegradation(BackendFunctionalTest):
     def get_sys_info(self):
         cpu_usage = psutil.cpu_percent(interval=1)
         memory_usage = psutil.virtual_memory().percent
-        disk_usage = psutil.disk_usage('/').percent
+        disk_usage = psutil.disk_usage("/").percent
         return cpu_usage, memory_usage, disk_usage
 
     def get_vdms_time(self):
@@ -96,9 +91,9 @@ class REIDPerformanceDegradation(BackendFunctionalTest):
         cpu_usage, memory_usage, disk_usage = self.get_sys_info()
         vdms_time = self.get_vdms_time()
         self.performance_db.append(
-            [test_time, cpu_usage, memory_usage, disk_usage, vdms_time])
-        log.info(
-            f"{test_time}, {cpu_usage}, {memory_usage}, {disk_usage}, {vdms_time}")
+            [test_time, cpu_usage, memory_usage, disk_usage, vdms_time]
+        )
+        log.info(f"{test_time}, {cpu_usage}, {memory_usage}, {disk_usage}, {vdms_time}")
         return
 
     def on_scene_message(self, mqttc, condlock, msg):
@@ -107,7 +102,7 @@ class REIDPerformanceDegradation(BackendFunctionalTest):
 
         # Verify that everything is still working as expected
         for scene in self.scenes_updates:
-            if json_data['id'] == scene:
+            if json_data["id"] == scene:
                 self.scenes_updates[scene]["updated"] = True
         return
 
@@ -115,12 +110,15 @@ class REIDPerformanceDegradation(BackendFunctionalTest):
         avg_elem_num = 5  # On how many elements we want to base the floor and ceiling
         first_elements_lists = self.performance_db[:avg_elem_num]
         last_elements_lists = self.performance_db[-avg_elem_num:]
-        avg_first = sum([sublist[position]
-                        for sublist in first_elements_lists]) / len(first_elements_lists)
-        avg_last = sum([sublist[position]
-                       for sublist in last_elements_lists]) / len(last_elements_lists)
-        avg_complete = sum(
-            [sublist[position] for sublist in self.performance_db]) / len(self.performance_db)
+        avg_first = sum([sublist[position] for sublist in first_elements_lists]) / len(
+            first_elements_lists
+        )
+        avg_last = sum([sublist[position] for sublist in last_elements_lists]) / len(
+            last_elements_lists
+        )
+        avg_complete = sum([sublist[position] for sublist in self.performance_db]) / len(
+            self.performance_db
+        )
         return (avg_first, avg_last, avg_complete)
 
     def check_returned_values(self):
@@ -128,34 +126,42 @@ class REIDPerformanceDegradation(BackendFunctionalTest):
 
         cpu_averages = self.get_average_values(1)
         log.info(
-            f"-> CPU: Start - {cpu_averages[0]}, End - {cpu_averages[1]}, Avg - {cpu_averages[2]}")
-        if (cpu_averages[1] >= cpu_averages[0] * 1.2):
+            f"-> CPU: Start - {cpu_averages[0]}, End - {cpu_averages[1]}, Avg - {cpu_averages[2]}"
+        )
+        if cpu_averages[1] >= cpu_averages[0] * 1.2:
             log.error(
-                "The final CPU average shouldn't be 20% greater than the initial one!")
+                "The final CPU average shouldn't be 20% greater than the initial one!"
+            )
             return_value = False
 
         mem_averages = self.get_average_values(2)
         log.info(
-            f"-> Memory: Start - {mem_averages[0]}, End - {mem_averages[1]}, Avg - {mem_averages[2]}")
-        if (mem_averages[1] >= mem_averages[0] * 1.1):
+            f"-> Memory: Start - {mem_averages[0]}, End - {mem_averages[1]}, Avg - {mem_averages[2]}"
+        )
+        if mem_averages[1] >= mem_averages[0] * 1.1:
             log.error(
-                "The final Memory average shouldn't be 10% greater than the initial one!")
+                "The final Memory average shouldn't be 10% greater than the initial one!"
+            )
             return_value = False
 
         disk_averages = self.get_average_values(3)
         log.info(
-            f"-> Disk Usage: Start - {disk_averages[0]}, End - {disk_averages[1]}, Avg - {disk_averages[2]}")
-        if (disk_averages[1] >= disk_averages[0] * 1.1):
+            f"-> Disk Usage: Start - {disk_averages[0]}, End - {disk_averages[1]}, Avg - {disk_averages[2]}"
+        )
+        if disk_averages[1] >= disk_averages[0] * 1.1:
             log.error(
-                "The final Disk Usage average shouldn't be 10% greater than the initial one!")
+                "The final Disk Usage average shouldn't be 10% greater than the initial one!"
+            )
             return_value = False
 
         query_averages = self.get_average_values(4)
         log.info(
-            f"-> Query time: Start - {query_averages[0]}, End - {query_averages[1]}, Avg - {query_averages[2]}")
-        if (query_averages[1] >= query_averages[0] * 3):
+            f"-> Query time: Start - {query_averages[0]}, End - {query_averages[1]}, Avg - {query_averages[2]}"
+        )
+        if query_averages[1] >= query_averages[0] * 3:
             log.error(
-                "The final Query time average shouldn't be 3 times greater than the initial one!")
+                "The final Query time average shouldn't be 3 times greater than the initial one!"
+            )
             return_value = False
 
         return return_value
@@ -169,7 +175,8 @@ class REIDPerformanceDegradation(BackendFunctionalTest):
         updated = False  # Compute only once the performance data
 
         log.info(
-            f"The test will run for {TEST_WAIT_TIME} seconds and will print an update aproximately every {interval} seconds.")
+            f"The test will run for {TEST_WAIT_TIME} seconds and will print an update aproximately every {interval} seconds."
+        )
         log.info("Timestamp, CPU Usage, Memory Usage, Disk Usage, Query time")
 
         while time.time() - start_time < TEST_WAIT_TIME:
@@ -181,7 +188,8 @@ class REIDPerformanceDegradation(BackendFunctionalTest):
                     self.scenes_updates[scene]["updated"] = False
                 else:
                     log.error(
-                        f"-> The {scene} scene hasn't sent any update in the past {interval} seconds! Aborting the test!")
+                        f"-> The {scene} scene hasn't sent any update in the past {interval} seconds! Aborting the test!"
+                    )
                     return False
             if updated:
                 self.store_performance_results(time_interval)
@@ -216,5 +224,5 @@ def main():
     return test_reid_performance_degradation(None, None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     os._exit(main() or 0)

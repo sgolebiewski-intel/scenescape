@@ -27,8 +27,10 @@ class PercebroSensor:
         if vdata:
             crop = vdata.unannotatedFrame()
             if self.bounds:
-                crop = crop[int(self.bounds.y):int(self.bounds.y2), int(
-                    self.bounds.x):int(self.bounds.x2)]
+                crop = crop[
+                    int(self.bounds.y) : int(self.bounds.y2),
+                    int(self.bounds.x) : int(self.bounds.x2),
+                ]
             sensorFrame = VideoFrame(vdata.cam, crop, None, None)
             sensorFrame.sensor = self
             sensorFrame.begin = vdata.begin
@@ -56,23 +58,20 @@ class PercebroSensor:
         sensors = []
         attribs = [None] * len(sensorIDs)
         attribs = sensorAttribs + attribs
-        attribs = attribs[:len(sensorIDs)]
+        attribs = attribs[: len(sensorIDs)]
         for sensorID, attrib, chainSpec in zip(sensorIDs, attribs, chainSpecs):
             bsplit = sensorID.split("=")
             sensorID = bsplit[0]
             bounds = None
             if len(bsplit) > 2:
                 log.error(
-                    "Unknown bounds format must be formatted as <sensor_id>=[x,y,width,height]")
+                    "Unknown bounds format must be formatted as <sensor_id>=[x,y,width,height]"
+                )
                 exit(1)
             elif len(bsplit) == 2:
                 bounds = Rectangle(json.loads(bsplit[1]))
             sensors.append(
-                PercebroSensor(
-                    sensorID,
-                    bounds,
-                    attrib,
-                    chainSpec,
-                    chainParams))
+                PercebroSensor(sensorID, bounds, attrib, chainSpec, chainParams)
+            )
 
         return sensors

@@ -20,7 +20,8 @@ def main():
     try:
         package_name = "openvino"
         proc = subprocess.Popen(
-            ["pip index versions " + package_name], stdout=subprocess.PIPE, shell=True)
+            ["pip index versions " + package_name], stdout=subprocess.PIPE, shell=True
+        )
         (proc_output, err) = proc.communicate()
 
         proc_output = proc_output.decode()
@@ -35,15 +36,11 @@ def main():
         print()
         output_str = "{label} {package} version: {value}"
         print(
-            output_str.format(
-                label=label_1,
-                package=package_name,
-                value=label_1_value))
+            output_str.format(label=label_1, package=package_name, value=label_1_value)
+        )
         print(
-            output_str.format(
-                label=label_2,
-                package=package_name,
-                value=label_2_value))
+            output_str.format(label=label_2, package=package_name, value=label_2_value)
+        )
 
         assert len(matches) == 2
         assert label_1 == "INSTALLED"
@@ -57,5 +54,5 @@ def main():
     return exit_code
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main() or 0)

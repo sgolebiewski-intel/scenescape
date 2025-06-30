@@ -10,7 +10,14 @@ import pytest
 from unittest.mock import MagicMock, patch
 
 from percebro import detector_geti
-from tests.sscape_tests.detector.conftest import geti_model, device, plugin, threshold, openvino_cores, keep_aspect
+from tests.sscape_tests.detector.conftest import (
+    geti_model,
+    device,
+    plugin,
+    threshold,
+    openvino_cores,
+    keep_aspect,
+)
 from tests.sscape_tests.detector.config import dummy_ovms_result
 
 
@@ -41,7 +48,7 @@ def test_preprocess(geti_detector, input, request):
 
 
 def mock_preprocess_return(geti_detector, input_data):
-    """ Mock OpenVINO 'Model.preprocess()' return value. Need to mock it because the mock
+    """Mock OpenVINO 'Model.preprocess()' return value. Need to mock it because the mock
     pretrained model that was used to test this module returned preprocessed data where
     the image was stored under 'data' key while the GetiDetector.preprocess() was
     expecting data to be stored under 'image' key.
@@ -50,14 +57,14 @@ def mock_preprocess_return(geti_detector, input_data):
     @param    input_data        IAData object that contains an image with text
     """
 
-    patched_image, patched_meta = geti_detector.detector.preprocess(
-        input_data.data[0])
+    patched_image, patched_meta = geti_detector.detector.preprocess(input_data.data[0])
 
-    if 'data' in patched_image:
-        patched_image['image'] = patched_image['data']
+    if "data" in patched_image:
+        patched_image["image"] = patched_image["data"]
 
     geti_detector.detector.preprocess = MagicMock(
-        return_value=(patched_image, patched_meta))
+        return_value=(patched_image, patched_meta)
+    )
     return
 
 
@@ -77,11 +84,9 @@ def test_ovms_geti_preprocess(ovms_geti, input_data):
     return
 
 
-@pytest.mark.parametrize("swap_x, swap_y",
-                         [(True, True),
-                          (True, False),
-                          (False, True),
-                          (False, False)])
+@pytest.mark.parametrize(
+    "swap_x, swap_y", [(True, True), (True, False), (False, True), (False, False)]
+)
 def test_postprocess(geti_detector, input_data, swap_x, swap_y):
     """! Postprocesses the detected objects
 
@@ -98,10 +103,7 @@ def test_postprocess(geti_detector, input_data, swap_x, swap_y):
     preprocessed_data = geti_detector.preprocess(input_data)
 
     geti_detector.tasksRemainCount[input_data.id] = len(preprocessed_data)
-    geti_detector.startInfer(
-        preprocessed_data[0],
-        input_data.id,
-        debugFlag=False)
+    geti_detector.startInfer(preprocessed_data[0], input_data.id, debugFlag=False)
     geti_detector.checkDone()
 
     outputs = geti_detector.getDone()
@@ -111,10 +113,10 @@ def test_postprocess(geti_detector, input_data, swap_x, swap_y):
         postprocessed_data = geti_detector.postprocess(outputs[0])
 
     assert postprocessed_data
-    assert postprocessed_data[0]['id']
-    assert postprocessed_data[0]['category']
-    assert postprocessed_data[0]['confidence']
-    assert postprocessed_data[0]['bounding_box']
+    assert postprocessed_data[0]["id"]
+    assert postprocessed_data[0]["category"]
+    assert postprocessed_data[0]["confidence"]
+    assert postprocessed_data[0]["bounding_box"]
 
     return
 
@@ -127,17 +129,17 @@ def test_ovms_postprocess(ovms_geti):
     postprocessed_data = ovms_geti.postprocess(dummy_ovms_result)
 
     assert postprocessed_data
-    assert postprocessed_data[0]['id']
-    assert postprocessed_data[0]['category']
-    assert postprocessed_data[0]['confidence']
-    assert postprocessed_data[0]['bounding_box']
+    assert postprocessed_data[0]["id"]
+    assert postprocessed_data[0]["category"]
+    assert postprocessed_data[0]["confidence"]
+    assert postprocessed_data[0]["bounding_box"]
 
     return
 
 
-@pytest.mark.parametrize("model, is_parameters",
-                         [(geti_model, True),
-                          (geti_model, False)])
+@pytest.mark.parametrize(
+    "model, is_parameters", [(geti_model, True), (geti_model, False)]
+)
 def test_setParameters(model, is_parameters):
     """! Verifies the output of 'percebro.detector_geti.GetiDetector.setParameters()' method.
 
@@ -150,12 +152,7 @@ def test_setParameters(model, is_parameters):
     if not is_parameters:
         detector_geti.json.load = MagicMock(return_value=None)
 
-    geti_detector.setParameters(
-        model,
-        device,
-        plugin,
-        threshold,
-        openvino_cores)
+    geti_detector.setParameters(model, device, plugin, threshold, openvino_cores)
 
     assert geti_detector.threshold
     if is_parameters:

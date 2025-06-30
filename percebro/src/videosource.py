@@ -16,6 +16,7 @@ from scene_common import log
 # RealSense will segfault if /dev/bus/usb doesn't exist
 if os.path.exists("/dev/bus/usb") and os.path.isdir("/dev/bus/usb"):
     from realsense import RSCamera
+
     REALSENSE_AVAIL = True
 else:
     REALSENSE_AVAIL = False
@@ -24,8 +25,17 @@ MIN_64BIT_INT = -0x8000000000000000
 
 
 class VideoSource:
-    def __init__(self, path, intrinsics, distortion, uniqueID=None, loop=False,
-                 cvSubsystem='ANY', resolution=None, max_distance=None):
+    def __init__(
+        self,
+        path,
+        intrinsics,
+        distortion,
+        uniqueID=None,
+        loop=False,
+        cvSubsystem="ANY",
+        resolution=None,
+        max_distance=None,
+    ):
 
         self.isFile = False
         self.isStream = False
@@ -37,13 +47,15 @@ class VideoSource:
         # Keep distance squared to avoid square roots per detection
         self.max_distance_squared = None
         if max_distance and max_distance >= 0:
-            self.max_distance_squared = max_distance ** 2
+            self.max_distance_squared = max_distance**2
 
         self.url = path
         if path.startswith(("rtsp://", "http://", "https://")):
-            path = f"uridecodebin uri={path}" \
-                " ! videoconvert" \
+            path = (
+                f"uridecodebin uri={path}"
+                " ! videoconvert"
                 " ! appsink max-buffers=1 drop=true"
+            )
         elif re.match("^[0-9]+$", path):
             path = f"/dev/video{path}"
 
@@ -51,7 +63,7 @@ class VideoSource:
         self.isStream = not os.path.exists(self.camID)
         if not self.isStream:
             self.isFile = os.path.isfile(self.camID)
-            self.is_bag = self.camID.endswith('.bag')
+            self.is_bag = self.camID.endswith(".bag")
             self.modifiedTime = os.path.getmtime(self.camID)
 
         if not uniqueID:
@@ -76,8 +88,7 @@ class VideoSource:
         if isinstance(intrinsics, CameraIntrinsics):
             self._intrinsics = intrinsics
         elif intrinsics is not None:
-            self._intrinsics = CameraIntrinsics(
-                intrinsics, distortion, resolution)
+            self._intrinsics = CameraIntrinsics(intrinsics, distortion, resolution)
 
         if self.isRealSense or self.is_bag:
             self.fps = self.cam.getFramerate()
@@ -114,22 +125,23 @@ class VideoSource:
 
     def configureHWAccel(self):
         cvApiPref = cv2.CAP_ANY
-        if 'GPU' in self.cv_subsystem:
+        if "GPU" in self.cv_subsystem:
             # Force FFMPEG and VAAPI
             cvHwAccel = cv2.VIDEO_ACCELERATION_VAAPI
             cvApiPref = cv2.CAP_FFMPEG
             cvDevice = 0
-            if '.' in self.cv_subsystem:
+            if "." in self.cv_subsystem:
                 subsystemSplit = self.cv_subsystem.split(".")
                 cvDevice = int(subsystemSplit[1])
             params = (
                 cv2.CAP_PROP_HW_ACCELERATION,
                 cvHwAccel,
                 cv2.CAP_PROP_HW_DEVICE,
-                int(cvDevice))
-        elif self.cv_subsystem == 'CPU':
+                int(cvDevice),
+            )
+        elif self.cv_subsystem == "CPU":
             params = None
-        elif self.cv_subsystem == 'ANY':
+        elif self.cv_subsystem == "ANY":
             params = (cv2.CAP_PROP_HW_ACCELERATION, cv2.VIDEO_ACCELERATION_ANY)
         else:
             log.warn("Invalid/Unknown subsystem {}".format(self.cv_subsystem))
@@ -142,8 +154,9 @@ class VideoSource:
         if hw_accel > 0:
             log.info(
                 "HW Accel {} on device {}".format(
-                    hw_accel, self.cam.get(
-                        cv2.CAP_PROP_HW_DEVICE)))
+                    hw_accel, self.cam.get(cv2.CAP_PROP_HW_DEVICE)
+                )
+            )
         else:
             log.info("HW Accel unavailable")
         return
@@ -164,14 +177,18 @@ class VideoSource:
         now = get_epoch_time()
         # BAG files don't support seeking, or grabbing frames until we catch up, they are all
         # captured with the same frame delta.
-        if self.isFile and hasattr(
-                self, 'endPosition') and self.realTime and not self.is_bag:
+        if (
+            self.isFile
+            and hasattr(self, "endPosition")
+            and self.realTime
+            and not self.is_bag
+        ):
             frame_msec = (1 / self.fps) * 1000
             first_frame = int(self.startPosition / frame_msec)
             last_frame = int(self.endPosition / frame_msec)
             max_frames = last_frame - first_frame
 
-            if not hasattr(self, 'startClock'):
+            if not hasattr(self, "startClock"):
                 self.lastCapture = self.startClock = now * 1000
             next_fnum = int((now * 1000 - self.startClock) / frame_msec)
             cur_fnum = int((self.lastCapture - self.startClock) / frame_msec)
@@ -193,8 +210,8 @@ class VideoSource:
                 else:
                     log.debug("SEEKING", nframes, next_fnum + first_frame)
                     self.cam.set(
-                        cv2.CAP_PROP_POS_FRAMES, (next_fnum %
-                                                  max_frames) + first_frame)
+                        cv2.CAP_PROP_POS_FRAMES, (next_fnum % max_frames) + first_frame
+                    )
 
         ret, frame = self.cam.read()
 
@@ -259,8 +276,9 @@ class VideoSource:
             if width != int(size[0]) or height != int(size[1]):
                 ret = False
         else:
-            if not self.cam.set(cv2.CAP_PROP_FRAME_WIDTH, float(size[0])) \
-               or not self.cam.set(cv2.CAP_PROP_FRAME_HEIGHT, float(size[1])):
+            if not self.cam.set(
+                cv2.CAP_PROP_FRAME_WIDTH, float(size[0])
+            ) or not self.cam.set(cv2.CAP_PROP_FRAME_HEIGHT, float(size[1])):
                 log.warn("Set resolution failed")
             ret = True
 
@@ -276,7 +294,7 @@ class VideoSource:
 
     @intrinsics.setter
     def intrinsics(self, value):
-        'setting'
+        "setting"
         self._intrinsics = value
 
     def getNumberOfFrames(self):
@@ -285,8 +303,7 @@ class VideoSource:
         elif self.isFile:
             return self.cam.get(cv2.CAP_PROP_POS_FRAMES)
         else:
-            raise RuntimeError(
-                "Streams do not support getting number of frames")
+            raise RuntimeError("Streams do not support getting number of frames")
 
     def supportsPositionUpdate(self):
         return self.isFile and not self.is_bag

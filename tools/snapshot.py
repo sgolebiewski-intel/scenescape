@@ -19,36 +19,29 @@ from scene_common.timestamp import get_iso_time
 def build_argparser():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-        description='Sample of generating a snapshot and publishing it over MQTT upon request.')
+        description="Sample of generating a snapshot and publishing it over MQTT upon request.",
+    )
 
-    parser.add_argument('-b', '--broker',
-                        help='MQTT broker',
-                        default='localhost')
+    parser.add_argument("-b", "--broker", help="MQTT broker", default="localhost")
 
-    parser.add_argument('--port',
-                        type=int,
-                        help='MQTT port',
-                        default=1883)
+    parser.add_argument("--port", type=int, help="MQTT port", default=1883)
 
-    parser.add_argument('-a', '--auth',
-                        help='Scenescape Auth file')
+    parser.add_argument("-a", "--auth", help="Scenescape Auth file")
 
-    parser.add_argument('-p', '--password',
-                        help='MQTT password')
+    parser.add_argument("-p", "--password", help="MQTT password")
 
-    parser.add_argument('-u', '--username',
-                        help='MQTT user name')
+    parser.add_argument("-u", "--username", help="MQTT user name")
 
-    parser.add_argument('-i', '--id',
-                        help='Sensor ID (or mqttid)',
-                        required=True)
+    parser.add_argument("-i", "--id", help="Sensor ID (or mqttid)", required=True)
 
     parser.add_argument(
         "--rootcert",
         default="/run/secrets/certs/scenescape-ca.pem",
-        help="path to ca certificate")
+        help="path to ca certificate",
+    )
 
     return parser.parse_args()
+
 
 # Define MQTT callbacks
 
@@ -70,13 +63,10 @@ def on_message(client, userdata, message):
 
         # Create base64 encoded JPEG image from the frame
         ret, jpeg = cv2.imencode(".jpg", frame)
-        jpeg = base64.b64encode(jpeg).decode('utf-8')
+        jpeg = base64.b64encode(jpeg).decode("utf-8")
 
         # Generate the message with a timestamp and the encoded frame
-        message_dict = {
-            'timestamp': timestamp,
-            'image': jpeg,
-            'id': userdata.id}
+        message_dict = {"timestamp": timestamp, "image": jpeg, "id": userdata.id}
 
         # Publish the message to the image topic
         topic = PubSub.formatTopic(PubSub.IMAGE_CAMERA, camera_id=userdata.id)
@@ -104,16 +94,11 @@ def main():
     args = build_argparser()
     auth_str = args.auth
     if auth_str is None:
-        auth_str = args.username + ':' + args.password
+        auth_str = args.username + ":" + args.password
 
     client = PubSub(
-        auth_str,
-        None,
-        args.rootcert,
-        args.broker,
-        args.port,
-        60,
-        userdata=args)
+        auth_str, None, args.rootcert, args.broker, args.port, 60, userdata=args
+    )
     client.onMessage = on_message
     client.onLog = on_log
     client.onConnect = on_connect
@@ -128,5 +113,5 @@ def main():
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main() or 0)

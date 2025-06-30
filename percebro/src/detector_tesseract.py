@@ -25,7 +25,8 @@ class TesseractDetector(Detector):
 
         super().__init__(asynchronous=asynchronous, distributed=distributed)
         self.tess_api = PyTessBaseAPI(
-            lang="eng", path="/usr/share/tesseract-ocr/4.00/tessdata/")
+            lang="eng", path="/usr/share/tesseract-ocr/4.00/tessdata/"
+        )
         return
 
     def detect(self, input, debugFlag=False):
@@ -89,14 +90,13 @@ class TesseractDetector(Detector):
         words = []
         for output in result.data:
             (x_min, y_min, x_max, y_max), text = output
-            box = Rectangle(origin=Point(x_min, y_min),
-                            opposite=Point(x_max, y_max))
+            box = Rectangle(origin=Point(x_min, y_min), opposite=Point(x_max, y_max))
 
             word = {
-                'id': len(words) + 1,
-                'category': 'text',
-                'text': text,
-                'bounding_box': box.asDict
+                "id": len(words) + 1,
+                "category": "text",
+                "text": text,
+                "bounding_box": box.asDict,
             }
             words.append(word)
 

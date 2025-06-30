@@ -35,7 +35,8 @@ class UUIDManager:
         self.reid_database = available_databases[database]()
         self.pool = concurrent.futures.ThreadPoolExecutor()
         self.similarity_query_times = collections.deque(
-            maxlen=DEFAULT_MAX_SIMILARITY_QUERIES_TRACKED)
+            maxlen=DEFAULT_MAX_SIMILARITY_QUERIES_TRACKED
+        )
         self.similarity_query_times_lock = threading.Lock()
         self.reid_enabled = True
         return
@@ -49,8 +50,7 @@ class UUIDManager:
 
         @param  tracked_objects  The objects currently tracked by the tracker
         """
-        active_tracks = [
-            tracked_object.id for tracked_object in tracked_objects]
+        active_tracks = [tracked_object.id for tracked_object in tracked_objects]
         inactive_tracks = []
         new_active_ids = {}
         with self.active_ids_lock:
@@ -71,10 +71,7 @@ class UUIDManager:
             self._addNewFeaturesToDatabase(track_id)
         return
 
-    def _addNewFeaturesToDatabase(
-            self,
-            track_id,
-            slice_size=DEFAULT_FEATURE_SLICE_SIZE):
+    def _addNewFeaturesToDatabase(self, track_id, slice_size=DEFAULT_FEATURE_SLICE_SIZE):
         """
         Add the features when the track is no longer active to reduce the total number of
         queries sent to the database. Also only take a subset of the captured features to
@@ -88,15 +85,17 @@ class UUIDManager:
         """
         features = self.features_for_database.pop(track_id, None)
         if features:
-            features['reid_vectors'] = features['reid_vectors'][::slice_size]
+            features["reid_vectors"] = features["reid_vectors"][::slice_size]
             log.debug(
-                f"Adding {len(features['reid_vectors'])} features for track {track_id} to database")
+                f"Adding {len(features['reid_vectors'])} features for track {track_id} to database"
+            )
             self.pool.submit(
                 self.reid_database.addEntry,
-                features['gid'],
+                features["gid"],
                 track_id,
-                features['category'],
-                features['reid_vectors'])
+                features["category"],
+                features["reid_vectors"],
+            )
 
     def isNewTrackerID(self, sscape_object):
         """
@@ -111,9 +110,8 @@ class UUIDManager:
         return result is None or result[0] is None
 
     def gatherQualityVisualFeatures(
-            self,
-            sscape_object,
-            minimum_bbox_area=DEFAULT_MINIMUM_BBOX_AREA):
+        self, sscape_object, minimum_bbox_area=DEFAULT_MINIMUM_BBOX_AREA
+    ):
         """
         This function gathers quality visual features for identifying newly detected objects.
         It currently only uses re-id vectors but can be expanded to include more features.
@@ -125,10 +123,12 @@ class UUIDManager:
             if sscape_object.boundingBoxPixels.area > minimum_bbox_area:
                 if sscape_object.rv_id in self.quality_features:
                     self.quality_features[sscape_object.rv_id].append(
-                        sscape_object.reidVector)
+                        sscape_object.reidVector
+                    )
                 else:
                     self.quality_features[sscape_object.rv_id] = [
-                        sscape_object.reidVector]
+                        sscape_object.reidVector
+                    ]
         return
 
     def pickBestID(self, sscape_object):
@@ -148,17 +148,17 @@ class UUIDManager:
             sscape_object.similarity = result[1]
             if sscape_object.reidVector is not None:
                 if sscape_object.rv_id in self.features_for_database:
-                    self.features_for_database[sscape_object.rv_id]['reid_vectors'].append(
-                        sscape_object.reidVector)
+                    self.features_for_database[sscape_object.rv_id][
+                        "reid_vectors"
+                    ].append(sscape_object.reidVector)
         # DATABASE ID IS NULL
         else:
             sscape_object.similarity = None
         return
 
     def haveSufficientVisualFeatures(
-            self,
-            sscape_object,
-            minimum_feature_count=DEFAULT_MINIMUM_FEATURE_COUNT):
+        self, sscape_object, minimum_feature_count=DEFAULT_MINIMUM_FEATURE_COUNT
+    ):
         """
         Checks if there are enough visual features to send a query to the database
 
@@ -189,13 +189,11 @@ class UUIDManager:
             else:
                 log.warn(
                     f"Track {
-                        sscape_object.rv_id} left scene before ID query finished")
+                        sscape_object.rv_id} left scene before ID query finished"
+                )
         return
 
-    def sendSimilarityQuery(
-            self,
-            sscape_object,
-            max_query_time=DEFAULT_MAX_QUERY_TIME):
+    def sendSimilarityQuery(self, sscape_object, max_query_time=DEFAULT_MAX_QUERY_TIME):
         """
         Sends a query to find similarity scores for a given sscape_object and stores the time it
         takes for query completion. If the time is over a threshold, disables re-id queries.
@@ -207,27 +205,30 @@ class UUIDManager:
         log.debug(f"Finding similarity scores for track {sscape_object.rv_id}")
         start_time = get_epoch_time()
         scores = self.reid_database.findSimilarityScores(
-            sscape_object.category, reid_vectors)
+            sscape_object.category, reid_vectors
+        )
         query_time = get_epoch_time() - start_time
         log.debug(
             f"Similarity scores for track {
-                sscape_object.rv_id} found in {query_time} seconds")
+                sscape_object.rv_id} found in {query_time} seconds"
+        )
 
         with self.similarity_query_times_lock:
             self.similarity_query_times.append(query_time)
-            average_query_time = sum(
-                self.similarity_query_times) / len(self.similarity_query_times)
+            average_query_time = sum(self.similarity_query_times) / len(
+                self.similarity_query_times
+            )
         if average_query_time > max_query_time:
             self.reid_enabled = False
             log.error(
-                "Disabling reid due to average query time exceeding the maximum threshold")
+                "Disabling reid due to average query time exceeding the maximum threshold"
+            )
 
         return scores
 
     def parseQueryResults(
-            self,
-            similarity_scores,
-            threshold=DEFAULT_SIMILARITY_THRESHOLD):
+        self, similarity_scores, threshold=DEFAULT_SIMILARITY_THRESHOLD
+    ):
         """
         Check database for any similar objects and return an ID and similarity score.
         The threshold value is used as the deciding criteria for close matches.
@@ -241,18 +242,25 @@ class UUIDManager:
                                     matched entry if it is found; otherwise, return None
         """
         if similarity_scores:
-            minimum_distances = [self._findMinimumDistance(entities)
-                                 for entities in similarity_scores]
-            distances_below_threshold = [(uuid, distance) for (uuid, distance) in
-                                         minimum_distances if
-                                         distance is not None and distance < threshold]
+            minimum_distances = [
+                self._findMinimumDistance(entities) for entities in similarity_scores
+            ]
+            distances_below_threshold = [
+                (uuid, distance)
+                for (uuid, distance) in minimum_distances
+                if distance is not None and distance < threshold
+            ]
             if distances_below_threshold:
                 counter = collections.Counter(
-                    item[0] for item in distances_below_threshold)
+                    item[0] for item in distances_below_threshold
+                )
                 most_common_uuid, count = counter.most_common(1)[0]
                 if count >= (len(minimum_distances) / 2):
                     similarity = min(
-                        item[1] for item in distances_below_threshold if item[0] == most_common_uuid)
+                        item[1]
+                        for item in distances_below_threshold
+                        if item[0] == most_common_uuid
+                    )
                     return most_common_uuid, similarity
         return None, None
 
@@ -264,11 +272,11 @@ class UUIDManager:
         [{'uuid': <UUID>, 'rvid': <TRACKER_ID>, '_distance': <SIMILARITY_SCORE>}, ...]
         """
         if entities:
-            minimum_distance_entity = min(
-                entities, key=lambda x: x['_distance'])
+            minimum_distance_entity = min(entities, key=lambda x: x["_distance"])
             return (
-                minimum_distance_entity['uuid'],
-                minimum_distance_entity['_distance'])
+                minimum_distance_entity["uuid"],
+                minimum_distance_entity["_distance"],
+            )
         return (None, None)
 
     def updateActiveDict(self, sscape_object, database_id, similarity):
@@ -286,16 +294,17 @@ class UUIDManager:
             self.active_ids[sscape_object.rv_id] = [database_id, similarity]
             log.debug(
                 f"Match found for {
-                    sscape_object.rv_id}: {database_id},{similarity}")
+                    sscape_object.rv_id}: {database_id},{similarity}"
+            )
         # MATCH FOUND - NO / DB ID ALREADY IN DICT - YES
         else:
             self.active_ids[sscape_object.rv_id] = [sscape_object.gid, None]
             database_id = sscape_object.gid
 
         self.features_for_database[sscape_object.rv_id] = {
-            'gid': database_id,
-            'category': sscape_object.category,
-            'reid_vectors': self.quality_features[sscape_object.rv_id]
+            "gid": database_id,
+            "category": sscape_object.category,
+            "reid_vectors": self.quality_features[sscape_object.rv_id],
         }
         return
 
@@ -320,8 +329,7 @@ class UUIDManager:
                 self.active_ids.setdefault(sscape_object.rv_id, [None, None])
             self.gatherQualityVisualFeatures(sscape_object)
             self.pickBestID(sscape_object)
-            if self.haveSufficientVisualFeatures(
-                    sscape_object) and self.reid_enabled:
+            if self.haveSufficientVisualFeatures(sscape_object) and self.reid_enabled:
                 # Only do the query for similarity if it hasn't been run before
                 if sscape_object.rv_id not in self.active_query:
                     self.active_query[sscape_object.rv_id] = True

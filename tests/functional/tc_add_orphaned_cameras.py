@@ -19,26 +19,23 @@ class OrphanedCameraTest(FunctionalTest):
     def __init__(self, testName, request, recordXMLAttribute):
         super().__init__(testName, request, recordXMLAttribute)
 
-        self.existingSceneUID = self.params['scene_id']
+        self.existingSceneUID = self.params["scene_id"]
         self.newSceneName = "automated-scene1"
         self.newCameraName = "automated-camera1"
 
-        self.rest = RESTClient(
-            self.params['resturl'],
-            rootcert=self.params['rootcert'])
-        assert self.rest.authenticate(
-            self.params['user'], self.params['password'])
+        self.rest = RESTClient(self.params["resturl"], rootcert=self.params["rootcert"])
+        assert self.rest.authenticate(self.params["user"], self.params["password"])
         return
 
     def _isCameraAvailable(self, cameras, cameraID):
         for camera in cameras:
-            if camera['uid'] == cameraID:
+            if camera["uid"] == cameraID:
                 return True
 
         return False
 
     def verifyOrphanedCameras(self):
-        """ Verifies that camera can exist even if the scene associated with it is deleted.
+        """Verifies that camera can exist even if the scene associated with it is deleted.
         Also verifies that the orphaned camera can be assigned to another scene.
 
         Steps:
@@ -55,44 +52,50 @@ class OrphanedCameraTest(FunctionalTest):
 
         try:
             log.info(f"Generating a new scene: {self.newSceneName}")
-            newScene = self.rest.createScene({'name': self.newSceneName})
+            newScene = self.rest.createScene({"name": self.newSceneName})
             assert newScene, (newScene.statusCode, newScene.errors)
 
             log.info(
                 f"Generating a new camera: {
                     self.newCameraName} and adding it to scene: {
-                    newScene['uid']}")
+                    newScene['uid']}"
+            )
             newCamera = self.rest.createCamera(
-                {'name': self.newCameraName, 'scene': newScene['uid']})
+                {"name": self.newCameraName, "scene": newScene["uid"]}
+            )
             assert newCamera, (newCamera.statusCode, newCamera.errors)
 
             log.info(f"Delete the newly created scene: {newScene['uid']}")
-            assert self.rest.deleteScene(newScene['uid'])
+            assert self.rest.deleteScene(newScene["uid"])
 
             log.info(
-                "Make sure the camera is available in the camera list after deleting associated scene")
+                "Make sure the camera is available in the camera list after deleting associated scene"
+            )
             getAllCameras = self.rest.getCameras({})
-            assert len(
-                getAllCameras['results']) >= 1 and self._isCameraAvailable(
-                getAllCameras['results'],
-                newCamera['uid'])
+            assert len(getAllCameras["results"]) >= 1 and self._isCameraAvailable(
+                getAllCameras["results"], newCamera["uid"]
+            )
 
             log.info("Assign the orphaned camera to an existing scene")
-            existingScene = self.rest.getScenes({'id': self.existingSceneUID})
-            assert existingScene['results'], (
-                existingScene.statusCode, existingScene.errors)
-            sceneID = existingScene['results'][0]['uid']
+            existingScene = self.rest.getScenes({"id": self.existingSceneUID})
+            assert existingScene["results"], (
+                existingScene.statusCode,
+                existingScene.errors,
+            )
+            sceneID = existingScene["results"][0]["uid"]
             updateNewCamera = self.rest.updateCamera(
-                newCamera['uid'], {'scene': sceneID})
-            assert updateNewCamera and updateNewCamera['scene'] == sceneID, \
-                (updateNewCamera.statusCode, updateNewCamera.errors)
+                newCamera["uid"], {"scene": sceneID}
+            )
+            assert updateNewCamera and updateNewCamera["scene"] == sceneID, (
+                updateNewCamera.statusCode,
+                updateNewCamera.errors,
+            )
 
             log.info("Make sure that the camera is still available")
             getAllCameras = self.rest.getCameras({})
-            assert len(
-                getAllCameras['results']) >= 1 and self._isCameraAvailable(
-                getAllCameras['results'],
-                newCamera['uid'])
+            assert len(getAllCameras["results"]) >= 1 and self._isCameraAvailable(
+                getAllCameras["results"], newCamera["uid"]
+            )
 
             self.exitCode = 0
 
@@ -113,5 +116,5 @@ def main():
     return test_orphaned_cameras(None, None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     os._exit(main() or 0)

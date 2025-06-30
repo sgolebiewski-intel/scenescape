@@ -32,16 +32,23 @@ class TestSensorCalibrationBase(ABC):
         """
         assert common.open_sensor_tab(browser)
         self.elements["sensor_name"] = browser.find_element(
-            By.CSS_SELECTOR, "#sensors > div > div > div > h5").text
+            By.CSS_SELECTOR, "#sensors > div > div > div > h5"
+        ).text
         self.elements["sensor_id"] = browser.find_element(
-            By.CSS_SELECTOR,
-            "#sensors > div > div > div > div > table > tbody > tr > td").text
+            By.CSS_SELECTOR, "#sensors > div > div > div > div > table > tbody > tr > td"
+        ).text
         self.elements["sensor_graphic"] = browser.find_element(
-            By.CSS_SELECTOR, "#sensor_test_sensor_id")
-        self.elements["sensor_graphic_subtags"] = self.elements["sensor_graphic"].find_elements(
-            By.XPATH, "./child::*")
-        self.elements["sensor_graphic_height"] = self.elements["sensor_graphic"].size["height"]
-        self.elements["sensor_graphic_width"] = self.elements["sensor_graphic"].size["width"]
+            By.CSS_SELECTOR, "#sensor_test_sensor_id"
+        )
+        self.elements["sensor_graphic_subtags"] = self.elements[
+            "sensor_graphic"
+        ].find_elements(By.XPATH, "./child::*")
+        self.elements["sensor_graphic_height"] = self.elements["sensor_graphic"].size[
+            "height"
+        ]
+        self.elements["sensor_graphic_width"] = self.elements["sensor_graphic"].size[
+            "width"
+        ]
         return
 
     def test_values(self):
@@ -145,10 +152,10 @@ class TestCircleSensorCalibration(TestSensorCalibrationBase):
         common.navigate_to_scene(browser, common.TEST_SCENE_NAME)
         self.get_base_elements(browser)
         sensor_graphic_circle = browser.find_element(
-            By.CSS_SELECTOR, "#sensor_test_sensor_id > circle")
+            By.CSS_SELECTOR, "#sensor_test_sensor_id > circle"
+        )
         self.elements["sensor_graphic_tag"] = sensor_graphic_circle.tag_name
-        self.elements["circle_radius"] = sensor_graphic_circle.value_of_css_property(
-            "r")
+        self.elements["circle_radius"] = sensor_graphic_circle.value_of_css_property("r")
         return
 
 
@@ -181,10 +188,10 @@ class TestTriangleSensorCalibration(TestSensorCalibrationBase):
         common.navigate_to_scene(browser, common.TEST_SCENE_NAME)
         self.get_base_elements(browser)
         sensor_graphic_polygon = browser.find_element(
-            By.CSS_SELECTOR, "#sensor_test_sensor_id > polygon")
+            By.CSS_SELECTOR, "#sensor_test_sensor_id > polygon"
+        )
         self.elements["sensor_graphic_tag"] = sensor_graphic_polygon.tag_name
-        self.elements["polygon_points"] = sensor_graphic_polygon.get_attribute(
-            "points")
+        self.elements["polygon_points"] = sensor_graphic_polygon.get_attribute("points")
         return
 
 
@@ -203,7 +210,8 @@ def test_sensor_calibration(params, record_xml_attribute):
         log.info("Executing: " + TEST_NAME)
         browser = Browser()
         viewport_dimensions = browser.execute_script(
-            "return [window.innerWidth, window.innerHeight];")
+            "return [window.innerWidth, window.innerHeight];"
+        )
         browser.setViewportSize(viewport_dimensions[0], 1200)
         assert common.check_page_login(browser, params)
 
@@ -211,13 +219,15 @@ def test_sensor_calibration(params, record_xml_attribute):
             "sensor_name": SENSOR_NAME,
             "sensor_id": SENSOR_ID,
             "sensor_graphic_height": 14.0,
-            "sensor_graphic_width": 14.0
+            "sensor_graphic_width": 14.0,
         }
         sensor_1_count_tests = {"sensor_graphic_subtags": 3}
         sensor_1_test = TestDefaultSensorCalibration(
-            sensor_1_equality_tests, sensor_1_count_tests)
+            sensor_1_equality_tests, sensor_1_count_tests
+        )
         sensor_1_test.execute_test(
-            [browser, SENSOR_ID, SENSOR_NAME, common.TEST_SCENE_NAME])
+            [browser, SENSOR_ID, SENSOR_NAME, common.TEST_SCENE_NAME]
+        )
 
         sensor_2_equality_tests = {
             "sensor_name": SENSOR_NAME,
@@ -225,11 +235,12 @@ def test_sensor_calibration(params, record_xml_attribute):
             "sensor_graphic_height": 677.0,
             "sensor_graphic_width": 677.0,
             "sensor_graphic_tag": "circle",
-            "circle_radius": "337px"
+            "circle_radius": "337px",
         }
         sensor_2_count_tests = {"sensor_graphic_subtags": 5}
         sensor_2_test = TestCircleSensorCalibration(
-            sensor_2_equality_tests, sensor_2_count_tests)
+            sensor_2_equality_tests, sensor_2_count_tests
+        )
         sensor_2_test.execute_test([browser])
 
         sensor_3_equality_tests = {
@@ -238,11 +249,12 @@ def test_sensor_calibration(params, record_xml_attribute):
             "sensor_graphic_height": 612.0,
             "sensor_graphic_width": 812.0,
             "sensor_graphic_tag": "polygon",
-            "polygon_points": "50,21,50,621,850,621"
+            "polygon_points": "50,21,50,621,850,621",
         }
         sensor_3_count_tests = {"sensor_graphic_subtags": 5}
         sensor_3_test = TestTriangleSensorCalibration(
-            sensor_3_equality_tests, sensor_3_count_tests)
+            sensor_3_equality_tests, sensor_3_count_tests
+        )
         sensor_3_test.execute_test([browser])
         exit_code = 0
 

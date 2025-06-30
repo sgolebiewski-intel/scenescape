@@ -8,13 +8,13 @@ from .settings import APP_BASE_NAME
 
 DEBUG = True
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': APP_BASE_NAME,
-        'USER': APP_BASE_NAME,
-        'PASSWORD': DATABASE_PASSWORD,
-        'HOST': 'pgserver',
-        'PORT': '',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": APP_BASE_NAME,
+        "USER": APP_BASE_NAME,
+        "PASSWORD": DATABASE_PASSWORD,
+        "HOST": "pgserver",
+        "PORT": "",
     }
 }
 

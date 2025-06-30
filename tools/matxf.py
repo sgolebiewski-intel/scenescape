@@ -13,9 +13,11 @@ from argparse import ArgumentParser
 import cv2
 import numpy as np
 
-matrix_map = [[-7.97239399e-01, -4.30985504e-01, -4.22682903e-01, 3.90266716e+02],
-              [8.82206161e-02, -7.75861415e-01, 6.24704880e-01, 1.60876672e+02],
-              [-5.97182103e-01, 4.60749997e-01, 6.56569095e-01, 1.76965189e+02]]
+matrix_map = [
+    [-7.97239399e-01, -4.30985504e-01, -4.22682903e-01, 3.90266716e02],
+    [8.82206161e-02, -7.75861415e-01, 6.24704880e-01, 1.60876672e02],
+    [-5.97182103e-01, 4.60749997e-01, 6.56569095e-01, 1.76965189e02],
+]
 
 
 def build_argparser():
@@ -28,10 +30,8 @@ def build_argparser():
 def create_overlay(map_img, cam_img, transform):
     map_img = 255 - map_img
     mask = np.uint8(cv2.cvtColor(map_img, cv2.COLOR_BGR2GRAY) / 128)
-    warp = cv2.warpPerspective(map_img, transform,
-                               (cam_img.shape[1], cam_img.shape[0]))
-    mask = cv2.warpPerspective(mask, transform,
-                               (cam_img.shape[1], cam_img.shape[0]))
+    warp = cv2.warpPerspective(map_img, transform, (cam_img.shape[1], cam_img.shape[0]))
+    mask = cv2.warpPerspective(mask, transform, (cam_img.shape[1], cam_img.shape[0]))
     mask = np.dstack((mask, mask, mask))
     foreground = warp * mask
     background = cam_img * (1 - mask)
@@ -39,13 +39,7 @@ def create_overlay(map_img, cam_img, transform):
     return overlay
 
 
-def align_map(
-        name,
-        input_mat,
-        extrinsics,
-        map_img,
-        cam_img,
-        camera_intrinsics):
+def align_map(name, input_mat, extrinsics, map_img, cam_img, camera_intrinsics):
     x = np.array([[0, 0, 0, 1]])
     mat = np.concatenate((input_mat, x))
     mat = np.matmul(extrinsics, mat)[:3]
@@ -63,10 +57,7 @@ def fix_mat(mat):
     mat = np.array(mat)
     x = np.array([[0, 0, 0, 1]])
     mat = np.concatenate((mat, x))
-    swap_yz = np.array([[1, 0, 0, 0],
-                        [0, 0, 1, 0],
-                        [0, 1, 0, 0],
-                        [0, 0, 0, 1]])
+    swap_yz = np.array([[1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1]])
     fix = np.matmul(mat, swap_yz)
     return fix[:3]
 
@@ -106,8 +97,7 @@ def main():
     fy = fx = diag / (2 * math.tan(math.radians(fov / 2)))
     cx = x / 2
     cy = y / 2
-    camera_intrinsics = np.array(
-        [[fx, 0.0, cx], [0.0, fy, cy], [0.0, 0.0, 1.0]])
+    camera_intrinsics = np.array([[fx, 0.0, cx], [0.0, fy, cy], [0.0, 0.0, 1.0]])
 
     for idx in range(len(matrices)):
         m = matrices[idx]
@@ -116,12 +106,12 @@ def main():
 
     while True:
         key = cv2.waitKey(100)
-        if key == 27 or key == ord('q'):
+        if key == 27 or key == ord("q"):
             break
     cv2.destroyAllWindows()
 
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main() or 0)

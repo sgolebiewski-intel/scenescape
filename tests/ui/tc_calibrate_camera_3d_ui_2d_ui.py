@@ -67,8 +67,7 @@ class Scene3dUserInterfaceTest(UserInterfaceTest):
             self.navigateDirectlyToPage(cam_url_1)
 
             log.info("Check calibrate-info message is equal.")
-            aprilTagMsgByElem = self.browser.find_element(
-                By.ID, "calibrate-info").text
+            aprilTagMsgByElem = self.browser.find_element(By.ID, "calibrate-info").text
             assert aprilTagMsgByElem == aprilTagMsg
 
             log.info("Press Reset Points of atag-qcam1.")
@@ -82,8 +81,7 @@ class Scene3dUserInterfaceTest(UserInterfaceTest):
 
             self.navigateDirectlyToPage(cam_url_1)
             log.info("Check calibrate-info message is different.")
-            aprilTagMsgByElem = self.browser.find_element(
-                By.ID, "calibrate-info").text
+            aprilTagMsgByElem = self.browser.find_element(By.ID, "calibrate-info").text
             assert aprilTagMsgByElem != aprilTagMsg
 
             log.info("Press Save Camera of atag-qcam1.")
@@ -94,8 +92,7 @@ class Scene3dUserInterfaceTest(UserInterfaceTest):
             self.navigateDirectlyToPage(cam_url_2)
 
             log.info("Check calibrate-info message is equal.")
-            aprilTagMsgByElem = self.browser.find_element(
-                By.ID, "calibrate-info").text
+            aprilTagMsgByElem = self.browser.find_element(By.ID, "calibrate-info").text
             assert aprilTagMsgByElem == aprilTagMsg
 
             log.info("Press Reset Points of atag-qcam2.")
@@ -109,8 +106,7 @@ class Scene3dUserInterfaceTest(UserInterfaceTest):
 
             self.navigateDirectlyToPage(cam_url_2)
             log.info("Check calibrate-info message is different.")
-            aprilTagMsgByElem = self.browser.find_element(
-                By.ID, "calibrate-info").text
+            aprilTagMsgByElem = self.browser.find_element(By.ID, "calibrate-info").text
             assert aprilTagMsgByElem != aprilTagMsg
 
             log.info("Press Save Camera of atag-qcam2.")
@@ -131,7 +127,8 @@ def test_calibrate_camera_3d_ui_2d_ui(request, record_xml_attribute):
     """
     log.info("Executing: " + TEST_NAME)
     log.info(
-        "Test to calibrate camera in 3D first and calibrate again camera in 2D using April Tag.")
+        "Test to calibrate camera in 3D first and calibrate again camera in 2D using April Tag."
+    )
 
     test = Scene3dUserInterfaceTest(TEST_NAME, request, record_xml_attribute)
     test.checkCalibration3d2dAprilTag()
@@ -144,5 +141,5 @@ def main():
     return test_calibrate_camera_3d_ui_2d_ui(None, None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     os._exit(main() or 0)

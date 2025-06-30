@@ -29,11 +29,10 @@ def test_additional_floor_plans_main(params, record_xml_attribute):
 
     files = [
         common.File(
-            os.path.join(
-                common.TEST_MEDIA_PATH,
-                "HazardZoneScene.png"),
+            os.path.join(common.TEST_MEDIA_PATH, "HazardZoneScene.png"),
             "id_map",
-            "#map_wrapper a"),
+            "#map_wrapper a",
+        ),
     ]
 
     try:

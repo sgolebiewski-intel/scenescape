@@ -24,13 +24,7 @@ def cm_RdGn(x):
     return np.clip(c, 0, 1)
 
 
-def plot_images(
-        imgs,
-        titles=None,
-        cmaps="gray",
-        dpi=100,
-        pad=0.5,
-        adaptive=True):
+def plot_images(imgs, titles=None, cmaps="gray", dpi=100, pad=0.5, adaptive=True):
     """Plot a set of images horizontally.
     Args:
         imgs: a list of NumPy or PyTorch images, RGB (H, W, 3) or mono (H, W).
@@ -79,16 +73,7 @@ def plot_keypoints(kpts, colors="lime", ps=4):
             a.scatter(k[:, 0], k[:, 1], c=c, s=ps, linewidths=0)
 
 
-def plot_matches(
-        kpts0,
-        kpts1,
-        color=None,
-        lw=1.5,
-        ps=4,
-        indices=(
-            0,
-            1),
-        a=1.0):
+def plot_matches(kpts0, kpts1, color=None, lw=1.5, ps=4, indices=(0, 1), a=1.0):
     """Plot matches for a pair of existing images.
     Args:
         kpts0, kpts1: corresponding keypoints of size (N, 2).
@@ -150,13 +135,8 @@ def add_text(
 ):
     ax = plt.gcf().axes[idx]
     t = ax.text(
-        *pos,
-        text,
-        fontsize=fs,
-        ha=ha,
-        va=va,
-        color=color,
-        transform=ax.transAxes)
+        *pos, text, fontsize=fs, ha=ha, va=va, color=color, transform=ax.transAxes
+    )
     if lcolor is not None:
         t.set_path_effects(
             [

@@ -17,13 +17,18 @@ from scene_common import log
 class Command(BaseCommand):
     def add_arguments(self, parser):
         group = parser.add_mutually_exclusive_group(required=True)
-        group.add_argument("--ready", action="store_true",
-                           help="Indicate that the database is ready")
-        group.add_argument("--not-ready", action="store_false", dest="ready",
-                           help="Indicate that the database is not ready")
+        group.add_argument(
+            "--ready", action="store_true", help="Indicate that the database is ready"
+        )
+        group.add_argument(
+            "--not-ready",
+            action="store_false",
+            dest="ready",
+            help="Indicate that the database is not ready",
+        )
 
     def handle(self, *args, **kwargs):
-        status = kwargs['ready']
+        status = kwargs["ready"]
         try:
             db_status = DatabaseStatus.get_instance()
         except DatabaseError:
@@ -33,5 +38,6 @@ class Command(BaseCommand):
         db_status.save()
         log.info(
             f"Database status updated to {
-                'ready' if status else 'not ready'}")
+                'ready' if status else 'not ready'}"
+        )
         return

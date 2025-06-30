@@ -14,63 +14,62 @@ from argparse import ArgumentParser
 TIMEOUT = 600
 NUM_RETRIES = "6"
 OMZ_DIR = "/usr/local/lib/open_model_zoo"
-MODEL_DIR = os.environ.get(
-    "MODEL_DIR") if "MODEL_DIR" in os.environ else "/workspace/models"
+MODEL_DIR = (
+    os.environ.get("MODEL_DIR") if "MODEL_DIR" in os.environ else "/workspace/models"
+)
 SYMLINK_MODEL_DIR = os.path.join(MODEL_DIR, "ovms")
 MODEL_CACHE_DIR = os.path.join(SYMLINK_MODEL_DIR, "cache")
 MODEL_CONFIGFILE = "/workspace/percebro/config/model-config.json"
 OVMS_CONFIGFILE = "/workspace/model_installer/models/ovms-config.json"
-OMZ_BASE_URL = "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1"
+OMZ_BASE_URL = (
+    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1"
+)
 
 _DEFAULT_MODELS = [
-    'person-detection-retail-0013',
-    'person-reidentification-retail-0277',
-    'human-pose-estimation-0001',
+    "person-detection-retail-0013",
+    "person-reidentification-retail-0277",
+    "human-pose-estimation-0001",
 ]
 
 _OCR_MODELS = [
-    'horizontal-text-detection-0001',
-    'text-recognition-resnet-fc',
+    "horizontal-text-detection-0001",
+    "text-recognition-resnet-fc",
 ]
 
-_ALL_MODELS = _DEFAULT_MODELS + _OCR_MODELS + [
-    'pedestrian-and-vehicle-detector-adas-0001',
-    'person-vehicle-bike-detection-2000',
-    'person-vehicle-bike-detection-2001',
-    'person-vehicle-bike-detection-2002',
-    'person-vehicle-bike-detection-crossroad-0078',
-    'person-vehicle-bike-detection-crossroad-1016',
-    'vehicle-detection-0200',
-    'vehicle-detection-0201',
-    'vehicle-detection-0202',
-    'vehicle-detection-adas-0002'
-]
+_ALL_MODELS = (
+    _DEFAULT_MODELS
+    + _OCR_MODELS
+    + [
+        "pedestrian-and-vehicle-detector-adas-0001",
+        "person-vehicle-bike-detection-2000",
+        "person-vehicle-bike-detection-2001",
+        "person-vehicle-bike-detection-2002",
+        "person-vehicle-bike-detection-crossroad-0078",
+        "person-vehicle-bike-detection-crossroad-1016",
+        "vehicle-detection-0200",
+        "vehicle-detection-0201",
+        "vehicle-detection-0202",
+        "vehicle-detection-adas-0002",
+    ]
+)
 
 _PUBLIC_MODELS = [
-    'text-recognition-resnet-fc',
+    "text-recognition-resnet-fc",
 ]
 
 
 def _build_argparser():
     parser = ArgumentParser()
-    parser.add_argument(
-        "--default",
-        action="store_true",
-        help="Download default models")
-    parser.add_argument(
-        "--ocr",
-        action="store_true",
-        help="Download OCR models")
-    parser.add_argument(
-        "--all",
-        action="store_true",
-        help="Download all models")
+    parser.add_argument("--default", action="store_true", help="Download default models")
+    parser.add_argument("--ocr", action="store_true", help="Download OCR models")
+    parser.add_argument("--all", action="store_true", help="Download all models")
     parser.add_argument(
         "--precisions",
         help="Donwload models with specific precisions."
         "Comma separated value, with no extra spaces.",
         type=str,
-        default="FP32")
+        default="FP32",
+    )
 
     return parser
 
@@ -83,9 +82,7 @@ def _make_dir(path):
 
 
 def _create_ovms_configfile(filepath):
-    data = {
-        "model_config_list": []
-    }
+    data = {"model_config_list": []}
 
     _write_json(filepath, data)
     return
@@ -99,7 +96,7 @@ def _write_json(filepath, data):
 
 
 def _read_json(filepath):
-    with open(filepath, 'r') as datafile:
+    with open(filepath, "r") as datafile:
         data = datafile.read()
 
     config = json.loads(data)
@@ -107,8 +104,9 @@ def _read_json(filepath):
 
 
 def _find_existing_config(ovms_config):
-    existing_config = {config["config"]["name"]
-                       for config in ovms_config["model_config_list"]}
+    existing_config = {
+        config["config"]["name"] for config in ovms_config["model_config_list"]
+    }
     return existing_config
 
 
@@ -127,11 +125,13 @@ def _download_model(model, precisions, model_subdir):
             bin_url = f"{model_url_dir}/{model}.bin"
             subprocess.run(
                 ["wget", "-nv", "-O", os.path.join(dest_dir, f"{model}.xml"), xml_url],
-                timeout=TIMEOUT, check=True
+                timeout=TIMEOUT,
+                check=True,
             )
             subprocess.run(
                 ["wget", "-nv", "-O", os.path.join(dest_dir, f"{model}.bin"), bin_url],
-                timeout=TIMEOUT, check=True
+                timeout=TIMEOUT,
+                check=True,
             )
         except Exception as e:
             print(f"Failed to download {model} ({prec}): {e}")
@@ -153,8 +153,8 @@ def _create_symlink(source, destination):
 def _update_ovms_config(ovms_config, model_config, model):
     modelname = None
     for config in model_config:
-        if 'external_id' in config and config['external_id'] == model:
-            modelname = config['external_id']
+        if "external_id" in config and config["external_id"] == model:
+            modelname = config["external_id"]
             break
 
     if modelname:
@@ -165,7 +165,7 @@ def _update_ovms_config(ovms_config, model_config, model):
                 "shape": "auto",
                 "batch_size": "1",
                 "plugin_config": {"PERFORMANCE_HINT": "LATENCY"},
-                "allow_cache": True
+                "allow_cache": True,
             }
         }
         ovms_config["model_config_list"].append(new_config)

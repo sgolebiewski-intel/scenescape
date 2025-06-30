@@ -39,10 +39,6 @@ if __name__ == "__main__":
     with open(args.dataset_dir / "dataset_poses.csv", "w", newline="") as dpfile:
         dpfile.write("#filename qw qx qy qz tx ty tz\n")
         csv_dp = csv.writer(dpfile, delimiter=" ", lineterminator="\n")
-        for rpath in sorted(args.dataset_dir.glob(
-                "database/cutouts/*/*/*.jpg")):
+        for rpath in sorted(args.dataset_dir.glob("database/cutouts/*/*/*.jpg")):
             quat, trans = get_database_pose(args.dataset_dir, rpath)
-            csv_dp.writerow(
-                [rpath] +
-                quat.ravel().tolist() +
-                trans.ravel().tolist())
+            csv_dp.writerow([rpath] + quat.ravel().tolist() + trans.ravel().tolist())

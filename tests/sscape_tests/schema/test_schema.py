@@ -16,8 +16,9 @@ def mockPayload(objData):
     return msg
 
 
-@pytest.mark.parametrize("file, expected", [(SCHEMA_PATH, True),
-                                            (INVALID_SCHEMA_PATH, None)])
+@pytest.mark.parametrize(
+    "file, expected", [(SCHEMA_PATH, True), (INVALID_SCHEMA_PATH, None)]
+)
 def test_loadSchema(schemaObject, file, expected):
     schemaObject.mqtt_schema = None
     schemaObject.loadSchema(file)
@@ -28,89 +29,61 @@ def test_loadSchema(schemaObject, file, expected):
     return
 
 
-@pytest.mark.parametrize("data, expected, format",
-                         [("objData",
-                           True,
-                           False),
-                          ("objData",
-                           False,
-                           False),
-                             ("objData",
-                              True,
-                              True),
-                             ("emptyObjData",
-                              False,
-                              True)])
-def test_validate2DDetectionMessage(
-        schemaObject,
-        data,
-        expected,
-        format,
-        request):
+@pytest.mark.parametrize(
+    "data, expected, format",
+    [
+        ("objData", True, False),
+        ("objData", False, False),
+        ("objData", True, True),
+        ("emptyObjData", False, True),
+    ],
+)
+def test_validate2DDetectionMessage(schemaObject, data, expected, format, request):
     objData = request.getfixturevalue(data)
     if objData and expected == False:
-        del objData['objects']['person'][0]['bounding_box']["x"]
+        del objData["objects"]["person"][0]["bounding_box"]["x"]
 
     result = schemaObject.validateMessage("detector", objData, format)
     assert result == expected
     return
 
 
-@pytest.mark.parametrize("data, expected, format",
-                         [("objData3D",
-                           True,
-                           False),
-                          ("objData3D",
-                           False,
-                           False),
-                             ("objData3D",
-                              True,
-                              True)])
-def test_validate3DDetectionMessage(
-        schemaObject,
-        data,
-        expected,
-        format,
-        request):
+@pytest.mark.parametrize(
+    "data, expected, format",
+    [("objData3D", True, False), ("objData3D", False, False), ("objData3D", True, True)],
+)
+def test_validate3DDetectionMessage(schemaObject, data, expected, format, request):
     objData = request.getfixturevalue(data)
     if objData and expected == False:
-        del objData['objects']['person'][0]['size']
+        del objData["objects"]["person"][0]["size"]
 
     result = schemaObject.validateMessage("detector", objData, format)
     assert result == expected
     return
 
 
-@pytest.mark.parametrize("data, expected, format",
-                         [("singletonData",
-                           True,
-                           False),
-                          ("singletonData",
-                           False,
-                           False),
-                             ("singletonData",
-                              True,
-                              True),
-                             ("emptyObjData",
-                              False,
-                              True)])
-def test_validateSingletonMessage(
-        schemaObject,
-        data,
-        expected,
-        format,
-        request):
+@pytest.mark.parametrize(
+    "data, expected, format",
+    [
+        ("singletonData", True, False),
+        ("singletonData", False, False),
+        ("singletonData", True, True),
+        ("emptyObjData", False, True),
+    ],
+)
+def test_validateSingletonMessage(schemaObject, data, expected, format, request):
     singletonData = request.getfixturevalue(data)
     if singletonData and expected == False:
-        del singletonData['value']
+        del singletonData["value"]
 
     result = schemaObject.validateMessage("singleton", singletonData, format)
     assert result == expected
     return
 
 
-@pytest.mark.parametrize("schemaPath, expected", [(INVALID_SCHEMA_PATH, None),
-                                                  (SCHEMA_PATH, True)])
+@pytest.mark.parametrize(
+    "schemaPath, expected", [(INVALID_SCHEMA_PATH, None), (SCHEMA_PATH, True)]
+)
 def test_compileValidators(schemaObject, schemaPath, expected):
     schemaObject.validator = {}
     schemaObject.validator_no_format = {}

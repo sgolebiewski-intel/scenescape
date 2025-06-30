@@ -89,22 +89,18 @@ def pose_from_cluster(
     all_indices = []
     if isinstance(match_dense, bool):
         match_dense = (match_dense,) * len(feature_files)
-    kpqs = tuple(ff[q]["keypoints"].__array__().astype(np.float32)
-                 for ff in feature_files)  # read all keypoint types
+    kpqs = tuple(
+        ff[q]["keypoints"].__array__().astype(np.float32) for ff in feature_files
+    )  # read all keypoint types
     num_matches = 0
 
     for i, r in enumerate(retrieved):
         pair = names_to_pair(q, r)
         mkpq, mkpr = [], []
-        for md, ff, mf, kpq in zip(
-                match_dense, db_feature_files, match_files, kpqs):
+        for md, ff, mf, kpq in zip(match_dense, db_feature_files, match_files, kpqs):
             if md:
-                mkpq.append(
-                    mf[pair]["keypoints0"].__array__().astype(
-                        np.float32))
-                mkpr.append(
-                    mf[pair]["keypoints1"].__array__().astype(
-                        np.float32))
+                mkpq.append(mf[pair]["keypoints0"].__array__().astype(np.float32))
+                mkpr.append(mf[pair]["keypoints1"].__array__().astype(np.float32))
             else:
                 kpr = ff[r]["keypoints"].__array__().astype(np.float32)
                 m = mf[pair]["matches0"].__array__()
@@ -148,10 +144,8 @@ def pose_from_cluster(
                 str(Path(dataset_dir, retrieval_calibration[r].depth_name))
             )
             depth_r = depth_r.clip_transform(
-                scale=depth_scale,
-                min_value=0.1,
-                max_value=depth_max,
-                clip_fill=np.nan)
+                scale=depth_scale, min_value=0.1, max_value=depth_max, clip_fill=np.nan
+            )
 
         if depth_type in ("hdf5", "h5", "png"):
             mkp3d, valid = interpolate_scan(
@@ -159,8 +153,7 @@ def pose_from_cluster(
             )
             # Rw_c, tw_c:  camera -> world
             Rw_c = qvec2rotmat(retrieval_calibration[r].qvec).T
-            tw_c = - \
-                Rw_c @ np.array(retrieval_calibration[r].tvec).reshape((3, 1))
+            tw_c = -Rw_c @ np.array(retrieval_calibration[r].tvec).reshape((3, 1))
             mkp3d = (Rw_c @ mkp3d.T + tw_c).T
 
         all_mkpq.append(mkpq[valid])
@@ -229,11 +222,8 @@ def read_cameras_text(path):
                 height = int(elems[3])
                 params = np.array(tuple(map(float, elems[4:])))
                 cameras[camera_id] = Camera(
-                    id=camera_id,
-                    model=model,
-                    width=width,
-                    height=height,
-                    params=params)
+                    id=camera_id, model=model, width=width, height=height, params=params
+                )
             line = fid.readline().strip()
     return cameras
 
@@ -363,9 +353,7 @@ def write_calibration_text(
                 qvec = " ".join(map(str, qwxyz_to_qxyzw(image.qvec)))
                 tvec = " ".join(map(str, model_scale * np.array(image.tvec)))
                 camid = camera_id if single_camera else image.camera_id
-                imfile.write(
-                    " ".join(
-                        (image.name, str(camid), qvec, tvec)) + "\n")
+                imfile.write(" ".join((image.name, str(camid), qvec, tvec)) + "\n")
 
 
 def main(
@@ -389,10 +377,8 @@ def main(
     retrieval_dict = parse_retrieval(retrieval)
     query = next(iter(retrieval_dict.keys()))
     retrieval_calibration = read_calibration(
-        dataset_dir,
-        data_config.rgb_ext,
-        data_config.depth_ext,
-        data_config.mesh_file)
+        dataset_dir, data_config.rgb_ext, data_config.depth_ext, data_config.mesh_file
+    )
     have_gt = False
 
     if (
@@ -419,11 +405,7 @@ def main(
 
     db_feature_files = tuple(open_or_skip_h5(f, "r") for f in db_feature_paths)
 
-    logs = {
-        "features": features,
-        "matches": matches,
-        "retrieval": retrieval,
-        "loc": {}}
+    logs = {"features": features, "matches": matches, "retrieval": retrieval, "loc": {}}
     logger.info("Starting localization...")
     retrieved = retrieval_dict[query]
     ret, mkpq, mkpr, mkp3d, indices, num_matches = pose_from_cluster(
@@ -490,9 +472,11 @@ def main(
         fres.write(
             f"{query} {qvec} {tvec} {eval_str} {
                 result.success} {
-                result.n_keypoints} " f"{
+                result.n_keypoints} "
+            f"{
                 result.num_matches} {
-                    result.n_inliers}\n")
+                    result.n_inliers}\n"
+        )
         print(
             f"{query} {eval_str} {result.success} {result.n_keypoints} "
             f"{result.num_matches} {result.n_inliers}\n"

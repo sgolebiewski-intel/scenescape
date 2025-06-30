@@ -31,8 +31,7 @@ def test_serializeInput(reid_detector, reid_preprocessed_data):
     encoded = cv2.imencode(".jpg", row)[1]
 
     expected_output = base64.b64encode(encoded).decode("ASCII")
-    original_output = reid_detector.serializeInput(
-        reid_preprocessed_data[0].data)
+    original_output = reid_detector.serializeInput(reid_preprocessed_data[0].data)
 
     assert original_output[0] == expected_output
 

@@ -6,7 +6,11 @@
 import open3d as o3d
 import numpy as np
 import open3d.visualization.rendering as rendering
-from scene_common.mesh_util import extractMeshFromGLB, VECTOR_PROPERTIES, SCALAR_PROPERTIES
+from scene_common.mesh_util import (
+    extractMeshFromGLB,
+    VECTOR_PROPERTIES,
+    SCALAR_PROPERTIES,
+)
 import math
 
 SUNLIGHT_INTENSITY = 100000
@@ -14,7 +18,7 @@ SUNLIGHT_DIRECTION = [0.0, 0.0, -1.0]
 SUNLIGHT_COLOR = [1.0, 1.0, 1.0]
 
 VERTICAL_FOV = 40
-THUMBNAIL_RESOLUTION = {'x': 1024, 'y': 768}
+THUMBNAIL_RESOLUTION = {"x": 1024, "y": 768}
 
 
 def materialToMaterialRecord(mat):
@@ -31,8 +35,7 @@ def materialToMaterialRecord(mat):
     if "normal" in mat.texture_maps:
         mat_record.normal_img = mat.texture_maps["normal"].to_legacy()
     if "ao_rough_metal" in mat.texture_maps:
-        mat_record.ao_rough_metal_img = mat.texture_maps["ao_rough_metal"].to_legacy(
-        )
+        mat_record.ao_rough_metal_img = mat.texture_maps["ao_rough_metal"].to_legacy()
     return mat_record
 
 
@@ -50,9 +53,9 @@ def renderTopView(mesh, tensor_mesh, glb_size, res_x, res_y):
     renderer = rendering.OffscreenRenderer(res_x, res_y)
     mat_record = materialToMaterialRecord(tensor_mesh[0].material)
     renderer.scene.add_geometry("mesh", mesh, mat_record)
-    renderer.scene.scene.set_sun_light(SUNLIGHT_DIRECTION,
-                                       SUNLIGHT_COLOR,
-                                       SUNLIGHT_INTENSITY)
+    renderer.scene.scene.set_sun_light(
+        SUNLIGHT_DIRECTION, SUNLIGHT_COLOR, SUNLIGHT_INTENSITY
+    )
     renderer.scene.scene.enable_sun_light(True)
     renderer.scene.show_axes(False)
     floor_width = glb_size[0]
@@ -66,13 +69,8 @@ def renderTopView(mesh, tensor_mesh, glb_size, res_x, res_y):
         right = floor_height * aspect_ratio
         top = floor_height
     renderer.scene.camera.set_projection(
-        renderer.scene.camera.Projection.Ortho,
-        0.0,
-        right,
-        0.0,
-        top,
-        0,
-        glb_size.max())
+        renderer.scene.camera.Projection.Ortho, 0.0, right, 0.0, top, 0, glb_size.max()
+    )
     # We use the vertical resolution as the base for all computations
     pixels_per_meter = res_y / top
     img = renderer.render_to_image()
@@ -97,17 +95,18 @@ def generateOrthoView(scene_obj, glb_file):
     @return img                captured image as numpy array.
     @return pixels_per_meter   determined pixels per meter.
     """
-    rotation_vector = np.float64([scene_obj.rotation_x,
-                                  scene_obj.rotation_y,
-                                  scene_obj.rotation_z])
+    rotation_vector = np.float64(
+        [scene_obj.rotation_x, scene_obj.rotation_y, scene_obj.rotation_z]
+    )
     triangle_mesh, tensor_mesh = extractMeshFromGLB(glb_file, rotation_vector)
-    triangle_mesh.translate(
-        (scene_obj.translation_x, scene_obj.translation_y, 0.0))
+    triangle_mesh.translate((scene_obj.translation_x, scene_obj.translation_y, 0.0))
 
     glb_size = getMeshSize(triangle_mesh)
-    img, pixels_per_meter = renderTopView(triangle_mesh,
-                                          tensor_mesh,
-                                          glb_size,
-                                          THUMBNAIL_RESOLUTION['x'],
-                                          THUMBNAIL_RESOLUTION['y'])
+    img, pixels_per_meter = renderTopView(
+        triangle_mesh,
+        tensor_mesh,
+        glb_size,
+        THUMBNAIL_RESOLUTION["x"],
+        THUMBNAIL_RESOLUTION["y"],
+    )
     return np.array(img), pixels_per_meter

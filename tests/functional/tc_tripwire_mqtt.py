@@ -35,19 +35,18 @@ tripwirePoints = None
 class WillOurShipGo(ROIMqtt):
     def __init__(self, testName, request, recordXMLAttribute):
         super().__init__(testName, request, recordXMLAttribute)
-        self.sceneUID = self.params['scene_id']
+        self.sceneUID = self.params["scene_id"]
 
-        self.rest = RESTClient(
-            self.params['resturl'],
-            rootcert=self.params['rootcert'])
-        assert self.rest.authenticate(
-            self.params['user'], self.params['password'])
+        self.rest = RESTClient(self.params["resturl"], rootcert=self.params["rootcert"])
+        assert self.rest.authenticate(self.params["user"], self.params["password"])
 
-        self.client = PubSub(self.params["auth"],
-                             None,
-                             self.params["rootcert"],
-                             self.params["broker_url"],
-                             int(self.params["broker_port"]))
+        self.client = PubSub(
+            self.params["auth"],
+            None,
+            self.params["rootcert"],
+            self.params["broker_url"],
+            int(self.params["broker_port"]),
+        )
         self.client.onConnect = self.on_connect
         self.client.onMessage = self.on_message
         self.client.connect()
@@ -79,7 +78,8 @@ class WillOurShipGo(ROIMqtt):
         currPoint = tripwireEvent["objects"][0]["translation"]
 
         direction = self.directionOfPoint(
-            tripwirePoints[0], tripwirePoints[1], currPoint)
+            tripwirePoints[0], tripwirePoints[1], currPoint
+        )
         if direction == RIGHT:
             rightAcross = RIGHT
             print("right across {}".format(rightAcross))
@@ -127,20 +127,14 @@ class WillOurShipGo(ROIMqtt):
         dx = cx * x_ratio
         pt1 = (cx - dx, cy)
         pt2 = (cx + dx, cy)
-        tripwire_data = {
-            'scene': scene_id,
-            'name': tripwire_name,
-            'points': (
-                pt1,
-                pt2)}
+        tripwire_data = {"scene": scene_id, "name": tripwire_name, "points": (pt1, pt2)}
         return tripwire_data
 
     def prepareScene(self):
         """! Prepares scene for the test.
         @return   res                     Response object.
         """
-        tripwire_data = self.create_tripwire_by_ratio(
-            TW_NAME, self.sceneUID, 0.8)
+        tripwire_data = self.create_tripwire_by_ratio(TW_NAME, self.sceneUID, 0.8)
         res = self.rest.createTripwire(tripwire_data)
         return res
 
@@ -165,18 +159,20 @@ class WillOurShipGo(ROIMqtt):
                     event_type="objects",
                     region_type="tripwire",
                     scene_id=self.sceneUID,
-                    region_id=res['uid']))
+                    region_id=res["uid"],
+                )
+            )
             tripwirePoints = res["points"]
             print("tripwire points: ", tripwirePoints)
             objLocation = self.getLocations()
             objData = self.objData()
-            objData['objects'][PERSON][0]['bounding_box']['y'] = objLocation[0]
+            objData["objects"][PERSON][0]["bounding_box"]["y"] = objLocation[0]
             waitTopic = PubSub.formatTopic(
-                PubSub.DATA_SCENE,
-                scene_id=self.sceneUID,
-                thing_type=PERSON)
+                PubSub.DATA_SCENE, scene_id=self.sceneUID, thing_type=PERSON
+            )
             publishTopic = PubSub.formatTopic(
-                PubSub.DATA_CAMERA, camera_id=objData['id'])
+                PubSub.DATA_CAMERA, camera_id=objData["id"]
+            )
 
             self.sceneReady(MAX_DELAYS, waitTopic, publishTopic, objData)
 
@@ -217,5 +213,5 @@ def main():
     return test_sensor_region_events(None, None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     os._exit(main() or 0)

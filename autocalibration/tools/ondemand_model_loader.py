@@ -27,8 +27,8 @@ MINIMAL_MODEL_SIZE_MB = 500
 NETVLAD_MODEL_URL = "https://cvg-data.inf.ethz.ch/hloc/netvlad/Pitts30K_struct.mat"
 NETVLAD_MODEL_NAME = "VGG16-NetVLAD-Pitts30K.mat"
 MODEL_DIR = os.getenv(
-    "NETVLAD_MODEL_DIR",
-    "/usr/local/lib/python3.10/dist-packages/third_party/netvlad")
+    "NETVLAD_MODEL_DIR", "/usr/local/lib/python3.10/dist-packages/third_party/netvlad"
+)
 NETVLAD_MODEL_MIN_SIZE_MB = MINIMAL_MODEL_SIZE_MB
 
 EXPECTED_SHA256 = "a67d9d897d3b7942f206478e3a22a4c4c9653172ae2447041d35f6cb278fdc67"
@@ -58,10 +58,10 @@ def download_file(url: str, destination: Path, chunk_size: int = 8192) -> bool:
         response = requests.get(url, stream=True, timeout=300)
         response.raise_for_status()
 
-        total_size = int(response.headers.get('content-length', 0))
+        total_size = int(response.headers.get("content-length", 0))
         downloaded = 0
 
-        with open(destination, 'wb') as f:
+        with open(destination, "wb") as f:
             for chunk in response.iter_content(chunk_size=chunk_size):
                 if chunk:
                     f.write(chunk)
@@ -72,7 +72,8 @@ def download_file(url: str, destination: Path, chunk_size: int = 8192) -> bool:
                         progress = (downloaded / total_size) * 100
                         sys.stdout.write(
                             f"\rDownloading: {
-                                progress:.1f}% ({downloaded}/{total_size} bytes)")
+                                progress:.1f}% ({downloaded}/{total_size} bytes)"
+                        )
                         sys.stdout.flush()
 
         print()  # New line after progress
@@ -112,7 +113,7 @@ def ensure_model_exists() -> Optional[Path]:
 
 def sha256sum(filename: Path) -> str:
     h = hashlib.sha256()
-    with filename.open('rb') as f:
+    with filename.open("rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
             h.update(chunk)
     return h.hexdigest()
@@ -125,7 +126,8 @@ def check_model_integrity(model_path: Path) -> bool:
         actual_sha256 = sha256sum(str(model_path))
         if actual_sha256 != EXPECTED_SHA256:
             logger.warning(
-                f"Model checksum mismatch: {actual_sha256} (expected: {EXPECTED_SHA256})")
+                f"Model checksum mismatch: {actual_sha256} (expected: {EXPECTED_SHA256})"
+            )
             # Delete the corrupted file so it can be re-downloaded
             model_path.unlink(missing_ok=True)
             return False

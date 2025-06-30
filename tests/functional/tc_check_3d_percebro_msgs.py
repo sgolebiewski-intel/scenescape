@@ -15,7 +15,7 @@ from scene_common.timestamp import get_epoch_time
 
 from tests.functional import FunctionalTest
 
-TEST_NAME = 'NEX-T10507'
+TEST_NAME = "NEX-T10507"
 FRAMES_PER_SECOND = 10
 PERSON = "person"
 CAMERA_ID = "camera1"
@@ -27,26 +27,17 @@ class Percebro3DMsgs(FunctionalTest):
     def __init__(self, testName, request, recordXMLAttribute):
         super().__init__(testName, request, recordXMLAttribute)
         self.passed = False
-        self.sceneUID = self.params['scene_id']
+        self.sceneUID = self.params["scene_id"]
         self.frameRate = FRAMES_PER_SECOND
-        self.rest = RESTClient(
-            self.params['resturl'],
-            rootcert=self.params['rootcert'])
-        res = self.rest.authenticate(
-            self.params['user'],
-            self.params['password'])
-        assert res, (res.errors)
+        self.rest = RESTClient(self.params["resturl"], rootcert=self.params["rootcert"])
+        res = self.rest.authenticate(self.params["user"], self.params["password"])
+        assert res, res.errors
 
         self.pubsub = PubSub(
-            self.params['auth'],
-            None,
-            self.params['rootcert'],
-            self.params['broker_url'])
+            self.params["auth"], None, self.params["rootcert"], self.params["broker_url"]
+        )
 
-        self.topics = [
-            PubSub.formatTopic(
-                PubSub.DATA_CAMERA,
-                camera_id=CAMERA_ID)]
+        self.topics = [PubSub.formatTopic(PubSub.DATA_CAMERA, camera_id=CAMERA_ID)]
         self.pubsub.onConnect = self.pubsubConnected
         self.pubsub.addCallback(self.topics[0], self.detectionReceived)
         self.pubsub.connect()
@@ -84,9 +75,11 @@ class Percebro3DMsgs(FunctionalTest):
         return
 
     def verifyDetectionData(self, detectionData):
-        if PERSON in detectionData['objects'] and len(
-                detectionData["objects"][PERSON]) > 0 and len(
-                detectionData["objects"][PERSON][0]) > 0:
+        if (
+            PERSON in detectionData["objects"]
+            and len(detectionData["objects"][PERSON]) > 0
+            and len(detectionData["objects"][PERSON][0]) > 0
+        ):
             object_1 = detectionData["objects"][PERSON][0]
             assert object_1["id"] == 1
             assert object_1["category"] == "person"
@@ -103,17 +96,20 @@ class Percebro3DMsgs(FunctionalTest):
             dict_keys = ["x", "y", "z", "width", "height", "depth"]
             dimensions = ["width", "height", "depth"]
             self.dictContains(dict_keys, object_1["center_of_mass"])
-            self.checkDictValType(
-                (float, int), dict_keys, object_1["center_of_mass"])
+            self.checkDictValType((float, int), dict_keys, object_1["center_of_mass"])
             self.checkDictValPos(dimensions, object_1["center_of_mass"])
 
             self.passed = True
         return
 
     def getScene(self):
-        res = self.rest.getScenes({'id': self.sceneUID})
-        assert res['results'], ("Scene does not exist",
-                                self.sceneUID, res.statusCode, res.errors)
+        res = self.rest.getScenes({"id": self.sceneUID})
+        assert res["results"], (
+            "Scene does not exist",
+            self.sceneUID,
+            res.statusCode,
+            res.errors,
+        )
         return
 
     def objData(self):
@@ -121,12 +117,9 @@ class Percebro3DMsgs(FunctionalTest):
         obj = {
             "id": 1,
             "category": "person",
-            "bounding_box": {
-                "x": 0.56,
-                "y": 0.0,
-                "width": 0.24,
-                "height": 0.49}}
-        jdata['objects']['person'] = obj
+            "bounding_box": {"x": 0.56, "y": 0.0, "width": 0.24, "height": 0.49},
+        }
+        jdata["objects"]["person"] = obj
         return jdata
 
     def setupTest(self):
@@ -137,11 +130,9 @@ class Percebro3DMsgs(FunctionalTest):
     def prepareTest(self):
         objData = self.objData()
         waitTopic = PubSub.formatTopic(
-            PubSub.DATA_SCENE,
-            scene_id=self.sceneUID,
-            thing_type=PERSON)
-        publishTopic = PubSub.formatTopic(
-            PubSub.DATA_CAMERA, camera_id=objData['id'])
+            PubSub.DATA_SCENE, scene_id=self.sceneUID, thing_type=PERSON
+        )
+        publishTopic = PubSub.formatTopic(PubSub.DATA_CAMERA, camera_id=objData["id"])
         begin = get_epoch_time()
         count = self.sceneControllerReady(
             waitTopic,
@@ -149,7 +140,8 @@ class Percebro3DMsgs(FunctionalTest):
             MAX_CONTROLLER_WAIT,
             begin,
             1 / self.frameRate,
-            objData)
+            objData,
+        )
         assert count is not None
         self.getScene()
         return
@@ -187,5 +179,5 @@ def main():
     return test_3D_percebro_msgs(None, None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     os._exit(main() or 0)

@@ -11,8 +11,8 @@ from tests.ui.browser import By
 from tests.ui import UserInterfaceTest
 
 
-class CalPt():
-    """! Class to parse calibration point location. """
+class CalPt:
+    """! Class to parse calibration point location."""
 
     def __init__(self, pt_str):
         """! Init CalPt class.
@@ -25,12 +25,12 @@ class CalPt():
         return None
 
     def value(self):
-        """! Return point x,y location as a tuple. """
+        """! Return point x,y location as a tuple."""
         return (self.x, self.y)
 
 
-class CalPtLoc():
-    """! Class containing and manipulating calibration point locations. """
+class CalPtLoc:
+    """! Class containing and manipulating calibration point locations."""
 
     def __init__(self, pt_type) -> None:
         """! Init CalPtLoc class.
@@ -51,34 +51,31 @@ class CalPtLoc():
         @return   None.
         """
         self.pt_1 = CalPt(
-            browser.find_element(
-                By.ID,
-                "id_" +
-                self.pt_type +
-                "_coord1").get_attribute("value"))
+            browser.find_element(By.ID, "id_" + self.pt_type + "_coord1").get_attribute(
+                "value"
+            )
+        )
         self.pt_2 = CalPt(
-            browser.find_element(
-                By.ID,
-                "id_" +
-                self.pt_type +
-                "_coord2").get_attribute("value"))
+            browser.find_element(By.ID, "id_" + self.pt_type + "_coord2").get_attribute(
+                "value"
+            )
+        )
         self.pt_3 = CalPt(
-            browser.find_element(
-                By.ID,
-                "id_" +
-                self.pt_type +
-                "_coord3").get_attribute("value"))
+            browser.find_element(By.ID, "id_" + self.pt_type + "_coord3").get_attribute(
+                "value"
+            )
+        )
         self.pt_4 = CalPt(
-            browser.find_element(
-                By.ID,
-                "id_" +
-                self.pt_type +
-                "_coord4").get_attribute("value"))
+            browser.find_element(By.ID, "id_" + self.pt_type + "_coord4").get_attribute(
+                "value"
+            )
+        )
         self.pt_list = [
             self.pt_1.value(),
             self.pt_2.value(),
             self.pt_3.value(),
-            self.pt_4.value()]
+            self.pt_4.value(),
+        ]
         return None
 
     def loc_diff(self, other_loc):
@@ -121,8 +118,11 @@ def wait_for_calibration(browser, wait_time):
             break
     print()
     print("---------------------------------------------")
-    print("After {} seconds autocal enabled: {}".format(
-        time_passed, autocal_button.is_enabled()))
+    print(
+        "After {} seconds autocal enabled: {}".format(
+            time_passed, autocal_button.is_enabled()
+        )
+    )
     print("---------------------------------------------")
     return autocal_button
 
@@ -137,7 +137,7 @@ def wait_for_image(browser, wait_time, image_id):
     iterations = int(round(wait_time / iter_time))
     for x in range(iterations):
         cam_img = browser.find_element(By.ID, image_id)
-        if cam_img.is_displayed() and (cam_img.get_attribute('alt') != "Camera Offline"):
+        if cam_img.is_displayed() and (cam_img.get_attribute("alt") != "Camera Offline"):
             return True
         time.sleep(iter_time)
     return False
@@ -146,7 +146,7 @@ def wait_for_image(browser, wait_time, image_id):
 class WillOurShipGo(UserInterfaceTest):
     def __init__(self, testName, request, recordXMLAttribute):
         super().__init__(testName, request, recordXMLAttribute)
-        self.sceneName = self.params['scene']
+        self.sceneName = self.params["scene"]
         return
 
     def checkForMalfunctions(self, cam_url, scene_name, wait_time):
@@ -174,8 +174,7 @@ class WillOurShipGo(UserInterfaceTest):
             autocal_button = wait_for_calibration(self.browser, wait_time)
             assert autocal_button.is_enabled()
 
-            reset_points_button = self.browser.find_element(
-                By.ID, "reset_points")
+            reset_points_button = self.browser.find_element(By.ID, "reset_points")
             reset_points_button.click()
             time.sleep(1)
             map_pts_1, cam_pts_1 = get_calibration_pt_locs(self.browser)
@@ -194,7 +193,7 @@ class WillOurShipGo(UserInterfaceTest):
         return True
 
     def execute_test(self):
-        """! Checks that a user can setup a scene with april tags. """
+        """! Checks that a user can setup a scene with april tags."""
         MAX_WAIT_TIME = 15
         try:
             assert self.login()
@@ -202,12 +201,14 @@ class WillOurShipGo(UserInterfaceTest):
             good_scene_name = "Queuing"
             cam_url = "/cam/calibrate/4"
             test_case_1 = self.checkForMalfunctions(
-                cam_url, good_scene_name, MAX_WAIT_TIME)
+                cam_url, good_scene_name, MAX_WAIT_TIME
+            )
 
             bad_scene_name = "Retail"
             cam_url = "/cam/calibrate/2"
             test_case_2 = self.checkForMalfunctions(
-                cam_url, bad_scene_name, MAX_WAIT_TIME)
+                cam_url, bad_scene_name, MAX_WAIT_TIME
+            )
 
             if test_case_1 and test_case_2:
                 self.exitCode = 0
@@ -236,5 +237,5 @@ def main():
     return test_april_tag(None, None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     os._exit(main() or 0)

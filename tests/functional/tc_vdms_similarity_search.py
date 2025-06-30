@@ -26,7 +26,7 @@ class VDMSSimilaritySearch(BackendFunctionalTest):
             "AddDescriptorSet": {
                 "name": "reid_vectors",
                 "metric": "L2",
-                "dimensions": 256
+                "dimensions": 256,
             }
         }
         all_queries = []
@@ -34,7 +34,9 @@ class VDMSSimilaritySearch(BackendFunctionalTest):
 
         response, res_arr = self.vdb.db.query(all_queries)
         log.debug(f"RESPONSE: {response}\nRES_ARR: {res_arr}")
-        assert response[0]['AddDescriptorSet']['status'] == 0, "The response status for the descriptor set should be 0!"
+        assert (
+            response[0]["AddDescriptorSet"]["status"] == 0
+        ), "The response status for the descriptor set should be 0!"
         return
 
     def descriptor_objects(self):
@@ -46,19 +48,9 @@ class VDMSSimilaritySearch(BackendFunctionalTest):
         descriptor_blob.append(blob_1.tobytes())
         descriptor_blob.append(blob_2.tobytes())
 
-        descriptor_1 = {
-            "AddDescriptor": {
-                "set": "reid_vector",
-                "label": "Person 1"
-            }
-        }
+        descriptor_1 = {"AddDescriptor": {"set": "reid_vector", "label": "Person 1"}}
 
-        descriptor_2 = {
-            "AddDescriptor": {
-                "set": "reid_vector",
-                "label": "Person 2"
-            }
-        }
+        descriptor_2 = {"AddDescriptor": {"set": "reid_vector", "label": "Person 2"}}
 
         all_queries = []
         all_queries.append(descriptor_1)
@@ -67,17 +59,21 @@ class VDMSSimilaritySearch(BackendFunctionalTest):
         response, res_arr = self.vdb.db.query(all_queries, [descriptor_blob])
 
         log.debug(f"RESPONSE: {response}\nRES_ARR: {res_arr}")
-        assert response[0]['AddDescriptor']['status'] == 0 and response[1]['AddDescriptor']['status'] == 0, \
-            "The response status for both descriptors should be 0!"
+        assert (
+            response[0]["AddDescriptor"]["status"] == 0
+            and response[1]["AddDescriptor"]["status"] == 0
+        ), "The response status for both descriptors should be 0!"
         return
 
     def get_similarity(self):
-        log.info("Pass a third RE-ID vector from one of the two initial objects and get a similarity search comparison. It should have low distance from one of the entries.")
-        response, res_arr = self.get_similarity_comparison(
-            [self.thing_2_match])
+        log.info(
+            "Pass a third RE-ID vector from one of the two initial objects and get a similarity search comparison. It should have low distance from one of the entries."
+        )
+        response, res_arr = self.get_similarity_comparison([self.thing_2_match])
         log.debug(f"RESPONSE: {response}\nRES_ARR: {res_arr}")
-        assert response[0]['FindDescriptor']['returned'] == 2, \
-            "There should be only 2 entities returned!"
+        assert (
+            response[0]["FindDescriptor"]["returned"] == 2
+        ), "There should be only 2 entities returned!"
         return
 
 
@@ -106,5 +102,5 @@ def main():
     return test_vdms_similarity_search(None, None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     os._exit(main() or 0)

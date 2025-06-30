@@ -24,38 +24,40 @@ line using their name. Each is a dictionary with the following entries:
     - output: the name of the match file that will be generated.
     - model: the model configuration, as passed to a feature matcher.
 """
-confs = {"superglue": {"output": "matches-superglue",
-                       "model": {"name": "superglue",
-                                 "weights": "outdoor",
-                                 "sinkhorn_iterations": 50},
-                       },
-         "superglue-indoor": {"output": "matches-superglue-indoor",
-                              "model": {"name": "superglue",
-                                        "weights": "indoor",
-                                        "sinkhorn_iterations": 50},
-                              },
-         "superglue-fast": {"output": "matches-superglue-it5",
-                            "model": {"name": "superglue",
-                                      "weights": "outdoor",
-                                      "sinkhorn_iterations": 5},
-                            },
-         "NN-superpoint": {"output": "matches-NN-mutual-dist.7",
-                           "model": {"name": "nearest_neighbor",
-                                     "do_mutual_check": True,
-                                     "distance_threshold": 0.7,
-                                     },
-                           },
-         "NN-ratio": {"output": "matches-NN-mutual-ratio.8",
-                      "model": {"name": "nearest_neighbor",
-                                "do_mutual_check": True,
-                                "ratio_threshold": 0.8,
-                                },
-                      },
-         "NN-mutual": {"output": "matches-NN-mutual",
-                       "model": {"name": "nearest_neighbor",
-                                 "do_mutual_check": True},
-                       },
-         }
+confs = {
+    "superglue": {
+        "output": "matches-superglue",
+        "model": {"name": "superglue", "weights": "outdoor", "sinkhorn_iterations": 50},
+    },
+    "superglue-indoor": {
+        "output": "matches-superglue-indoor",
+        "model": {"name": "superglue", "weights": "indoor", "sinkhorn_iterations": 50},
+    },
+    "superglue-fast": {
+        "output": "matches-superglue-it5",
+        "model": {"name": "superglue", "weights": "outdoor", "sinkhorn_iterations": 5},
+    },
+    "NN-superpoint": {
+        "output": "matches-NN-mutual-dist.7",
+        "model": {
+            "name": "nearest_neighbor",
+            "do_mutual_check": True,
+            "distance_threshold": 0.7,
+        },
+    },
+    "NN-ratio": {
+        "output": "matches-NN-mutual-ratio.8",
+        "model": {
+            "name": "nearest_neighbor",
+            "do_mutual_check": True,
+            "ratio_threshold": 0.8,
+        },
+    },
+    "NN-mutual": {
+        "output": "matches-NN-mutual",
+        "model": {"name": "nearest_neighbor", "do_mutual_check": True},
+    },
+}
 
 
 # Reuse optimized model in repeat calls
@@ -94,19 +96,21 @@ def main(
         features_q = features
         if matches is None:
             raise ValueError(
-                "Either provide both features and matches as Path"
-                " or both as names.")
+                "Either provide both features and matches as Path" " or both as names."
+            )
     else:
         if export_dir is None:
             raise ValueError(
-                "Provide an export_dir if features is not" f" a file path: {features}.")
+                "Provide an export_dir if features is not" f" a file path: {features}."
+            )
         features_q = Path(export_dir, features + ".h5")
         if matches is None:
             matches = Path(
                 export_dir,
                 f'{features}_{
                     conf["output"]}_{
-                    pairs.stem}.h5')
+                    pairs.stem}.h5',
+            )
 
     if features_ref is None:
         features_ref = features_q
@@ -120,8 +124,7 @@ def main(
     return matches
 
 
-def find_unique_new_pairs(
-        pairs_all: List[Tuple[str]], match_path: Path = None):
+def find_unique_new_pairs(pairs_all: List[Tuple[str]], match_path: Path = None):
     """Avoid to recompute duplicates to save time."""
     pairs = set()
     for i, j in pairs_all:
@@ -129,7 +132,7 @@ def find_unique_new_pairs(
             pairs.add((i, j))
     pairs = list(pairs)
     if match_path is not None and match_path.exists():
-        with h5py.File(str(match_path), 'r', libver='latest') as fd:
+        with h5py.File(str(match_path), "r", libver="latest") as fd:
             pairs_filtered = []
             for i, j in pairs:
                 if (
@@ -154,16 +157,17 @@ def match_from_paths(
     overwrite: bool = False,
 ) -> Path:
     logger.info(
-        "Matching local features with configuration:" f"\n{
-            pprint.pformat(conf)}")
+        "Matching local features with configuration:"
+        f"\n{
+            pprint.pformat(conf)}"
+    )
 
     if not feature_path_q.exists():
         raise FileNotFoundError(f"Query feature file {feature_path_q}.")
     for path in feature_paths_refs:
         if not path.exists():
             raise FileNotFoundError(f"Reference feature file {path}.")
-    name2ref = {n: i for i, p in enumerate(
-        feature_paths_refs) for n in list_h5_names(p)}
+    name2ref = {n: i for i, p in enumerate(feature_paths_refs) for n in list_h5_names(p)}
     match_path.parent.mkdir(exist_ok=True, parents=True)
 
     assert pairs_path.exists(), pairs_path
@@ -176,26 +180,26 @@ def match_from_paths(
 
     model = MF.get_optimized_model(conf["model"])
 
-    for (name0, name1) in tqdm(pairs, smoothing=0.1):
+    for name0, name1 in tqdm(pairs, smoothing=0.1):
         data = {}
-        with h5py.File(str(feature_path_q), 'r', libver='latest') as fd:
+        with h5py.File(str(feature_path_q), "r", libver="latest") as fd:
             grp = fd[name0]
             for k, v in grp.items():
-                data[k +
-                     "0"] = torch.from_numpy(v.__array__()).float().to(MF.device)
+                data[k + "0"] = torch.from_numpy(v.__array__()).float().to(MF.device)
             # some matchers might expect an image but only use its size
-            data['image0'] = torch.empty((1,) + tuple(grp['image_size'])[::-1])
-        with h5py.File(str(feature_paths_refs[name2ref[name1]]), 'r', libver='latest') as fd:
+            data["image0"] = torch.empty((1,) + tuple(grp["image_size"])[::-1])
+        with h5py.File(
+            str(feature_paths_refs[name2ref[name1]]), "r", libver="latest"
+        ) as fd:
             grp = fd[name1]
             for k, v in grp.items():
-                data[k +
-                     "1"] = torch.from_numpy(v.__array__()).float().to(MF.device)
+                data[k + "1"] = torch.from_numpy(v.__array__()).float().to(MF.device)
             data["image1"] = torch.empty((1,) + tuple(grp["image_size"])[::-1])
         data = {k: v[None] for k, v in data.items()}
 
         pred = model(data)
         pair = names_to_pair(name0, name1)
-        with h5py.File(str(match_path), 'a', libver='latest') as fd:
+        with h5py.File(str(match_path), "a", libver="latest") as fd:
             if pair in fd:
                 del fd[pair]
             grp = fd.create_group(pair)
@@ -213,10 +217,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--pairs", type=Path, required=True)
     parser.add_argument("--export_dir", type=Path)
-    parser.add_argument(
-        "--features",
-        type=str,
-        default="feats-superpoint-n4096-r1024")
+    parser.add_argument("--features", type=str, default="feats-superpoint-n4096-r1024")
     parser.add_argument("--matches", type=Path)
     parser.add_argument(
         "--conf", type=str, default="superglue", choices=list(confs.keys())

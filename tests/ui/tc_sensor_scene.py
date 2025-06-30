@@ -30,30 +30,27 @@ def test_sensor_scene_main(params, record_xml_attribute):
         sensor_id = "test_sensor"
         sensor_name = "Sensor_0"
         scene_name = common.TEST_SCENE_NAME
-        print("Adding sensor " + sensor_name +
-              " Home -> sensors -> +New sensors")
+        print("Adding sensor " + sensor_name + " Home -> sensors -> +New sensors")
         browser.find_element(
-            By.CSS_SELECTOR,
-            ".navbar-nav > .nav-item:nth-child(3) > .nav-link").click()
-        browser.find_element(
-            By.XPATH, "//*/a[contains(text(), '+ New Sensor')]").click()
+            By.CSS_SELECTOR, ".navbar-nav > .nav-item:nth-child(3) > .nav-link"
+        ).click()
+        browser.find_element(By.XPATH, "//*/a[contains(text(), '+ New Sensor')]").click()
         browser.find_element(By.ID, "id_sensor_id").send_keys(sensor_id)
         browser.find_element(By.ID, "id_name").send_keys(sensor_name)
         browser.find_element(By.CSS_SELECTOR, ".btn:nth-child(1)").click()
         print("clicked on 'Add New Sensor")
-        get_error = WebDriverWait(
-            browser, 20).until(
-            EC.visibility_of_element_located(
-                (By.CSS_SELECTOR, "#id_scene"))).get_attribute("validationMessage")
+        get_error = (
+            WebDriverWait(browser, 20)
+            .until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#id_scene")))
+            .get_attribute("validationMessage")
+        )
         assert get_error == "Please select an item in the list."
         print("validation error: " + get_error)
         print("Assigning " + sensor_name + " to a scene...")
 
         browser.find_element(
-            By.XPATH,
-            "//*[@id = 'id_scene']/option[. = '" +
-            scene_name +
-            "']").click()
+            By.XPATH, "//*[@id = 'id_scene']/option[. = '" + scene_name + "']"
+        ).click()
         browser.find_element(By.XPATH, "//*[@type = 'submit']").click()
         common.verify_sensor_under_scene(browser, sensor_name)
         exit_code = 0

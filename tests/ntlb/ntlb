@@ -21,46 +21,53 @@ TESTS_DIR = "tests"
 
 def build_argparser():
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--junitdir", default="tests/reports/test_reports",
-                        help="directory with junit xml files")
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument(
+        "--junitdir",
+        default="tests/reports/test_reports",
+        help="directory with junit xml files",
+    )
 
     subparsers = parser.add_subparsers(help="commands", dest="command")
 
     sub_parser = subparsers.add_parser(
-        "update-junit",
-        help="Parse output from `make --trace`"
-        " and update junit files")
-    sub_parser.add_argument(
-        "log", help="Path to log file with `make -C tests` output")
+        "update-junit", help="Parse output from `make --trace`" " and update junit files"
+    )
+    sub_parser.add_argument("log", help="Path to log file with `make -C tests` output")
     sub_parser.add_argument(
         "--ignore-skipped",
         action="store_true",
-        help="Don't create/update junit files of skipped tests")
-    sub_parser.add_argument("--no-overwrite", action="store_true",
-                            help="Don't overwrite junit files")
-
-    sub_parser = subparsers.add_parser(
-        "check-zephyr-test-id",
-        help="Check that all tests have a Zephyr test ID")
-
-    sub_parser = subparsers.add_parser(
-        "check-collection",
-        help="Check that all tests are in a collection")
-
-    sub_parser = subparsers.add_parser(
-        "newly-broken",
-        help="List tests which were recently flagged as broken")
+        help="Don't create/update junit files of skipped tests",
+    )
     sub_parser.add_argument(
-        "commit",
-        nargs="?",
-        help="get list of broken tests added by commit")
+        "--no-overwrite", action="store_true", help="Don't overwrite junit files"
+    )
+
+    sub_parser = subparsers.add_parser(
+        "check-zephyr-test-id", help="Check that all tests have a Zephyr test ID"
+    )
+
+    sub_parser = subparsers.add_parser(
+        "check-collection", help="Check that all tests are in a collection"
+    )
+
+    sub_parser = subparsers.add_parser(
+        "newly-broken", help="List tests which were recently flagged as broken"
+    )
+    sub_parser.add_argument(
+        "commit", nargs="?", help="get list of broken tests added by commit"
+    )
     sub_parser.add_argument(
         "--all",
         action="store_true",
-        help="Print all tests marked as broken instead of finding newest")
-    sub_parser.add_argument("--broken-only", action="store_true",
-                            help="do not print tests that have been fixed")
+        help="Print all tests marked as broken instead of finding newest",
+    )
+    sub_parser.add_argument(
+        "--broken-only",
+        action="store_true",
+        help="do not print tests that have been fixed",
+    )
 
     return parser
 
@@ -78,12 +85,18 @@ def update_junit(args):
 
     print()
     print("Total tests:", len(allTests))
-    print("   executed:", len(
-        [x for x in allTests if allTests[x].status != TestResult.SKIPPED]))
-    print("     failed:", len(
-        [x for x in allTests if allTests[x].status == TestResult.FAILED]))
-    print("    skipped:", len(
-        [x for x in allTests if allTests[x].status == TestResult.SKIPPED]))
+    print(
+        "   executed:",
+        len([x for x in allTests if allTests[x].status != TestResult.SKIPPED]),
+    )
+    print(
+        "     failed:",
+        len([x for x in allTests if allTests[x].status == TestResult.FAILED]),
+    )
+    print(
+        "    skipped:",
+        len([x for x in allTests if allTests[x].status == TestResult.SKIPPED]),
+    )
 
     return
 
@@ -111,7 +124,7 @@ def check_collection(args):
 
     for target in allTests:
         test = allTests[target]
-        if not hasattr(test, 'collections') or not test.collections:
+        if not hasattr(test, "collections") or not test.collections:
             print("Missing collection:", target)
             errors += 1
 
@@ -144,8 +157,9 @@ def newly_broken(args):
     commit = None
     for commit in commits[1:]:
         prev_broken = broken_in_commit(mp, commit, path)
-        if (not args.broken_only and cur_broken !=
-                prev_broken) or cur_broken - prev_broken:
+        if (
+            not args.broken_only and cur_broken != prev_broken
+        ) or cur_broken - prev_broken:
             break
 
     newly_broken = cur_broken - prev_broken
@@ -178,5 +192,5 @@ def main():
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main() or 0)

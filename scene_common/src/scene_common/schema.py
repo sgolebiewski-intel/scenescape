@@ -31,7 +31,7 @@ class SchemaValidation:
         for key, value in self.mqtt_schema["properties"].items():
             sub_schema = {
                 "$ref": value["$ref"],
-                "definitions": self.mqtt_schema["definitions"]
+                "definitions": self.mqtt_schema["definitions"],
             }
             self.validator[key] = compile(sub_schema, formats=formats)
             self.validator_no_format[key] = compile(sub_schema)

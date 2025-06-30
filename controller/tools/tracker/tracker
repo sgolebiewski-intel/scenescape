@@ -27,22 +27,17 @@ def build_argparser():
     parser = ArgumentParser()
     parser.add_argument("input", nargs="+", help="json file(s) for simulation")
     parser.add_argument("--frame", type=int, help="frame number to stop at")
-    parser.add_argument("--skip", default=0, type=int,
-                        help="frame number to skip to")
-    parser.add_argument(
-        "--config",
-        default="config.json",
-        help="path to config file")
+    parser.add_argument("--skip", default=0, type=int, help="frame number to skip to")
+    parser.add_argument("--config", default="config.json", help="path to config file")
     parser.add_argument("--demo", help="path to save scene video to")
+    parser.add_argument("--dumpframe", type=int, help="frame to dump unit test data for")
     parser.add_argument(
-        "--dumpframe",
-        type=int,
-        help="frame to dump unit test data for")
-    parser.add_argument("--dumpall", action="store_true",
-                        help="dump unit test data for all frames")
+        "--dumpall", action="store_true", help="dump unit test data for all frames"
+    )
     parser.add_argument("--dumpout", help="file to write unit test data to")
-    parser.add_argument("--verbose", "-v", action="store_true",
-                        help="lots and lots of debug printing")
+    parser.add_argument(
+        "--verbose", "-v", action="store_true", help="lots and lots of debug printing"
+    )
     return parser
 
 
@@ -70,7 +65,7 @@ def serializeVectors(objects, key):
         if isinstance(obj[key], np.ndarray):
             vector = obj[key].flatten().tolist()
             vector = struct.pack("256f", *vector)
-            vector = base64.b64encode(vector).decode('utf-8')
+            vector = base64.b64encode(vector).decode("utf-8")
             obj[key] = vector
     return
 
@@ -81,14 +76,14 @@ def publishEvents(scene, ts_str):
             rid = scene.name + "/" + region_name
             etype = None
             if isinstance(region, Tripwire):
-                etype = 'tripwire'
+                etype = "tripwire"
             elif isinstance(region, Region):
-                etype = 'region'
+                etype = "region"
 
             event_data = {
-                'timestamp': ts_str,
-                etype + '_id': rid,
-                etype + '_name': region_name,
+                "timestamp": ts_str,
+                etype + "_id": rid,
+                etype + "_name": region_name,
             }
             counts = {}
             num_objects = 0
@@ -97,11 +92,11 @@ def publishEvents(scene, ts_str):
                 counts[otype] = len(objects)
                 num_objects += counts[otype]
                 all_objects += objects
-            event_data['counts'] = counts
-            event_data['objects'] = buildDetectionsList(all_objects, None)
-            if hasattr(region, 'value'):
-                event_data['value'] = region.value
-            exited = getattr(region, 'exited', {})
+            event_data["counts"] = counts
+            event_data["objects"] = buildDetectionsList(all_objects, None)
+            if hasattr(region, "value"):
+                event_data["value"] = region.value
+            exited = getattr(region, "exited", {})
             exited_dict = {}
             for exited_list in exited.values():
                 exited_objs = []
@@ -109,9 +104,11 @@ def publishEvents(scene, ts_str):
                     exited_dict[exited_obj.gid] = dwell
                     exited_objs.extend([exited_obj])
                 exited_objs = buildDetectionsList(exited_objs, scene)
-                exited_data = [{'object': exited_obj, 'dwell': exited_dict[exited_obj['id']]}
-                               for exited_obj in exited_objs]
-                event_data['exited'].extend(exited_data)
+                exited_data = [
+                    {"object": exited_obj, "dwell": exited_dict[exited_obj["id"]]}
+                    for exited_obj in exited_objs
+                ]
+                event_data["exited"].extend(exited_data)
 
             if not isinstance(region, Tripwire) or num_objects > 0:
                 print(event_type, event_data)
@@ -139,7 +136,7 @@ def main():
 
     # Make sure dumpout file is empty when doing dumpall
     if args.dumpall and args.dumpout is not None:
-        with open(args.dumpout, 'w') as outfile:
+        with open(args.dumpout, "w") as outfile:
             pass
 
     font = cv2.FONT_HERSHEY_SIMPLEX
@@ -174,47 +171,47 @@ def main():
             if not camDetect:
                 break
             if doStep:
-                print(curFrame, camDetect['id'])
+                print(curFrame, camDetect["id"])
             doStep = False
 
             cd = camDetect.copy()
-            if 'image' in cd:
-                del cd['image']
+            if "image" in cd:
+                del cd["image"]
 
             if args.dumpframe == curFrame - 1 or args.dumpall:
                 unit_test = {
-                    'config': config,
-                    'state': scene.tracker.dumpState(),
-                    'input': camDetect
+                    "config": config,
+                    "state": scene.tracker.dumpState(),
+                    "input": camDetect,
                 }
 
-            objects = scene.tracker.groupObjects(camDetect['objects'])
+            objects = scene.tracker.groupObjects(camDetect["objects"])
 
             for otype, ogroup in objects.items():
-                camDetect['objects'] = ogroup
+                camDetect["objects"] = ogroup
                 scene.processCameraData(camDetect, otype)
                 if len(scene.events):
-                    publishEvents(scene, camDetect['timestamp'])
+                    publishEvents(scene, camDetect["timestamp"])
 
             scene.tracker.waitForComplete()
 
             if args.dumpframe == curFrame - 1 or args.dumpall:
-                unit_test['output'] = scene.tracker.dumpState()
-                unit_test['frame'] = curFrame - 1
-                unit_test['files'] = args.input
+                unit_test["output"] = scene.tracker.dumpState()
+                unit_test["frame"] = curFrame - 1
+                unit_test["files"] = args.input
 
-                for otype in unit_test['state']['objects']:
-                    ogroup = unit_test['state']['objects'][otype]
-                    serializeVectors(ogroup, 'reid')
+                for otype in unit_test["state"]["objects"]:
+                    ogroup = unit_test["state"]["objects"][otype]
+                    serializeVectors(ogroup, "reid")
 
-                for otype in unit_test['output']['objects']:
-                    ogroup = unit_test['output']['objects'][otype]
-                    serializeVectors(ogroup, 'reid')
+                for otype in unit_test["output"]["objects"]:
+                    ogroup = unit_test["output"]["objects"][otype]
+                    serializeVectors(ogroup, "reid")
 
                 if args.dumpout:
-                    mode = 'w'
+                    mode = "w"
                     if args.dumpall:
-                        mode = 'a'
+                        mode = "a"
                     with open(args.dumpout, mode) as outfile:
                         json.dump(unit_test, outfile)
                         outfile.write("\n")
@@ -226,33 +223,36 @@ def main():
             altFrame = frame
             # altFrame = 255 * np.ones(frame.shape, np.uint8)
 
-            sensor = scene.cameraWithID(camDetect['id'])
+            sensor = scene.cameraWithID(camDetect["id"])
             if not sensor:
-                print("Unknown sensor", camDetect['id'])
+                print("Unknown sensor", camDetect["id"])
                 print(scene.sensors)
                 exit(1)
 
             drawHorizon(frame, sensor)
 
             overlayDetailsOnCameraFrames(
-                scene,
-                sensor,
-                altFrame,
-                camDetect,
-                font,
-                mask & DebugDisplay.HOMOGRAPHY)
+                scene, sensor, altFrame, camDetect, font, mask & DebugDisplay.HOMOGRAPHY
+            )
 
             displayScene(scene, curFrame, sensor.color, mask, font, onlyGID)
             if args.demo:
                 dframe = cv2.resize(frame, (mgr.frameres[0], mgr.frameres[1]))
-                output[mgr.frameres[1] * jcount:mgr.frameres[1] * (jcount + 1),
-                       :mgr.frameres[0], :3] = dframe
-                output[:scene.frame.shape[0], mgr.frameres[0]
-                    :mgr.frameres[0] + scene.frame.shape[1], :3] = scene.frame
+                output[
+                    mgr.frameres[1] * jcount : mgr.frameres[1] * (jcount + 1),
+                    : mgr.frameres[0],
+                    :3,
+                ] = dframe
+                output[
+                    : scene.frame.shape[0],
+                    mgr.frameres[0] : mgr.frameres[0] + scene.frame.shape[1],
+                    :3,
+                ] = scene.frame
                 sceneWriter.write(output)
 
             if (args.frame is not None and args.frame == curFrame) or (
-                    args.dumpframe is not None and args.dumpframe == curFrame - 1):
+                args.dumpframe is not None and args.dumpframe == curFrame - 1
+            ):
                 singleStep = True
                 doStep = False
 
@@ -260,7 +260,8 @@ def main():
 
         key = cv2.waitKey(int(1000 / 60))
         singleStep, doStep, __break = handleKeyPress(
-            key, scene, sensor, curFrame, singleStep, doStep, mask, font, onlyGID)
+            key, scene, sensor, curFrame, singleStep, doStep, mask, font, onlyGID
+        )
         if __break:
             break
 
@@ -276,47 +277,22 @@ def main():
 
 
 def handleKeyPress(
-        key,
-        scene,
-        sensor,
-        curFrame,
-        singleStep,
-        doStep,
-        mask,
-        font,
-        onlyGID):
+    key, scene, sensor, curFrame, singleStep, doStep, mask, font, onlyGID
+):
     if key == ord(" "):
         singleStep = not singleStep
     elif key == ord("."):
         mask ^= DebugDisplay.INTERSECTIONS
         if sensor:
-            displayScene(
-                scene,
-                curFrame - 1,
-                sensor.color,
-                mask,
-                font,
-                onlyGID)
+            displayScene(scene, curFrame - 1, sensor.color, mask, font, onlyGID)
     elif key == ord("'"):
         mask ^= DebugDisplay.RADIUS
         if sensor:
-            displayScene(
-                scene,
-                curFrame - 1,
-                sensor.color,
-                mask,
-                font,
-                onlyGID)
+            displayScene(scene, curFrame - 1, sensor.color, mask, font, onlyGID)
     elif key == ord(","):
         mask ^= DebugDisplay.ALLOBJECTS
         if sensor:
-            displayScene(
-                scene,
-                curFrame - 1,
-                sensor.color,
-                mask,
-                font,
-                onlyGID)
+            displayScene(scene, curFrame - 1, sensor.color, mask, font, onlyGID)
     elif key == 13:
         singleStep = True
         doStep = True
@@ -341,13 +317,7 @@ def handleKeyPress(
             else:
                 onlyGID = gids[idx]
             if sensor:
-                displayScene(
-                    scene,
-                    curFrame - 1,
-                    sensor.color,
-                    mask,
-                    font,
-                    onlyGID)
+                displayScene(scene, curFrame - 1, sensor.color, mask, font, onlyGID)
     elif key > -1:
         print("KEY", key)
     return singleStep, doStep, False
@@ -360,10 +330,11 @@ def initDemoData(args, scene, mgr):
     four_cc = cv2.VideoWriter_fourcc(*"MP4V")
     base = os.path.splitext(args.demo)
     sceneWriter = cv2.VideoWriter(
-        base + ".mp4", four_cc, 15 * len(mgr.jfiles), tuple(res))
+        base + ".mp4", four_cc, 15 * len(mgr.jfiles), tuple(res)
+    )
     output = np.zeros([res[1], res[0], 3], np.uint8)
     return sceneWriter, output
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main() or 0)

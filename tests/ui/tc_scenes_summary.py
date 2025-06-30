@@ -37,8 +37,8 @@ def test_scenes_summary_main(params, record_xml_attribute):
 
         time.sleep(1)
         browser.find_element(
-            By.CSS_SELECTOR,
-            ".navbar-nav > .nav-item:nth-child(1) > .nav-link").click()
+            By.CSS_SELECTOR, ".navbar-nav > .nav-item:nth-child(1) > .nav-link"
+        ).click()
         scenes_name = browser.find_elements(By.CLASS_NAME, "card-header")
         element1 = scenes_name[0].text
         element2 = scenes_name[1].text
@@ -58,5 +58,5 @@ def test_scenes_summary_main(params, record_xml_attribute):
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(test_scenes_summary_main() or 0)

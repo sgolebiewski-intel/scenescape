@@ -31,7 +31,7 @@ def get_detections(tracked_data, scene, objects, jdata):
         for obj in curr_objects:
             obj_list.append(obj)
 
-    jdata['objects'] = buildDetectionsList(obj_list, None)
+    jdata["objects"] = buildDetectionsList(obj_list, None)
     tracked_data.append(jdata)
     return
 
@@ -49,8 +49,8 @@ def track(params):
     mgr = CamManager(params["input"], scene)
 
     detected_category = None
-    if 'assets' in params:
-        scene.tracker.updateObjectClasses(params['assets'])
+    if "assets" in params:
+        scene.tracker.updateObjectClasses(params["assets"])
 
     while True:
         _, cam_detect, _ = mgr.nextFrame(scene, loop=False)
@@ -62,7 +62,7 @@ def track(params):
         jdata = {
             "cam_id": cam_detect["id"],
             "frame": cam_detect["frame"],
-            "timestamp": cam_detect["timestamp"]
+            "timestamp": cam_detect["timestamp"],
         }
         get_detections(tracked_data, scene, objects, jdata)
 

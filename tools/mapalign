@@ -22,11 +22,26 @@ log.LVL_TRACK = 20
 # log.LVL_MIN = log.LVL_TRACK + 1
 log.LVL_MIN = log.LVL_TRACK
 
-pointColors = [(0, 0, 255), (0, 255, 255), (0, 128, 0), (255, 64, 64),
-               (0xAA, 0x00, 0x00), (0x00, 0xAA, 0x00), (0x00, 0xAA, 0xAA), (0x00, 0x00, 0xAA),
-               (0xAA, 0x00, 0xAA), (0x00, 0x55, 0xAA), (0xAA, 0xAA, 0xAA), (0x55, 0x55, 0x55),
-               (0xFF, 0x55, 0x55), (0x55, 0xFF, 0x55), (0xFF, 0xFF, 0x55), (0x55, 0x55, 0xFF),
-               (0xFF, 0x55, 0xFF), (0x55, 0xFF, 0xFF)]
+pointColors = [
+    (0, 0, 255),
+    (0, 255, 255),
+    (0, 128, 0),
+    (255, 64, 64),
+    (0xAA, 0x00, 0x00),
+    (0x00, 0xAA, 0x00),
+    (0x00, 0xAA, 0xAA),
+    (0x00, 0x00, 0xAA),
+    (0xAA, 0x00, 0xAA),
+    (0x00, 0x55, 0xAA),
+    (0xAA, 0xAA, 0xAA),
+    (0x55, 0x55, 0x55),
+    (0xFF, 0x55, 0x55),
+    (0x55, 0xFF, 0x55),
+    (0xFF, 0xFF, 0x55),
+    (0x55, 0x55, 0xFF),
+    (0xFF, 0x55, 0xFF),
+    (0x55, 0xFF, 0xFF),
+]
 
 
 def build_argparser():
@@ -41,14 +56,7 @@ def build_argparser():
 
 
 class Cybertronium:
-    def __init__(
-            self,
-            number,
-            name,
-            image,
-            coords,
-            intrinsics=None,
-            rcoords=None):
+    def __init__(self, number, name, image, coords, intrinsics=None, rcoords=None):
         self.number = number
         self.windowName = name
         self.registered = False
@@ -58,12 +66,15 @@ class Cybertronium:
         if intrinsics is not None:
             self.image = intrinsics.unwarp(self.originalImage)
 
-        corners = [[0, 0], [self.image.shape[1] - 1, 0],
-                   [self.image.shape[1] - 1, self.image.shape[0] - 1],
-                   [0, self.image.shape[0] - 1]]
+        corners = [
+            [0, 0],
+            [self.image.shape[1] - 1, 0],
+            [self.image.shape[1] - 1, self.image.shape[0] - 1],
+            [0, self.image.shape[0] - 1],
+        ]
         normalized = []
         for idx in range(max(len(coords), len(corners))):
-            c = ([-1, -1])
+            c = [-1, -1]
             if idx < len(coords):
                 c = coords[idx]
             if not self.coordInFrame(c):
@@ -93,16 +104,16 @@ class Cybertronium:
             scl_line(img, (0, pt[1] - 1), (size[1], pt[1] - 1), (0, 0, 0), 1)
 
         for idx in range(len(self.coords)):
-            scl_circle(img, tuple(self.coords[idx]),
-                       radius, pointColors[idx], -1)
+            scl_circle(img, tuple(self.coords[idx]), radius, pointColors[idx], -1)
             scl_circle(img, tuple(self.coords[idx]), radius, (0, 0, 0), border)
         return
 
     def drawName(self, img):
         size = Size(img.shape[1::-1])
         label = str(self.number)
-        lsize = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX,
-                                1 * self.scale, 2 * self.scale)[0]
+        lsize = cv2.getTextSize(
+            label, cv2.FONT_HERSHEY_SIMPLEX, 1 * self.scale, 2 * self.scale
+        )[0]
         radius = int(lsize[1] / 2) + 5
         pt = Point(10 + radius, size.height - 10 - radius)
         color = (0, 0, 128)
@@ -110,16 +121,18 @@ class Cybertronium:
             color = (0, 128, 0)
         scl_circle(img, pt.cv, radius, color, -1)
         pt = pt + (-1 * lsize[0] / 2, lsize[1] / 2)
-        cv2.putText(img, label, pt.cv, cv2.FONT_HERSHEY_SIMPLEX,
-                    1 * self.scale, (255, 255, 255), 2 * self.scale)
+        cv2.putText(
+            img,
+            label,
+            pt.cv,
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1 * self.scale,
+            (255, 255, 255),
+            2 * self.scale,
+        )
         return
 
-    def display(
-            self,
-            cameraOrigin=None,
-            regionOfView=None,
-            scale=None,
-            overlay=None):
+    def display(self, cameraOrigin=None, regionOfView=None, scale=None, overlay=None):
         dimg = overlay
         if dimg is None:
             dimg = self.image.copy()
@@ -157,8 +170,7 @@ class Cybertronium:
             c = points[idx]
             if isinstance(c, Point):
                 c = c.asNumpyCartesian
-            if abs(c[0] - xs) <= 5 * \
-                    dotScale and abs(c[1] - ys) <= 5 * dotScale:
+            if abs(c[0] - xs) <= 5 * dotScale and abs(c[1] - ys) <= 5 * dotScale:
                 return idx
         return None
 
@@ -182,45 +194,36 @@ class Cybertronium:
 
     def handleEvent(self, event, x, y, flags, param):
         if event == cv2.EVENT_LBUTTONDOWN:
-            self.moving = self.findCoord(
-                x, y, self.scale, self.dotScale, self.coords)
+            self.moving = self.findCoord(x, y, self.scale, self.dotScale, self.coords)
             if self.moving is not None:
-                self.offset = (self.coords[self.moving][0] - x * self.scale,
-                               self.coords[self.moving][1] - y * self.scale)
+                self.offset = (
+                    self.coords[self.moving][0] - x * self.scale,
+                    self.coords[self.moving][1] - y * self.scale,
+                )
             elif self.rcoords is not None:
-                rpoint = self.findCoord(
-                    x, y, self.scale, self.dotScale, self.rcoords)
+                rpoint = self.findCoord(x, y, self.scale, self.dotScale, self.rcoords)
                 print("REGION POINT", rpoint)
         elif event == cv2.EVENT_LBUTTONUP:
             self.moving = None
             param.map.display(
-                cameraOrigin=param.cameraOrigin,
-                regionOfView=param.regionOfView)
+                cameraOrigin=param.cameraOrigin, regionOfView=param.regionOfView
+            )
             param.frame.display(overlay=param.overlayMap())
         elif event == cv2.EVENT_MOUSEMOVE:
             if self.moving is not None:
-                nc = (
-                    x * self.scale + self.offset[0],
-                    y * self.scale + self.offset[1])
+                nc = (x * self.scale + self.offset[0], y * self.scale + self.offset[1])
                 self.coords[self.moving] = self.normalizeCoord(nc)
                 param.map.display(
-                    cameraOrigin=param.cameraOrigin,
-                    regionOfView=param.regionOfView)
+                    cameraOrigin=param.cameraOrigin, regionOfView=param.regionOfView
+                )
                 param.frame.display(overlay=param.overlayMap())
         return
 
 
 class Autobot:
     def __init__(
-            self,
-            number,
-            image,
-            fcoords,
-            mapImage,
-            mcoords,
-            intrinsics,
-            mapScale,
-            rcoords):
+        self, number, image, fcoords, mapImage, mcoords, intrinsics, mapScale, rcoords
+    ):
         self.number = number
         # self.windowPrefix = "pos" + str(self.number) + "-"
         self.windowPrefix = ""
@@ -235,24 +238,18 @@ class Autobot:
         self.live = False
 
         self.frame = Cybertronium(
-            self.number,
-            self.warpName,
-            image,
-            fcoords,
-            self.intrinsics)
+            self.number, self.warpName, image, fcoords, self.intrinsics
+        )
         self.map = Cybertronium(
-            self.number,
-            self.mapName,
-            mapImage,
-            mcoords,
-            rcoords=rcoords)
+            self.number, self.mapName, mapImage, mcoords, rcoords=rcoords
+        )
 
         pts_src = np.array(self.frame.coords)
         pts_dst = np.array(self.map.coords)
         pose = {
-            'camera homography': pts_src,
-            'map homography': pts_dst,
-            'resolution': self.frame.image.shape[1::-1],
+            "camera homography": pts_src,
+            "map homography": pts_dst,
+            "resolution": self.frame.image.shape[1::-1],
         }
         xform = HomographyTransform(pose, intrinsics)
         self.scaleFieldOfView(xform.regionOfView.points, self.mapScale)
@@ -262,10 +259,7 @@ class Autobot:
         return
 
     def scaleFieldOfView(self, coords, scale):
-        self.regionOfView = [
-            tuple(
-                c *
-                scale for c in x.as2Dxy.cv) for x in coords]
+        self.regionOfView = [tuple(c * scale for c in x.as2Dxy.cv) for x in coords]
         print("FIELD OF VIEW", self.regionOfView)
         return
 
@@ -302,10 +296,8 @@ class Autobot:
         else:
             mask = np.uint8(np.full(image1.shape[:2], 1))
         print("TRANSFORM", transform)
-        warp = cv2.warpPerspective(image1, transform,
-                                   (image2.shape[1], image2.shape[0]))
-        mask = cv2.warpPerspective(mask, transform,
-                                   (image2.shape[1], image2.shape[0]))
+        warp = cv2.warpPerspective(image1, transform, (image2.shape[1], image2.shape[0]))
+        mask = cv2.warpPerspective(mask, transform, (image2.shape[1], image2.shape[0]))
         mask = np.dstack((mask, mask, mask))
         foreground = warp * mask
         # background = image2 * (1 - mask)
@@ -317,9 +309,9 @@ class Autobot:
         pts_src = np.array(self.frame.coords)
         pts_dst = np.array(self.map.coords)
         pose = {
-            'camera homography': pts_src,
-            'map homography': pts_dst,
-            'resolution': self.frame.image.shape[1::-1],
+            "camera homography": pts_src,
+            "map homography": pts_dst,
+            "resolution": self.frame.image.shape[1::-1],
         }
         xform = HomographyTransform(pose, self.intrinsics)
         self.scaleFieldOfView(xform.regionOfView.points, self.mapScale)
@@ -330,24 +322,20 @@ class Autobot:
 
         if self.doOverlay:
             overlay = self.createOverlay(
-                self.map.image,
-                self.frame.image,
-                transformMap,
-                asMap=True)
+                self.map.image, self.frame.image, transformMap, asMap=True
+            )
 
             if self.rcoords is not None:
                 for idx, coord in enumerate(self.rcoords):
                     idxn = (idx + 1) % len(self.rcoords)
                     coordn = self.rcoords[idxn]
-                    wcoord = self.transformPoint(
-                        coord.asNumpyCartesian, transformMap)
-                    wcoordn = self.transformPoint(
-                        coordn.asNumpyCartesian, transformMap)
-                    scl_line(
-                        overlay, wcoord.cv, wcoordn.cv, (0, 0, 128 + 64), 3)
+                    wcoord = self.transformPoint(coord.asNumpyCartesian, transformMap)
+                    wcoordn = self.transformPoint(coordn.asNumpyCartesian, transformMap)
+                    scl_line(overlay, wcoord.cv, wcoordn.cv, (0, 0, 128 + 64), 3)
         else:
             overlay = self.createOverlay(
-                self.frame.image, self.map.image, transformFrame)
+                self.frame.image, self.map.image, transformFrame
+            )
 
             if self.rcoords is not None:
                 for idx, coord in enumerate(self.rcoords):
@@ -356,13 +344,15 @@ class Autobot:
                     scl_line(overlay, coord.cv, coordn.cv, (0, 0, 128 + 64), 3)
 
         self.cameraOrigin = xform.translation.as2Dxy
-        self.cameraOrigin = Point(self.cameraOrigin.x * xform.scale[0],
-                                  self.cameraOrigin.y * xform.scale[1])
+        self.cameraOrigin = Point(
+            self.cameraOrigin.x * xform.scale[0], self.cameraOrigin.y * xform.scale[1]
+        )
         log.info("CAMERA ORIGIN", self.cameraOrigin)
 
         scl_line(overlay, (0, 0), self.cameraOrigin.cv, (0, 255, 0), 4)
-        scl_line(overlay, (overlay.shape[1] - 1, 0),
-                 self.cameraOrigin.cv, (0, 255, 0), 4)
+        scl_line(
+            overlay, (overlay.shape[1] - 1, 0), self.cameraOrigin.cv, (0, 255, 0), 4
+        )
 
         return overlay
 
@@ -381,19 +371,16 @@ class Autobot:
 
                 wcoords = []
                 for coord in self.rcoords:
-                    wcoords.append(
-                        self.transformPoint(
-                            coord.point,
-                            transformMap).point)
+                    wcoords.append(self.transformPoint(coord.point, transformMap).point)
                 self.rmoving = self.frame.findCoord(
-                    x, y, self.frame.scale, self.frame.dotScale, wcoords)
+                    x, y, self.frame.scale, self.frame.dotScale, wcoords
+                )
 
                 if self.rmoving is not None:
-                    self.offset = (wcoords[self.rmoving][0] -
-                                   x *
-                                   self.frame.scale, wcoords[self.rmoving][1] -
-                                   y *
-                                   self.frame.scale)
+                    self.offset = (
+                        wcoords[self.rmoving][0] - x * self.frame.scale,
+                        wcoords[self.rmoving][1] - y * self.frame.scale,
+                    )
                     return
 
             self.doOverlay = not self.doOverlay
@@ -407,12 +394,9 @@ class Autobot:
                 transformFrame, status = cv2.findHomography(pts_src, pts_dst)
 
                 nc = (
-                    x *
-                    self.frame.scale +
-                    self.offset[0],
-                    y *
-                    self.frame.scale +
-                    self.offset[1])
+                    x * self.frame.scale + self.offset[0],
+                    y * self.frame.scale + self.offset[1],
+                )
                 dewarp = self.transformPoint(nc, transformFrame)
                 self.rcoords[self.rmoving] = dewarp
                 self.displayOverlay()
@@ -421,8 +405,10 @@ class Autobot:
     def zoom(self, offset):
         self.intrinsics.intrinsics[0, 0] += offset
         self.intrinsics.intrinsics[1, 1] += offset
-        print("Focal length %0.3f %0.3f" % (self.intrinsics.intrinsics[0, 0],
-                                            self.intrinsics.intrinsics[1, 1]))
+        print(
+            "Focal length %0.3f %0.3f"
+            % (self.intrinsics.intrinsics[0, 0], self.intrinsics.intrinsics[1, 1])
+        )
         self.frame.image = self.intrinsics.unwarp(self.frame.originalImage)
         self.frame.display(overlay=self.overlayMap())
         self.map.display(self.cameraOrigin, self.regionOfView, self.mapScale)
@@ -448,10 +434,10 @@ def main():
     with open(args.config) as f:
         config = json.load(f)
     camCoords = mapCoords = []
-    if 'camera homography' in config['sensors'][args.camera]:
-        camCoords = config['sensors'][args.camera]['camera homography']
-    if 'map homography' in config['sensors'][args.camera]:
-        mapCoords = config['sensors'][args.camera]['map homography']
+    if "camera homography" in config["sensors"][args.camera]:
+        camCoords = config["sensors"][args.camera]["camera homography"]
+    if "map homography" in config["sensors"][args.camera]:
+        mapCoords = config["sensors"][args.camera]["map homography"]
 
     map_img = cv2.imread(args.map)
     video = cv2.VideoCapture(args.video)
@@ -469,17 +455,18 @@ def main():
     # padding = 1000
     padding = 0
     mapCoords = [[x + padding for x in y] for y in mapCoords]
-    map_img = cv2.copyMakeBorder(map_img, padding, padding, padding, padding,
-                                 cv2.BORDER_CONSTANT, value=(255, 255, 255))
-    pos1 = Autobot(
-        1,
-        frame,
-        camCoords,
+    map_img = cv2.copyMakeBorder(
         map_img,
-        mapCoords,
-        intrinsics,
-        scene.scale,
-        region)
+        padding,
+        padding,
+        padding,
+        padding,
+        cv2.BORDER_CONSTANT,
+        value=(255, 255, 255),
+    )
+    pos1 = Autobot(
+        1, frame, camCoords, map_img, mapCoords, intrinsics, scene.scale, region
+    )
 
     pos1.initWindows()
 
@@ -489,12 +476,12 @@ def main():
 
             if key == 27:
                 break
-            elif key == ord('+'):
+            elif key == ord("+"):
                 pos1.zoom(100)
-            elif key == ord('-'):
+            elif key == ord("-"):
                 pos1.zoom(-100)
-            elif key >= ord('0') and key <= ord('9'):
-                val = key - ord('0')
+            elif key >= ord("0") and key <= ord("9"):
+                val = key - ord("0")
                 val = val / 9
                 pos1.setOpacity(val)
             elif key == 83:  # Right arrow
@@ -513,18 +500,23 @@ def main():
     cv2.destroyAllWindows()
 
     print('"camera homography": %s,' % (json.dumps(pos1.frame.coords)))
-    print('"map homography": %s,'
-          % (json.dumps([[x - padding for x in y] for y in pos1.map.coords])))
+    print(
+        '"map homography": %s,'
+        % (json.dumps([[x - padding for x in y] for y in pos1.map.coords]))
+    )
 
-    if hasattr(pos1, 'registeredPose'):
+    if hasattr(pos1, "registeredPose"):
         print('"slam pose": %s,' % (json.dumps(pos1.registeredPose.tolist())))
-    if hasattr(pos1, 'slamScale'):
+    if hasattr(pos1, "slamScale"):
         print('"slam scale": %s,' % (pos1.slamScale))
 
-    intrinsics = [pos1.intrinsics.intrinsics[0, 0], pos1.intrinsics.intrinsics[1, 1],
-                  pos1.intrinsics.intrinsics[0, 2], pos1.intrinsics.intrinsics[1, 2]]
-    print('"intrinsics": %s,' %
-          (json.dumps(pos1.intrinsics.intrinsics.tolist())))
+    intrinsics = [
+        pos1.intrinsics.intrinsics[0, 0],
+        pos1.intrinsics.intrinsics[1, 1],
+        pos1.intrinsics.intrinsics[0, 2],
+        pos1.intrinsics.intrinsics[1, 2],
+    ]
+    print('"intrinsics": %s,' % (json.dumps(pos1.intrinsics.intrinsics.tolist())))
 
     print('"width": %s,' % (pos1.frame.image.shape[1]))
     print('"height": %s,' % (pos1.frame.image.shape[0]))
@@ -536,5 +528,5 @@ def main():
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main() or 0)

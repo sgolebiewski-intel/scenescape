@@ -20,12 +20,8 @@ def build_argparser():
     parser.add_argument("output", help="png file to write")
     parser.add_argument("input", nargs="+", help="json file(s) for simulation")
     parser.add_argument("--frame", type=int, help="frame number to stop at")
-    parser.add_argument("--skip", default=0, type=int,
-                        help="frame number to skip to")
-    parser.add_argument(
-        "--config",
-        default="config.json",
-        help="path to config file")
+    parser.add_argument("--skip", default=0, type=int, help="frame number to skip to")
+    parser.add_argument("--config", default="config.json", help="path to config file")
     return parser
 
 
@@ -48,9 +44,9 @@ def main():
         if not camDetect:
             break
 
-        objects = scene.tracker.groupObjects(camDetect['objects'])
+        objects = scene.tracker.groupObjects(camDetect["objects"])
         for otype, ogroup in objects.items():
-            camDetect['objects'] = ogroup
+            camDetect["objects"] = ogroup
             scene.processSensorData(camDetect, otype)
 
         scene.tracker.waitForComplete()
@@ -62,7 +58,7 @@ def main():
                     tracked_objects[obj.gid] = []
                 tracked_objects[obj.gid].append(obj.sceneLoc)
 
-        if (args.frame is not None and args.frame == curFrame):
+        if args.frame is not None and args.frame == curFrame:
             break
         curFrame += 1
 
@@ -72,7 +68,7 @@ def main():
     for gid in tracked_objects:
         locations = tracked_objects[gid]
         for pair in zip(locations, locations[1:]):
-            if hasattr(scene, 'mapScale'):
+            if hasattr(scene, "mapScale"):
                 points = [scene.mapScale((0, 0), x).cv for x in pair]
             else:
                 points = [scene.ms((0, 0), x).cv for x in pair]
@@ -85,5 +81,5 @@ def main():
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main() or 0)

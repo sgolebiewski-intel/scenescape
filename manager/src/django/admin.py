@@ -9,12 +9,13 @@ from manager.models import PubSubACL
 
 @admin.register(PubSubACL)
 class PubSubACLAdmin(admin.ModelAdmin):
-    list_display = ('user', 'topic', 'get_access_display')
-    search_fields = ('user__username', 'topic')
-    list_filter = ('access', 'user')
-    ordering = ('user', 'topic')
+    list_display = ("user", "topic", "get_access_display")
+    search_fields = ("user__username", "topic")
+    list_filter = ("access", "user")
+    ordering = ("user", "topic")
 
     def get_access_display(self, obj):
         return obj.get_access_display()
-    get_access_display.short_description = 'Access Level'
-    get_access_display.admin_order_field = 'access'
+
+    get_access_display.short_description = "Access Level"
+    get_access_display.admin_order_field = "access"

@@ -9,8 +9,7 @@ import pytest
 from tests.sscape_tests.scene_pytest.config import *
 
 
-@pytest.mark.parametrize("detectionType, jdata, when",
-                         [(thing_type, jdata, when)])
+@pytest.mark.parametrize("detectionType, jdata, when", [(thing_type, jdata, when)])
 def test_visible(scene_obj, camera_obj, detectionType, jdata, when):
     """!
     Test visible property of the MovingObjects returned by scene.updateVisible().
@@ -19,9 +18,10 @@ def test_visible(scene_obj, camera_obj, detectionType, jdata, when):
     regardless of relative locations of the camera and object.
     """
     scene_obj.cameras[camera_obj.cameraID] = camera_obj
-    detected_objects = jdata['objects'][thing_type]
+    detected_objects = jdata["objects"][thing_type]
     mobj = scene_obj.tracker.createObject(
-        detectionType, detected_objects[0], when, camera_obj)
+        detectionType, detected_objects[0], when, camera_obj
+    )
     moving_objects = []
     moving_objects.append(mobj)
     scene_obj.updateVisible(moving_objects)

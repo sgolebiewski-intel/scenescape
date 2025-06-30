@@ -37,21 +37,20 @@ def test_page_persistence_main(params, record_xml_attribute):
         assert common.create_scene(browser, scene_name, scale, map_image)
         assert scene_name in browser.page_source
 
-        camera_count = browser.find_element(
-            By.CSS_SELECTOR, sensor_count_loc).text
+        camera_count = browser.find_element(By.CSS_SELECTOR, sensor_count_loc).text
         print("Editing scene by adding camera " + scene_name)
-        assert common.add_camera_to_scene(
-            browser, scene_name, camera_id, camera_name)
+        assert common.add_camera_to_scene(browser, scene_name, camera_id, camera_name)
         browser.find_element(By.ID, "home").click()
         changed_camera_count = browser.find_element(
-            By.CSS_SELECTOR, sensor_count_loc).text
+            By.CSS_SELECTOR, sensor_count_loc
+        ).text
 
         assert int(changed_camera_count) == int(camera_count) + 1
         print(
-            "Edited info (camera addition to scene) persists on page navigation, camera count: " +
-            str(changed_camera_count))
-        assert common.validate_scene_data(
-            browser, scene_name, scale, map_image)
+            "Edited info (camera addition to scene) persists on page navigation, camera count: "
+            + str(changed_camera_count)
+        )
+        assert common.validate_scene_data(browser, scene_name, scale, map_image)
         print("Scene data persist on page navigation")
         exit_code = 0
     finally:

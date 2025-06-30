@@ -22,7 +22,7 @@ class MotionDetector(Detector):
         """
         super().__init__(asynchronous=asynchronous, distributed=distributed)
         self.fbgbMap = {}
-        self.bgsAlg = 'mog2'
+        self.bgsAlg = "mog2"
         self.contourSize = 12000
         self.detectShadows = 0
         return
@@ -37,22 +37,33 @@ class MotionDetector(Detector):
         """
         detections = []
 
-        if (input is not None):
+        if input is not None:
             if input.cameraID not in self.fbgbMap:
-                if self.bgsAlg == 'knn':
+                if self.bgsAlg == "knn":
                     log.info("Running KNN bgs for {}".format(input.cameraID))
                     self.fbgbMap[input.cameraID] = cv2.createBackgroundSubtractorKNN(
-                        self.model['history'], self.model['threshold'], self.detectShadows)
-                elif self.bgsAlg == 'mog2':
+                        self.model["history"],
+                        self.model["threshold"],
+                        self.detectShadows,
+                    )
+                elif self.bgsAlg == "mog2":
                     log.info("Running MOG2 bgs for {}".format(input.cameraID))
                     self.fbgbMap[input.cameraID] = cv2.createBackgroundSubtractorMOG2(
-                        self.model['history'], self.model['threshold'], self.detectShadows)
+                        self.model["history"],
+                        self.model["threshold"],
+                        self.detectShadows,
+                    )
                 else:
                     log.info(
                         "unknown bgs algorithm, running default MOG2 for {}".format(
-                            input.cameraID))
+                            input.cameraID
+                        )
+                    )
                     self.fbgbMap[input.cameraID] = cv2.createBackgroundSubtractorMOG2(
-                        self.model['history'], self.model['threshold'], self.detectShadows)
+                        self.model["history"],
+                        self.model["threshold"],
+                        self.detectShadows,
+                    )
 
             monoBlur = self.preprocess(input)
 
@@ -63,9 +74,8 @@ class MotionDetector(Detector):
 
                 thresh = cv2.dilate(fgmask, None, iterations=2)
                 cnts = cv2.findContours(
-                    thresh.copy(),
-                    cv2.RETR_EXTERNAL,
-                    cv2.CHAIN_APPROX_SIMPLE)
+                    thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+                )
                 cnts = imutils.grab_contours(cnts)
 
                 for c in cnts:
@@ -105,15 +115,17 @@ class MotionDetector(Detector):
 
         found = []
         for detection in result.data:
-            bounds = {'x': detection[0],
-                      'y': detection[1],
-                      'width': detection[2],
-                      'height': detection[3]
-                      }
+            bounds = {
+                "x": detection[0],
+                "y": detection[1],
+                "width": detection[2],
+                "height": detection[3],
+            }
 
-            object = {'category': "motion",
-                      'bounding_box': bounds,
-                      }
+            object = {
+                "category": "motion",
+                "bounding_box": bounds,
+            }
             found.append(object)
 
         return found
@@ -134,10 +146,12 @@ class MotionDetector(Detector):
         if not isinstance(model, dict):
             raise TypeError(
                 f"Argument type {
-                    type(model)} is inappropriate. Argument `model` must be a dict.")
-        if 'history' not in model or 'threshold' not in model:
+                    type(model)} is inappropriate. Argument `model` must be a dict."
+            )
+        if "history" not in model or "threshold" not in model:
             raise KeyError(
-                "Missing key(s) 'history' and/or 'threshold' in dict `model`.")
+                "Missing key(s) 'history' and/or 'threshold' in dict `model`."
+            )
 
         self.model = model
         return
@@ -153,7 +167,7 @@ class MotionMog2Detector(MotionDetector):
         """
         super().__init__(asynchronous=asynchronous, distributed=distributed)
         self.fbgbMap = {}
-        self.bgsAlg = 'mog2'
+        self.bgsAlg = "mog2"
 
 
 class MotionKnnDetector(MotionDetector):
@@ -166,4 +180,4 @@ class MotionKnnDetector(MotionDetector):
         """
         super().__init__(asynchronous=asynchronous, distributed=distributed)
         self.fbgbMap = {}
-        self.bgsAlg = 'knn'
+        self.bgsAlg = "knn"

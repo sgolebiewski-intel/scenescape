@@ -13,8 +13,7 @@ from legacy_geometry.geometry import Point as pyPoint
 def comparePointPolarAttributes2D(cpp_pt: cppPoint, py_pt: pyPoint):
     delta_rad = abs(cpp_pt.radius - py_pt.radius)
     delta_az = abs(cpp_pt.azimuth - py_pt.azimuth)
-    if delta_rad > 0.01 \
-            or delta_az > 0.01:
+    if delta_rad > 0.01 or delta_az > 0.01:
         print("Mismatch in Polar math")
         print("Radius", cpp_pt.radius, "vs", py_pt.radius)
         print("Length", cpp_pt.length, "vs", py_pt.length)
@@ -38,9 +37,7 @@ def comparePointCartesianAttributes2D(cpp_pt: cppPoint, py_pt: pyPoint):
     delta_rad = abs(cpp_pt.radius - py_pt.radius)
     delta_x = abs(cpp_pt.x - py_pt.x)
     delta_y = abs(cpp_pt.y - py_pt.y)
-    if delta_rad > 0.01 \
-            or delta_x > 0.01 \
-            or delta_y > 0.01:
+    if delta_rad > 0.01 or delta_x > 0.01 or delta_y > 0.01:
         print("Mismatch in Cartesian math")
         print("Rad", cpp_pt.radius, "vs", py_pt.radius)
         print("X", cpp_pt.x, "vs", py_pt.x)
@@ -101,7 +98,8 @@ def testPointsCartesianAttributes3D(start_range, stop_range, step):
                         "Failed in Cartesian Attributes for 3D points in",
                         radius,
                         az,
-                        inc)
+                        inc,
+                    )
                     return False
 
                 cpp_pt = cpp_pt.asCartesian
@@ -111,7 +109,8 @@ def testPointsCartesianAttributes3D(start_range, stop_range, step):
                         "Failed in Polar->Cartesian->Polar Attributes for points in",
                         radius,
                         az,
-                        inc)
+                        inc,
+                    )
                     return False
 
                 cpp_ptxy = cpp_pt.as2Dxy
@@ -137,10 +136,7 @@ def testPointsCartesianAttributes2D(start_range, stop_range, step):
             py_pt = pyPoint(radius, az, polar=True)
 
             if not comparePointCartesianAttributes2D(cpp_pt, py_pt):
-                print(
-                    "Failed in Cartesian Attributes for 2D points in",
-                    radius,
-                    az)
+                print("Failed in Cartesian Attributes for 2D points in", radius, az)
                 return False
     log.log("Polar to Cartesian (2D) ok")
     return True
@@ -155,5 +151,5 @@ def test():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(test() or 0)

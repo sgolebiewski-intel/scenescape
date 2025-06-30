@@ -50,18 +50,19 @@ class ATagDetector(Detector):
                 if bounds[3] is None or corner[1] > bounds[3]:
                     bounds[3] = corner[1]
 
-            bounds = Rectangle(origin=Point(bounds[0], bounds[1]),
-                               opposite=Point(bounds[2], bounds[3]))
+            bounds = Rectangle(
+                origin=Point(bounds[0], bounds[1]), opposite=Point(bounds[2], bounds[3])
+            )
             object = {
-                'category': "apriltag",
-                'bounding_box': bounds.asDict,
-                'tag_id': tag.tag_id,
-                'tag_family': tag.tag_family.decode("utf-8"),
-                'corners': tag.corners.tolist(),
-                'homography': tag.homography.tolist(),
-                'center': tag.center.tolist(),
-                'hamming': tag.hamming,
-                'decision_margin': tag.decision_margin,
+                "category": "apriltag",
+                "bounding_box": bounds.asDict,
+                "tag_id": tag.tag_id,
+                "tag_family": tag.tag_family.decode("utf-8"),
+                "corners": tag.corners.tolist(),
+                "homography": tag.homography.tolist(),
+                "center": tag.center.tolist(),
+                "hamming": tag.hamming,
+                "decision_margin": tag.decision_margin,
             }
             found.append(object)
         return found

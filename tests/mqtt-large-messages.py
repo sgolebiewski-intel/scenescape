@@ -37,20 +37,23 @@ max_packet_size 104857600
 
 def build_argparser():
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("yml", nargs="?", default="tests/compose/broker.yml",
-                        help="yml of mosquitto broker")
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument(
-        "--broker",
-        help="host:port of broker to use for testing")
+        "yml",
+        nargs="?",
+        default="tests/compose/broker.yml",
+        help="yml of mosquitto broker",
+    )
+    parser.add_argument("--broker", help="host:port of broker to use for testing")
     return parser
 
 
 class LargeMessageTest:
     def __init__(self, broker, auth, cert, rootcert):
         image = np.random.rand(1080, 1920, 3) * 255
-        image = image.astype('uint8')
-        self.image_b64 = base64.b64encode(image).decode('utf-8')
+        image = image.astype("uint8")
+        self.image_b64 = base64.b64encode(image).decode("utf-8")
         self.delay = 0
 
         self.wsReceived = Condition()
@@ -61,13 +64,8 @@ class LargeMessageTest:
 
         self.websocketReady = False
         ws = PubSub(
-            auth,
-            cert,
-            rootcert,
-            broker,
-            1884,
-            insecure=True,
-            transport="websockets")
+            auth, cert, rootcert, broker, 1884, insecure=True, transport="websockets"
+        )
         ws.onConnect = self.websocketConnect
         ws.onDisconnect = self.websocketDisconnect
         ws.onSubscribe = self.websocketSubscribe
@@ -84,11 +82,13 @@ class LargeMessageTest:
         self.receiveIDs = []
         for idx in self.sendIDs:
             for retry in range(1):
-                res = self.client.publish(TOPIC,
-                                          json.dumps({'id': idx,
-                                                      'data': self.image_b64,
-                                                      'time': get_epoch_time()}),
-                                          qos=2)
+                res = self.client.publish(
+                    TOPIC,
+                    json.dumps(
+                        {"id": idx, "data": self.image_b64, "time": get_epoch_time()}
+                    ),
+                    qos=2,
+                )
                 print("Publish", idx, res)
                 if res[0] != 0:
                     break
@@ -123,10 +123,10 @@ class LargeMessageTest:
     def websocketReceived(self, client, userdata, message):
         msg = str(message.payload.decode("utf-8"))
         jdata = json.loads(msg)
-        idx = jdata['id']
+        idx = jdata["id"]
         self.receiveIDs.append(idx)
         now = get_epoch_time()
-        self.delay = now - jdata['time']
+        self.delay = now - jdata["time"]
         with self.wsReceived:
             self.wsReceived.notify()
         print("WS received", idx, self.delay, len(msg))
@@ -162,15 +162,13 @@ def main():
         network_name = "scenescape-test"
 
         override = {
-            'services': {
-                'broker': {
-                    'networks': [
-                        network_name
-                    ],
-                    'volumes': [
+            "services": {
+                "broker": {
+                    "networks": [network_name],
+                    "volumes": [
                         tmp_conf.name + ":" + "/etc/mosquitto/mosquitto.conf",
                     ],
-                    'restart': "no"
+                    "restart": "no",
                 }
             }
         }
@@ -180,24 +178,38 @@ def main():
         tmp_override.write(override_yaml.encode())
         tmp_override.flush()
 
-        cmd = ["docker", "compose", "--project-directory", os.getcwd(),
-               "--project-name", project_name,
-               "-f", args.yml, "-f", tmp_override.name,
-               "up"]
+        cmd = [
+            "docker",
+            "compose",
+            "--project-directory",
+            os.getcwd(),
+            "--project-name",
+            project_name,
+            "-f",
+            args.yml,
+            "-f",
+            tmp_override.name,
+            "up",
+        ]
         print(" ".join(cmd))
         broker_process = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        )
         for line in broker_process.stdout:
             line = line.decode()
             print(line.rstrip())
-            if 'mosquitto' in line and 'running' in line:
+            if "mosquitto" in line and "running" in line:
                 break
 
         try:
-            cmd = ["tools/scenescape-start",
-                   "--network", project_name + "_" + network_name,
-                   os.path.relpath(__file__),
-                   "--broker", "broker.scenescape.intel.com"]
+            cmd = [
+                "tools/scenescape-start",
+                "--network",
+                project_name + "_" + network_name,
+                os.path.relpath(__file__),
+                "--broker",
+                "broker.scenescape.intel.com",
+            ]
             print(" ".join(cmd))
             test_error = subprocess.run(cmd).returncode
             print("ERROR", test_error)
@@ -207,10 +219,19 @@ def main():
             print("Broker still running:", not broker_error)
 
             time.sleep(1)
-            cmd = ["docker", "compose", "--project-directory", os.getcwd(),
-                   "--project-name", project_name,
-                   "-f", args.yml, "-f", tmp_override.name,
-                   "down"]
+            cmd = [
+                "docker",
+                "compose",
+                "--project-directory",
+                os.getcwd(),
+                "--project-name",
+                project_name,
+                "-f",
+                args.yml,
+                "-f",
+                tmp_override.name,
+                "down",
+            ]
             print(" ".join(cmd))
             subprocess.run(cmd)
 
@@ -220,5 +241,5 @@ def main():
     return error
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main() or 0)

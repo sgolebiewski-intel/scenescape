@@ -7,11 +7,7 @@ from scene_common.geometry import Point
 from scene_common.transform import CameraIntrinsics, CameraPose
 import numpy as np
 
-DEFAULT_TRANSFORM = {
-    'translation': [0, 0, 0],
-    'rotation': [0, 0, 0],
-    'scale': [1, 1, 1]
-}
+DEFAULT_TRANSFORM = {"translation": [0, 0, 0], "rotation": [0, 0, 0], "scale": [1, 1, 1]}
 
 
 def keysNotEmpty(info, keys):
@@ -30,22 +26,21 @@ class Camera:
     def __init__(self, anID, info, resolution=None):
         self.cameraID = anID
 
-        if resolution is None and 'width' in info and 'height' in info:
-            resolution = (info['width'], info['height'])
+        if resolution is None and "width" in info and "height" in info:
+            resolution = (info["width"], info["height"])
 
-        intrinsics = info.get('intrinsics', info.get('fov', None))
+        intrinsics = info.get("intrinsics", info.get("fov", None))
         if intrinsics is not None:
-            cam_intrins = CameraIntrinsics(intrinsics,
-                                           info.get('distortion', None),
-                                           resolution)
+            cam_intrins = CameraIntrinsics(
+                intrinsics, info.get("distortion", None), resolution
+            )
 
-            info['resolution'] = resolution
+            info["resolution"] = resolution
             pose_formats = [
-                ('translation', 'rotation', 'scale'),
-                ('camera points', 'map points')
+                ("translation", "rotation", "scale"),
+                ("camera points", "map points"),
             ]
-            if any(keysNotEmpty(info, pose_format)
-                   for pose_format in pose_formats):
+            if any(keysNotEmpty(info, pose_format) for pose_format in pose_formats):
                 self.pose = CameraPose(info, cam_intrins)
             else:
                 self.pose = CameraPose(DEFAULT_TRANSFORM, cam_intrins)
@@ -57,19 +52,19 @@ class Camera:
 
     def serialize(self):
         data = {
-            'uid': self.cameraID,
-            'name': self.cameraID,
+            "uid": self.cameraID,
+            "name": self.cameraID,
         }
 
         # resolution
         # aspect_ratio - does this serve any purpose if resolution is available?
         # rate - of what?
 
-        data['intrinsics'] = self.pose.intrinsics.intrinsics
-        data['distortion'] = self.pose.intrinsics.distortion
-        data['translation'] = self.pose.translation.asNumpyCartesian.tolist()
-        if hasattr(self.pose, 'rotation'):
-            data['rotation'] = self.pose.rotation
-        data['scale'] = self.pose.scale
+        data["intrinsics"] = self.pose.intrinsics.intrinsics
+        data["distortion"] = self.pose.intrinsics.distortion
+        data["translation"] = self.pose.translation.asNumpyCartesian.tolist()
+        if hasattr(self.pose, "rotation"):
+            data["rotation"] = self.pose.rotation
+        data["scale"] = self.pose.scale
 
         return data

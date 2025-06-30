@@ -10,13 +10,11 @@ from test_result import TestResult
 class LogParser:
     MAKE_LINE_PREFIX = r"Makefile.*:[0-9]+: "
     MAKE_CMD_PREFIX = r"^make(\[[0-9]+])?: "
-    RE_TARGET = MAKE_LINE_PREFIX + \
-        r"target '([0-9a-z][-0-9a-z_]+)' does not exist"
+    RE_TARGET = MAKE_LINE_PREFIX + r"target '([0-9a-z][-0-9a-z_]+)' does not exist"
     RE_OUTPUT_END = MAKE_CMD_PREFIX + "Leaving directory"
     RE_OUTPUT_BEGIN = MAKE_CMD_PREFIX + "Entering directory"
     RE_FAILED = MAKE_CMD_PREFIX + r"\*\*\* \[" + MAKE_LINE_PREFIX + r"([^]]+)]"
-    RE_NOTREMADE = MAKE_CMD_PREFIX + \
-        r"Target '([0-9a-z_][-0-9a-z+]+)' not remade"
+    RE_NOTREMADE = MAKE_CMD_PREFIX + r"Target '([0-9a-z_][-0-9a-z+]+)' not remade"
 
     def __init__(self, logfile):
         with open(logfile) as f:
@@ -38,9 +36,13 @@ class LogParser:
         unknownOutput = []
         for idx, row in enumerate(self.logLines):
             skip = False
-            for pattern in \
-                (self.RE_TARGET, self.RE_OUTPUT_END, self.RE_OUTPUT_BEGIN,
-                 self.RE_FAILED, self.RE_NOTREMADE):
+            for pattern in (
+                self.RE_TARGET,
+                self.RE_OUTPUT_END,
+                self.RE_OUTPUT_BEGIN,
+                self.RE_FAILED,
+                self.RE_NOTREMADE,
+            ):
                 if re.match(pattern, row):
                     if test:
                         self.allTests[test].output = "\n".join(output)
@@ -57,16 +59,14 @@ class LogParser:
             m = re.match(self.RE_TARGET, row)
             if m:
                 test = m.group(1)
-                result = allTargets.get(
-                    test, TestResult(
-                        test, TestResult.EXECUTED))
+                result = allTargets.get(test, TestResult(test, TestResult.EXECUTED))
                 result.status = TestResult.EXECUTED
                 self.allTests[test] = result
             else:
                 output.append(row)
 
         for test in self.allTests:
-            if not getattr(self.allTests[test], 'output', None):
+            if not getattr(self.allTests[test], "output", None):
                 pattern = r"RUNNING.* TEST " + test
                 found = False
                 for output in unknownOutput:

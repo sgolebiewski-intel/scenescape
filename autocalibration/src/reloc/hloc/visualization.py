@@ -22,21 +22,16 @@ from .utils.viz import (
 from .utils.io import read_image
 
 
-def visualize_sfm_2d(reconstruction,
-                     image_dir,
-                     color_by="visibility",
-                     selected=[],
-                     n=1,
-                     seed=0,
-                     dpi=75):
+def visualize_sfm_2d(
+    reconstruction, image_dir, color_by="visibility", selected=[], n=1, seed=0, dpi=75
+):
     assert image_dir.exists()
     if not isinstance(reconstruction, pycolmap.Reconstruction):
         reconstruction = pycolmap.Reconstruction(reconstruction)
 
     if not selected:
         image_ids = reconstruction.reg_image_ids()
-        selected = random.Random(seed).sample(image_ids,
-                                              min(n, len(image_ids)))
+        selected = random.Random(seed).sample(image_ids, min(n, len(image_ids)))
 
     for i in selected:
         image = reconstruction.images[i]
@@ -47,20 +42,28 @@ def visualize_sfm_2d(reconstruction,
             color = [(0, 0, 1) if v else (1, 0, 0) for v in visible]
             text = f"visible: {np.count_nonzero(visible)}/{len(visible)}"
         elif color_by == "track_length":
-            tl = np.array([
-                reconstruction.points3D[p.point3D_id].track.length()
-                if p.has_point3D() else 1 for p in image.points2D
-            ])
+            tl = np.array(
+                [
+                    (
+                        reconstruction.points3D[p.point3D_id].track.length()
+                        if p.has_point3D()
+                        else 1
+                    )
+                    for p in image.points2D
+                ]
+            )
             max_, med_ = np.max(tl), np.median(tl[tl > 1])
             tl = np.log(tl)
             color = cm.jet(tl / tl.max()).tolist()
             text = f"max/median track length: {max_}/{med_}"
         elif color_by == "depth":
             p3ids = [p.point3D_id for p in image.points2D if p.has_point3D()]
-            z = np.array([
-                image.transform_to_image(reconstruction.points3D[j].xyz)[-1]
-                for j in p3ids
-            ])
+            z = np.array(
+                [
+                    image.transform_to_image(reconstruction.points3D[j].xyz)[-1]
+                    for j in p3ids
+                ]
+            )
             z -= z.min()
             color = cm.jet(z / np.percentile(z, 99.9))
             text = f"visible: {np.count_nonzero(visible)}/{len(visible)}"
@@ -104,8 +107,9 @@ def visualize_loc(
     for qname in selected:
         loc = logs["loc"][qname]
         if loc["PnP_ret"]["success"]:
-            visualize_loc_from_log(image_dir, qname, loc, reconstruction,
-                                   db_image_dir, **kwargs)
+            visualize_loc_from_log(
+                image_dir, qname, loc, reconstruction, db_image_dir, **kwargs
+            )
 
 
 def visualize_loc_from_log(
@@ -141,8 +145,7 @@ def visualize_loc_from_log(
         counts = np.zeros(n)
         dbs_kp_q_db = [[] for _ in range(n)]
         inliers_dbs = [[] for _ in range(n)]
-        for i, (inl, (p3D_id,
-                      db_idxs)) in enumerate(zip(inliers, kp_to_3D_to_db)):
+        for i, (inl, (p3D_id, db_idxs)) in enumerate(zip(inliers, kp_to_3D_to_db)):
             track = reconstruction.points3D[p3D_id].track
             track = {el.image_id: el.point2D_idx for el in track.elements}
             for db_idx in db_idxs:
@@ -154,8 +157,7 @@ def visualize_loc_from_log(
         # for inloc the database keypoints are already in the logs
         assert "keypoints_db" in loc
         assert "indices_db" in loc
-        counts = np.array(
-            [np.sum(loc["indices_db"][inliers] == i) for i in range(n)])
+        counts = np.array([np.sum(loc["indices_db"][inliers] == i) for i in range(n)])
 
     if feature_paths is not None:
         feature_files = list(h5py.File(fp, "r") for fp in feature_paths)
@@ -177,8 +179,7 @@ def visualize_loc_from_log(
 
         db_image = read_image((db_image_dir or image_dir) / db_name)
         # color = None => random colors
-        color = cm_RdGn(
-            inliers_db).tolist() if color_by == "confidence" else None
+        color = cm_RdGn(inliers_db).tolist() if color_by == "confidence" else None
         text = f"inliers: {sum(inliers_db)}/{len(inliers_db)}"
         if "e_t" in loc:
             text += f'\ne_t: {loc["e_t"] * 100:.2f}cm'
@@ -191,11 +192,17 @@ def visualize_loc_from_log(
         if feature_paths is not None:
             kpq = np.vstack(
                 tuple(
-                    ff[query_name]["keypoints"].__array__().astype(
-                        np.float32) for ff in feature_files))
-            kpr = np.vstack(tuple(ff[db_name]["keypoints"].__array__().astype(
-                np.float32) for ff in feature_files))
-            plot_keypoints([kpq, kpr], colors='tab:orange', ps=1)
+                    ff[query_name]["keypoints"].__array__().astype(np.float32)
+                    for ff in feature_files
+                )
+            )
+            kpr = np.vstack(
+                tuple(
+                    ff[db_name]["keypoints"].__array__().astype(np.float32)
+                    for ff in feature_files
+                )
+            )
+            plot_keypoints([kpq, kpr], colors="tab:orange", ps=1)
         plot_matches(
             kp_q[inliers_db],
             kp_db[inliers_db],
@@ -203,16 +210,16 @@ def visualize_loc_from_log(
             ps=4,
             a=0.1,
         )
-        plot_matches(kp_q[~inliers_db],
-                     kp_db[~inliers_db], [1.0, 0.0, 0.0],
-                     ps=1,
-                     a=0.1)
+        plot_matches(kp_q[~inliers_db], kp_db[~inliers_db], [1.0, 0.0, 0.0], ps=1, a=0.1)
         add_text(0, text, fs=8)
         opts = dict(pos=(0.01, 0.01), fs=6, lcolor=None, va="bottom")
         add_text(0, query_name, **opts)
         add_text(1, db_name, **opts)
         if savefigdir is not None:
             figname = Path(
-                query_name.split(".")[0].replace("/", "_") + "_" +
-                db_name.split(".")[0].replace("/", "_") + ".jpg")
+                query_name.split(".")[0].replace("/", "_")
+                + "_"
+                + db_name.split(".")[0].replace("/", "_")
+                + ".jpg"
+            )
             save_plot(savefigdir / figname)

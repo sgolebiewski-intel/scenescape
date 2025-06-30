@@ -54,5 +54,5 @@ def main():
     return test_restricted_media_access(None, None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     os._exit(main() or 0)

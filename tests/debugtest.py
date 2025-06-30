@@ -49,38 +49,35 @@ class _RequestPlaceholder:
 
 
 def _is_test(Object):
-    return isinstance(
-        Object,
-        types.FunctionType) and Object.__name__.startswith("test_")
+    return isinstance(Object, types.FunctionType) and Object.__name__.startswith("test_")
 
 
 def _is_fixture(Object):
-    return isinstance(
-        Object, types.FunctionType) and hasattr(
-        Object, "_pytestfixturefunction")
+    return isinstance(Object, types.FunctionType) and hasattr(
+        Object, "_pytestfixturefunction"
+    )
 
 
 def _is_params_func(Object):
-    return isinstance(
-        Object,
-        types.FunctionType) and Object.__name__ == "pytest_addoption"
+    return (
+        isinstance(Object, types.FunctionType) and Object.__name__ == "pytest_addoption"
+    )
 
 
 def _resolve_fixtures(fixture_with_args, fixtures, request):
     if fixture_with_args.__code__.co_argcount == 0:
         return fixture_with_args()
-    args = fixture_with_args.__code__.co_varnames[:
-                                                  fixture_with_args.__code__.co_argcount]
+    args = fixture_with_args.__code__.co_varnames[
+        : fixture_with_args.__code__.co_argcount
+    ]
     params = []
     for arg in args:
         if arg == "request":
             params.append(request)
         elif arg in fixtures:
             params.append(
-                _resolve_fixtures(
-                    fixtures[arg].__wrapped__,
-                    fixtures,
-                    request))
+                _resolve_fixtures(fixtures[arg].__wrapped__, fixtures, request)
+            )
         else:
             # Case where a fixture has a non-fixture arg, need to check if
             # common occurence
@@ -102,8 +99,9 @@ def _process_conftest_values(conftest, test_cmdline_params, test_name):
             cmdline_options[0][1](parser)
             # 25 used to replace "usage: debugtest.py [-h] " from the default
             # string
-            parser.usage = ' '.join(
-                (str(Path(__file__)), test_name, parser.format_usage()[25:]))
+            parser.usage = " ".join(
+                (str(Path(__file__)), test_name, parser.format_usage()[25:])
+            )
             cmdline_args = parser.parse_args(test_cmdline_params)
             cmdline_args = vars(cmdline_args)
 
@@ -117,8 +115,7 @@ def _replace_args(arg, fixtures, request, parameterize_pairs):
         return lambda *args: None
     elif arg in fixtures:
         if fixtures[arg].__wrapped__.__code__.co_argcount != 0:
-            return _resolve_fixtures(
-                fixtures[arg].__wrapped__, fixtures, request)
+            return _resolve_fixtures(fixtures[arg].__wrapped__, fixtures, request)
         else:
             return fixtures[arg].__wrapped__()
     elif arg in parameterize_pairs:
@@ -133,31 +130,30 @@ def run_test(test_path, test_cmdline_params):
     if not Path(filepath).is_file():
         sys.exit(f"Test not found at specified path: {filepath.resolve()}")
 
-    test_name = str(filepath.with_suffix('')).replace('/', '.')
+    test_name = str(filepath.with_suffix("")).replace("/", ".")
     module = import_module(test_name, package=None)
     conftest = None
 
-    if (filepath.parent.joinpath("conftest.py").is_file()):
-        conftest_path = str(filepath.parent).replace('/', '.') + ".conftest"
+    if filepath.parent.joinpath("conftest.py").is_file():
+        conftest_path = str(filepath.parent).replace("/", ".") + ".conftest"
         conftest = import_module(conftest_path, package=None)
 
-    fixtures, cmdline_args = _process_conftest_values(conftest,
-                                                      test_cmdline_params,
-                                                      str(filepath))
+    fixtures, cmdline_args = _process_conftest_values(
+        conftest, test_cmdline_params, str(filepath)
+    )
     request = _RequestPlaceholder(cmdline_args, fixtures)
 
     tests = getmembers(module, _is_test)
 
     for _, test in tests:
         testcase = test.__name__
-        args = test.__code__.co_varnames[:test.__code__.co_argcount]
+        args = test.__code__.co_varnames[: test.__code__.co_argcount]
 
         parametrize_args = None
         parametrize_values = [None]
         if "pytestmark" in test.__dict__:
-            pytest_parametrize = test.__dict__['pytestmark'][0].args
-            parametrize_args = [arg.strip()
-                                for arg in pytest_parametrize[0].split(',')]
+            pytest_parametrize = test.__dict__["pytestmark"][0].args
+            parametrize_args = [arg.strip() for arg in pytest_parametrize[0].split(",")]
             parametrize_values = pytest_parametrize[1]
             # print(f"pytest parameters {parametrize_args} and values {parametrize_values}")
 
@@ -170,11 +166,8 @@ def run_test(test_path, test_cmdline_params):
             else:
                 parametrize_pairs = None
             test_args = [
-                _replace_args(
-                    arg,
-                    fixtures,
-                    request,
-                    parametrize_pairs) for arg in args]
+                _replace_args(arg, fixtures, request, parametrize_pairs) for arg in args
+            ]
             print(f"DEBUG: Running {testcase}")
             # pprint.pprint(dict(zip(args, test_args)))
             test(*test_args)

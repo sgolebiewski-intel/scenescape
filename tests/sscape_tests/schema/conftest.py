@@ -33,18 +33,17 @@ def schemaObject():
 def objData3D():
     timestamp = "1970-01-01T00:00:00.000Z"
 
-    jdata = {"id": "camera1",
-             "objects": {},
-             "timestamp": timestamp,
-             "rate": 9.8}
+    jdata = {"id": "camera1", "objects": {}, "timestamp": timestamp, "rate": 9.8}
 
-    obj = {"id": 1,
-           "category": "person",
-           "confidence": 1,
-           "translation": [0.5, 1.0, -0.23],
-           "rotation": [0.43, -0.52, 0.12, 0.21],
-           "size": [1.0, 2.0, 0.5]}
-    jdata['objects']['person'] = [obj]
+    obj = {
+        "id": 1,
+        "category": "person",
+        "confidence": 1,
+        "translation": [0.5, 1.0, -0.23],
+        "rotation": [0.43, -0.52, 0.12, 0.21],
+        "size": [1.0, 2.0, 0.5],
+    }
+    jdata["objects"]["person"] = [obj]
     return jdata
 
 
@@ -53,27 +52,24 @@ def objData():
     timestamp = "1970-01-01T00:00:00.000Z"
     point = {"x": 0.56, "y": 0.0, "width": 0.24, "height": 0.49}
 
-    jdata = {"id": "camera1",
-             "objects": {},
-             "timestamp": timestamp,
-             "rate": 9.8}
+    jdata = {"id": "camera1", "objects": {}, "timestamp": timestamp, "rate": 9.8}
 
-    obj = {"id": 1,
-           "category": "person",
-           "confidence": 1,
-           "bounding_box": point,
-           "center_of_mass": point,
-           "bounding_box_px": point}
-    jdata['objects']['person'] = [obj]
+    obj = {
+        "id": 1,
+        "category": "person",
+        "confidence": 1,
+        "bounding_box": point,
+        "center_of_mass": point,
+        "bounding_box_px": point,
+    }
+    jdata["objects"]["person"] = [obj]
     return jdata
 
 
 @pytest.fixture
 def singletonData():
     timestamp = "1970-01-01T00:00:00.000Z"
-    jdata = {"id": "temp1",
-             "timestamp": timestamp,
-             "value": 95.8}
+    jdata = {"id": "temp1", "timestamp": timestamp, "value": 95.8}
 
     return jdata
 

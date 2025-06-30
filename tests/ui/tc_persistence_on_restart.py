@@ -23,7 +23,9 @@ def test_system_persist_main(params, record_xml_attribute):
     exit_code = 1
     try:
         print("Executing: " + TEST_NAME + " with restart")
-        print("Test that the system saves scene floor plan, name, and scale - On restart")
+        print(
+            "Test that the system saves scene floor plan, name, and scale - On restart"
+        )
         browser = Browser()
         assert common.check_page_login(browser, params)
         assert common.check_db_status(browser)
@@ -38,13 +40,14 @@ def test_system_persist_main(params, record_xml_attribute):
         sensor_count_loc = "[name='" + scene_name + "'] .sensor-count"
         assert scene_name in browser.page_source
         changed_camera_count = browser.find_element(
-            By.CSS_SELECTOR, sensor_count_loc).text
+            By.CSS_SELECTOR, sensor_count_loc
+        ).text
         assert int(changed_camera_count) == 1
         print(
-            "Edited info (camera addition to scene) persists on docker restart, camera count: " +
-            str(changed_camera_count))
-        assert common.validate_scene_data(
-            browser, scene_name, scale, map_image)
+            "Edited info (camera addition to scene) persists on docker restart, camera count: "
+            + str(changed_camera_count)
+        )
+        assert common.validate_scene_data(browser, scene_name, scale, map_image)
         print("Scene data persist on docker restart")
         assert common.navigate_to_scene(browser, scene_name)
         assert common.delete_scene(browser, scene_name)

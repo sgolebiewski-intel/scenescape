@@ -51,7 +51,7 @@ def test_live_button(params, record_xml_attribute=None):
         assert common.check_page_login(browser, params)
         assert common.check_db_status(browser)
 
-        camera1_box = browser.find_element(By.ID, 'camera1')
+        camera1_box = browser.find_element(By.ID, "camera1")
         live_toggle = browser.find_element(By.ID, "live-view")
         if live_toggle.is_selected():
             raise Exception("Live View is initially on. Expected to be off")
@@ -78,14 +78,12 @@ def test_live_button(params, record_xml_attribute=None):
         assert common.read_images(image_array, files_path)
         assert len(image_array) == 3
         assert common.compare_images(
-            image_array[0],
-            image_array[1],
-            TEST_IMAGE_THRESHOLD)
+            image_array[0], image_array[1], TEST_IMAGE_THRESHOLD
+        )
         print("img_1 and img_2 not equals")
         assert common.compare_images(
-            image_array[1],
-            image_array[2],
-            TEST_IMAGE_THRESHOLD)
+            image_array[1], image_array[2], TEST_IMAGE_THRESHOLD
+        )
         print("img_2 and img_3 not equals")
 
         exit_code = 0

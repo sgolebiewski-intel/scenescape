@@ -9,7 +9,7 @@ from django.contrib.auth.models import Group
 register = template.Library()
 
 
-@register.filter(name='has_group')
+@register.filter(name="has_group")
 def has_group(user, group_name):
     group = Group.objects.filter(name=group_name)
     if group:
@@ -19,6 +19,6 @@ def has_group(user, group_name):
         return False
 
 
-@register.filter(name='add_class')
+@register.filter(name="add_class")
 def addclass(field, class_attr):
-    return field.as_widget(attrs={'class': class_attr})
+    return field.as_widget(attrs={"class": class_attr})

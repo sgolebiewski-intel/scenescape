@@ -20,19 +20,28 @@ class RSImage:
     def __init__(self, frame):
         # Explicity create a copy of the depth + color data, to avoid realsense
         # issues.
-        self.depth_info = None if not frame.get_depth_frame() else np.asanyarray(
-            frame.get_depth_frame().get_data()).copy()
+        self.depth_info = (
+            None
+            if not frame.get_depth_frame()
+            else np.asanyarray(frame.get_depth_frame().get_data()).copy()
+        )
         color_frame = frame.get_color_frame()
-        self.color_info = None if not color_frame else np.asanyarray(
-            color_frame.get_data()).copy()
-        self.shape_info = (0, 0) if not color_frame else (
-            int(color_frame.get_height()), int(color_frame.get_width()))
+        self.color_info = (
+            None if not color_frame else np.asanyarray(color_frame.get_data()).copy()
+        )
+        self.shape_info = (
+            (0, 0)
+            if not color_frame
+            else (int(color_frame.get_height()), int(color_frame.get_width()))
+        )
         # Infrared attributes:
         if frame.get_infrared_frame():
             self.metadata = frame.get_frame_metadata(
-                rs.pyrealsense2.frame_metadata_value.frame_laser_power_mode)
+                rs.pyrealsense2.frame_metadata_value.frame_laser_power_mode
+            )
             self.infrared_info = np.asanyarray(
-                frame.get_infrared_frame().get_data()).copy()
+                frame.get_infrared_frame().get_data()
+            ).copy()
         else:
             self.infrared_info = None
             self.metadata = None
@@ -108,8 +117,7 @@ class RSCamera:
     def enableDepth(self, width, height):
         if self.pipeline:
             self.stop()
-        self.config.enable_stream(
-            rs.stream.depth, width, height, rs.format.z16, 30)
+        self.config.enable_stream(rs.stream.depth, width, height, rs.format.z16, 30)
         return True
 
     def getFramerate(self):
@@ -164,11 +172,8 @@ class RSCamera:
         if self.pipeline:
             self.stop()
         self.config.enable_stream(
-            rs.stream.color,
-            width,
-            height,
-            rs.format.bgr8,
-            int(rate))
+            rs.stream.color, width, height, rs.format.bgr8, int(rate)
+        )
         try:
             r = self.getFramerate()
         except RuntimeError:
@@ -183,7 +188,8 @@ class RSCamera:
         if resolution is not None:
             width, height = resolution
             self.config.enable_stream(
-                rs.stream.color, width, height, rs.format.bgr8, rate)
+                rs.stream.color, width, height, rs.format.bgr8, rate
+            )
             try:
                 w, h = self.getResolution()
             except RuntimeError:
@@ -194,9 +200,13 @@ class RSCamera:
         return True
 
     def setupCVIntrinsics(self):
-        self.matrix = np.array([[self.rgbIntrinsics.fx, 0, self.rgbIntrinsics.ppx],
-                                [0, self.rgbIntrinsics.fy, self.rgbIntrinsics.ppy],
-                                [0, 0, 1]])
+        self.matrix = np.array(
+            [
+                [self.rgbIntrinsics.fx, 0, self.rgbIntrinsics.ppx],
+                [0, self.rgbIntrinsics.fy, self.rgbIntrinsics.ppy],
+                [0, 0, 1],
+            ]
+        )
         self.distortion = np.array([0, 0, 0, 0, 0], dtype=np.float32)
         return
 
@@ -241,24 +251,22 @@ class RSCamera:
             path = f"/dev/video{path}"
         cmd = ["v4l2-ctl", "--list-devices"]
         result = subprocess.run(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True)
+            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
+        )
         devices = result.stdout.splitlines()
         model = None
         basedevice = None
         for line in devices:
-            if ':' in line:
+            if ":" in line:
                 model = line
                 basedevice = None
             if line.startswith("\t/dev/video") and "RealSense" in model:
                 if basedevice is None:
                     basedevice = line
                 if line.endswith(path):
-                    name = basedevice.split('/')[2]
+                    name = basedevice.split("/")[2]
                     if re.match("^video[0-9]+$", name):
-                        name = re.sub('video', '', name)
+                        name = re.sub("video", "", name)
                         return name
         return None
 
@@ -274,16 +282,14 @@ class RSCamera:
         if len(_rs_ctx.devices) > 0:
             for cam in _rs_ctx.devices:
                 log.info(
-                    'Found RealSense device: ',
-                    cam.get_info(
-                        rs.camera_info.serial_number))
+                    "Found RealSense device: ",
+                    cam.get_info(rs.camera_info.serial_number),
+                )
                 # FIXME - Had to do this to ignore bogus device
                 if len(cam.get_info(rs.camera_info.serial_number)) > 5:
                     _rs_cameras.append(
-                        RSCamera(
-                            cam.get_info(
-                                rs.camera_info.serial_number),
-                            mode))
+                        RSCamera(cam.get_info(rs.camera_info.serial_number), mode)
+                    )
                     mode = RSCamera.MODE_SLAVE
         return
 
@@ -311,8 +317,7 @@ class RSBag(RSCamera):
         self.config = rs.config()
         # Force repeat_playback to True to avoid the 'Frame didn't arrive within 5000'
         # when we reach EOS.
-        rs.config.enable_device_from_file(
-            self.config, path, repeat_playback=True)
+        rs.config.enable_device_from_file(self.config, path, repeat_playback=True)
         self.config.enable_all_streams()
         self.pipeline = None
         self.start()
@@ -340,7 +345,8 @@ class RSBag(RSCamera):
                 self.depthIntrinsics = s.as_video_stream_profile().get_intrinsics()
 
         self.frame_count = int(
-            profile.get_device().as_playback().get_duration().total_seconds() * rate)
+            profile.get_device().as_playback().get_duration().total_seconds() * rate
+        )
         return
 
     def getNumberOfFrames(self):
@@ -355,7 +361,10 @@ class RSBag(RSCamera):
 
         rs_image = RSImage(self.captureAlignedImage())
         # Convert the image to BGR if needed.
-        if rs_image and rs_image.color_info is not None and self.pixel_format == rs.format.rgb8:
-            rs_image.color_info = cv2.cvtColor(
-                rs_image.color_info, cv2.COLOR_RGB2BGR)
+        if (
+            rs_image
+            and rs_image.color_info is not None
+            and self.pixel_format == rs.format.rgb8
+        ):
+            rs_image.color_info = cv2.cvtColor(rs_image.color_info, cv2.COLOR_RGB2BGR)
         return 1, rs_image

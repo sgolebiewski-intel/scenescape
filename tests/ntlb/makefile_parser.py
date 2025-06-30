@@ -51,8 +51,7 @@ class MakefileParser:
             m = re.match(tgPattern, row)
             if m:
                 target = m.group(1)
-                self.allTargets[target] = TestResult(
-                    target, TestResult.SKIPPED)
+                self.allTargets[target] = TestResult(target, TestResult.SKIPPED)
 
             m = re.match(mfPattern, row)
             if m and target:
@@ -66,14 +65,17 @@ class MakefileParser:
                 self.collections[name] = m.group(2).split()
 
         for coll in self.collections:
-            if coll[0] == '_':
+            if coll[0] == "_":
                 d = self.allTargets.pop(coll[1:], None)
             for target in self.allTargets:
                 if target in self.collections[coll]:
                     self.allTargets[target].addCollection(coll)
 
         reports = [
-            x for x in self.allTargets if self.allTargets[x].makefile == "Makefile.reports"]
+            x
+            for x in self.allTargets
+            if self.allTargets[x].makefile == "Makefile.reports"
+        ]
         for target in reports:
             self.allTargets.pop(target, None)
 
@@ -82,8 +84,11 @@ class MakefileParser:
     def findZephyrTestIDs(self):
         pattern = self.TARGET_PATTERN + r" *# *(NEX-T[0-9]+)"
         for makefile in self.makefiles:
-            targetLines = [self.allTargets[x].line - 2 for x in self.allTargets
-                           if self.allTargets[x].makefile == makefile]
+            targetLines = [
+                self.allTargets[x].line - 2
+                for x in self.allTargets
+                if self.allTargets[x].makefile == makefile
+            ]
             targetLines.sort()
             path = os.path.join(self.directory, makefile)
             with open(path) as f:

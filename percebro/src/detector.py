@@ -20,73 +20,61 @@ from scene_common.geometry import Point, Rectangle
 from scene_common import log
 from scene_common.timestamp import get_epoch_time
 
-_colorSpaceCodes = {
-    'BGR': None,
-    'RGB': cv2.COLOR_BGR2RGB,
-    'GRAY': cv2.COLOR_BGR2GRAY
-}
+_colorSpaceCodes = {"BGR": None, "RGB": cv2.COLOR_BGR2RGB, "GRAY": cv2.COLOR_BGR2GRAY}
 
 _default_model_config = {
     # Fields are directory, categories, xml
-    'pv0078': {
-        'directory': "person-vehicle-bike-detection-crossroad-0078",
-        'categories': ['background', 'person', 'vehicle', 'bicycle']
+    "pv0078": {
+        "directory": "person-vehicle-bike-detection-crossroad-0078",
+        "categories": ["background", "person", "vehicle", "bicycle"],
     },
-    'pv1016': {
-        'directory': "person-vehicle-bike-detection-crossroad-1016",
-        'categories': ['background', 'vehicle', 'person', 'bicycle']
+    "pv1016": {
+        "directory": "person-vehicle-bike-detection-crossroad-1016",
+        "categories": ["background", "vehicle", "person", "bicycle"],
     },
-    'pv0001': {
-        'directory': "pedestrian-and-vehicle-detector-adas-0001",
-        'categories': ['background', 'vehicle', 'person']
+    "pv0001": {
+        "directory": "pedestrian-and-vehicle-detector-adas-0001",
+        "categories": ["background", "vehicle", "person"],
     },
-    'v0002': {
-        'directory': "vehicle-detection-adas-0002",
-        'categories': ['background', 'vehicle']
+    "v0002": {
+        "directory": "vehicle-detection-adas-0002",
+        "categories": ["background", "vehicle"],
     },
-    'retail': {
-        'directory': "person-detection-retail-0013",
-        'categories': ['background', 'person']
+    "retail": {
+        "directory": "person-detection-retail-0013",
+        "categories": ["background", "person"],
     },
-    'hpe': {
-        'directory': "human-pose-estimation-0001"
+    "hpe": {"directory": "human-pose-estimation-0001"},
+    "reid": {"directory": "person-reidentification-retail-0277"},
+    "td0001": {"directory": "horizontal-text-detection-0001"},
+    "trresnet": {"directory": "text-recognition-resnet-fc"},
+    "pv2000": {
+        "directory": "person-vehicle-bike-detection-2000",
+        "categories": ["vehicle", "person", "bicycle", "unknown"],
     },
-    'reid': {
-        'directory': "person-reidentification-retail-0277"
+    "pv2001": {
+        "directory": "person-vehicle-bike-detection-2001",
+        "categories": ["vehicle", "person", "bicycle", "unknown"],
     },
-    'td0001': {
-        'directory': "horizontal-text-detection-0001"
+    "pv2002": {
+        "directory": "person-vehicle-bike-detection-2002",
+        "categories": ["vehicle", "person", "bicycle", "unknown"],
     },
-    'trresnet': {
-        'directory': "text-recognition-resnet-fc"
+    "v0200": {
+        "directory": "vehicle-detection-0200",
+        "categories": ["background", "vehicle"],
     },
-    'pv2000': {
-        'directory': "person-vehicle-bike-detection-2000",
-        'categories': ["vehicle", "person", "bicycle", "unknown"]
+    "v0201": {
+        "directory": "vehicle-detection-0201",
+        "categories": ["background", "vehicle"],
     },
-    'pv2001': {
-        'directory': "person-vehicle-bike-detection-2001",
-        'categories': ["vehicle", "person", "bicycle", "unknown"]
+    "v0202": {
+        "directory": "vehicle-detection-0202",
+        "categories": ["background", "vehicle"],
     },
-    'pv2002': {
-        'directory': "person-vehicle-bike-detection-2002",
-        'categories': ["vehicle", "person", "bicycle", "unknown"]
-    },
-    'v0200': {
-        'directory': "vehicle-detection-0200",
-        'categories': ["background", "vehicle"]
-    },
-    'v0201': {
-        'directory': "vehicle-detection-0201",
-        'categories': ["background", "vehicle"]
-    },
-    'v0202': {
-        'directory': "vehicle-detection-0202",
-        'categories': ["background", "vehicle"]
-    },
-    'retail3d': {
-        'directory': "person-detection-retail-0013",
-        'categories': ['background', 'person']
+    "retail3d": {
+        "directory": "person-detection-retail-0013",
+        "categories": ["background", "person"],
     },
 }
 
@@ -213,8 +201,7 @@ class Detector(Thread):
 
         elif self.distributed == Distributed.OVMS:
             image = data.data.astype(np.float32)
-            output = self.client.predict(
-                {self.input_blob: image}, self.ovms_modelname)
+            output = self.client.predict({self.input_blob: image}, self.ovms_modelname)
             result = IAData(output, data.id, data.save)
 
             self.taskLock.acquire()
@@ -230,12 +217,10 @@ class Detector(Thread):
         # are 2 or more tasks already done
         num_done = len(self.tasksDone)
         if len(self.tasksDone) > len(self.tasksCur):
-            log.warn(
-                "WHAAAAAAAAAAAAAAAAT?", len(
-                    self.tasksDone), len(
-                    self.tasksCur))
+            log.warn("WHAAAAAAAAAAAAAAAAT?", len(self.tasksDone), len(self.tasksCur))
         haveData = num_done and (
-            self.tasksCur[0].task in self.tasksDone)  # or num_done > 1)
+            self.tasksCur[0].task in self.tasksDone
+        )  # or num_done > 1)
         if haveData:
             # Can't just take first element from tasksDone, they may not be
             # in the same order as tasksCur
@@ -244,15 +229,19 @@ class Detector(Thread):
                     if self.distributed == Distributed.NONE:
                         req = self.async_queue[task.task]
                         req.wait()
-                        if hasattr(req, 'invalid') and req.invalid:
+                        if hasattr(req, "invalid") and req.invalid:
                             res_det = None
                             req.invalid = False
                         else:
                             if not self.saveDict:
                                 res_det = req.results[self.output_blob].copy()
                             else:
-                                res_det = {out.get_any_name(): req.get_output_tensor(
-                                    idx).data.copy() for idx, out in enumerate(req.model_outputs)}
+                                res_det = {
+                                    out.get_any_name(): req.get_output_tensor(
+                                        idx
+                                    ).data.copy()
+                                    for idx, out in enumerate(req.model_outputs)
+                                }
                             # print("BLOB", self.model, task.task, task.id, len(res_det[0][0]))
                     else:
                         res_det = task.task.results
@@ -273,8 +262,7 @@ class Detector(Thread):
                     self.tasksCur.pop(idx)
                     remainCount = self.tasksRemainCount.pop(task.id)
                     remainCount -= 1
-                    if remainCount == 0 and task.id not in [
-                            x.id for x in self.tasksCur]:
+                    if remainCount == 0 and task.id not in [x.id for x in self.tasksCur]:
                         # FIXME - Need to join on distributed tasks at some
                         # point.
                         if idx != 0:
@@ -366,9 +354,12 @@ class Detector(Thread):
         self.client = make_grpc_client(self.ovmshost)
         log.info(self.ovms_modelname)
         self.model_metadata = self.client.get_model_metadata(
-            model_name=self.ovms_modelname)
+            model_name=self.ovms_modelname
+        )
         self.input_blob = next(iter(self.model_metadata["inputs"]))
-        self.n, self.c, self.h, self.w = self.model_metadata["inputs"][self.input_blob]['shape']
+        self.n, self.c, self.h, self.w = self.model_metadata["inputs"][self.input_blob][
+            "shape"
+        ]
         return
 
     def modelPreconfigure(self):
@@ -378,13 +369,13 @@ class Detector(Thread):
         else:
             self.num_req = self.ov_cores
         if self.device == "CPU":
-            self.config = {'NUM_STREAMS': self.ov_cores,
-                           'INFERENCE_NUM_THREADS': str(self.ov_cores),
-                           'PERFORMANCE_HINT': 'THROUGHPUT',
-                           'AFFINITY': 'CORE'}
-            self.core.set_property(
-                device_name=self.device,
-                properties=self.config)
+            self.config = {
+                "NUM_STREAMS": self.ov_cores,
+                "INFERENCE_NUM_THREADS": str(self.ov_cores),
+                "PERFORMANCE_HINT": "THROUGHPUT",
+                "AFFINITY": "CORE",
+            }
+            self.core.set_property(device_name=self.device, properties=self.config)
 
             if self.plugin:
                 self.ie.add_extension(self.plugin, self.device)
@@ -392,8 +383,8 @@ class Detector(Thread):
 
     def modelLoad(self):
         self.model = self.core.read_model(
-            model=self.model_path, weights=os.path.splitext(
-                self.model_path)[0] + ".bin")
+            model=self.model_path, weights=os.path.splitext(self.model_path)[0] + ".bin"
+        )
 
         if self.input_shape is not None:
             self.model.reshape({0: self.input_shape})
@@ -405,7 +396,7 @@ class Detector(Thread):
         # Save as dict and use same post-process function as ovms.
         found_labels_output = False
         for out in self.model.outputs:
-            if out.names == {'labels'}:
+            if out.names == {"labels"}:
                 found_labels_output = True
                 break
 
@@ -420,8 +411,7 @@ class Detector(Thread):
         # When the model's result has 5 entries, assume the Geti-optimized format,
         #  unless the user has specifically requested a different output_order
         #  in the model-config file.
-        if output_blob_shape[output_blob_len - 1] == 5 \
-                and self.defaultOutputOrder:
+        if output_blob_shape[output_blob_len - 1] == 5 and self.defaultOutputOrder:
             self.idxCategory = -1
             self.idxConfidence = 4
             self.idxOriginX = 0
@@ -438,10 +428,12 @@ class Detector(Thread):
     def modelCompile(self):
         if self.asynchronous:
             self.exec_network = self.core.compile_model(
-                model=self.model, config=self.config, device_name=self.device)
+                model=self.model, config=self.config, device_name=self.device
+            )
         else:
             self.exec_network = self.core.compile_model(
-                model=self.model, device_name=self.device)
+                model=self.model, device_name=self.device
+            )
 
         self.async_queue = []
         for i in range(self.num_req):
@@ -453,11 +445,12 @@ class Detector(Thread):
         return
 
     def findXML(
-            self,
-            directory,
-            xml,
-            device,
-            default_path="/opt/intel/openvino/deployment_tools/intel_models/intel/"):
+        self,
+        directory,
+        xml,
+        device,
+        default_path="/opt/intel/openvino/deployment_tools/intel_models/intel/",
+    ):
         mpath = directory
         xpath = None
         if not os.path.isabs(mpath):
@@ -485,8 +478,8 @@ class Detector(Thread):
 
     def setParameters(self, model, device, plugin, threshold, ov_cores):
         if self.distributed == Distributed.OVMS:
-            self.ovmshost = model['ovmshost']
-            self.ovms_modelname = model['external_id']
+            self.ovmshost = model["ovmshost"]
+            self.ovms_modelname = model["external_id"]
 
         mdict = None
         if not model:
@@ -500,8 +493,8 @@ class Detector(Thread):
                     return
                 mdict = _default_model_config[model]
             elif isinstance(model, dict):
-                if 'model' in model and model['model'] in _default_model_config:
-                    mdict = _default_model_config[model['model']]
+                if "model" in model and model["model"] in _default_model_config:
+                    mdict = _default_model_config[model["model"]]
                     mdict.update(model)
                 else:
                     mdict = model
@@ -515,13 +508,13 @@ class Detector(Thread):
 
         # Not all detectors are loaded thru OpenVINO, end here for those which
         # aren't
-        if 'directory' not in mdict:
+        if "directory" not in mdict:
             self.loadConfig(mdict)
             self.configureDetector()
             return
 
-        mdir = mdict['directory']
-        xpath = self.findXML(mdir, mdict.get('xml', None), device)
+        mdir = mdict["directory"]
+        xpath = self.findXML(mdir, mdict.get("xml", None), device)
 
         self.device = device
         self.model = model
@@ -540,53 +533,53 @@ class Detector(Thread):
                 if group["relation_type"] != "EMPTY_LABEL":
                     for label_id in group["label_ids"]:
                         label_info = label_params["all_labels"][label_id]
-                        categories.append(label_info['name'].lower())
+                        categories.append(label_info["name"].lower())
         return categories
 
     def loadLabelSchema(self):
         labelSchemaPath = os.path.dirname(self.model_path)
-        labelSchemaFilePath = labelSchemaPath + '/label_schema.json'
+        labelSchemaFilePath = labelSchemaPath + "/label_schema.json"
         if os.path.exists(labelSchemaFilePath):
             log.info("Label schema found, attempting to load categories")
             with open(labelSchemaFilePath) as fd:
                 schema_data = json.load(fd)
-                if 'label_groups' in schema_data:
+                if "label_groups" in schema_data:
                     self.categories = self._loadCategories(schema_data)
                     log.info("Categories detected as", self.categories)
         return
 
     def loadConfig(self, mdict):
         if mdict:
-            self.input_shape = mdict.get('input_shape', None)
-            if 'categories' in mdict:
-                self.categories = mdict['categories']
-            self.keep_aspect = mdict.get('keep_aspect', False)
-            if 'output_order' in mdict:
-                self.idxCategory = mdict['output_order']['category']
-                self.idxConfidence = mdict['output_order']['confidence']
-                self.idxOriginX = mdict['output_order']['originX']
-                self.idxOriginY = mdict['output_order']['originY']
-                self.idxOppositeX = mdict['output_order']['oppositeX']
-                self.idxOppositeY = mdict['output_order']['oppositeY']
+            self.input_shape = mdict.get("input_shape", None)
+            if "categories" in mdict:
+                self.categories = mdict["categories"]
+            self.keep_aspect = mdict.get("keep_aspect", False)
+            if "output_order" in mdict:
+                self.idxCategory = mdict["output_order"]["category"]
+                self.idxConfidence = mdict["output_order"]["confidence"]
+                self.idxOriginX = mdict["output_order"]["originX"]
+                self.idxOriginY = mdict["output_order"]["originY"]
+                self.idxOppositeX = mdict["output_order"]["oppositeX"]
+                self.idxOppositeY = mdict["output_order"]["oppositeY"]
                 self.defaultOutputOrder = False
-            if 'colorspace' in mdict:
+            if "colorspace" in mdict:
                 self.setColorSpace(mdict)
-            if 'normalized_output' in mdict:
-                self.normalized_output = mdict['normalized_output']
+            if "normalized_output" in mdict:
+                self.normalized_output = mdict["normalized_output"]
                 self.default_normalized_output = False
-            if 'normalize_input' in mdict:
-                self.normalize_input = mdict['normalize_input']
-            if 'blacklist' in mdict:
-                self.blacklist = mdict['blacklist']
-            if 'threshold' in mdict:
-                self.threshold = mdict['threshold']
+            if "normalize_input" in mdict:
+                self.normalize_input = mdict["normalize_input"]
+            if "blacklist" in mdict:
+                self.blacklist = mdict["blacklist"]
+            if "threshold" in mdict:
+                self.threshold = mdict["threshold"]
         return
 
     def setColorSpace(self, mdict):
-        if mdict['colorspace'] in _colorSpaceCodes:
-            self.colorSpaceCode = _colorSpaceCodes[mdict['colorspace']]
+        if mdict["colorspace"] in _colorSpaceCodes:
+            self.colorSpaceCode = _colorSpaceCodes[mdict["colorspace"]]
         else:
-            log.warn("Unknown colorspace {}".format(mdict['colorspace']))
+            log.warn("Unknown colorspace {}".format(mdict["colorspace"]))
         return
 
     def preprocessColorspace(self, frame):
@@ -605,8 +598,7 @@ class Detector(Thread):
                     in_frame = in_frame.transpose((2, 0, 1))
                 in_frame = in_frame.reshape((self.n, self.c, self.h, self.w))
                 if self.normalize_input:
-                    in_frame = np.ascontiguousarray(
-                        in_frame).astype(np.float32)
+                    in_frame = np.ascontiguousarray(in_frame).astype(np.float32)
                     in_frame /= 255.0
                 resized.append(IAData(in_frame, input.id, frame.shape[1::-1]))
         return resized
@@ -635,16 +627,8 @@ class Detector(Thread):
         bottom, right = self.h - resized_height, self.w - resized_width
         resized_frame = cv2.resize(frame, (resized_width, resized_height))
         frame_with_padding = cv2.copyMakeBorder(
-            resized_frame,
-            top,
-            bottom,
-            left,
-            right,
-            cv2.BORDER_CONSTANT,
-            value=[
-                0,
-                0,
-                0])
+            resized_frame, top, bottom, left, right, cv2.BORDER_CONSTANT, value=[0, 0, 0]
+        )
         return frame_with_padding
 
     # Helper function to 'squeeze' the output buffer from OpenVINO.
@@ -668,17 +652,19 @@ class Detector(Thread):
         # If user didnt explicitly request normalized_output,
         # and we find something that doesnt look normalized,
         # move to unnormalized to get proper bounding-boxes.
-        if self.default_normalized_output and \
-                self.normalized_output and \
-                (x_min > 1.0 or y_min > 1.0):
+        if (
+            self.default_normalized_output
+            and self.normalized_output
+            and (x_min > 1.0 or y_min > 1.0)
+        ):
             log.info("Auto switching to unnormalized output")
             self.normalized_output = False
         return
 
     def postprocessAsDict(self, result):
         objects = []
-        detections = result.data['boxes']
-        labels = result.data['labels']
+        detections = result.data["boxes"]
+        labels = result.data["labels"]
 
         detections = self.squeeze_buffer(detections, 2)
         if len(labels.shape) > 1 and labels.shape[1] == 1:
@@ -695,12 +681,13 @@ class Detector(Thread):
             self._autoDetectUnnormalized(x_min, y_min)
 
             bounding_box = self.recalculateBoundingBox(
-                [x_min, y_min, x_max, y_max], result.save[0], result.save[1])
+                [x_min, y_min, x_max, y_max], result.save[0], result.save[1]
+            )
             object = {
-                'id': len(objects) + 1,
-                'category': self.categories[label],
-                'confidence': float(confidence),
-                'bounding_box': bounding_box.asDict
+                "id": len(objects) + 1,
+                "category": self.categories[label],
+                "confidence": float(confidence),
+                "bounding_box": bounding_box.asDict,
             }
             objects.append(object)
 
@@ -709,8 +696,9 @@ class Detector(Thread):
     def postprocess(self, result):
         objects = []
 
-        if self.saveDict or (isinstance(result.data, dict)
-                             and self.distributed == Distributed.OVMS):
+        if self.saveDict or (
+            isinstance(result.data, dict) and self.distributed == Distributed.OVMS
+        ):
             return self.postprocessAsDict(result)
         else:
             detections = self.squeeze_buffer(result.data, 2)
@@ -728,13 +716,14 @@ class Detector(Thread):
         for obj in detections:
             # detections seem to be sorted by threshold descending, bail out
             # when threshold is too low or detection width or height is zero
-            if obj[self.idxConfidence] < self.threshold \
-                    or obj[self.idxOriginX] == obj[self.idxOppositeX] \
-                    or obj[self.idxOriginY] == obj[self.idxOppositeY]:
+            if (
+                obj[self.idxConfidence] < self.threshold
+                or obj[self.idxOriginX] == obj[self.idxOppositeX]
+                or obj[self.idxOriginY] == obj[self.idxOppositeY]
+            ):
                 break
 
-            self._autoDetectUnnormalized(
-                obj[self.idxOriginX], obj[self.idxOriginY])
+            self._autoDetectUnnormalized(obj[self.idxOriginX], obj[self.idxOriginY])
 
             # Allow the model to request fixed detection type.
             if self.idxCategory >= 0:
@@ -750,21 +739,22 @@ class Detector(Thread):
             if category in self.blacklist:
                 continue
             bounds = self.recalculateBoundingBox(
-                obj[self.idxOriginX:self.idxOppositeY + 1], result.save[0], result.save[1])
+                obj[self.idxOriginX : self.idxOppositeY + 1],
+                result.save[0],
+                result.save[1],
+            )
             comw = bounds.width / 3
             comh = bounds.height / 4
             center_of_mass = Rectangle(
-                origin=Point(
-                    bounds.x + comw,
-                    bounds.y + comh),
-                size=(
-                    comw,
-                    comh))
-            odict = {'id': len(objects) + 1,
-                     'category': category,
-                     'confidence': float(obj[self.idxConfidence]),
-                     'bounding_box': bounds.asDict,
-                     'center_of_mass': center_of_mass.asDict}
+                origin=Point(bounds.x + comw, bounds.y + comh), size=(comw, comh)
+            )
+            odict = {
+                "id": len(objects) + 1,
+                "category": category,
+                "confidence": float(obj[self.idxConfidence]),
+                "bounding_box": bounds.asDict,
+                "center_of_mass": center_of_mass.asDict,
+            }
             objects.append(odict)
         return objects
 
@@ -772,8 +762,12 @@ class Detector(Thread):
         x_min, y_min, x_max, y_max = bbox
 
         if not self.normalized_output:
-            x_min, y_min, x_max, y_max = x_min / self.w, y_min / \
-                self.h, x_max / self.w, y_max / self.h
+            x_min, y_min, x_max, y_max = (
+                x_min / self.w,
+                y_min / self.h,
+                x_max / self.w,
+                y_max / self.h,
+            )
 
         x_scale, y_scale = image_width, image_height
         if self.keep_aspect:
@@ -786,12 +780,9 @@ class Detector(Thread):
                 y_scale = self.h / width_ratio
 
         bounding_box = Rectangle(
-            origin=Point(
-                x_min * x_scale,
-                y_min * y_scale),
-            opposite=Point(
-                x_max * x_scale,
-                y_max * y_scale))
+            origin=Point(x_min * x_scale, y_min * y_scale),
+            opposite=Point(x_max * x_scale, y_max * y_scale),
+        )
         return bounding_box
 
     def serializeInput(self, data):
@@ -816,32 +807,67 @@ class Detector(Thread):
 
 
 class PoseEstimator(Detector):
-    POSE_PAIRS = ((15, 13), (13, 11), (16, 14), (14, 12), (11, 12), (5, 11),
-                  (6, 12), (5, 6), (5, 7), (6, 8), (7, 9), (8, 10), (1, 2),
-                  (0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 6))
+    POSE_PAIRS = (
+        (15, 13),
+        (13, 11),
+        (16, 14),
+        (14, 12),
+        (11, 12),
+        (5, 11),
+        (6, 12),
+        (5, 6),
+        (5, 7),
+        (6, 8),
+        (7, 9),
+        (8, 10),
+        (1, 2),
+        (0, 1),
+        (0, 2),
+        (1, 3),
+        (2, 4),
+        (3, 5),
+        (4, 6),
+    )
 
     bodyPartKP = [
-        'Nose',
-        'Left-Eye',
-        'Right-Eye',
-        'Left-Ear',
-        'Right-Ear',
-        'Left-Shoulder',
-        'Right-Shoulder',
-        'Left-Elbow',
-        'Right-Elbow',
-        'Left-Wrist',
-        'Right-Wrist',
-        'Left-Hip',
-        'Right-Hip',
-        'Left-Knee',
-        'Right-Knee',
-        'Left-Ankle',
-        'Right-Ankle']
+        "Nose",
+        "Left-Eye",
+        "Right-Eye",
+        "Left-Ear",
+        "Right-Ear",
+        "Left-Shoulder",
+        "Right-Shoulder",
+        "Left-Elbow",
+        "Right-Elbow",
+        "Left-Wrist",
+        "Right-Wrist",
+        "Left-Hip",
+        "Right-Hip",
+        "Left-Knee",
+        "Right-Knee",
+        "Left-Ankle",
+        "Right-Ankle",
+    ]
 
-    colors = [(255, 0, 0), (255, 85, 0), (255, 170, 0), (255, 255, 0), (170, 255, 0), (85, 255, 0),
-              (0, 255, 0), (0, 255, 85), (0, 255, 170), (0, 255, 255), (0, 170, 255), (0, 85, 255),
-              (0, 0, 255), (85, 0, 255), (170, 0, 255), (255, 0, 255), (255, 0, 170)]
+    colors = [
+        (255, 0, 0),
+        (255, 85, 0),
+        (255, 170, 0),
+        (255, 255, 0),
+        (170, 255, 0),
+        (85, 255, 0),
+        (0, 255, 0),
+        (0, 255, 85),
+        (0, 255, 170),
+        (0, 255, 255),
+        (0, 170, 255),
+        (0, 85, 255),
+        (0, 0, 255),
+        (85, 0, 255),
+        (170, 0, 255),
+        (255, 0, 255),
+        (255, 0, 170),
+    ]
 
     def __init__(self, asynchronous=False, distributed=Distributed.NONE):
         super().__init__(asynchronous=asynchronous, distributed=distributed)
@@ -855,10 +881,11 @@ class PoseEstimator(Detector):
 
         if self.distributed == Distributed.OVMS:
             self.output_keys = list(self.model_metadata["outputs"].keys())
-            self.n, self.c, self.h, self.w = self.model_metadata["inputs"]["data"]["shape"]
+            self.n, self.c, self.h, self.w = self.model_metadata["inputs"]["data"][
+                "shape"
+            ]
         else:
-            self.output_keys = [out.get_any_name()
-                                for out in self.model.outputs]
+            self.output_keys = [out.get_any_name() for out in self.model.outputs]
             self.n, self.c, self.h, self.w = self.model.inputs[0].shape
 
         return
@@ -893,41 +920,47 @@ class PoseEstimator(Detector):
             if hpe_bounds[0] is None:
                 continue
 
-            if self.hasKeypoints(published_pose,
-                                 ('Right-Hip',
-                                  'Right-Knee',
-                                  'Right-Ankle',
-                                  'Left-Hip',
-                                  'Left-Knee',
-                                  'Left-Ankle')) or self.hasKeypoints(published_pose,
-                                                                      ('Right-Shoulder',
-                                                                       'Right-Elbow',
-                                                                       'Right-Wrist',
-                                                                       'Left-Shoulder',
-                                                                       'Left-Elbow',
-                                                                       'Left-Wrist')):
+            if self.hasKeypoints(
+                published_pose,
+                (
+                    "Right-Hip",
+                    "Right-Knee",
+                    "Right-Ankle",
+                    "Left-Hip",
+                    "Left-Knee",
+                    "Left-Ankle",
+                ),
+            ) or self.hasKeypoints(
+                published_pose,
+                (
+                    "Right-Shoulder",
+                    "Right-Elbow",
+                    "Right-Wrist",
+                    "Left-Shoulder",
+                    "Left-Elbow",
+                    "Left-Wrist",
+                ),
+            ):
 
                 bounds = Rectangle(
-                    origin=Point(
-                        hpe_bounds[0], hpe_bounds[1]), opposite=Point(
-                        hpe_bounds[2], hpe_bounds[3]))
+                    origin=Point(hpe_bounds[0], hpe_bounds[1]),
+                    opposite=Point(hpe_bounds[2], hpe_bounds[3]),
+                )
                 if bounds.width == 0 or bounds.height == 0:
                     continue
 
                 comw = bounds.width / 3
                 comh = bounds.height / 4
                 center_of_mass = Rectangle(
-                    origin=Point(
-                        bounds.x + comw,
-                        bounds.y + comh),
-                    size=(
-                        comw,
-                        comh))
-                person = {'id': len(people) + 1,
-                          'category': 'person',
-                          'bounding_box': bounds.asDict,
-                          'center_of_mass': center_of_mass.asDict,
-                          'pose': published_pose}
+                    origin=Point(bounds.x + comw, bounds.y + comh), size=(comw, comh)
+                )
+                person = {
+                    "id": len(people) + 1,
+                    "category": "person",
+                    "bounding_box": bounds.asDict,
+                    "center_of_mass": center_of_mass.asDict,
+                    "pose": published_pose,
+                }
                 people.append(person)
 
         return people
@@ -945,14 +978,15 @@ class PoseEstimator(Detector):
         heatmaps = results.data[self.output_keys[1]]
 
         pooled_heatmaps = np.array(
-            [[self.maxpool(h, kernel_size=3, stride=1, padding=1) for h in heatmaps[0]]])
+            [[self.maxpool(h, kernel_size=3, stride=1, padding=1) for h in heatmaps[0]]]
+        )
         nms_heatmaps = self.nonMaxSuppression(heatmaps, pooled_heatmaps)
 
         image_shape = results.save
         poses, _ = self.decoder(heatmaps, nms_heatmaps, pafs)
 
         if self.distributed == Distributed.OVMS:
-            output_shape = self.model_metadata["outputs"][self.output_keys[0]]['shape']
+            output_shape = self.model_metadata["outputs"][self.output_keys[0]]["shape"]
         else:
             output_shape = self.model.get_output_shape(0)
 
@@ -973,21 +1007,19 @@ class PoseEstimator(Detector):
 
     def maxpool(self, matrix, kernel_size, stride, padding):
         matrix = np.pad(matrix, padding, mode="constant")
-        output_shape = ((matrix.shape[0] - kernel_size) // stride + 1,
-                        (matrix.shape[1] - kernel_size) // stride + 1,)
+        output_shape = (
+            (matrix.shape[0] - kernel_size) // stride + 1,
+            (matrix.shape[1] - kernel_size) // stride + 1,
+        )
 
         kernel_size = (kernel_size, kernel_size)
 
         matrix_view = np.lib.stride_tricks.as_strided(
             matrix,
-            shape=output_shape +
-            kernel_size,
-            strides=(
-                stride *
-                matrix.strides[0],
-                stride *
-                matrix.strides[1]) +
-            matrix.strides)
+            shape=output_shape + kernel_size,
+            strides=(stride * matrix.strides[0], stride * matrix.strides[1])
+            + matrix.strides,
+        )
         matrix_view = matrix_view.reshape(-1, *kernel_size)
 
         return matrix_view.max(axis=(1, 2)).reshape(output_shape)

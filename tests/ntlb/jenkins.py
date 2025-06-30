@@ -27,11 +27,12 @@ class ReportUpdater:
             if result.status in (TestResult.FAILED, TestResult.EXECUTED):
                 statusLines.append(self.statusLine(result, report))
 
-            if (result.status != report.status
+            if (
+                result.status != report.status
                 or test != report.classname
                 or result.suite != report.suite
-                or result.name != report.name) \
-               and (not ignoreSkipped or result.status != TestResult.SKIPPED):
+                or result.name != report.name
+            ) and (not ignoreSkipped or result.status != TestResult.SKIPPED):
                 report.status = result.status
                 report.suite = result.suite
                 report.name = result.name

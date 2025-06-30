@@ -29,8 +29,9 @@ def wait_on_connect(mqttc, obj, flags, rc):
     waitConnected = True
     # print( "Connected to MQTT Broker" )
     mqttc.subscribe(PubSub.formatTopic(PubSub.DATA_CAMERA, camera_id="+"), 0)
-    mqttc.subscribe(PubSub.formatTopic(PubSub.DATA_SCENE, scene_id="+",
-                                       thing_type="+"), 0)
+    mqttc.subscribe(
+        PubSub.formatTopic(PubSub.DATA_SCENE, scene_id="+", thing_type="+"), 0
+    )
     # print("Subscribed to the topic {}".format( topic ))
     return
 
@@ -47,17 +48,25 @@ def wait_on_message(mqttc, obj, msg):
     metadata = json.loads(realMsg)
 
     topic = PubSub.parseTopic(msg.topic)
-    if topic['_topic_id'] == PubSub.DATA_CAMERA:
+    if topic["_topic_id"] == PubSub.DATA_CAMERA:
         if len(list(metadata["objects"].values())[0]):
             percebroDetectionMessages += 1
-    elif topic['_topic_id'] == PubSub.DATA_SCENE:
+    elif topic["_topic_id"] == PubSub.DATA_SCENE:
         sceneUpdateMessages += 1
     return
 
 
-def mqtt_wait_for_detections(broker, port, rootca, auth,
-                             waitOnPercebro, waitOnScene,
-                             maxWait=120, waitStep=2, minMessages=10):
+def mqtt_wait_for_detections(
+    broker,
+    port,
+    rootca,
+    auth,
+    waitOnPercebro,
+    waitOnScene,
+    maxWait=120,
+    waitStep=2,
+    minMessages=10,
+):
     """! This function waits for percebro-generated mqtt messages to be available
     on the broker, so tests can start after they are available.
     @params broker   - The address for the broker.
@@ -106,7 +115,10 @@ def mqtt_wait_for_detections(broker, port, rootca, auth,
                 waitDone = True
 
     waitClient.loopStop()
-    print("mqtt_wait_for_detections: {},{} detections found".format(
-        percebroDetectionMessages, sceneUpdateMessages))
+    print(
+        "mqtt_wait_for_detections: {},{} detections found".format(
+            percebroDetectionMessages, sceneUpdateMessages
+        )
+    )
 
     return result

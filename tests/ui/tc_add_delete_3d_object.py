@@ -18,7 +18,7 @@ def test_add_delete_3d_object(params, record_xml_attribute):
     TEST_NAME = "NEX-T10428"
     record_xml_attribute("name", TEST_NAME)
     PAGE_NAME = "Object Library"
-    OBJECT_NAME = '3D Object'
+    OBJECT_NAME = "3D Object"
     FILE_TO_UPLOAD = "/workspace/tests/ui/test_media/box.glb"
     exit_code = 1
     try:
@@ -31,10 +31,11 @@ def test_add_delete_3d_object(params, record_xml_attribute):
         print("Object Library exists in the navigation bar.")
 
         assert common.create_object_library(
-            browser, OBJECT_NAME, model_file=FILE_TO_UPLOAD)
-        print('3D object created!')
+            browser, OBJECT_NAME, model_file=FILE_TO_UPLOAD
+        )
+        print("3D object created!")
         assert common.delete_object_library(browser, OBJECT_NAME)
-        print('3D object deleted!')
+        print("3D object deleted!")
         exit_code = 0
 
     finally:

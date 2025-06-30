@@ -5,9 +5,7 @@
 # This file is licensed under the Limited Edge Software Distribution
 # License Agreement.
 
+
 def pytest_addoption(parser):
-    parser.addoption(
-        '--url',
-        action='store',
-        help='RSTP stream URL to use in test')
+    parser.addoption("--url", action="store", help="RSTP stream URL to use in test")
     return

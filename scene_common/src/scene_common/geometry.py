@@ -12,7 +12,7 @@ from fast_geometry import Point, Line, Rectangle, Polygon, Size
 DEFAULTZ = 0
 
 # Re-export modules from fast geometry as our own
-__all__ = ['Point', 'Line', 'Rectangle', 'Size']
+__all__ = ["Point", "Line", "Rectangle", "Size"]
 
 
 def isarray(a):
@@ -38,31 +38,30 @@ class Region:
         return
 
     def updatePoints(self, newPoints):
-        if (not isarray(newPoints) and 'center' in newPoints):
-            pt = newPoints['center']
+        if not isarray(newPoints) and "center" in newPoints:
+            pt = newPoints["center"]
             self.center = pt if isinstance(pt, Point) else Point(pt)
 
-        if isarray(newPoints) or (
-                'area' in newPoints and newPoints['area'] == "poly"):
+        if isarray(newPoints) or ("area" in newPoints and newPoints["area"] == "poly"):
             self.area = Region.REGION_POLY
             self.points = []
             if not isarray(newPoints):
-                newPoints = newPoints['points']
+                newPoints = newPoints["points"]
             for pt in newPoints:
                 self.points.append(pt if isinstance(pt, Point) else Point(pt))
             self.findBoundingBox()
-            self.points_list = [
-                x.as2Dxy.asCartesianVector for x in self.points]
+            self.points_list = [x.as2Dxy.asCartesianVector for x in self.points]
             if len(self.points_list) > 2:
                 self.polygon = Polygon(self.points_list)
-        elif 'area' in newPoints and newPoints['area'] == "circle":
+        elif "area" in newPoints and newPoints["area"] == "circle":
             self.area = Region.REGION_CIRCLE
-            self.radius = newPoints['radius']
+            self.radius = newPoints["radius"]
             # Rectangle is created using Point, Point constructor.
-            self.boundingBox = Rectangle(self.center -
-                                         (self.radius, self.radius), self.center +
-                                         (self.radius, self.radius))
-        elif 'area' in newPoints and newPoints['area'] == "scene":
+            self.boundingBox = Rectangle(
+                self.center - (self.radius, self.radius),
+                self.center + (self.radius, self.radius),
+            )
+        elif "area" in newPoints and newPoints["area"] == "scene":
             self.area = Region.REGION_SCENE
         else:
             raise ValueError("Unrecognized point data", newPoints)
@@ -70,7 +69,7 @@ class Region:
 
     def updateSingletonType(self, info):
         if isinstance(info, dict):
-            self.singleton_type = info.get('singleton_type', None)
+            self.singleton_type = info.get("singleton_type", None)
         return
 
     def findBoundingBox(self):
@@ -82,8 +81,7 @@ class Region:
             ty = min(ty, point.y)
             bx = max(bx, point.x)
             by = max(by, point.y)
-        self.boundingBox = Rectangle(origin=Point(tx, ty),
-                                     opposite=Point(bx, by))
+        self.boundingBox = Rectangle(origin=Point(tx, ty), opposite=Point(bx, by))
         return
 
     def isPointWithin(self, coord):
@@ -111,8 +109,9 @@ class Region:
 
             if len(self.points) > 2:
                 if self.polygon is None:
-                    pts = [x.as2Dxy.asNumpyCartesian.flatten().tolist()
-                           for x in self.points]
+                    pts = [
+                        x.as2Dxy.asNumpyCartesian.flatten().tolist() for x in self.points
+                    ]
                     self.polygon = Polygon(pts)
                 return self.polygon.isPointInside(coord.x, coord.y)
 
@@ -128,17 +127,17 @@ class Region:
         return False
 
     def serialize(self):
-        data = {'points': [], 'title': self.name, 'uuid': self.uuid}
+        data = {"points": [], "title": self.name, "uuid": self.uuid}
         if self.area == self.REGION_SCENE:
-            data['area'] = "scene"
+            data["area"] = "scene"
         elif self.area == self.REGION_CIRCLE:
-            data['area'] = "circle"
-            data['radius'] = self.radius
+            data["area"] = "circle"
+            data["radius"] = self.radius
         elif self.area == self.REGION_POLY:
-            data['area'] = "poly"
-            data['points'] = self.coordinates
+            data["area"] = "poly"
+            data["points"] = self.coordinates
         if hasattr(self, "center"):
-            data['x'], data['y'] = self.center.x, self.center.y
+            data["x"], data["y"] = self.center.x, self.center.y
         return data
 
     @property
@@ -147,16 +146,17 @@ class Region:
 
     @property
     def coordinates(self):
-        if hasattr(self, 'points'):
-            return [np.array(x.asCartesianVector).tolist()
-                    for x in self.points]
+        if hasattr(self, "points"):
+            return [np.array(x.asCartesianVector).tolist() for x in self.points]
         return None
 
     def __repr__(self):
-        return "%s: person:%i vehicle:%i %s" % \
-            (self.__class__.__name__,
-             len(self.objects.get('person', [])), len(self.objects.get('vehicle', [])),
-             self.coordinates)
+        return "%s: person:%i vehicle:%i %s" % (
+            self.__class__.__name__,
+            len(self.objects.get("person", [])),
+            len(self.objects.get("vehicle", [])),
+            self.coordinates,
+        )
 
 
 class Tripwire(Region):
@@ -166,17 +166,21 @@ class Tripwire(Region):
             pt2 = self.points[(idx + 1) % len(self.points)]
             segment = Line(pt1, pt2)
             isect = line.intersection(segment)
-            if isect[0] and line.isPointOnLine(Point(isect[1])) \
-                    and segment.isPointOnLine(Point(isect[1])):
-                direction = (line.x2 - segment.x1) * (segment.y2 - segment.y1) \
-                    - (line.y2 - segment.y1) * (segment.x2 - segment.x1)
+            if (
+                isect[0]
+                and line.isPointOnLine(Point(isect[1]))
+                and segment.isPointOnLine(Point(isect[1]))
+            ):
+                direction = (line.x2 - segment.x1) * (segment.y2 - segment.y1) - (
+                    line.y2 - segment.y1
+                ) * (segment.x2 - segment.x1)
                 return int(math.copysign(1, direction))
         return 0
 
     def serialize(self):
         data = {
-            'title': self.name,
-            'points': self.coordinates,
-            'uuid': self.uuid,
+            "title": self.name,
+            "points": self.coordinates,
+            "uuid": self.uuid,
         }
         return data

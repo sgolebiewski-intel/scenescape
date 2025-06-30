@@ -9,7 +9,7 @@ import os
 
 
 def known_video_type(filepath):
-    extensions = ['.mov', '.avi', '.mpg', '.mkv', '.mp4']
+    extensions = [".mov", ".avi", ".mpg", ".mkv", ".mp4"]
     length = len(extensions)
     i = 0
     while i < length:

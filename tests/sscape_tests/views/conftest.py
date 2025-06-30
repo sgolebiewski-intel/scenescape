@@ -12,7 +12,7 @@ TEST_NAME = "NEX-T10479"
 
 
 def pytest_sessionstart():
-    """! Executes at the beginning of the session. """
+    """! Executes at the beginning of the session."""
 
     print(f"Executing: {TEST_NAME}")
 
@@ -20,7 +20,7 @@ def pytest_sessionstart():
 
 
 def pytest_sessionfinish(exitstatus):
-    """! Executes at the end of the session. """
+    """! Executes at the end of the session."""
 
     common.record_test_result(TEST_NAME, exitstatus)
     return

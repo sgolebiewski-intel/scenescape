@@ -39,18 +39,16 @@ def test_delete_sensor_main(params, record_xml_attribute):
         common.create_scene(browser, scene_name_1, scale, map_image)
         common.create_scene(browser, scene_name_2, scale, map_image)
         common.create_sensor_from_scene(
-            browser, sensor_id_1, sensor_name_1, scene_name_1)
+            browser, sensor_id_1, sensor_name_1, scene_name_1
+        )
         common.create_sensor_from_scene(
-            browser, sensor_id_2, sensor_name_2, scene_name_2)
+            browser, sensor_id_2, sensor_name_2, scene_name_2
+        )
 
         ### After deleting the Scene-2, Sensor_2 must be orphan ###
         common.delete_scene(browser, scene_name_2)
         assert common.delete_sensor(browser, sensor_name_1)
-        print(
-            sensor_name_1 +
-            " was assigned to " +
-            scene_name_1 +
-            " and can be deleted")
+        print(sensor_name_1 + " was assigned to " + scene_name_1 + " and can be deleted")
         assert common.delete_sensor(browser, sensor_name_2)
         print(sensor_name_2 + " was orphaned(--) and can be deleted")
         common.delete_scene(browser, scene_name_1)

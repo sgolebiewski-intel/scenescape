@@ -5,6 +5,7 @@
 # This file is licensed under the Limited Edge Software Distribution
 # License Agreement.
 
+
 def record_test_result(name: str, error: int):
     print(f"\n{name}:", "FAIL" if error else "PASS")
     print("-----------------------------\n")
@@ -19,7 +20,7 @@ def check_event_contains_data(event, event_type):
     event_id = "tripwire_id"
     event_name = "tripwire_name"
 
-    if event_type == 'region':
+    if event_type == "region":
         event_id = "region_id"
         event_name = "region_name"
 
@@ -30,7 +31,8 @@ def check_event_contains_data(event, event_type):
         event_id,
         event_name,
         "counts",
-        "objects"]
+        "objects",
+    ]
     event_keys = list(event.keys())
     # Check if all the data exists in the event message payload
     assert set(event_data) <= set(event_keys)

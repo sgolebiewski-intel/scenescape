@@ -5,6 +5,7 @@
 # This file is licensed under the Limited Edge Software Distribution
 # License Agreement.
 
+
 def test_detect(ocr_detect, ocr_sample_image, ocr_positions):
     """! Verifies the output of 'detector.TextDetector.detect()' method.
 
@@ -13,12 +14,11 @@ def test_detect(ocr_detect, ocr_sample_image, ocr_positions):
     """
 
     detections = ocr_detect.detect(ocr_sample_image)
-    boxes = [x['bounding_box'] for x in detections.data[0]]
+    boxes = [x["bounding_box"] for x in detections.data[0]]
     assert len(ocr_positions) == len(boxes)
     for box, position in zip(boxes, ocr_positions):
-        assert abs((position[0] - box['x']) / position[0]) < 0.05
-        assert abs(
-            (position[1] - (box['y'] + box["height"])) / position[1]) < 0.05
+        assert abs((position[0] - box["x"]) / position[0]) < 0.05
+        assert abs((position[1] - (box["y"] + box["height"])) / position[1]) < 0.05
 
     return
 

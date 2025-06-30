@@ -32,16 +32,16 @@ def test_camera_status_main(params, record_xml_attribute):
 
         print("Waiting for the cameras to send the data...")
         assert mqtt_wait_for_detections(
-            params['broker_url'],
-            params['broker_port'],
-            params['rootcert'],
-            params['auth'],
+            params["broker_url"],
+            params["broker_port"],
+            params["rootcert"],
+            params["auth"],
             waitOnPercebro=True,
-            waitOnScene=False)
+            waitOnScene=False,
+        )
         statusCamera = [False] * cameraNumber
         foundCameras = 0
-        assert common.wait_for_elements(
-            browser, "#camera1", findBy=By.CSS_SELECTOR)
+        assert common.wait_for_elements(browser, "#camera1", findBy=By.CSS_SELECTOR)
 
         camerasOnline = False
         currWait = 0
@@ -54,23 +54,25 @@ def test_camera_status_main(params, record_xml_attribute):
                 print("Camera1 failed to come online...")
                 break
             camerasOnline = browser.find_element(
-                By.CSS_SELECTOR, "#camera1").is_displayed()
+                By.CSS_SELECTOR, "#camera1"
+            ).is_displayed()
 
         assert camerasOnline
         for i in range(cameraNumber):
             statusCamera[i] = browser.find_element(
-                By.CSS_SELECTOR, "#camera{}".format(
-                    i + 1)).is_displayed()
+                By.CSS_SELECTOR, "#camera{}".format(i + 1)
+            ).is_displayed()
             foundCameras += 1
 
         assert foundCameras == cameraNumber
         label_cam_offline = browser.find_element(
-            By.CLASS_NAME, "cam-offline").get_attribute("textContent")
+            By.CLASS_NAME, "cam-offline"
+        ).get_attribute("textContent")
         assert statusCamera[0] and statusCamera[1] and not statusCamera[2]
         print("Camera1 & Camera2 are visible and show a snapshot!")
         print(
-            "Camera3 does not sending data and displays the label: " +
-            label_cam_offline)
+            "Camera3 does not sending data and displays the label: " + label_cam_offline
+        )
         exit_code = 0
 
     finally:

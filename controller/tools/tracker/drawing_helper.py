@@ -11,11 +11,7 @@ import numpy as np
 
 from drawing import *
 
-class_colors = {
-    'Person': (0, 0, 255),
-    'Vehicle': (255, 0, 0),
-    'other': (0, 255, 255)
-}
+class_colors = {"Person": (0, 0, 255), "Vehicle": (255, 0, 0), "other": (0, 255, 255)}
 
 
 def displayScene(scene, curFrame, color, mask, font, onlyGID):
@@ -32,12 +28,11 @@ def displayScene(scene, curFrame, color, mask, font, onlyGID):
 
 
 def centerTextWithinFrame(frame, label, loc, font, fsize, color):
-    size, origin, scale = scl_text_size(
-        frame, label, loc, (0, 0), font, fsize, 5)
-    cv2.putText(frame, label, origin, font, int(
-        fsize * scale), (0, 0, 0), int(5 * scale))
-    cv2.putText(frame, label, origin, font, int(
-        fsize * scale), color, int(2 * scale))
+    size, origin, scale = scl_text_size(frame, label, loc, (0, 0), font, fsize, 5)
+    cv2.putText(
+        frame, label, origin, font, int(fsize * scale), (0, 0, 0), int(5 * scale)
+    )
+    cv2.putText(frame, label, origin, font, int(fsize * scale), color, int(2 * scale))
     return size
 
 
@@ -53,16 +48,16 @@ def labelObjects(objects, camDetect, frame, sensor, font, scale):
             old.append(obj)
     for obj in camDetect:
         bounds = obj.boundingBoxPixels
-        point = np.array((bounds.x + bounds.width / 2,
-                          bounds.y + bounds.height / 2)) / scale
+        point = (
+            np.array((bounds.x + bounds.width / 2, bounds.y + bounds.height / 2)) / scale
+        )
         label = "GID:%s" % (obj.gid)
-        size = centerTextWithinFrame(
-            frame, label, point, font, 1, sensor.color)
+        size = centerTextWithinFrame(frame, label, point, font, 1, sensor.color)
         label = "%s/%s" % (obj.oid, obj.reidVector)
         lsize = cv2.getTextSize(label, font, 0.5, 2)[0]
         point[1] += size[1] + lsize[1] / 2
         centerTextWithinFrame(frame, label, point, font, 0.5, sensor.color)
-        tag_id = getattr(obj, 'tag_id', None)
+        tag_id = getattr(obj, "tag_id", None)
         if tag_id is not None:
             label = tag_id
             lsize = cv2.getTextSize(label, font, 0.5, 2)[0]
@@ -75,7 +70,7 @@ def labelObjects(objects, camDetect, frame, sensor, font, scale):
         #   bounds = tuple(map(tuple, bounds.astype(int)))
         #   scl_rect(frame, *bounds, color, 2)
 
-        color = class_colors['other']
+        color = class_colors["other"]
         if obj.__class__.__name__ in class_colors:
             color = class_colors[obj.__class__.__name__]
         if obj in old:
@@ -87,43 +82,30 @@ def labelObjects(objects, camDetect, frame, sensor, font, scale):
         scl_rect(frame, *bounds.cv, color, 2)
 
         estBounds = sensor.pose.projectEstimatedBoundsToCameraPixels(
-            obj.sceneLoc, obj.bbMeters.size)
+            obj.sceneLoc, obj.bbMeters.size
+        )
         scl_rect(frame, *estBounds.cv, (255, 255, 255), 2)
 
         pt = obj.averageCenter()
         if obj.location[0].bounds.isPointWithin(pt):
             scl_line(
-                frame, (int(
-                    bounds.x1), int(
-                    pt.y)), (int(
-                        bounds.x2), int(
-                        pt.y)), color, 2)
+                frame, (int(bounds.x1), int(pt.y)), (int(bounds.x2), int(pt.y)), color, 2
+            )
             scl_line(
-                frame, (int(
-                    pt.x), int(
-                    bounds.y1)), (int(
-                        pt.x), int(
-                        bounds.y2)), color, 2)
+                frame, (int(pt.x), int(bounds.y1)), (int(pt.x), int(bounds.y2)), color, 2
+            )
 
     return
 
 
-def drawTextBelow(
-        frame,
-        label,
-        point,
-        font,
-        fscale,
-        fthick,
-        tcolor,
-        bgcolor=None):
+def drawTextBelow(frame, label, point, font, fscale, fthick, tcolor, bgcolor=None):
     if bgcolor:
         size, origin, _ = scl_text_size(
-            frame, label, point.cv, (-1, 1), font, fscale, fthick)
+            frame, label, point.cv, (-1, 1), font, fscale, fthick
+        )
         lpoint = (origin[0] + size[0], origin[1] + size[1])
         scl_rect(frame, point.cv, lpoint, bgcolor, cv2.FILLED)
-    size = scl_text(frame, label, point.cv, (-1, 1),
-                    font, fscale, tcolor, fthick)
+    size = scl_text(frame, label, point.cv, (-1, 1), font, fscale, tcolor, fthick)
     return size
 
 
@@ -137,12 +119,9 @@ def labelDimensions(objects, frame, font):
             font,
             0.5,
             1,
-            (0,
-             0,
-             0),
-            (255,
-             0,
-             255))
+            (0, 0, 0),
+            (255, 0, 255),
+        )
 
         # label = "%ipx x %ipx" % (obj.boundingBox.width, obj.boundingBox.height)
         # lpoint = obj.boundingBox.origin + (0, lsize[1] + 2)
@@ -168,12 +147,8 @@ def drawHorizon(frame, sensor):
 
 
 def overlayDetailsOnCameraFrames(
-        scene,
-        sensor,
-        altFrame,
-        camDetect,
-        font,
-        showHomography):
+    scene, sensor, altFrame, camDetect, font, showHomography
+):
     scale = 1
     # if frame.shape[1] > 640:
     #   scale = 2
@@ -181,22 +156,17 @@ def overlayDetailsOnCameraFrames(
     curObjects = scene.tracker.currentObjects()
     sensorObjects = {}
     for category in curObjects:
-        sensorObjects[category] = [x for x in curObjects[category]
-                                   if x.vectors[0].camera == sensor]
+        sensorObjects[category] = [
+            x for x in curObjects[category] if x.vectors[0].camera == sensor
+        ]
     for category in sensorObjects:
         ogroup = sensorObjects[category]
         if not len(ogroup):
             continue
-        labelObjects(
-            curObjects[category],
-            ogroup,
-            altFrame,
-            sensor,
-            font,
-            scale)
+        labelObjects(curObjects[category], ogroup, altFrame, sensor, font, scale)
         labelDimensions(ogroup, altFrame, font)
 
-    cv2.namedWindow(camDetect['id'], cv2.WINDOW_NORMAL | cv2.WINDOW_KEEPRATIO)
+    cv2.namedWindow(camDetect["id"], cv2.WINDOW_NORMAL | cv2.WINDOW_KEEPRATIO)
 
     # FIXME - if onlyGID display only that one
     scl_rect(altFrame, (0, 0), altFrame.shape[:2][::-1], sensor.color, 8)
@@ -205,7 +175,7 @@ def overlayDetailsOnCameraFrames(
             pt = (np.array(pt) / scale).astype(int)
             scl_circle(altFrame, tuple(pt), 5, (0, 255, 0), -1)
 
-    cv2.imshow(camDetect['id'], altFrame)
+    cv2.imshow(camDetect["id"], altFrame)
 
     # warp = cv2.warpPerspective(frame, sensor.transform, sensor.res)
     # cv2.imshow(camDetect['id'] + "2", warp)

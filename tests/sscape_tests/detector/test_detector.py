@@ -14,10 +14,16 @@ import pytest
 from unittest.mock import MagicMock, patch
 
 from percebro import detector
-from tests.sscape_tests.detector.conftest import model, plugin, threshold, openvino_cores, keep_aspect
+from tests.sscape_tests.detector.conftest import (
+    model,
+    plugin,
+    threshold,
+    openvino_cores,
+    keep_aspect,
+)
 from tests.sscape_tests.detector.config import detector_model, ovms_retail_model
 
-detectorClass = 'percebro.detector.Detector'
+detectorClass = "percebro.detector.Detector"
 
 
 def test_addModels(detector_object):
@@ -27,22 +33,18 @@ def test_addModels(detector_object):
     """
 
     new_models = {
-        'test001': {
-            'directory': "test001-directory"},
-        'pv0078': {
-            'directory': "updated_0078",
-            'categories': [
-                'background',
-                'person',
-                'vehicle',
-                'bicycle',
-                'test']}}
+        "test001": {"directory": "test001-directory"},
+        "pv0078": {
+            "directory": "updated_0078",
+            "categories": ["background", "person", "vehicle", "bicycle", "test"],
+        },
+    }
     detector_object.addModels(new_models)
 
-    assert detector._default_model_config['test001']
-    assert detector._default_model_config['test001']['directory'] == "test001-directory"
-    assert detector._default_model_config['pv0078']['directory'] == "updated_0078"
-    assert detector._default_model_config['pv0078']['categories'][4] == "test"
+    assert detector._default_model_config["test001"]
+    assert detector._default_model_config["test001"]["directory"] == "test001-directory"
+    assert detector._default_model_config["pv0078"]["directory"] == "updated_0078"
+    assert detector._default_model_config["pv0078"]["categories"][4] == "test"
 
     return
 
@@ -62,10 +64,10 @@ def test_run(detector_object, mock_class):
     detector_object.task = mock_class
     detector_object.task.status = "SUCCESS"
     detector_object.task.result = [
-        detector_object.serializeOutput(
-            original_data[0]), detector_object.serializeOutput(
-            original_data[1]), detector_object.serializeOutput(
-                original_data[2])]
+        detector_object.serializeOutput(original_data[0]),
+        detector_object.serializeOutput(original_data[1]),
+        detector_object.serializeOutput(original_data[2]),
+    ]
     detector_object.run()
 
     assert np.array_equal(detector_object.results, original_data[2])
@@ -84,9 +86,7 @@ def test_callback(detector_object):
     expected_result = [i for i in range(total_tasks)]
 
     with ThreadPoolExecutor(max_workers=3) as executor:
-        executor.map(
-            lambda parameters: detector_object.callback(parameters),
-            tasks)
+        executor.map(lambda parameters: detector_object.callback(parameters), tasks)
 
     assert detector_object.tasksDone == expected_result
 
@@ -94,16 +94,13 @@ def test_callback(detector_object):
     return
 
 
-@pytest.mark.parametrize("detector_instance, asynchronous",
-                         [("detector_object", True),
-                          ("detector_object", False),
-                          ("ovms_detector", False)])
+@pytest.mark.parametrize(
+    "detector_instance, asynchronous",
+    [("detector_object", True), ("detector_object", False), ("ovms_detector", False)],
+)
 def test_startInfer(
-        detector_instance,
-        input_data,
-        preprocessed_data,
-        asynchronous,
-        request):
+    detector_instance, input_data, preprocessed_data, asynchronous, request
+):
     """! Verifies the output of 'percebro.detector.Detector.startInfer()' method
 
     @param    detector_instance   Detector object
@@ -116,16 +113,14 @@ def test_startInfer(
     detector_instance.asynchronous = asynchronous
     detector_instance.tasksRemainCount[input_data.id] = len(preprocessed_data)
     is_started = detector_instance.startInfer(
-        preprocessed_data[0], input_data.id, debugFlag=False)
+        preprocessed_data[0], input_data.id, debugFlag=False
+    )
 
     assert is_started
     return
 
 
-def test_startInfer_returns_false(
-        detector_object,
-        input_data,
-        preprocessed_data):
+def test_startInfer_returns_false(detector_object, input_data, preprocessed_data):
     """! Verifies 'percebro.detector.Detector.startInfer()' method returns False when all
     available inference engines are busy.
 
@@ -139,19 +134,17 @@ def test_startInfer_returns_false(
     detector_object.tasksCur = [current_task]
     detector_object.tasksRemainCount[input_data.id] = len(preprocessed_data)
     is_started = detector_object.startInfer(
-        preprocessed_data[0], input_data.id, debugFlag=False)
+        preprocessed_data[0], input_data.id, debugFlag=False
+    )
 
     assert not is_started
     return
 
 
-@pytest.mark.parametrize("default_tasks, expected_output",
-                         [(True, True), (False, False)])
-def test_checkDone(
-        detector_object,
-        start_inference,
-        default_tasks,
-        expected_output):
+@pytest.mark.parametrize(
+    "default_tasks, expected_output", [(True, True), (False, False)]
+)
+def test_checkDone(detector_object, start_inference, default_tasks, expected_output):
     """! Verifies the output of 'percebro.detector.Detector.checkDone()' method
 
     @param    detector_object     Detector object
@@ -200,13 +193,12 @@ def test_getDone(detector_object, start_inference):
     return
 
 
-@pytest.mark.parametrize("completed_tasks, expected_output",
-                         [([], None), ([None, None], None)])
+@pytest.mark.parametrize(
+    "completed_tasks, expected_output", [([], None), ([None, None], None)]
+)
 def test_getDone_no_tasks(
-        detector_object,
-        start_inference,
-        completed_tasks,
-        expected_output):
+    detector_object, start_inference, completed_tasks, expected_output
+):
     """! Verifies the output of 'percebro.detector.Detector.getDone()' method with no completed tasks
 
     @param    detector_object     Detector object
@@ -223,8 +215,7 @@ def test_getDone_no_tasks(
     return
 
 
-@pytest.mark.parametrize("detector_instance",
-                         [("detector_object"), ("ovms_detector")])
+@pytest.mark.parametrize("detector_instance", [("detector_object"), ("ovms_detector")])
 def test_detect(detector_instance, input_data, request):
     """! Verifies the output of 'percebro.detector.Detector.detect()' method
 
@@ -236,23 +227,19 @@ def test_detect(detector_instance, input_data, request):
     result = detector_instance.detect(input_data)
 
     assert result
-    assert result.data[0][0]['id'] == 1
-    assert result.data[0][0]['category'] == 'person'
-    assert result.data[0][0]['confidence']
-    assert result.data[0][0]['bounding_box']
-    assert result.data[0][0]['center_of_mass']
+    assert result.data[0][0]["id"] == 1
+    assert result.data[0][0]["category"] == "person"
+    assert result.data[0][0]["confidence"]
+    assert result.data[0][0]["bounding_box"]
+    assert result.data[0][0]["center_of_mass"]
 
     return
 
 
-@pytest.mark.parametrize("processed_input, expected_output",
-                         [(None, None),
-                          ([], [])])
+@pytest.mark.parametrize("processed_input, expected_output", [(None, None), ([], [])])
 def test_detect_none_preprocess(
-        detector_object,
-        input_data,
-        processed_input,
-        expected_output):
+    detector_object, input_data, processed_input, expected_output
+):
     """! Verifies the none result from 'percebro.detector.Detector.detect()' method
     when preprocess data is None or empty.
 
@@ -262,7 +249,7 @@ def test_detect_none_preprocess(
     @param    expected_output     Expected output
     """
 
-    with patch(".".join((detectorClass, 'preprocess')), return_value=processed_input):
+    with patch(".".join((detectorClass, "preprocess")), return_value=processed_input):
         result = detector_object.detect(input_data)
 
     assert result == expected_output or result.data == expected_output
@@ -277,7 +264,7 @@ def test_detect_inference_not_started(detector_object, input_data):
     @param    input_data          IAData object that is created using frame
     """
 
-    with patch(".".join((detectorClass, 'startInfer')), side_effect=[False, True]):
+    with patch(".".join((detectorClass, "startInfer")), side_effect=[False, True]):
         result = detector_object.detect(input_data)
 
     assert result is None
@@ -294,8 +281,11 @@ def test_waitingIDs(detector_object, mock_class):
     mock_class.id = 1
 
     current_tasks = [[mock_class], [mock_class] * 2, [mock_class] * 3]
-    completed_tasks = [[[2, 5, 3], [8, 4, 5]], [
-        [2, 7, 8]], [[1, 6, 0], [1, 4, 9], [2, 2, 4]]]
+    completed_tasks = [
+        [[2, 5, 3], [8, 4, 5]],
+        [[2, 7, 8]],
+        [[1, 6, 0], [1, 4, 9], [2, 2, 4]],
+    ]
     expected_output = [{1, 3, 5}, {1, 8}, {1, 0, 9, 4}]
 
     results = []
@@ -320,8 +310,11 @@ def test_waitingCount(detector_object):
     """
 
     current_tasks = [[1, 2], [1, 2, 3], [1, 5, 3, 9]]
-    completed_tasks = [[[2, 5, 3]], [[2, 5, 3], [8, 4, 5]],
-                       [[2, 5, 3], [8, 4, 5], [8, 4, 3]]]
+    completed_tasks = [
+        [[2, 5, 3]],
+        [[2, 5, 3], [8, 4, 5]],
+        [[2, 5, 3], [8, 4, 5], [8, 4, 3]],
+    ]
     expected_output = [3, 5, 7]
 
     results = []
@@ -340,15 +333,11 @@ def test_waitingCount(detector_object):
     return
 
 
-@pytest.mark.parametrize("current_tasks, completed_tasks, expected_output",
-                         [([1, 2], [], True),
-                          ([1, 2], [8, 1, 2, 6], True),
-                          ([], [], False)])
-def test_waiting(
-        detector_object,
-        current_tasks,
-        completed_tasks,
-        expected_output):
+@pytest.mark.parametrize(
+    "current_tasks, completed_tasks, expected_output",
+    [([1, 2], [], True), ([1, 2], [8, 1, 2, 6], True), ([], [], False)],
+)
+def test_waiting(detector_object, current_tasks, completed_tasks, expected_output):
     """! Verifies the output of 'percebro.detector.Detector.waiting()' property.
 
     @param    detector_object     Detector object
@@ -400,12 +389,16 @@ def test_ovms_configureDetector(ovms_detector):
     return
 
 
-@pytest.mark.parametrize("detector_instance, model_config, device",
-                         [("detector_object", None, "CPU"),
-                          ("detector_object", model, "CPU"),
-                          ("detector_object", model, "GPU"),
-                          ("detector_object", detector_model, "CPU"),
-                          ("ovms_detector", ovms_retail_model, "CPU")])
+@pytest.mark.parametrize(
+    "detector_instance, model_config, device",
+    [
+        ("detector_object", None, "CPU"),
+        ("detector_object", model, "CPU"),
+        ("detector_object", model, "GPU"),
+        ("detector_object", detector_model, "CPU"),
+        ("ovms_detector", ovms_retail_model, "CPU"),
+    ],
+)
 def test_setParameters(detector_instance, model_config, device, request):
     """! Verifies the output of 'percebro.detector.Detector.setParameters()' method.
 
@@ -416,10 +409,11 @@ def test_setParameters(detector_instance, model_config, device, request):
 
     detector_instance = request.getfixturevalue(detector_instance)
 
-    with patch(".".join((detectorClass, 'configureDetector')), return_value=None):
-        with patch(".".join((detectorClass, 'loadLabelSchema')), return_value=None):
+    with patch(".".join((detectorClass, "configureDetector")), return_value=None):
+        with patch(".".join((detectorClass, "loadLabelSchema")), return_value=None):
             detector_instance.setParameters(
-                model_config, device, plugin, threshold, openvino_cores)
+                model_config, device, plugin, threshold, openvino_cores
+            )
 
     assert detector_instance.device == device
     assert detector_instance.model
@@ -430,9 +424,9 @@ def test_setParameters(detector_instance, model_config, device, request):
     return
 
 
-@pytest.mark.parametrize("input",
-                         [("input_data"),
-                          (detector.IAData([np.zeros((10, 0))], 1))])
+@pytest.mark.parametrize(
+    "input", [("input_data"), (detector.IAData([np.zeros((10, 0))], 1))]
+)
 def test_preprocess(detector_object, input, request):
     """! Verifies the output of 'percebro.detector.Detector.preprocess()' method.
 
@@ -456,13 +450,12 @@ def test_preprocess(detector_object, input, request):
     return
 
 
-@pytest.mark.parametrize("default_threshold, default_categories",
-                         [(True, True), (False, True), (True, False)])
-def test_postprocess(detector_object,
-                     input_data,
-                     preprocessed_data,
-                     default_threshold,
-                     default_categories):
+@pytest.mark.parametrize(
+    "default_threshold, default_categories", [(True, True), (False, True), (True, False)]
+)
+def test_postprocess(
+    detector_object, input_data, preprocessed_data, default_threshold, default_categories
+):
     """! Verifies the output of 'percebro.detector.Detector.postprocess()' method.
 
     @param    detector_object     Detector object
@@ -475,10 +468,7 @@ def test_postprocess(detector_object,
     """
 
     detector_object.tasksRemainCount[input_data.id] = len(preprocessed_data)
-    detector_object.startInfer(
-        preprocessed_data[0],
-        input_data.id,
-        debugFlag=False)
+    detector_object.startInfer(preprocessed_data[0], input_data.id, debugFlag=False)
     detector_object.checkDone()
     results = detector_object.getDone()
 
@@ -494,11 +484,11 @@ def test_postprocess(detector_object,
 
     if default_threshold:
         assert postprocessed_data
-        assert postprocessed_data[0]['id'] == 1
-        assert postprocessed_data[0]['category']
-        assert postprocessed_data[0]['confidence']
-        assert postprocessed_data[0]['bounding_box']
-        assert postprocessed_data[0]['center_of_mass']
+        assert postprocessed_data[0]["id"] == 1
+        assert postprocessed_data[0]["category"]
+        assert postprocessed_data[0]["confidence"]
+        assert postprocessed_data[0]["bounding_box"]
+        assert postprocessed_data[0]["center_of_mass"]
 
     else:
         assert len(postprocessed_data) == 0
@@ -514,7 +504,8 @@ def test_serializeInput(detector_object, preprocessed_data):
     """
 
     reshaped = preprocessed_data[0].data.reshape(
-        (detector_object.h, detector_object.w, -1))
+        (detector_object.h, detector_object.w, -1)
+    )
     encoded = cv2.imencode(".jpg", reshaped)[1]
     expected_output = base64.b64encode(encoded).decode("ASCII")
 

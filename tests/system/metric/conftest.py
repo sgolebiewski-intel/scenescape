@@ -18,13 +18,13 @@ def pytest_addoption(parser):
     """
     parser.addoption("--metric", action="store", help="metric type")
     parser.addoption(
-        "--threshold",
-        action="store",
-        help="threshold as the % of the distance error")
+        "--threshold", action="store", help="threshold as the % of the distance error"
+    )
     parser.addoption(
         "--camera_frame_rate",
         action="store",
-        help="enables tests with input camera running on this frame rate")
+        help="enables tests with input camera running on this frame rate",
+    )
     return
 
 
@@ -41,8 +41,7 @@ def params(request):
     params = {}
     params["metric"] = request.config.getoption("--metric")
     params["threshold"] = request.config.getoption("--threshold")
-    params["camera_frame_rate"] = request.config.getoption(
-        "--camera_frame_rate")
+    params["camera_frame_rate"] = request.config.getoption("--camera_frame_rate")
     params["default_camera_frame_rate"] = 30
     params["input"] = [input_cam_1, input_cam_2]
     params["config"] = os.path.join(dir, "test_data/config.json")
@@ -51,8 +50,7 @@ def params(request):
     params["auth"] = "/run/secrets/percebro.auth"
     params["mqtt_broker"] = "broker.scenescape.intel.com"
     params["mqtt_port"] = 1883
-    params["trackerconfig"] = os.path.join(
-        dir, "test_data/tracker-config.json")
+    params["trackerconfig"] = os.path.join(dir, "test_data/tracker-config.json")
     return params
 
 
@@ -63,28 +61,25 @@ def assets():
     @returns params                    Tuple of dict
     """
     asset_1 = {
-        'name': 'person',
-        'tracking_radius': 2.0,
-        'x_size': 0.5,
-        'y_size': 0.5,
-        'z_size': 2.0
+        "name": "person",
+        "tracking_radius": 2.0,
+        "x_size": 0.5,
+        "y_size": 0.5,
+        "z_size": 2.0,
     }
     asset_2 = {
-        'name': 'person',
-        'tracking_radius': 2.0,
-        'x_size': 10.0,
-        'y_size': 10.0,
-        'z_size': 2.0
+        "name": "person",
+        "tracking_radius": 2.0,
+        "x_size": 10.0,
+        "y_size": 10.0,
+        "z_size": 2.0,
     }
     asset_3 = {
-        'name': 'person',
-        'tracking_radius': 0.1,
-        'x_size': 0.5,
-        'y_size': 0.5,
-        'z_size': 2.0
+        "name": "person",
+        "tracking_radius": 0.1,
+        "x_size": 0.5,
+        "y_size": 0.5,
+        "z_size": 2.0,
     }
-    asset_4 = {
-        'name': 'FW190D',
-        'shift_type': TYPE_2
-    }
+    asset_4 = {"name": "FW190D", "shift_type": TYPE_2}
     return (asset_1, asset_2, asset_3, asset_4)

@@ -28,16 +28,17 @@ def build_argparser():
         "--interval",
         type=int,
         default=5,
-        help="Number of seconds to wait for message each interval")
-    parser.add_argument("--output",
-                        help="Location to save captured mqtt messages")
+        help="Number of seconds to wait for message each interval",
+    )
+    parser.add_argument("--output", help="Location to save captured mqtt messages")
     return parser
 
 
 def test_on_connect(mqttc, obj, flags, rc):
     print("Connected")
-    mqttc.subscribe(PubSub.formatTopic(PubSub.DATA_SCENE, scene_id="+",
-                                       thing_type="+"), 0)
+    mqttc.subscribe(
+        PubSub.formatTopic(PubSub.DATA_SCENE, scene_id="+", thing_type="+"), 0
+    )
     return
 
 
@@ -49,17 +50,18 @@ def test_on_message(mqttc, obj, msg):
     time_rx = get_epoch_time()
     real_msg = str(msg.payload.decode("utf-8"))
     jdata = json.loads(real_msg)
-    time_tx_det = jdata['real_stamp']
+    time_tx_det = jdata["real_stamp"]
 
-    time_rx_tstamp = get_epoch_time(jdata['timestamp'])
-    time_proc_est = jdata['debug_hmo_processing_time']
+    time_rx_tstamp = get_epoch_time(jdata["timestamp"])
+    time_proc_est = jdata["debug_hmo_processing_time"]
 
     # This assumes the delay observed between TX at the detection generation
     # and the delay between scene controller and this module
     # are roughly the same (at least in average).
 
-    proc_time_avg = ((proc_time_avg * proc_time_count) +
-                     time_proc_est) / (proc_time_count + 1)
+    proc_time_avg = ((proc_time_avg * proc_time_count) + time_proc_est) / (
+        proc_time_count + 1
+    )
     proc_time_count += 1
 
     if log_file is not None:
@@ -67,9 +69,9 @@ def test_on_message(mqttc, obj, msg):
         log_file.write("\n")
     objects_detected += 1
 
-    if jdata['id'] not in sensors_seen:
+    if jdata["id"] not in sensors_seen:
         number_sensors += 1
-        sensors_seen.append(jdata['id'])
+        sensors_seen.append(jdata["id"])
     return
 
 
@@ -105,10 +107,11 @@ def test_mqtt_recorder():
     args = build_argparser().parse_args()
 
     result = 1
-    supass = os.getenv('SUPASS')
-    auth_string = f'admin:{supass}'
-    client = PubSub(auth_string, None, TEST_MQTT_DEFAULT_ROOTCA,
-                    "broker.scenescape.intel.com")
+    supass = os.getenv("SUPASS")
+    auth_string = f"admin:{supass}"
+    client = PubSub(
+        auth_string, None, TEST_MQTT_DEFAULT_ROOTCA, "broker.scenescape.intel.com"
+    )
 
     client.onMessage = test_on_message
     client.onConnect = test_on_connect
@@ -120,7 +123,7 @@ def test_mqtt_recorder():
     test_wait = args.interval
 
     if args.output is not None:
-        log_file = open(args.output, 'w')
+        log_file = open(args.output, "w")
 
     client.loopStart()
     # Wait for test to start..
@@ -159,8 +162,11 @@ def test_mqtt_recorder():
             test_empty_loops = 0
 
         print("Current rate incoming {:.3f} messages/ss".format(cur_rate))
-        print("Current proc time {:.3f} ms, proc {:.3f} mps".format(
-            proc_time_avg * 1000.0, 1.0 / proc_time_avg))
+        print(
+            "Current proc time {:.3f} ms, proc {:.3f} mps".format(
+                proc_time_avg * 1000.0, 1.0 / proc_time_avg
+            )
+        )
         old_det_objects = new_det_objects
 
     client.loopStop()
@@ -171,8 +177,11 @@ def test_mqtt_recorder():
 
     if proc_time_count > 0:
         print("Final rate incoming {:.3f} messages/ss".format(total_rate))
-        print("Final proc time {:.3f} ms, proc {:.3f} mps".format(
-            proc_time_avg * 1000.0, 1.0 / proc_time_avg))
+        print(
+            "Final proc time {:.3f} ms, proc {:.3f} mps".format(
+                proc_time_avg * 1000.0, 1.0 / proc_time_avg
+            )
+        )
         result = 0
     else:
         print("Unknown processing time")
@@ -183,5 +192,5 @@ def test_mqtt_recorder():
     return result
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(test_mqtt_recorder() or 0)

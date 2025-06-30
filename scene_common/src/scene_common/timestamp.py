@@ -54,7 +54,6 @@ def get_datetime_from_string(date_string: str) -> datetime:
     @param      date_string    Date in string format.
     @return     Date as datetime object.
     """
-    return datetime.strptime(
-        date_string,
-        f"{DATETIME_FORMAT}Z").replace(
-        tzinfo=timezone(TIMEZONE))
+    return datetime.strptime(date_string, f"{DATETIME_FORMAT}Z").replace(
+        tzinfo=timezone(TIMEZONE)
+    )

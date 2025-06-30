@@ -25,8 +25,9 @@ def log(*args, level=logging.INFO):
         log.logger = logging.getLogger(__name__)
         log.logger.setLevel(level)
         handler = logging.StreamHandler(sys.stdout)
-        handler.setFormatter(logging.Formatter("%(asctime)s %(message)s",
-                                               datefmt="%Y-%m-%d %H:%M:%S"))
+        handler.setFormatter(
+            logging.Formatter("%(asctime)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+        )
         # handler.setFormatter(logging.Formatter("%(message)s"))
         log.logger.addHandler(handler)
     outstr = " ".join(map(str, args))

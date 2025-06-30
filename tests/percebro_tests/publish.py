@@ -19,11 +19,7 @@ TEST_WAIT_TIME = 3
 
 
 def on_connect(mqttc, obj, flags, rc):
-    mqttc.subscribe(
-        PubSub.formatTopic(
-            PubSub.IMAGE_CAMERA,
-            camera_id="camera1"),
-        0)
+    mqttc.subscribe(PubSub.formatTopic(PubSub.IMAGE_CAMERA, camera_id="camera1"), 0)
 
 
 def test_main(videoData):
@@ -39,7 +35,7 @@ def test_main(videoData):
     auth = "/run/secrets/percebro.auth"
 
     # mqtt broker info:
-    mqtt_broker = 'broker.scenescape.intel.com'
+    mqtt_broker = "broker.scenescape.intel.com"
     mqtt_port = 1883
 
     client = initializeMqttClient()
@@ -49,18 +45,18 @@ def test_main(videoData):
     if os.path.exists(rootca):
         if certs is None:
             certs = {}
-        certs['ca_certs'] = rootca
+        certs["ca_certs"] = rootca
 
     if os.path.exists(auth):
         with open(auth) as json_file:
             data = json.load(json_file)
 
-        user = data['user']
-        pw = data['password']
+        user = data["user"]
+        pw = data["password"]
 
     else:
-        user = 'tmp'
-        pw = 'dummy'
+        user = "tmp"
+        pw = "dummy"
         print("Warning: Could not determine mqtt user/password!")
 
     if certs is not None:

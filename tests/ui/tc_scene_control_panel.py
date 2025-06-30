@@ -34,12 +34,12 @@ def test_scene_control_panel(params, record_xml_attribute):
 
         interaction_page = common.InteractWith3DScene(browser)
         common.navigate_directly_to_page(
-            browser, f"/scene/detail/{common.TEST_SCENE_ID}/")
+            browser, f"/scene/detail/{common.TEST_SCENE_ID}/"
+        )
 
         log.info("Turn off tracked objects and hide stats graph.")
         time.sleep(WAIT_SEC)
-        common.selenium_wait_for_elements(
-            browser, (By.ID, "camera1-control-panel"), 100)
+        common.selenium_wait_for_elements(browser, (By.ID, "camera1-control-panel"), 100)
         browser.find_element(By.ID, "tracked-objects-button").click()
         interaction_page.hide_stats()
 
@@ -57,7 +57,7 @@ def test_scene_control_panel(params, record_xml_attribute):
 
         log.info("Toggle floor plane off.")
         time.sleep(WAIT_SEC)
-        browser.find_element(By.ID, 'plane-view-label').click()
+        browser.find_element(By.ID, "plane-view-label").click()
 
         log.info("Hide 3D panels.")
         time.sleep(WAIT_SEC)
@@ -90,7 +90,8 @@ def test_scene_control_panel(params, record_xml_attribute):
         screen_3d_1 = interaction_page.get_page_screenshot()
 
         log.info(
-            "AC(1) Check if floor plane screenshot is identical after toggling back on.")
+            "AC(1) Check if floor plane screenshot is identical after toggling back on."
+        )
         assert not common.compare_images(plane_view_1, screen_3d_1, 8)
 
         log.info("Unhide 3D panels.")
@@ -197,7 +198,8 @@ def test_scene_control_panel(params, record_xml_attribute):
         screen_2d_3d_2 = interaction_page.get_page_screenshot()
 
         log.info(
-            "AC(3) Check if 2D and 3D screenshots are similar (2D perspective is slightly different).")
+            "AC(3) Check if 2D and 3D screenshots are similar (2D perspective is slightly different)."
+        )
         assert not common.compare_images(screen_2d_3d_1, screen_2d_3d_2, 2)
 
         log.info("Unhide 3D panels.")

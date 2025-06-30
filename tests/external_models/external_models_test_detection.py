@@ -15,21 +15,25 @@ TEST_NAME = "Geti: Detection test"
 
 def build_argparser():
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument(
         "-z",
         "--zip",
         type=str,
         help="Path to the .zip file of the model.",
-        required=True)
-    parser.add_argument("-i", "--inputs", type=str,
-                        help="Camera device you are using.", required=True)
+        required=True,
+    )
+    parser.add_argument(
+        "-i", "--inputs", type=str, help="Camera device you are using.", required=True
+    )
     parser.add_argument(
         "-f",
         "--fps",
         type=float,
         help="Process this many frames and then exit.",
-        required=True)
+        required=True,
+    )
     return parser
 
 
@@ -44,13 +48,13 @@ def test_detection():
     if os.path.exists(zip_path):
         common.clean_model(env_model)
         cfg_file = common.prepare_model(zip_path, env_model)
-        os.environ['TARGET_FPS'] = "{}".format(args.fps)
-        os.environ['INPUTS'] = args.inputs
-        os.environ['MODELS'] = env_model
-        os.environ['MODEL_CONFIG'] = cfg_file
-        os.environ['VIDEO_FRAMES'] = "200"
+        os.environ["TARGET_FPS"] = "{}".format(args.fps)
+        os.environ["INPUTS"] = args.inputs
+        os.environ["MODELS"] = env_model
+        os.environ["MODEL_CONFIG"] = cfg_file
+        os.environ["VIDEO_FRAMES"] = "200"
 
-        testCommand = ['tests/perf_tests/tc_inference_performance.sh']
+        testCommand = ["tests/perf_tests/tc_inference_performance.sh"]
 
         testResult = common.run_and_check_output(testCommand, env_model)
 
@@ -66,5 +70,5 @@ def test_detection():
     return testResult
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(test_detection() or 0)

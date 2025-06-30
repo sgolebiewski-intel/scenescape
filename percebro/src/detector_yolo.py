@@ -6,11 +6,13 @@
 import cv2
 import torch
 import yaml
+
 try:
     from ultralytics.yolo.utils import ops
 except ImportError:
     raise ImportError(
-        "Failed to import 'ops' module. Please ensure ultralytics is installed correctly.")
+        "Failed to import 'ops' module. Please ensure ultralytics is installed correctly."
+    )
 
 from scene_common.geometry import Point, Rectangle
 
@@ -45,39 +47,41 @@ class YoloV8Detector(Detector):
         return
 
     def loadLabels(self, metadatafile):
-        with open(metadatafile, 'r') as file:
+        with open(metadatafile, "r") as file:
             model_info = yaml.safe_load(file)
             self.categories = []
-            for cat in model_info['names']:
-                self.categories.append(model_info['names'][cat])
+            for cat in model_info["names"]:
+                self.categories.append(model_info["names"][cat])
         return
 
     def setParameters(self, model, device, plugin, threshold, ov_cores):
         # Some yolov8 export options generate a completly dynamic model
         # with a -1, 3, -1, -1 shape. Force-request a (self.w x self.h) version
         # of it.
-        model['input_shape'] = [1, 3, self.h, self.w]
+        model["input_shape"] = [1, 3, self.h, self.w]
         super().setParameters(model, device, plugin, threshold, ov_cores)
-        if 'categories' in model:
-            if isinstance(model['categories'], str):
-                self.loadLabels(model['categories'])
+        if "categories" in model:
+            if isinstance(model["categories"], str):
+                self.loadLabels(model["categories"])
             else:
-                self.categories = model['categories']
-        if 'threshold' in model:
-            self.threshold = model['threshold']
+                self.categories = model["categories"]
+        if "threshold" in model:
+            self.threshold = model["threshold"]
         return
 
     def postprocess(self, result):
         objects = []
-        predictions = ops.non_max_suppression(torch.from_numpy(result.data['output0']),
-                                              self.threshold,  # 'min_conf_threshold' min confidence for detections
-                                              # threshold for overlap.
-                                              self.nms_iou_threshold,
-                                              # Number of classes.
-                                              nc=len(self.categories),
-                                              agnostic=False,
-                                              # One frame at a time, so index 0
-                                              max_det=self.max_detections)[0]
+        predictions = ops.non_max_suppression(
+            torch.from_numpy(result.data["output0"]),
+            self.threshold,  # 'min_conf_threshold' min confidence for detections
+            # threshold for overlap.
+            self.nms_iou_threshold,
+            # Number of classes.
+            nc=len(self.categories),
+            agnostic=False,
+            # One frame at a time, so index 0
+            max_det=self.max_detections,
+        )[0]
 
         if not len(predictions):
             return objects
@@ -96,20 +100,21 @@ class YoloV8Detector(Detector):
                 continue
 
             bounds = self.recalculateBoundingBox(
-                det[self.idxOriginX:self.idxOppositeY + 1], result.save[0], result.save[1])
+                det[self.idxOriginX : self.idxOppositeY + 1],
+                result.save[0],
+                result.save[1],
+            )
             comw = bounds.width / 3
             comh = bounds.height / 4
             center_of_mass = Rectangle(
-                origin=Point(
-                    bounds.x + comw,
-                    bounds.y + comh),
-                size=(
-                    comw,
-                    comh))
-            odict = {'id': len(objects) + 1,
-                     'category': category,
-                     'confidence': float(det[self.idxConfidence]),
-                     'bounding_box': bounds.asDict,
-                     'center_of_mass': center_of_mass.asDict}
+                origin=Point(bounds.x + comw, bounds.y + comh), size=(comw, comh)
+            )
+            odict = {
+                "id": len(objects) + 1,
+                "category": category,
+                "confidence": float(det[self.idxConfidence]),
+                "bounding_box": bounds.asDict,
+                "center_of_mass": center_of_mass.asDict,
+            }
             objects.append(odict)
         return objects

@@ -25,11 +25,7 @@ def main():
         args.video = int(args.video)
     cam = cv2.VideoCapture(args.video)
     assert cam.isOpened()
-    print(
-        "Codec", int(
-            cam.get(
-                cv2.CAP_PROP_FOURCC)).to_bytes(
-            4, byteorder='little'))
+    print("Codec", int(cam.get(cv2.CAP_PROP_FOURCC)).to_bytes(4, byteorder="little"))
     ret, frame = cam.read()
     if not ret:
         print("####### FAILED TO READ FRAME #######")
@@ -39,5 +35,5 @@ def main():
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main() or 0)

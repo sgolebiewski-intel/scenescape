@@ -37,10 +37,7 @@ class WillOurShipGo(UserInterfaceTest):
         self.clickOnElement("tracked-objects-button", waitTime=WAIT_SEC)
 
         # Expand camera 1 menu
-        self.clickOnElement(
-            "camera1-control-panel",
-            waitTime=WAIT_SEC,
-            delay=100)
+        self.clickOnElement("camera1-control-panel", waitTime=WAIT_SEC, delay=100)
 
         # Toggle project frame for camera 1
         self.clickOnElement("camera1-project-frame", waitTime=WAIT_SEC)
@@ -56,19 +53,21 @@ class WillOurShipGo(UserInterfaceTest):
         camera_pose = [
             float(
                 self.browser.find_element(
-                    self.By.ID, f"{cameraName}-{item}").
-                get_attribute("value"))
+                    self.By.ID, f"{cameraName}-{item}"
+                ).get_attribute("value")
+            )
             for item in ["posX", "posY", "posZ", "rotX", "rotY", "rotZ"]
         ]
 
         return camera_pose[:3], camera_pose[3:]
 
     def singleClick3DScene(
-            self,
-            xOffset: int = 0,
-            yOffset: int = 0,
-            resetPosition: bool = False,
-            waitTime: int = 1) -> None:
+        self,
+        xOffset: int = 0,
+        yOffset: int = 0,
+        resetPosition: bool = False,
+        waitTime: int = 1,
+    ) -> None:
         """! Single click the scene at specified offset from current position
         @param    xOffset          Offset from current x postition
         @param    yOffset          Offset from current y postition
@@ -76,17 +75,17 @@ class WillOurShipGo(UserInterfaceTest):
         @param    waitTime        Time to wait after performing action (in seconds)
         """
         action = self.browser.actionChains()
-        action.move_by_offset(
-            xOffset, yOffset).click().pause(waitTime).perform()
+        action.move_by_offset(xOffset, yOffset).click().pause(waitTime).perform()
         if resetPosition:
             action.move_by_offset(xOffset * -1, yOffset * -1).perform()
 
     def doubleClick3DScene(
-            self,
-            xOffset: int = 0,
-            yOffset: int = 0,
-            resetPosition: bool = False,
-            waitTime: int = 1) -> None:
+        self,
+        xOffset: int = 0,
+        yOffset: int = 0,
+        resetPosition: bool = False,
+        waitTime: int = 1,
+    ) -> None:
         """! Double click the scene at specified offset from current position
         @param    xOffset          Offset from current x postition
         @param    yOffset          Offset from current y postition
@@ -94,13 +93,17 @@ class WillOurShipGo(UserInterfaceTest):
         @param    waitTime         Time to wait after performing action (in seconds)
         """
         action = self.browser.actionChains()
-        action.move_by_offset(
-            xOffset, yOffset).double_click().pause(waitTime).perform()
+        action.move_by_offset(xOffset, yOffset).double_click().pause(waitTime).perform()
         if resetPosition:
             action.move_by_offset(xOffset * -1, yOffset * -1).perform()
 
-    def clickAndDrag3DScene(self, xOffset: int = 0, yOffset: int = 0,
-                            dragBack: bool = False, waitTime: int = 1) -> None:
+    def clickAndDrag3DScene(
+        self,
+        xOffset: int = 0,
+        yOffset: int = 0,
+        dragBack: bool = False,
+        waitTime: int = 1,
+    ) -> None:
         """! Click and drag to specified offset from current position
         @param    xOffset     Offset from current x postition
         @param    yOffset     Offset from current y postition
@@ -108,23 +111,34 @@ class WillOurShipGo(UserInterfaceTest):
         @param    waitTime    Time to wait after performing action (in seconds)
         """
         self.browser.actionChains().click_and_hold().move_by_offset(
-            xOffset, yOffset).release().pause(waitTime).perform()
+            xOffset, yOffset
+        ).release().pause(waitTime).perform()
         if dragBack:
             self.browser.actionChains().click_and_hold().move_by_offset(
-                xOffset * -1, yOffset * -1).release().pause(waitTime).perform()
+                xOffset * -1, yOffset * -1
+            ).release().pause(waitTime).perform()
 
-    def rightClick3DScene(self, xOffset: int = 0, yOffset: int = 0,
-                          waitTime: int = 1) -> None:
+    def rightClick3DScene(
+        self, xOffset: int = 0, yOffset: int = 0, waitTime: int = 1
+    ) -> None:
         """! Right click the scene at specified offset from current position
         @param    xOffset     Offset from current x postition
         @param    yOffset     Offset from current y postition
         @param    waitTime    Time to wait after performing action (in seconds)
         """
         self.browser.actionChains().move_by_offset(
-            xOffset, yOffset).context_click().pause(waitTime).perform()
+            xOffset, yOffset
+        ).context_click().pause(waitTime).perform()
 
-    def comparePoses(self, p1, p2, r1, r2, pThreshold=POSITION_THRESHOLD,
-                     rThreshold=ROTATION_THRESHOLD) -> bool:
+    def comparePoses(
+        self,
+        p1,
+        p2,
+        r1,
+        r2,
+        pThreshold=POSITION_THRESHOLD,
+        rThreshold=ROTATION_THRESHOLD,
+    ) -> bool:
         """! Compares the position and rotation values and returns false if they are
         significantly different.
         @param       p1                         First position to compare
@@ -136,20 +150,14 @@ class WillOurShipGo(UserInterfaceTest):
         @returns     (pResult and rResult)    Returns True if both values within treshold
         """
         print(f"p1: {p1}\np2: {p2}\nr1: {r1}\nr2: {r2}")
-        pResult = all(abs(p1_i - p2_i) <
-                      pThreshold for (p1_i, p2_i) in zip(p1, p2))
-        rResult = all((abs(180 - ((180 - r1_i + r2_i) % 360)))
-                      < rThreshold for (r1_i, r2_i) in zip(r1, r2))
-        return (pResult and rResult)
+        pResult = all(abs(p1_i - p2_i) < pThreshold for (p1_i, p2_i) in zip(p1, p2))
+        rResult = all(
+            (abs(180 - ((180 - r1_i + r2_i) % 360))) < rThreshold
+            for (r1_i, r2_i) in zip(r1, r2)
+        )
+        return pResult and rResult
 
-    def compareImageRegion(
-            self,
-            image1,
-            image2,
-            xMin=250,
-            xMax=450,
-            yMin=150,
-            yMax=350):
+    def compareImageRegion(self, image1, image2, xMin=250, xMax=450, yMin=150, yMax=350):
         """! Checks if a region in an image matches another image
         @param    image1    The first image to compare
         @param    image2    The second image to compare
@@ -159,7 +167,8 @@ class WillOurShipGo(UserInterfaceTest):
         @param    yMax      Maximum y value of region
         """
         assert not self.compareImages(
-            image1[yMin: yMax, xMin: xMax, :], image2[yMin: yMax, xMin: xMax, :], 0)
+            image1[yMin:yMax, xMin:xMax, :], image2[yMin:yMax, xMin:xMax, :], 0
+        )
 
     def checkForMalfunctions(self):
         if self.testName and self.recordXMLAttribute:
@@ -221,8 +230,7 @@ class WillOurShipGo(UserInterfaceTest):
             log.info("Check dragging with 3rd point does not change frame")
             self.clickAndDrag3DScene(50, 0, dragBack=True)
             ss_drag_three_points = self.getPageScreenshot()
-            assert not self.compareImages(
-                ss_three_points, ss_drag_three_points, 0)
+            assert not self.compareImages(ss_three_points, ss_drag_three_points, 0)
 
             log.info("Add 4th calibration point")
             self.doubleClick3DScene(100, 0)
@@ -236,8 +244,7 @@ class WillOurShipGo(UserInterfaceTest):
             ss_five_points = self.getPageScreenshot()
             assert not self.compareImages(ss_four_points, ss_five_points, 0)
 
-            log.info(
-                "Check toggling calibration points visibility off hides points")
+            log.info("Check toggling calibration points visibility off hides points")
             self.clickOnElement("camera1-calibration", waitTime=WAIT_SEC)
             ss_disable_visibility = self.getPageScreenshot()
             self.compareImageRegion(ss_base, ss_disable_visibility)
@@ -263,23 +270,18 @@ class WillOurShipGo(UserInterfaceTest):
             ss_drag_four_points = self.getPageScreenshot()
             position_dragged, rotation_dragged = self.getCameraPose("camera1")
             assert not self.comparePoses(
-                position_initial,
-                position_dragged,
-                rotation_initial,
-                rotation_dragged)
+                position_initial, position_dragged, rotation_initial, rotation_dragged
+            )
             assert self.compareImages(ss_four_points, ss_drag_four_points, 0)
 
             log.info("Check returning to original point preserves camera pose")
             self.clickAndDrag3DScene(0, -50)
             position_final, rotation_final = self.getCameraPose("camera1")
             ss_drag_four_points_return = self.getPageScreenshot()
-            assert not self.compareImages(
-                ss_four_points, ss_drag_four_points_return, 1)
+            assert not self.compareImages(ss_four_points, ss_drag_four_points_return, 1)
             assert self.comparePoses(
-                position_initial,
-                position_final,
-                rotation_initial,
-                rotation_final)
+                position_initial, position_final, rotation_initial, rotation_final
+            )
 
             self.exitCode = 0
         finally:
@@ -305,5 +307,5 @@ def main():
     return test_3d_ui_calibration(None, None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     os._exit(main() or 0)

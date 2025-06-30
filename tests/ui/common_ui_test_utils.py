@@ -30,7 +30,7 @@ from tests.common_test_utils import record_test_result
 from tests.ui.browser import Browser, By, NoSuchElementException
 
 # FIXME - APP_PROPER_NAME is not the right way to validate correct page load
-APP_PROPER_NAME = 'Intel® SceneScape'
+APP_PROPER_NAME = "Intel® SceneScape"
 # from manager.settings import APP_PROPER_NAME
 
 TEST_SCENE_NAME = "Demo"
@@ -53,24 +53,22 @@ def check_page_login(browser, params):
     @return   bool                       Boolean representing success.
     """
     logged_in = False
-    if browser.getPage(params['weburl'], APP_PROPER_NAME):
+    if browser.getPage(params["weburl"], APP_PROPER_NAME):
         print("Logging in")
-        logged_in = browser.login(
-            params['user'],
-            params['password'],
-            params['weburl'])
+        logged_in = browser.login(params["user"], params["password"], params["weburl"])
         print("Logged in: ", logged_in)
     return logged_in
 
 
 def create_object_library(
-        browser,
-        object_name,
-        max_radius=None,
-        tracking_radius=None,
-        max_height=None,
-        mark_color=None,
-        model_file=None):
+    browser,
+    object_name,
+    max_radius=None,
+    tracking_radius=None,
+    max_height=None,
+    mark_color=None,
+    model_file=None,
+):
     """! Adds an Object to the Object Library.
     @param    browser                    Object wrapping the Selenium driver.
     @param    object_name                Class of the tracked Object.
@@ -83,23 +81,21 @@ def create_object_library(
     """
     browser.find_element(By.ID, "nav-object-library").click()
     obj_record = browser.find_elements(
-        By.XPATH, "//td[text()='{0}']".format(object_name))
+        By.XPATH, "//td[text()='{0}']".format(object_name)
+    )
     if len(obj_record) > 0:
         print("3D object already exists, deleting it before proceeding ...")
         if not delete_object_library(browser, object_name):
             return False
-    browser.find_element(
-        By.CSS_SELECTOR,
-        "a[href^=\"/asset/create/\"]").click()
+    browser.find_element(By.CSS_SELECTOR, 'a[href^="/asset/create/"]').click()
     # Fill in the form
-    browser.find_element(By.ID, 'id_name').send_keys(object_name)
+    browser.find_element(By.ID, "id_name").send_keys(object_name)
     if max_radius:
         browser.find_element(By.ID, "id_max_radius").clear()
         browser.find_element(By.ID, "id_max_radius").send_keys(max_radius)
     if tracking_radius:
         browser.find_element(By.ID, "id_tracking_radius").clear()
-        browser.find_element(
-            By.ID, "id_tracking_radius").send_keys(tracking_radius)
+        browser.find_element(By.ID, "id_tracking_radius").send_keys(tracking_radius)
     if max_height:
         browser.find_element(By.ID, "id_max_height").clear()
         browser.find_element(By.ID, "id_max_height").send_keys(max_height)
@@ -108,12 +104,11 @@ def create_object_library(
         browser.find_element(By.ID, "id_mark_color").send_keys(mark_color)
     if model_file:
         browser.find_element(By.ID, "id_model_3d").send_keys(model_file)
-    browser.find_element(
-        By.CSS_SELECTOR,
-        "input[value=\"Add New Object\"]").click()
+    browser.find_element(By.CSS_SELECTOR, 'input[value="Add New Object"]').click()
     # Verify object is shown in list
     obj_record = browser.find_elements(
-        By.XPATH, "//td[text()='{0}']".format(object_name))
+        By.XPATH, "//td[text()='{0}']".format(object_name)
+    )
     if len(obj_record) == 0:
         return False
     print('Object Library asset "{0}" created!'.format(object_name))
@@ -130,13 +125,17 @@ def delete_object_library(browser, object_name):
     browser.find_element(By.ID, "nav-object-library").click()
     browser.find_element(
         By.XPATH,
-        "//td[text()='{0}']/parent::tr//i[contains(@class, 'bi-trash')]/parent::a".format(object_name)).click()
+        "//td[text()='{0}']/parent::tr//i[contains(@class, 'bi-trash')]/parent::a".format(
+            object_name
+        ),
+    ).click()
     # click on delete confirmation button
     browser.find_element(
-        By.CSS_SELECTOR,
-        "input[value^=\"Yes, Delete the Object!\"]").click()
+        By.CSS_SELECTOR, 'input[value^="Yes, Delete the Object!"]'
+    ).click()
     obj_record = browser.find_elements(
-        By.XPATH, "//td[text()='{0}']".format(object_name))
+        By.XPATH, "//td[text()='{0}']".format(object_name)
+    )
     if len(obj_record) > 0:
         return False
     print('Object Library asset "{0}" deleted!'.format(object_name))
@@ -151,15 +150,19 @@ def delete_scene(browser, scene_name):
     """
     browser.find_element(By.ID, "nav-scenes").click()
     time.sleep(1)
-    browser.find_element(
-        By.NAME,
-        scene_name).find_element(
+    browser.find_element(By.NAME, scene_name).find_element(
         By.NAME,
         "Delete",
     ).click()
     time.sleep(1)
-    print("Confirmation appeared: " + str(browser.find_element(By.XPATH,
-          "//*[@type = 'submit']").get_attribute("value")))
+    print(
+        "Confirmation appeared: "
+        + str(
+            browser.find_element(By.XPATH, "//*[@type = 'submit']").get_attribute(
+                "value"
+            )
+        )
+    )
     browser.find_element(By.XPATH, "//*[@type = 'submit']").click()
     time.sleep(1)
     if scene_name not in browser.page_source:
@@ -180,13 +183,16 @@ def take_screenshot(browser, element, path):
     min_viewport_width = 1920
     min_viewport_height = 1080
     viewport_dimensions = browser.execute_script(
-        "return [window.innerWidth, window.innerHeight];")
+        "return [window.innerWidth, window.innerHeight];"
+    )
     viewport_width = viewport_dimensions[0]
     viewport_height = viewport_dimensions[1]
     if viewport_width < min_viewport_width or viewport_height < min_viewport_height:
         browser.setViewportSize(min_viewport_width, min_viewport_height)
-        print("Viewport size set to:", browser.execute_script(
-            "return [window.innerWidth, window.innerHeight];"))
+        print(
+            "Viewport size set to:",
+            browser.execute_script("return [window.innerWidth, window.innerHeight];"),
+        )
     return element.screenshot(path)
 
 
@@ -209,8 +215,7 @@ def add_child_scene(browser, parent, child):
     @return   bool                    Boolean representing success.
     """
     browser.find_element(By.ID, "nav-scenes").click()
-    if child not in browser.page_source or parent \
-            not in browser.page_source:
+    if child not in browser.page_source or parent not in browser.page_source:
         print("scenes {} and {} do not exist!".format(child, parent))
         return False
 
@@ -232,8 +237,7 @@ def update_child_scene(browser, parent, child, transform):
     @return   bool                    Boolean representing success.
     """
     browser.find_element(By.ID, "nav-scenes").click()
-    if child not in browser.page_source or parent \
-            not in browser.page_source:
+    if child not in browser.page_source or parent not in browser.page_source:
         print("scenes {} and {} do not exist!".format(child, parent))
         return False
 
@@ -243,23 +247,21 @@ def update_child_scene(browser, parent, child, transform):
     update_element = "child-update-{}".format(child)
     browser.find_element(By.ID, update_element).click()
     select = Select(browser.find_element(By.ID, "id_transform_type"))
-    select.select_by_visible_text(transform['transform'])
+    select.select_by_visible_text(transform["transform"])
 
     for id in range(1, 4):
-        translation_field = browser.find_element(
-            By.ID, "id_transform{}".format(id))
+        translation_field = browser.find_element(By.ID, "id_transform{}".format(id))
         translation_field.clear()
-        translation_field.send_keys(transform['pose']['translation'][id - 1])
+        translation_field.send_keys(transform["pose"]["translation"][id - 1])
 
     for id in range(4, 7):
-        rotation_field = browser.find_element(
-            By.ID, "id_transform{}".format(id))
+        rotation_field = browser.find_element(By.ID, "id_transform{}".format(id))
         rotation_field.clear()
-        rotation_field.send_keys(transform['pose']['rotation'][id - 4])
+        rotation_field.send_keys(transform["pose"]["rotation"][id - 4])
 
     scale = browser.find_element(By.ID, "id_transform7")
     scale.clear()
-    scale.send_keys(transform['pose']['scale'][0])
+    scale.send_keys(transform["pose"]["scale"][0])
     browser.find_element(By.ID, "update-child").click()
     return True
 
@@ -271,8 +273,7 @@ def delete_child_scene(browser, parent, child):
     @return   bool                    Boolean representing success.
     """
     browser.find_element(By.ID, "nav-scenes").click()
-    if child not in browser.page_source or parent \
-            not in browser.page_source:
+    if child not in browser.page_source or parent not in browser.page_source:
         print("scenes {} and {} do not exist!".format(child, parent))
         return False
 
@@ -343,15 +344,16 @@ def create_tripwire_by_ratio(browser, tripwire_name, x_ratio):
     browser.execute_script("document.getElementById('tripwires').type='text'")
     # Move controls out of the way
     browser.execute_script(
-        "document.getElementById('scene-controls').removeAttribute('id')")
+        "document.getElementById('scene-controls').removeAttribute('id')"
+    )
 
     scale_field = browser.find_element(By.ID, "scale")
     scale = float(scale_field.get_attribute("value"))
 
     # Create tripwire across the center point (origin is bottom left in meters)
     svg = browser.find_element(By.ID, "svgout")
-    cx = svg.size['width'] / (2 * scale)
-    cy = svg.size['height'] / (2 * scale)
+    cx = svg.size["width"] / (2 * scale)
+    cy = svg.size["height"] / (2 * scale)
     form_id = '"roi-form"'
 
     tripwires = []
@@ -391,13 +393,14 @@ def create_tripwire(browser, tw_name):
         action.drag_and_drop_by_offset(point_1, 400, 0).perform()
 
         tripwires = browser.find_element(By.ID, "tripwires")
-        tripwire_points = tripwires.get_attribute('value')
-        tripwire_points = json.loads(tripwire_points)[0]['points']
+        tripwire_points = tripwires.get_attribute("value")
+        tripwire_points = json.loads(tripwire_points)[0]["points"]
         tripwire_points[0] = [float(point) for point in tripwire_points[0]]
         tripwire_points[1] = [float(point) for point in tripwire_points[1]]
 
         tripwire_titles = browser.find_elements(
-            By.CSS_SELECTOR, ".card-body .tripwire-title")
+            By.CSS_SELECTOR, ".card-body .tripwire-title"
+        )
         tripwire_name = tripwire_titles[-1]
         tripwire_name.click()
         tripwire_name.clear()
@@ -440,9 +443,9 @@ def modify_tripwire(browser):
 def delete_tripwire(browser, tw_uuid):
     browser.find_element(By.ID, "tripwires-tab").click()
     print("Click on the 'Tripwires' tab")
-    browser.find_element(By.ID,
-                         f"form-tripwire_{tw_uuid}").find_element(By.CLASS_NAME,
-                                                                  "tripwire-remove").click()
+    browser.find_element(By.ID, f"form-tripwire_{tw_uuid}").find_element(
+        By.CLASS_NAME, "tripwire-remove"
+    ).click()
     browser.switch_to.alert.accept()
     print("Tripwire deleted!")
     return
@@ -458,14 +461,16 @@ def verify_tripwire_persistence(browser, tw_name):
         browser.find_element(By.ID, "tripwires-tab").click()
         print("Verifying persistence of tripwire after saving...")
         tripwire_titles = browser.find_elements(
-            By.CSS_SELECTOR, ".card-body .tripwire-title")
+            By.CSS_SELECTOR, ".card-body .tripwire-title"
+        )
         if not tripwire_titles:
             print(f"No tripwires were found!")
             return False
         tripwire_name = tripwire_titles[-1]
-        if tripwire_name.get_attribute('value') != tw_name:
+        if tripwire_name.get_attribute("value") != tw_name:
             print(
-                f"Expected name: {tw_name} - Returned name: {tripwire_name.get_attribute('value')}")
+                f"Expected name: {tw_name} - Returned name: {tripwire_name.get_attribute('value')}"
+            )
             return False
         print(f"Tripwire '{tw_name}' is persistent")
         return True
@@ -489,12 +494,8 @@ def move_tripwire(browser):
         point_1 = points_1[-1]
 
         action = browser.actionChains()
-        action.drag_and_drop_by_offset(
-            point_0, 0, random.randint(
-                30, 80)).perform()
-        action.drag_and_drop_by_offset(
-            point_1, random.randint(
-                30, 80), 0).perform()
+        action.drag_and_drop_by_offset(point_0, 0, random.randint(30, 80)).perform()
+        action.drag_and_drop_by_offset(point_1, random.randint(30, 80), 0).perform()
         print("Moved the ends of tripwire")
         return True
     except Exception as e:
@@ -502,11 +503,7 @@ def move_tripwire(browser):
     return False
 
 
-def change_cam_calibration(
-        browser,
-        dragdropPoint,
-        scrollPoint,
-        save_calibration=True):
+def change_cam_calibration(browser, dragdropPoint, scrollPoint, save_calibration=True):
     """! Changes the camera calibration by moving a point in the camera view and scene view.
     @param    browser                    Object wrapping the Selenium driver.
     @param    dragdropPoint              Location to where we drag and drop camera calibration point
@@ -517,31 +514,23 @@ def change_cam_calibration(
                                          session termination or Reset Points button.
     @return   bool                       Boolean representing success.
     """
-    browser.find_element(By.ID, 'cam_calibrate_1').click()
+    browser.find_element(By.ID, "cam_calibrate_1").click()
     camera_canvas = browser.find_elements(By.ID, "camera_canvas")
     map_canvas = browser.find_elements(By.ID, "map_canvas")
     if camera_canvas and map_canvas is None:
         return False
-    cam_draggable = browser.find_elements(
-        By.CSS_SELECTOR, "#camera .draggable.p1")
-    map_draggable = browser.find_elements(
-        By.CSS_SELECTOR, "#map .draggable.p1")
+    cam_draggable = browser.find_elements(By.CSS_SELECTOR, "#camera .draggable.p1")
+    map_draggable = browser.find_elements(By.CSS_SELECTOR, "#map .draggable.p1")
     cam_p1 = cam_draggable[-1]
     map_p1 = map_draggable[-1]
 
     action = browser.actionChains()
-    action.drag_and_drop_by_offset(
-        cam_p1,
-        dragdropPoint[0],
-        dragdropPoint[1]).perform()
+    action.drag_and_drop_by_offset(cam_p1, dragdropPoint[0], dragdropPoint[1]).perform()
     time.sleep(1)
     browser.execute_script(
-        "window.scrollTo({},{});".format(
-            scrollPoint[0], scrollPoint[1]))
-    action.drag_and_drop_by_offset(
-        map_p1,
-        dragdropPoint[0],
-        dragdropPoint[1]).perform()
+        "window.scrollTo({},{});".format(scrollPoint[0], scrollPoint[1])
+    )
+    action.drag_and_drop_by_offset(map_p1, dragdropPoint[0], dragdropPoint[1]).perform()
     print("Changed the Camera Perspective")
     if save_calibration:
         browser.find_element(By.NAME, "calibrate_save").click()
@@ -551,10 +540,7 @@ def change_cam_calibration(
     return True
 
 
-def check_cam_calibration(
-    browser, not_expected_cam=(
-        0, 0), not_expected_map=(
-            0, 0)):
+def check_cam_calibration(browser, not_expected_cam=(0, 0), not_expected_map=(0, 0)):
     """! Checks whether the camera calibration has moved the points in the camera view and scene view
     to a point that differs from the passed parameter.
     @param    browser                    Object wrapping the Selenium driver.
@@ -562,15 +548,17 @@ def check_cam_calibration(
     @return   bool                       Boolean representing success.
     """
     try:
-        browser.find_element(By.ID, 'cam_calibrate_1').click()
-        cam_values_init = get_calibration_points(browser, 'camera')
-        map_values_init = get_calibration_points(browser, 'map')
+        browser.find_element(By.ID, "cam_calibrate_1").click()
+        cam_values_init = get_calibration_points(browser, "camera")
+        map_values_init = get_calibration_points(browser, "map")
         if (cam_values_init[0] != not_expected_cam) and (
-                map_values_init[0] != not_expected_map):
+            map_values_init[0] != not_expected_map
+        ):
             print(
                 f"Perspective changed to: Cam coord1: '{
                     cam_values_init[0]}' Map coord1: '{
-                    map_values_init[0]}'")
+                    map_values_init[0]}'"
+            )
             return True
         else:
             print("Perspective has not changed!")
@@ -579,10 +567,7 @@ def check_cam_calibration(
     return False
 
 
-def check_calibration_initialization(
-        browser,
-        expected_cam_values,
-        expected_map_values):
+def check_calibration_initialization(browser, expected_cam_values, expected_map_values):
     """! Checks whether the camera calibration has moved the points in the camera view and scene view
     to the point passed as expected_points parameters.
     @param    browser                    Object wrapping the Selenium driver.
@@ -592,26 +577,30 @@ def check_calibration_initialization(
     """
     calibration = True
     try:
-        browser.find_element(By.ID, 'cam_calibrate_1').click()
-        cam_values_init = get_calibration_points(browser, 'camera')
-        map_values_init = get_calibration_points(browser, 'map')
+        browser.find_element(By.ID, "cam_calibrate_1").click()
+        cam_values_init = get_calibration_points(browser, "camera")
+        map_values_init = get_calibration_points(browser, "map")
         for index in range(len(expected_cam_values)):
             if (cam_values_init[index] == expected_cam_values[index]) and (
-                    map_values_init[index] == expected_map_values[index]):
+                map_values_init[index] == expected_map_values[index]
+            ):
                 print(
                     f"Calibration persists: Cam coord {index}: '{
                         cam_values_init[index]}', Map coord {index}: '{
-                        map_values_init[index]}'")
+                        map_values_init[index]}'"
+                )
             else:
                 print(f"Calibration for point {index} not as expected:")
                 print(
                     f"Cam coord {index} is: '{
                         cam_values_init[index]}', expected: '{
-                        expected_cam_values[index]}'")
+                        expected_cam_values[index]}'"
+                )
                 print(
                     f"Map coord {index} is: '{
                         map_values_init[index]}', expected: '{
-                        expected_map_values[index]}'")
+                        expected_map_values[index]}'"
+                )
                 calibration = False
     except Exception as e:
         print("Error in verifying perspective persistence: ", e)
@@ -629,22 +618,28 @@ def get_calibration_points(browser, calibration_type, initial_transforms=True):
     """
     try:
         browser.execute_script(
-            "document.querySelectorAll('.display-none').forEach(e => {e.style.display = 'block';})")
-        transforms_type = 'initial-id_transforms' if initial_transforms else 'id_transforms'
-        init_id_transforms = browser.find_element(
-            By.ID, transforms_type).get_attribute('value')
+            "document.querySelectorAll('.display-none').forEach(e => {e.style.display = 'block';})"
+        )
+        transforms_type = (
+            "initial-id_transforms" if initial_transforms else "id_transforms"
+        )
+        init_id_transforms = browser.find_element(By.ID, transforms_type).get_attribute(
+            "value"
+        )
         init_id_list = init_id_transforms.strip().split(",")
         init_id_pairs = list(
-            zip(map(float, init_id_list[::2]), map(float, init_id_list[1::2])))
-        if calibration_type == 'camera':
+            zip(map(float, init_id_list[::2]), map(float, init_id_list[1::2]))
+        )
+        if calibration_type == "camera":
             calibration_values_init = init_id_pairs[:4]
             print(f"Camera coordinate points: {calibration_values_init}")
-        elif calibration_type == 'map':
+        elif calibration_type == "map":
             calibration_values_init = init_id_pairs[4:8]
             print(f"Map coordinate points: {calibration_values_init}")
         else:
             raise ValueError(
-                "Invalid calibration type specified. Use 'camera' or 'map'.")
+                "Invalid calibration type specified. Use 'camera' or 'map'."
+            )
         return calibration_values_init
     except (ValueError, Exception) as e:
         print("Error in getting camera calibration points: ", e)
@@ -652,16 +647,15 @@ def get_calibration_points(browser, calibration_type, initial_transforms=True):
 
 
 def change_map_perspective(browser):
-    """! Change map perspective. """
+    """! Change map perspective."""
     MAP_POINT_X_OFFSET = -400
     MAP_POINT_Y_OFFSET = 0
     try:
         map_point = browser.find_element(By.ID, "scene")
         action = browser.actionChains()
         action.drag_and_drop_by_offset(
-            map_point,
-            MAP_POINT_X_OFFSET,
-            MAP_POINT_Y_OFFSET).perform()
+            map_point, MAP_POINT_X_OFFSET, MAP_POINT_Y_OFFSET
+        ).perform()
         return True
     except Exception as e:
         print("Error in changing map perspective:", e)
@@ -680,18 +674,20 @@ def validate_scene_data(browser, scene_name, scale, map_image):
     try:
         if scene_name in browser.page_source:
             print("Scene is accessible from the list of scenes")
-            browser.find_element(
-                By.NAME, scene_name).find_element(
-                By.NAME, "Edit").click()
+            browser.find_element(By.NAME, scene_name).find_element(
+                By.NAME, "Edit"
+            ).click()
             print(browser.page_source)
-            get_name = browser.find_element(
-                By.ID, "id_name").get_attribute("value")
-            get_scale = browser.find_element(
-                By.ID, "id_scale").get_attribute("value")
+            get_name = browser.find_element(By.ID, "id_name").get_attribute("value")
+            get_scale = browser.find_element(By.ID, "id_scale").get_attribute("value")
             get_image_text = browser.find_element(
-                By.CSS_SELECTOR, "#map_wrapper a").get_attribute('text')
-            if get_name == scene_name and float(get_scale) == float(
-                    scale) and get_image_text.split('_')[0] in map_image:
+                By.CSS_SELECTOR, "#map_wrapper a"
+            ).get_attribute("text")
+            if (
+                get_name == scene_name
+                and float(get_scale) == float(scale)
+                and get_image_text.split("_")[0] in map_image
+            ):
                 print("scene_name: " + get_name)
                 print("scale_value: " + get_scale)
                 print("map: " + get_image_text)
@@ -713,17 +709,14 @@ def add_camera_to_scene(browser, scene_name, camera_id, camera_name):
     try:
         if scene_name in browser.page_source:
             browser.find_element(
-                By.XPATH,
-                "//*[text()='" +
-                scene_name +
-                "']/parent::*/div[2]/div/a[1]").click()
+                By.XPATH, "//*[text()='" + scene_name + "']/parent::*/div[2]/div/a[1]"
+            ).click()
             browser.find_element(By.ID, "new-camera").click()
             browser.find_element(By.ID, "id_sensor_id").send_keys(camera_id)
             browser.find_element(By.ID, "id_name").send_keys(camera_name)
             browser.find_element(By.ID, "id_scene").click()
             dropdown = browser.find_element(By.ID, "id_scene")
-            dropdown.find_element(
-                By.XPATH, "//option[. = '" + scene_name + "']").click()
+            dropdown.find_element(By.XPATH, "//option[. = '" + scene_name + "']").click()
             browser.find_element(By.CSS_SELECTOR, ".btn:nth-child(1)").click()
             print("Camera " + camera_name + " added to scene " + scene_name)
             return True
@@ -740,13 +733,15 @@ def delete_camera(browser, camera_name):
     """
     browser.find_element(By.LINK_TEXT, "Cameras").click()
     rows_to_delete = browser.find_elements(
-        By.XPATH, "//td[text()='" + camera_name + "']/parent::tr")
+        By.XPATH, "//td[text()='" + camera_name + "']/parent::tr"
+    )
     for r in rows_to_delete:
         browser.find_element(
             By.XPATH,
-            "//td[text()='" +
-            camera_name +
-            "']/parent::tr//a[contains(@href,'cam/delete/')]").click()
+            "//td[text()='"
+            + camera_name
+            + "']/parent::tr//a[contains(@href,'cam/delete/')]",
+        ).click()
         browser.find_element(By.XPATH, "//*[@type = 'submit']").click()
         browser.find_element(By.LINK_TEXT, "Cameras").click()
 
@@ -771,9 +766,7 @@ def create_sensor(browser, sensor_id, sensor_name, scene_name):
     browser.find_element(By.ID, "id_name").send_keys(sensor_name)
     browser.find_element(By.ID, "id_scene").click()
     dropdown = browser.find_element(By.ID, "id_scene")
-    dropdown.find_element(
-        By.XPATH,
-        "//option[. = '" + scene_name + "']").click()
+    dropdown.find_element(By.XPATH, "//option[. = '" + scene_name + "']").click()
     add_button_xpath = "//input[@value = 'Add New Sensor']"
     browser.find_element(By.XPATH, add_button_xpath).click()
     return
@@ -802,11 +795,7 @@ def create_sensor_from_scene(browser, sensor_id, sensor_name, scene_name):
     return False
 
 
-def create_sensor_from_sensors_page(
-        browser,
-        sensor_id,
-        sensor_name,
-        scene_name):
+def create_sensor_from_sensors_page(browser, sensor_id, sensor_name, scene_name):
     """! From the sensor calibration page creates a default sensor covering the entire scene.
     @param    browser                    Object wrapping the Selenium driver.
     @param    sensor_id                  ID of the sensor to be added.
@@ -815,7 +804,7 @@ def create_sensor_from_sensors_page(
     @return   bool                       Boolean representing success.
     """
     browser.find_element(By.LINK_TEXT, "Sensors").click()
-    browser.find_element(By.LINK_TEXT, '+ New Sensor').click()
+    browser.find_element(By.LINK_TEXT, "+ New Sensor").click()
     create_sensor(browser, sensor_id, sensor_name, scene_name)
 
     # Page is redirected to respective scene page verify the presence of the
@@ -835,8 +824,8 @@ def open_scene_manage_sensors_tab(browser):
     try:
         browser.find_element(By.ID, "sensors-tab").click()
         browser.find_element(
-            By.CSS_SELECTOR,
-            "#sensors > div > div > div > div > div > a:nth-child(1)").click()
+            By.CSS_SELECTOR, "#sensors > div > div > div > div > div > a:nth-child(1)"
+        ).click()
         return True
     except BaseException:
         return False
@@ -863,16 +852,16 @@ def create_circle_sensor(browser, radius=250):
     browser.find_element(By.CSS_SELECTOR, "#id_area_1").click()
     slider = browser.find_element(By.ID, "id_sensor_r")
     circle_action = browser.actionChains()
-    circle_action.click_and_hold(slider).move_by_offset(
-        radius, 0).release().perform()
+    circle_action.click_and_hold(slider).move_by_offset(radius, 0).release().perform()
     return save_sensor_calibration(browser)
 
 
 def create_triangle_sensor(
-        browser,
-        triangle_height=DEFAULT_SENSOR_TRIANGLE_HEIGHT,
-        triangle_length=DEFAULT_SENSOR_TRIANGLE_LENGTH,
-        upper_left_point=DEFAULT_SENSOR_TRIANGLE_UPPER_LEFT_POINT):
+    browser,
+    triangle_height=DEFAULT_SENSOR_TRIANGLE_HEIGHT,
+    triangle_length=DEFAULT_SENSOR_TRIANGLE_LENGTH,
+    upper_left_point=DEFAULT_SENSOR_TRIANGLE_UPPER_LEFT_POINT,
+):
     """! Creates a sensor that covers a triangular area.
     @param    browser                    Object wrapping the Selenium driver.
     @param    triangle_height            Height of the triangular area.
@@ -884,11 +873,11 @@ def create_triangle_sensor(
     svg = browser.find_element(By.ID, "svgout")
     action_chain = browser.actionChains()
     action_chain.move_to_element_with_offset(
-        svg, upper_left_point[0], upper_left_point[1]).click().perform()
+        svg, upper_left_point[0], upper_left_point[1]
+    ).click().perform()
     action_chain.move_by_offset(0, triangle_height).click().perform()
     action_chain.move_by_offset(triangle_length, 0).click().perform()
-    action_chain.move_by_offset(-triangle_length, -
-                                triangle_height).click().perform()
+    action_chain.move_by_offset(-triangle_length, -triangle_height).click().perform()
     return save_sensor_calibration(browser)
 
 
@@ -899,8 +888,9 @@ def delete_sensor(browser, sensor_name):
     @return   bool                       Boolean representing a success.
     """
     browser.find_element(By.LINK_TEXT, "Sensors").click()
-    browser.find_element(By.XPATH, "//td[text()='" + sensor_name
-                         + "']/parent::tr/td[5]/a").click()
+    browser.find_element(
+        By.XPATH, "//td[text()='" + sensor_name + "']/parent::tr/td[5]/a"
+    ).click()
     browser.find_element(By.XPATH, "//*[@type = 'submit']").click()
 
     # verify the absence of the sensor
@@ -920,12 +910,11 @@ def verify_sensor_list(browser, sensor_names):
     """
     try:
         browser.find_element(
-            By.CSS_SELECTOR,
-            ".navbar-nav > .nav-item:nth-child(3) > .nav-link").click()
+            By.CSS_SELECTOR, ".navbar-nav > .nav-item:nth-child(3) > .nav-link"
+        ).click()
         time.sleep(1)
         for sensor_name in sensor_names:
-            browser.find_element(
-                By.XPATH, "//td[text()='" + sensor_name + "']")
+            browser.find_element(By.XPATH, "//td[text()='" + sensor_name + "']")
         return True
     except BaseException:
         return False
@@ -942,7 +931,8 @@ def verify_sensor_under_scene(browser, sensor_names):
         time.sleep(1)
         for sensor_name in sensor_names:
             browser.find_element(
-                By.XPATH, "//*/h5[contains(text(), '" + sensor_name + "')]")
+                By.XPATH, "//*/h5[contains(text(), '" + sensor_name + "')]"
+            )
         return True
     except BaseException:
         return False
@@ -962,7 +952,8 @@ def create_roi_by_ratio(browser, polygon_name, x_ratio, y_ratio, sensor=False):
     browser.execute_script("document.getElementById('id_rois').type='text'")
     # Move controls out of the way
     browser.execute_script(
-        "document.getElementById('scene-controls').removeAttribute('id')")
+        "document.getElementById('scene-controls').removeAttribute('id')"
+    )
 
     scale_field = browser.find_element(By.ID, "scale")
     scale = float(scale_field.get_attribute("value"))
@@ -972,15 +963,11 @@ def create_roi_by_ratio(browser, polygon_name, x_ratio, y_ratio, sensor=False):
     svg = browser.find_element(By.ID, "svgout")
 
     # Create ROI about the center point (origin is bottom left in meters)
-    cx = svg.size['width'] / (2 * scale)
-    cy = svg.size['height'] / (2 * scale)
+    cx = svg.size["width"] / (2 * scale)
+    cy = svg.size["height"] / (2 * scale)
 
     if sensor:
-        create_sensor_from_scene(
-            browser,
-            polygon_id,
-            polygon_name,
-            TEST_SCENE_NAME)
+        create_sensor_from_scene(browser, polygon_id, polygon_name, TEST_SCENE_NAME)
         open_sensor_tab(browser)
         open_scene_manage_sensors_tab(browser)
         browser.find_element(By.CSS_SELECTOR, "#id_area_2").click()
@@ -1024,13 +1011,16 @@ def create_roi(browser, polygon_name, x, y, side_length=250):
     min_viewport_width = 1920
     min_viewport_height = 1080
     viewport_dimensions = browser.execute_script(
-        "return [window.innerWidth, window.innerHeight];")
+        "return [window.innerWidth, window.innerHeight];"
+    )
     viewport_width = viewport_dimensions[0]
     viewport_height = viewport_dimensions[1]
     if viewport_width < min_viewport_width or viewport_height < min_viewport_height:
         browser.setViewportSize(min_viewport_width, min_viewport_height)
-        print("Viewport size set to:", browser.execute_script(
-            "return [window.innerWidth, window.innerHeight];"))
+        print(
+            "Viewport size set to:",
+            browser.execute_script("return [window.innerWidth, window.innerHeight];"),
+        )
 
     browser.find_element(By.ID, "regions-tab").click()
     browser.find_element(By.ID, "new-roi").click()
@@ -1067,9 +1057,10 @@ def create_roi(browser, polygon_name, x, y, side_length=250):
     for point in all_points:
         # find the origin point of the above polygon to complete the polygon
         # which are first and the second element in the p_list
-        if float(
-                point.get_attribute("cx")) == p_list[0] and float(
-                point.get_attribute("cy")) == p_list[1]:
+        if (
+            float(point.get_attribute("cx")) == p_list[0]
+            and float(point.get_attribute("cy")) == p_list[1]
+        ):
             point.click()
             print(f"{polygon_name} created")
             polygon_created = True
@@ -1077,25 +1068,25 @@ def create_roi(browser, polygon_name, x, y, side_length=250):
             break
 
     polygon_name_updated = False
-    roi_titles = browser.find_elements(
-        By.CSS_SELECTOR, ".card-body .roi-title")
+    roi_titles = browser.find_elements(By.CSS_SELECTOR, ".card-body .roi-title")
     roi_name = roi_titles[-1]
     roi_name.click()
     roi_name.clear()
     roi_name.send_keys(polygon_name)
     # Verifying that name is updated successfully
-    if roi_name.get_attribute('value') == polygon_name:
+    if roi_name.get_attribute("value") == polygon_name:
         print(
             f"ROI Name(Text box) updated successfully to {
-                roi_name.get_attribute('value')}")
+                roi_name.get_attribute('value')}"
+        )
         polygon_name_updated = True
     else:
         print("Failed to update polygon name")
 
     if polygon_created and polygon_name_updated:
         roi = browser.find_element(By.ID, "id_rois")
-        roi_points = roi.get_attribute('value')
-        roi_points = json.loads(roi_points)[0]['points']
+        roi_points = roi.get_attribute("value")
+        roi_points = json.loads(roi_points)[0]["points"]
         roi_points[0] = [float(point) for point in roi_points[0]]
         roi_points[1] = [float(point) for point in roi_points[1]]
         roi_points[2] = [float(point) for point in roi_points[2]]
@@ -1115,13 +1106,12 @@ def verify_roi(browser, rois_list):
     print("Navigating to ROI tab ...")
     browser.find_element(By.ID, "regions-tab").click()
     # roi_titles are roi_names which are in the roi_list
-    roi_titles = browser.find_elements(
-        By.CSS_SELECTOR, ".card-body .roi-title")
+    roi_titles = browser.find_elements(By.CSS_SELECTOR, ".card-body .roi-title")
 
     persistent_roi_list = []
     # get all the names of the available ROIs
     for roi in roi_titles:
-        persistent_roi_list.append(roi.get_attribute('value'))
+        persistent_roi_list.append(roi.get_attribute("value"))
     count = 0
     for roi_name in rois_list:
         if roi_name in persistent_roi_list:
@@ -1144,14 +1134,12 @@ def delete_roi(browser, roi):
     print("Navigating to ROI tab ...")
     browser.find_element(By.ID, "regions-tab").click()
     print("Deleting ...")
-    roi_titles = browser.find_elements(
-        By.CSS_SELECTOR, ".card-body .roi-title")
+    roi_titles = browser.find_elements(By.CSS_SELECTOR, ".card-body .roi-title")
     roi_name = roi_titles[-1]
     time.sleep(2)
 
-    if roi_name.get_attribute('value') == roi:
-        trash_buttons = browser.find_elements(
-            By.CSS_SELECTOR, ".card-body .roi-remove")
+    if roi_name.get_attribute("value") == roi:
+        trash_buttons = browser.find_elements(By.CSS_SELECTOR, ".card-body .roi-remove")
         remove_button = trash_buttons[-1]
         time.sleep(2)
         remove_button.click()
@@ -1228,21 +1216,17 @@ def navigate_to_scene(browser, scene_name):
     time.sleep(1)
 
     # This element is only shown when there is at least one scene available
-    card_header_xpath = "//h5[@class='card-header' and text()='" + \
-        scene_name + "']"
+    card_header_xpath = "//h5[@class='card-header' and text()='" + scene_name + "']"
     found = wait_for_elements(
-        browser,
-        card_header_xpath,
-        text=scene_name,
-        findBy=By.XPATH)
+        browser, card_header_xpath, text=scene_name, findBy=By.XPATH
+    )
 
     if found:
         card_header_element = browser.find_element(By.XPATH, card_header_xpath)
         print("Card Header Element: {}".format(card_header_element.text))
         card_header_element.find_element(By.XPATH, "./..//a[1]").click()
         time.sleep(1)
-        scene_name_xpath = "//h2[@id='scene_name' and text()='" + \
-            scene_name + "']"
+        scene_name_xpath = "//h2[@id='scene_name' and text()='" + scene_name + "']"
         browser.find_element(By.XPATH, scene_name_xpath)
     else:
         print("Unable to find {} scene!".format(scene_name))
@@ -1250,12 +1234,8 @@ def navigate_to_scene(browser, scene_name):
 
 
 def wait_for_elements(
-        browser,
-        search_phrase,
-        text=None,
-        findBy=By.XPATH,
-        maxWait=120,
-        refreshPage=True):
+    browser, search_phrase, text=None, findBy=By.XPATH, maxWait=120, refreshPage=True
+):
     """! This function waits for elements to be available in the browser, for a duration of maxWait.
     @param    browser                    Object wrapping the Selenium driver.
     @param    search_phrase              Search phrase to use in locating the web element.
@@ -1283,10 +1263,7 @@ def wait_for_elements(
                 browser.refresh()
         time.sleep(intervalSeconds)
         elapsedTime = time.time() - startTime
-    print(
-        "Failed finding element with [{}]:'{}'".format(
-            findBy,
-            search_phrase))
+    print("Failed finding element with [{}]:'{}'".format(findBy, search_phrase))
     return False
 
 
@@ -1300,7 +1277,8 @@ def selenium_wait_for_elements(browser, search_phrase, timeout=20):
     @returns    bool                     Boolean which is true if element loaded before timeout.
     """
     return WebDriverWait(browser, timeout).until(
-        EC.visibility_of_element_located(search_phrase))
+        EC.visibility_of_element_located(search_phrase)
+    )
 
 
 def create_orphan_camera(browser, camera_name, camera_id):
@@ -1319,8 +1297,7 @@ def create_orphan_camera(browser, camera_name, camera_id):
         return False
     print("Created scene ", scene_name)
 
-    is_camera_created = create_camera(
-        browser, camera_name, camera_id, scene_name)
+    is_camera_created = create_camera(browser, camera_name, camera_id, scene_name)
     if not is_camera_created:
         return False
     print(f"Added {camera_name} ID : {camera_id} to the scene {scene_name}")
@@ -1353,13 +1330,13 @@ def create_circle_sensor(browser, radius=250):
     browser.find_element(By.CSS_SELECTOR, "#id_area_1").click()
     slider = browser.find_element(By.ID, "id_sensor_r")
     circle_action = browser.actionChains()
-    circle_action.click_and_hold(slider).move_by_offset(
-        radius, 0).release().perform()
+    circle_action.click_and_hold(slider).move_by_offset(radius, 0).release().perform()
     return save_sensor_calibration(browser)
 
 
-def create_triangle_sensor(browser, triangle_height=600,
-                           triangle_length=800, upper_left_point=(-400, -300)):
+def create_triangle_sensor(
+    browser, triangle_height=600, triangle_length=800, upper_left_point=(-400, -300)
+):
     """! Creates a sensor that covers a triangular area.
     @param    browser                    Object wrapping the Selenium driver.
     @param    triangle_height            Height of the triangular area.
@@ -1371,11 +1348,11 @@ def create_triangle_sensor(browser, triangle_height=600,
     svg = browser.find_element(By.ID, "svgout")
     action_chain = browser.actionChains()
     action_chain.move_to_element_with_offset(
-        svg, upper_left_point[0], upper_left_point[1]).click().perform()
+        svg, upper_left_point[0], upper_left_point[1]
+    ).click().perform()
     action_chain.move_by_offset(0, triangle_height).click().perform()
     action_chain.move_by_offset(triangle_length, 0).click().perform()
-    action_chain.move_by_offset(-triangle_length, -
-                                triangle_height).click().perform()
+    action_chain.move_by_offset(-triangle_length, -triangle_height).click().perform()
     return save_sensor_calibration(browser)
 
 
@@ -1395,8 +1372,8 @@ def open_scene_manage_sensors_tab(browser):
     """
     browser.find_element(By.ID, "sensors-tab").click()
     browser.find_element(
-        By.CSS_SELECTOR,
-        "#sensors > div > div > div > div > div > a:nth-child(1)").click()
+        By.CSS_SELECTOR, "#sensors > div > div > div > div > div > a:nth-child(1)"
+    ).click()
     return True
 
 
@@ -1420,9 +1397,10 @@ def read_image(file_path):
 
 
 def compare_images(
-        base_image: np.ndarray,
-        image: np.ndarray,
-        comparison_threshold: float = DEFAULT_IMAGE_MSE_THRESHOLD) -> bool:
+    base_image: np.ndarray,
+    image: np.ndarray,
+    comparison_threshold: float = DEFAULT_IMAGE_MSE_THRESHOLD,
+) -> bool:
     """! Compare the mean squared error between to images represented as numpy arrays.
     @param    base_image                 Baseline image to be compared against.
     @param    image                      Image to be compared against the baseline image.
@@ -1495,9 +1473,7 @@ def upload_scene_file(browser, scene_name, file):
     @return   bool                       Boolean representing successful upload.
     """
     assert scene_name in browser.page_source
-    browser.find_element(
-        By.ID, file.upload_element_id).send_keys(
-        file.file_path)
+    browser.find_element(By.ID, file.upload_element_id).send_keys(file.file_path)
 
     # Saves uploaded images and goes back to the page listing all the scenes
     browser.find_element(By.ID, "save").click()
@@ -1527,11 +1503,16 @@ def is_within_rectangle(bl, tr, curr_point):
     @param    curr_point  Point being check.
     @return   bool        True/False if point is in rectangle.
     """
-    if (curr_point[0] > bl[0] and curr_point[0] < tr[0] and
-            curr_point[1] > bl[1] and curr_point[1] < tr[1]):
+    if (
+        curr_point[0] > bl[0]
+        and curr_point[0] < tr[0]
+        and curr_point[1] > bl[1]
+        and curr_point[1] < tr[1]
+    ):
         return True
     else:
         return False
+
 
 ##########################################################################
 # Decorators
@@ -1543,6 +1524,7 @@ def mock_display(func):
     @param    func                       Function to be wrapped.
     @return   wrapper_mock_display       Wrapped function mocking a display.
     """
+
     @functools.wraps(func)
     def wrapper_mock_display(*args, **kwargs):
         display = Display(visible=0, size=(1920, 1080))
@@ -1552,6 +1534,7 @@ def mock_display(func):
 
         display.stop()
         return return_val
+
     return wrapper_mock_display
 
 
@@ -1560,6 +1543,7 @@ def scenescape_login_headed(func):
     @param    func                       Function to be wrapped.
     @return   wrapper_scenescape_login   Wrapped function logged into Scenescape.
     """
+
     @functools.wraps(func)
     def wrapper_scenescape_login(*args, **kwargs):
         browser = Browser(headless=False)
@@ -1571,7 +1555,9 @@ def scenescape_login_headed(func):
 
         browser.close()
         return return_val
+
     return wrapper_scenescape_login
+
 
 ##########################################################################
 # Parameters
@@ -1579,12 +1565,13 @@ def scenescape_login_headed(func):
 
 
 @dataclass
-class File():
+class File:
     """! Parameters for uploading a file which is simpler than UploadParams.
     @param    file_path                  Path to uploaded file.
     @param    upload_element_id          HTML ID of upload field.
     @param    expected_location          Expected location of the uploaded files filename.
     """
+
     file_path: str
     upload_element_id: str
     expected_location: str
@@ -1607,6 +1594,7 @@ class InteractionParams:
     @param    screenshot_threshold       Threshold defining screenshot difference.
     @param    debug                      Flag to run test in debug mode.
     """
+
     file_name: str
     file_path: str
     page_path: str
@@ -1651,9 +1639,11 @@ class CheckInteraction:
     @param    file_on_server             If true check that the file is on the server.
     @param    screenshots_differ         If true check that screenshots differ.
     """
+
     file_name_in_page: bool = False
     file_on_server: bool = False
     screenshots_differ: bool = False
+
 
 ##########################################################################
 # Page Interactions
@@ -1661,12 +1651,9 @@ class CheckInteraction:
 
 
 class InteractWithPage(ABC):
-    """! Base class for interacting with a page. """
+    """! Base class for interacting with a page."""
 
-    def __init__(
-            self,
-            browser: Browser,
-            interaction_params: InteractionParams = None):
+    def __init__(self, browser: Browser, interaction_params: InteractionParams = None):
         """! Initiate class.
         @param    browser                  Object wrapping the Selenium driver.
         @param    interaction_params       InteractionParams object.
@@ -1686,9 +1673,8 @@ class InteractWithPage(ABC):
 
     @abstractmethod
     def check_successful_interaction(
-            self,
-            params: InteractionParams,
-            checks: CheckInteraction) -> bool:
+        self, params: InteractionParams, checks: CheckInteraction
+    ) -> bool:
         """! Checks that an interaction with a page is successful.
         @return   bool                     Boolean representing success.
         """
@@ -1698,20 +1684,21 @@ class InteractWithPage(ABC):
         """! Uploads file based on the classes upload_params.
         @return   correct_address          Address of the upload page.
         """
-        correct_address = self.navigate_to_page(
-            self.interaction_params.page_path)
+        correct_address = self.navigate_to_page(self.interaction_params.page_path)
         self.browser.find_element(
-            By.CSS_SELECTOR,
-            self.interaction_params.field_selector).send_keys(
-            self.interaction_params.file_path)
+            By.CSS_SELECTOR, self.interaction_params.field_selector
+        ).send_keys(self.interaction_params.file_path)
         self.browser.find_element(
-            By.CSS_SELECTOR,
-            self.interaction_params.field_selector).submit()
-        self.browser.find_element(By.CSS_SELECTOR,
-                                  "input[value=\"Save Scene Updates\"]").click()
+            By.CSS_SELECTOR, self.interaction_params.field_selector
+        ).submit()
+        self.browser.find_element(
+            By.CSS_SELECTOR, 'input[value="Save Scene Updates"]'
+        ).click()
         if correct_address:
             success_str = "Submitting upload {fname} succeeded: {fpath}".format(
-                fname=self.interaction_params.field_name, fpath=self.interaction_params.file_path)
+                fname=self.interaction_params.field_name,
+                fpath=self.interaction_params.file_path,
+            )
             print(success_str)
         return correct_address
 
@@ -1745,16 +1732,17 @@ class InteractWithPage(ABC):
         file_output_path = tmp_dir_path + "/" + self.interaction_params.file_name
         parsed_url = urlparse(self.browser.current_url)
         file_url = parsed_url._replace(
-            path=f"/media/{self.interaction_params.file_name}").geturl()
+            path=f"/media/{self.interaction_params.file_name}"
+        ).geturl()
 
         curl_str = ["curl", file_url, "-k", "-o", file_output_path, "-v"]
         sessionid = None
         csrftoken = None
 
         for item in self.browser.get_cookies():
-            if item['name'] == "sessionid":
+            if item["name"] == "sessionid":
                 sessionid = f"{item['name']}={item['value']}"
-            elif item['name'] == "csrftoken":
+            elif item["name"] == "csrftoken":
                 csrftoken = f"{item['name']}={item['value']}"
 
         assert sessionid is not None
@@ -1764,7 +1752,8 @@ class InteractWithPage(ABC):
 
         tmp_files = os.listdir(tmp_dir_path)
         if (self.interaction_params.file_name in tmp_files) and filecmp.cmp(
-                file_output_path, self.interaction_params.file_path):
+            file_output_path, self.interaction_params.file_path
+        ):
             upload_success = True
             print(check_str_root + "Passed")
         else:
@@ -1775,8 +1764,7 @@ class InteractWithPage(ABC):
         """! Tests that screenshot 1 differs from screenshot 2 by a given MSE threshold.
         @return   bool                     Boolean which is True if the screenshots differ more than the MSE threshold.
         """
-        navigate_directly_to_page(
-            self.browser, self.interaction_params.page_path)
+        navigate_directly_to_page(self.browser, self.interaction_params.page_path)
         time.sleep(5)
         screenshot = self.get_page_screenshot()
         self.interaction_params.add_screenshot(screenshot)
@@ -1785,9 +1773,11 @@ class InteractWithPage(ABC):
             fname = fname.split("/")[-1]
             cv2.imwrite("screenshot_" + fname + ".png", screenshot)
 
-        return compare_images(self.interaction_params.screenshots[1],
-                              self.interaction_params.screenshots[2],
-                              self.interaction_params.screenshot_threshold)
+        return compare_images(
+            self.interaction_params.screenshots[1],
+            self.interaction_params.screenshots[2],
+            self.interaction_params.screenshot_threshold,
+        )
 
     def check_file_uploaded_name(self) -> bool:
         """! Check that uploaded filename is in the expected html page at the expected location.
@@ -1796,9 +1786,11 @@ class InteractWithPage(ABC):
         check_str_root = "Check Uploaded File Name: "
         upload_success = False
         navigate_success = navigate_directly_to_page(
-            self.browser, self.interaction_params.page_path)
+            self.browser, self.interaction_params.page_path
+        )
         element = self.browser.find_element(
-            By.CSS_SELECTOR, self.interaction_params.element_location)
+            By.CSS_SELECTOR, self.interaction_params.element_location
+        )
         page_file_name = None
         if self.interaction_params.element_type == "text":
             page_file_name = element.text
@@ -1819,29 +1811,27 @@ class InteractWithPage(ABC):
         """
         passes = True
         if checks.file_name_in_page:
-            passes = (passes and self.check_file_uploaded_name())
+            passes = passes and self.check_file_uploaded_name()
             print("CHECK: file_name_in_page: ", passes)
 
         if checks.file_on_server:
-            passes = (passes and self.check_file_uploaded_is_on_server())
+            passes = passes and self.check_file_uploaded_is_on_server()
             print("CHECK: file_on_server: ", passes)
 
         if checks.screenshots_differ:
-            passes = (passes and self.check_screenshots_differ())
+            passes = passes and self.check_screenshots_differ()
             print("CHECK: screenshots_differ: ", passes)
         print()
         return passes
+
 
 ############################################################################
 
 
 class InteractWith3DScene(InteractWithPage):
-    """! Class for interacting with the 3d scene page. """
+    """! Class for interacting with the 3d scene page."""
 
-    def __init__(
-            self,
-            browser: Browser,
-            interaction_params: InteractionParams = None):
+    def __init__(self, browser: Browser, interaction_params: InteractionParams = None):
         """! Initiate class.
         @param    browser                  Object wrapping the Selenium driver.
         @param    interaction_params       InteractionParams object.
@@ -1851,15 +1841,14 @@ class InteractWith3DScene(InteractWithPage):
         return
 
     def navigate_to_page(self, expected_path: str) -> bool:
-        """! Place holder to satisfy the abstract method. """
+        """! Place holder to satisfy the abstract method."""
         return False
 
     def get_3D_scene_screenshot(self) -> np.ndarray:
         """! Take screenshot of current 3D scene.
         @return   screenshot               Numpy array representing a screenshot.
         """
-        navigate_directly_to_page(
-            self.browser, f"/scene/detail/{TEST_SCENE_ID}/")
+        navigate_directly_to_page(self.browser, f"/scene/detail/{TEST_SCENE_ID}/")
         time.sleep(1)
         return self.get_page_screenshot()
 
@@ -1869,7 +1858,8 @@ class InteractWith3DScene(InteractWithPage):
         @return   object_visible_success   Boolean which is true if both checks pass.
         """
         object_visible_checks = CheckInteraction(
-            file_name_in_page=True, screenshots_differ=True)
+            file_name_in_page=True, screenshots_differ=True
+        )
         return self.check_successful_interaction(object_visible_checks)
 
     def hide_stats(self) -> bool:
@@ -1877,7 +1867,8 @@ class InteractWith3DScene(InteractWithPage):
         @return   bool                     Boolean representing success.
         """
         self.browser.execute_script(
-            "document.getElementsByClassName('stats')[0].style.display = 'none';")
+            "document.getElementsByClassName('stats')[0].style.display = 'none';"
+        )
         return True
 
     def hide_control_panels(self) -> bool:
@@ -1885,18 +1876,16 @@ class InteractWith3DScene(InteractWithPage):
         @return  panels_hidden_success     Boolean which is true if both panels are hidden.
         """
         WAIT_SEC = 1
-        camera_3d_controls = self.browser.find_element(
-            By.ID, "panel-3d-controls")
-        scene_3d_controls = self.browser.find_element(
-            By.ID, "scene-controls-3d")
+        camera_3d_controls = self.browser.find_element(By.ID, "panel-3d-controls")
+        scene_3d_controls = self.browser.find_element(By.ID, "scene-controls-3d")
 
         # Hide 3d panels
         self.browser.execute_script(
-            "arguments[0].style.display = 'none';",
-            camera_3d_controls)
+            "arguments[0].style.display = 'none';", camera_3d_controls
+        )
         self.browser.execute_script(
-            "arguments[0].style.display = 'none';",
-            scene_3d_controls)
+            "arguments[0].style.display = 'none';", scene_3d_controls
+        )
         time.sleep(WAIT_SEC)
 
         # Check if panels are hidden successfully
@@ -1910,19 +1899,17 @@ class InteractWith3DScene(InteractWithPage):
         @return   panels_displayed_success        Boolean representing success.
         """
         WAIT_SEC = 1
-        camera_3d_controls = self.browser.find_element(
-            By.ID, "panel-3d-controls")
-        scene_3d_controls = self.browser.find_element(
-            By.ID, "scene-controls-3d")
+        camera_3d_controls = self.browser.find_element(By.ID, "panel-3d-controls")
+        scene_3d_controls = self.browser.find_element(By.ID, "scene-controls-3d")
 
         # Unhide 3d panels
         time.sleep(WAIT_SEC)
         self.browser.execute_script(
-            "arguments[0].style.display = 'block';",
-            camera_3d_controls)
+            "arguments[0].style.display = 'block';", camera_3d_controls
+        )
         self.browser.execute_script(
-            "arguments[0].style.display = 'block';",
-            scene_3d_controls)
+            "arguments[0].style.display = 'block';", scene_3d_controls
+        )
 
         # Check if panels are unhidden successfully
         if not camera_3d_controls.is_displayed() or not scene_3d_controls.is_displayed():
@@ -1932,12 +1919,9 @@ class InteractWith3DScene(InteractWithPage):
 
 
 class InteractWithSceneUpdate(InteractWithPage):
-    """! Class for interacting with the scene update page. """
+    """! Class for interacting with the scene update page."""
 
-    def __init__(
-            self,
-            browser: Browser,
-            interaction_params: InteractionParams = None):
+    def __init__(self, browser: Browser, interaction_params: InteractionParams = None):
         """! Initiate the class.
         @param    browser                  Object wrapping the Selenium driver.
         @param    interaction_params       InteractionParams object.
@@ -1963,8 +1947,7 @@ class InteractWithSceneUpdate(InteractWithPage):
         correct_address = self.upload_file()
 
         # Wait for redirect to resolve back to the Scenes page
-        selenium_wait_for_elements(
-            self.browser, (By.LINK_TEXT, "+ New Scene"), 5)
+        selenium_wait_for_elements(self.browser, (By.LINK_TEXT, "+ New Scene"), 5)
         successful_checks = self.check_successful_interaction(checks)
         if successful_checks and correct_address:
             upload_success = True

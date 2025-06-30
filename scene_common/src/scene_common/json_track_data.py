@@ -29,9 +29,9 @@ class CamManager:
             camDetect = jfile.read()
 
             if scene:
-                sensor = scene.cameraWithID(camDetect['id'])
+                sensor = scene.cameraWithID(camDetect["id"])
                 if not sensor:
-                    log.error("NO SUCH SENSOR", camDetect['id'])
+                    log.error("NO SUCH SENSOR", camDetect["id"])
                     exit(1)
 
                 frame = jfile.getImage(camDetect, scene)
@@ -58,7 +58,7 @@ class CamManager:
                 self.jfiles[idx].reset()
                 self.frameBuf[idx] = self.jfiles[idx].read(loop=False)
 
-        t = [x['epochtime'] if x else np.nan for x in self.frameBuf]
+        t = [x["epochtime"] if x else np.nan for x in self.frameBuf]
         idx = np.nanargmin(t)
         camDetect = self.frameBuf[idx]
         self.frameBuf[idx] = None
@@ -77,12 +77,11 @@ class CamManager:
             last = self.jfiles[idx]
             frameLast = last.frameLast
 
-            when = camDetect['epochtime']
-            when += ((frameLast + 1 / last.frameAvg) -
-                     frameFirst) * self.loopCount
-            camDetect['epochtime'] = when
+            when = camDetect["epochtime"]
+            when += ((frameLast + 1 / last.frameAvg) - frameFirst) * self.loopCount
+            camDetect["epochtime"] = when
 
-            camDetect['timestamp'] = get_iso_time(when)
+            camDetect["timestamp"] = get_iso_time(when)
 
         return idx, camDetect, frame
 
@@ -111,8 +110,8 @@ class Simcam:
             camData = self.jfile.readline()
         camDetect = json.loads(camData)
 
-        when = get_epoch_time(camDetect['timestamp'])
-        camDetect['epochtime'] = when
+        when = get_epoch_time(camDetect["timestamp"])
+        camDetect["epochtime"] = when
 
         if not self.frameFirst:
             self.frameFirst = when
@@ -128,12 +127,12 @@ class Simcam:
         return camDetect
 
     def getImage(self, info, scene):
-        if 'image' in info:
-            frame = info['image']
+        if "image" in info:
+            frame = info["image"]
             frame = np.fromstring(base64.b64decode(frame), np.uint8)
             frame = cv2.imdecode(frame, 1)
-        elif 'frame' in info:
-            num = info['frame']
+        elif "frame" in info:
+            num = info["frame"]
             if not self.video:
                 base, ext = os.path.splitext(self.path)
                 base += ".*"

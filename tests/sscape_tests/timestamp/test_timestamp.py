@@ -9,9 +9,13 @@ import numpy as np
 from scene_common.timestamp import get_iso_time, get_epoch_time
 
 
-@pytest.mark.parametrize("input_time, expected_time",
-                         [(1678924070.942, "2023-03-15T23:47:50.942Z"),
-                          (1127342123.122, "2005-09-21T22:35:23.122Z")])
+@pytest.mark.parametrize(
+    "input_time, expected_time",
+    [
+        (1678924070.942, "2023-03-15T23:47:50.942Z"),
+        (1127342123.122, "2005-09-21T22:35:23.122Z"),
+    ],
+)
 def test_get_iso_time(input_time, expected_time):
     """! Verifies the output of timestamp.get_iso_time().
 
@@ -23,9 +27,13 @@ def test_get_iso_time(input_time, expected_time):
     return
 
 
-@pytest.mark.parametrize("input_time, expected_time",
-                         [("2023-03-15T23:47:50.869Z", 1678924070.869),
-                          ("2000-11-19T03:07:34.123Z", 974603254.123)])
+@pytest.mark.parametrize(
+    "input_time, expected_time",
+    [
+        ("2023-03-15T23:47:50.869Z", 1678924070.869),
+        ("2000-11-19T03:07:34.123Z", 974603254.123),
+    ],
+)
 def test_get_epoch_time(input_time, expected_time):
     """! Verifies the output of timestamp.get_epoch_time().
 
@@ -39,7 +47,7 @@ def test_get_epoch_time(input_time, expected_time):
 
 def test_restored_iso_time():
     """! Verifies restoring iso time from the output of get_epoch_time()
-    using get_iso_time() """
+    using get_iso_time()"""
 
     iso_time = get_iso_time()
     epoch_time = get_epoch_time(iso_time)
@@ -51,7 +59,7 @@ def test_restored_iso_time():
 
 def test_restored_epoch_time():
     """! Verifies restoring epoch time from the output of get_iso_time()
-    using get_epoch_time() """
+    using get_epoch_time()"""
 
     epoch_time = get_epoch_time()
     iso_time = get_iso_time(epoch_time)

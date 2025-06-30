@@ -10,8 +10,7 @@ import zipfile
 from datetime import datetime
 
 from auto_camera_calibration_controller import CameraCalibrationController
-from markerless_camera_calibration import \
-    CameraCalibrationMonocularPoseEstimate
+from markerless_camera_calibration import CameraCalibrationMonocularPoseEstimate
 from polycam_to_images import transformDataset
 from pytz import timezone
 
@@ -40,18 +39,15 @@ class MarkerlessCameraCalibrationController(CameraCalibrationController):
         log.info("Calibration configuration:", cur_cam_calib_obj.config)
         percebro_cam_data = json.loads(msg)
         pub_data = cur_cam_calib_obj.localize(
-            percebro_cam_data=percebro_cam_data, sceneobj=sceneobj)
+            percebro_cam_data=percebro_cam_data, sceneobj=sceneobj
+        )
         if bool(pub_data):
-            if pub_data.get('error') == 'True':
-                log.error(
-                    pub_data.get(
-                        'message',
-                        'Weak or insufficient matches'))
+            if pub_data.get("error") == "True":
+                log.error(pub_data.get("message", "Weak or insufficient matches"))
             publish_topic = PubSub.formatTopic(
-                PubSub.DATA_AUTOCALIB_CAM_POSE,
-                camera_id=percebro_cam_data['id'])
-            return {'publish_topic': publish_topic,
-                    'publish_data': json.dumps(pub_data)}
+                PubSub.DATA_AUTOCALIB_CAM_POSE, camera_id=percebro_cam_data["id"]
+            )
+            return {"publish_topic": publish_topic, "publish_data": json.dumps(pub_data)}
 
     def processSceneForCalibration(self, sceneobj, map_update=False):
         """! The following tasks are done in this function:
@@ -64,39 +60,39 @@ class MarkerlessCameraCalibrationController(CameraCalibrationController):
 
         @return  mqtt_response
         """
-        response_dict = {'status': "success"}
+        response_dict = {"status": "success"}
         log.info("processing markerless scene for calibration")
         try:
             preprocess = self.preprocessPolycamDataset(sceneobj)
         except FileNotFoundError as fnfe:
             log.error(FileNotFoundError)
-            response_dict['status'] = str(fnfe)
+            response_dict["status"] = str(fnfe)
             return response_dict
 
-        response_dict['status'] = preprocess['status']
-        if preprocess['status'] != "success":
+        response_dict["status"] = preprocess["status"]
+        if preprocess["status"] != "success":
             return response_dict
 
         if sceneobj is None:
             log.error("Topic Structure mismatch")
-            response_dict['status'] = "Topic Structure mismatch"
+            response_dict["status"] = "Topic Structure mismatch"
             return response_dict
 
         if sceneobj.id not in self.cam_calib_objs or map_update:
             try:
-                self.cam_calib_objs[sceneobj.id] = \
-                    CameraCalibrationMonocularPoseEstimate(sceneobj,
-                                                           preprocess['dataset_dir'],
-                                                           preprocess['output_dir'])
+                self.cam_calib_objs[sceneobj.id] = (
+                    CameraCalibrationMonocularPoseEstimate(
+                        sceneobj, preprocess["dataset_dir"], preprocess["output_dir"]
+                    )
+                )
             except ValueError as ve:
-                response_dict['status'] = str(ve)
+                response_dict["status"] = str(ve)
                 return response_dict
 
         if sceneobj.map_processed is None or map_update:
             try:
                 with self.cam_calib_objs[sceneobj.id].cam_calib_lock:
-                    sceneobj = self.cam_calib_objs[sceneobj.id].registerDataset(
-                        sceneobj)
+                    sceneobj = self.cam_calib_objs[sceneobj.id].registerDataset(sceneobj)
                     self.saveToDatabase(sceneobj)
                     log.info("Dataset registered")
             except FileNotFoundError as e:
@@ -104,20 +100,18 @@ class MarkerlessCameraCalibrationController(CameraCalibrationController):
                     response_dict = {"status": "re-register"}
                 else:
                     log.error("Failed to register dataset")
-                    response_dict['status'] = str(e)
+                    response_dict["status"] = str(e)
                 return response_dict
         else:
             try:
-                sceneobj = self.cam_calib_objs[sceneobj.id].registerDataset(
-                    sceneobj)
-                log.info("Dataset registered",
-                         self.cam_calib_objs[sceneobj.id].config)
+                sceneobj = self.cam_calib_objs[sceneobj.id].registerDataset(sceneobj)
+                log.info("Dataset registered", self.cam_calib_objs[sceneobj.id].config)
             except FileNotFoundError as e:
                 if "global-feats-netvlad.h5" in str(e):
                     response_dict = {"status": "re-register"}
                 else:
                     log.error("Failed to register dataset")
-                    response_dict['status'] = str(e)
+                    response_dict["status"] = str(e)
                 return response_dict
 
         return response_dict
@@ -128,8 +122,9 @@ class MarkerlessCameraCalibrationController(CameraCalibrationController):
 
         @return  True/False
         """
-        return (sceneobj.map_processed < datetime.fromtimestamp(
-            os.path.getmtime(sceneobj.polycam_data), tz=timezone(TIMEZONE)))
+        return sceneobj.map_processed < datetime.fromtimestamp(
+            os.path.getmtime(sceneobj.polycam_data), tz=timezone(TIMEZONE)
+        )
 
     def isMapUpdated(self, sceneobj):
         """! function used to check if the map is updated and reset the scene when map is None.
@@ -139,8 +134,11 @@ class MarkerlessCameraCalibrationController(CameraCalibrationController):
         """
         if not sceneobj.map or not sceneobj.polycam_data:
             return False
-        elif (sceneobj.map_processed is None) or (self.isMapProcessed(sceneobj)) or (
-                self.isPolycamDataProcessed(sceneobj)):
+        elif (
+            (sceneobj.map_processed is None)
+            or (self.isMapProcessed(sceneobj))
+            or (self.isPolycamDataProcessed(sceneobj))
+        ):
             return True
 
     def saveToDatabase(self, scene):
@@ -149,15 +147,12 @@ class MarkerlessCameraCalibrationController(CameraCalibrationController):
 
         @return  None
         """
-        self.calibration_data_interface.updateMapProcessed(
-            scene.id, get_iso_time())
+        self.calibration_data_interface.updateMapProcessed(scene.id, get_iso_time())
         return
 
     def resetScene(self, scene):
         self.cam_calib_objs.pop(scene.id, None)
-        if os.path.exists(
-                scene.output_dir) and os.path.isdir(
-                scene.output_dir):
+        if os.path.exists(scene.output_dir) and os.path.isdir(scene.output_dir):
             shutil.rmtree(scene.output_dir)
         return
 

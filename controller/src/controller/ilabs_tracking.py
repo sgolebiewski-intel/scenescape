@@ -9,11 +9,13 @@ from datetime import datetime
 import numpy as np
 import robot_vision as rv
 
-from controller.moving_object import (DEFAULT_EDGE_LENGTH,
-                                      DEFAULT_TRACKING_RADIUS)
-from controller.tracking import (MAX_UNRELIABLE_TIME,
-                                 NON_MEASUREMENT_TIME_DYNAMIC,
-                                 NON_MEASUREMENT_TIME_STATIC, Tracking)
+from controller.moving_object import DEFAULT_EDGE_LENGTH, DEFAULT_TRACKING_RADIUS
+from controller.tracking import (
+    MAX_UNRELIABLE_TIME,
+    NON_MEASUREMENT_TIME_DYNAMIC,
+    NON_MEASUREMENT_TIME_STATIC,
+    Tracking,
+)
 from scene_common import log
 from scene_common.geometry import Point
 from scene_common.timestamp import get_epoch_time
@@ -22,10 +24,11 @@ from scene_common.timestamp import get_epoch_time
 class IntelLabsTracking(Tracking):
 
     def __init__(
-            self,
-            max_unreliable_time,
-            non_measurement_time_dynamic,
-            non_measurement_time_static):
+        self,
+        max_unreliable_time,
+        non_measurement_time_dynamic,
+        non_measurement_time_static,
+    ):
         """Initialize the tracker with tracker configuration parameters"""
         super().__init__()
         # ref_camera_frame_rate is used to determine the frame-based param
@@ -40,19 +43,22 @@ class IntelLabsTracking(Tracking):
         tracker_config.motion_models = [
             rv.tracking.MotionModel.CV,
             rv.tracking.MotionModel.CA,
-            rv.tracking.MotionModel.CTRV]
+            rv.tracking.MotionModel.CTRV,
+        ]
 
         if self.check_valid_time_parameters(
-                max_unreliable_time,
-                non_measurement_time_dynamic,
-                non_measurement_time_static):
+            max_unreliable_time,
+            non_measurement_time_dynamic,
+            non_measurement_time_static,
+        ):
             tracker_config.max_unreliable_time = max_unreliable_time
             tracker_config.non_measurement_time_dynamic = non_measurement_time_dynamic
             tracker_config.non_measurement_time_static = non_measurement_time_static
         else:
             log.error(
                 "The time-based parameters need to be positive and less than 10 seconds. \
-                 Initiating the tracker with the default values of the time-based parameters.")
+                 Initiating the tracker with the default values of the time-based parameters."
+            )
             tracker_config.max_unreliable_time = MAX_UNRELIABLE_TIME
             tracker_config.non_measurement_time_dynamic = NON_MEASUREMENT_TIME_DYNAMIC
             tracker_config.non_measurement_time_static = NON_MEASUREMENT_TIME_STATIC
@@ -64,14 +70,16 @@ class IntelLabsTracking(Tracking):
         return
 
     def check_valid_time_parameters(
-            self,
-            max_unreliable_time,
-            non_measurement_time_dynamic,
-            non_measurement_time_static):
+        self,
+        max_unreliable_time,
+        non_measurement_time_dynamic,
+        non_measurement_time_static,
+    ):
         param_list = [
             max_unreliable_time,
             non_measurement_time_dynamic,
-            non_measurement_time_static]
+            non_measurement_time_static,
+        ]
         result = all(value is not None for value in param_list)
         if result:
             if all((value > 0) and (value < 10) for value in param_list):
@@ -92,39 +100,36 @@ class IntelLabsTracking(Tracking):
         rv_object.z = pt.z
         # length is mapped to x, width is mapped to y and height is to z if
         # intel labs tracker
-        size = sscape_object.size if sscape_object.size else [
-            DEFAULT_EDGE_LENGTH] * 3
+        size = sscape_object.size if sscape_object.size else [DEFAULT_EDGE_LENGTH] * 3
         rv_object.length = size[0]
         rv_object.width = size[1]
         rv_object.height = size[2]
-        rv_object.yaw = sscape_object.rotation[1] if sscape_object.rotation else 0.
-        rv_object.classification = self.rv_classification(
-            sscape_object.confidence)
+        rv_object.yaw = sscape_object.rotation[1] if sscape_object.rotation else 0.0
+        rv_object.classification = self.rv_classification(sscape_object.confidence)
         info = sscape_object.info.copy()
-        info['framecount'] = sscape_object.frameCount
+        info["framecount"] = sscape_object.frameCount
         rv_object.attributes = {
-            'info': sscape_object.uuid,
+            "info": sscape_object.uuid,
         }
         return rv_object
 
     def update_tracks(self, objects, timestamp):
-        rv_objects = [self.to_rv_object(sscape_object)
-                      for sscape_object in objects]
+        rv_objects = [self.to_rv_object(sscape_object) for sscape_object in objects]
         tracking_radius = DEFAULT_TRACKING_RADIUS
         if len(objects):
-            tracking_radius = sum(
-                [x.tracking_radius for x in objects]) / len(objects)
+            tracking_radius = sum([x.tracking_radius for x in objects]) / len(objects)
 
         self.tracker.track(
             rv_objects,
             timestamp,
             distance_type=rv.tracking.DistanceType.Euclidean,
-            distance_threshold=tracking_radius)
+            distance_threshold=tracking_radius,
+        )
         return
 
     def from_tracked_object(self, tracked_object, objects):
         """Get associated sscape object from reliable tracked object"""
-        uuid = tracked_object.attributes['info']
+        uuid = tracked_object.attributes["info"]
         sscape_object = None
         for obj in objects:
             if uuid == obj.uuid:
@@ -136,14 +141,14 @@ class IntelLabsTracking(Tracking):
                     return obj
 
         sscape_object.location[0].point = Point(
-            tracked_object.x, tracked_object.y, tracked_object.z)
-        sscape_object.velocity = Point(
-            (tracked_object.vx, tracked_object.vy, 0.0))
+            tracked_object.x, tracked_object.y, tracked_object.z
+        )
+        sscape_object.velocity = Point((tracked_object.vx, tracked_object.vy, 0.0))
 
         sscape_object.rv_id = tracked_object.id
         found = False
         for obj in self._objects:
-            if hasattr(obj, 'rv_id') and sscape_object.rv_id == obj.rv_id:
+            if hasattr(obj, "rv_id") and sscape_object.rv_id == obj.rv_id:
                 found = True
                 sscape_object.setPrevious(obj)
                 sscape_object.inferRotationFromVelocity()
@@ -199,13 +204,14 @@ class IntelLabsTracking(Tracking):
         tracked_objects = self.tracker.get_reliable_tracks()
         self.uuid_manager.pruneInactiveTracks(tracked_objects)
         tracks_from_detections = [
-            self.from_tracked_object(
-                tracked_object,
-                objects) for tracked_object in tracked_objects]
+            self.from_tracked_object(tracked_object, objects)
+            for tracked_object in tracked_objects
+        ]
 
         # Already tracked objects include moving objects from tracks consumed
         # directly
         self.already_tracked_objects = self.mergeAlreadyTrackedObjects(
-            already_tracked_objects)
+            already_tracked_objects
+        )
         self._objects = tracks_from_detections + self.already_tracked_objects
         return

@@ -24,14 +24,14 @@ def loadData(fileName, convertJson=False):
     """
     jsonData = []
     m_objects = {}
-    info = {'id': None}
+    info = {"id": None}
 
     jsonData = loadJsonData(fileName)
     if convertJson:
         jsonData = convertEventJsonToMetricsJson(jsonData)
 
     for frame, item in enumerate(jsonData):
-        objects = item['objects']
+        objects = item["objects"]
         parseObjects(m_objects, info, frame, objects)
 
     return jsonData, m_objects, info
@@ -48,8 +48,8 @@ def parseObjects(m_objects, info, frame, objects):
         for object in objects[category]:
             if category not in m_objects:
                 m_objects[category] = {}
-            if info['id'] is None:
-                info['id'] = category
+            if info["id"] is None:
+                info["id"] = category
             m_objects[category][frame] = object
 
     return
@@ -63,20 +63,20 @@ def convertEventJsonToMetricsJson(raw):
     convertedData = []
     for i in range(len(raw)):
         posData = {}
-        timestamp = raw[i]['input']['timestamp']
+        timestamp = raw[i]["input"]["timestamp"]
         posData[timestamp] = {}
-        posData[timestamp]['objects'] = []
-        objects = raw[i]['output']['objects']
+        posData[timestamp]["objects"] = []
+        objects = raw[i]["output"]["objects"]
         for category in objects:
             objs = objects[category]
             for obj in objs:
                 od = {
-                    'category': obj['category'],
-                    'id': obj['gid'],
-                    'translation': obj['location'][0]['point']
+                    "category": obj["category"],
+                    "id": obj["gid"],
+                    "translation": obj["location"][0]["point"],
                 }
-                posData[timestamp]['objects'].append(od)
+                posData[timestamp]["objects"].append(od)
         for d in posData:
-            line = {'timestamp': d, 'objects': posData[d]['objects']}
+            line = {"timestamp": d, "objects": posData[d]["objects"]}
             convertedData.append(line)
     return convertedData

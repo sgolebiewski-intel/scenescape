@@ -112,9 +112,7 @@ def add_keypoints(
     # scores: np.ndarray = [],
 ):
     if update:
-        kpt_ids = np.arange(
-            len(other_cpts), len(other_cpts) + len(kpts), dtype=np.int32
-        )
+        kpt_ids = np.arange(len(other_cpts), len(other_cpts) + len(kpts), dtype=np.int32)
     else:
         kpt_ids = np.arange(len(kpts), dtype=np.int32)
     other_cpts.append(kpts)
@@ -193,8 +191,7 @@ def to_cpts(kpts, ps):
 
 def matches_to_matches0(matches, scores):
     if matches.shape[0] == 0:
-        return (np.zeros([0, 2], dtype=np.uint32),
-                np.zeros([0], dtype=np.float32))
+        return (np.zeros([0, 2], dtype=np.uint32), np.zeros([0], dtype=np.float32))
     n_kps0 = np.max(matches[:, 0]) + 1
     matches0 = -np.ones((n_kps0,))
     scores0 = np.zeros((n_kps0,))
@@ -266,8 +263,8 @@ class ImagePairDataset(torch.utils.data.Dataset):
         image_cache: Dict = None,
     ):
         self.image_dir = (
-            (image_dir, image_dir) if isinstance(
-                image_dir, Path) else image_dir)
+            (image_dir, image_dir) if isinstance(image_dir, Path) else image_dir
+        )
         self.conf = self.default_conf | Dict(conf)
         self.pairs = pairs
         self.batch_size = batch_size
@@ -284,11 +281,7 @@ class ImagePairDataset(torch.utils.data.Dataset):
         else:
             self.pool = SimpleExecutor()
         # preprocess first dataset image to get image size
-        self.preprocess(
-            self.pairs[0][1],
-            None,
-            self.image_dir[1] /
-            self.pairs[0][1])
+        self.preprocess(self.pairs[0][1], None, self.image_dir[1] / self.pairs[0][1])
         if image_cache is not None:  # SceneScape message
             self.n_keep = len(image_cache)
             for name, b64im in image_cache.items():
@@ -312,8 +305,9 @@ class ImagePairDataset(torch.utils.data.Dataset):
                 scale = self.conf.resize_max / max(size)
                 size_new = tuple(int(round(x * scale)) for x in size)
             # assure that the size is divisible by dfactor
-            size_new = tuple(int(x // self.conf.dfactor *
-                                 self.conf.dfactor) for x in size_new)
+            size_new = tuple(
+                int(x // self.conf.dfactor * self.conf.dfactor) for x in size_new
+            )
         scale = torch.Tensor(size) / torch.Tensor(size_new)
         image = resize_image(image, size_new, "cv2_area")
 
@@ -336,17 +330,18 @@ class ImagePairDataset(torch.utils.data.Dataset):
     def __getitem__(self, b_idx):
         if b_idx >= len(self):
             raise IndexError()
-        images0, images1, scales0, scales1, names0, names1 = (
-            [] for _ in range(6))
-        stop = min(len(self.pairs),
-                   (b_idx + 1 + self.conf.prefetch_factor) * self.batch_size)
+        images0, images1, scales0, scales1, names0, names1 = ([] for _ in range(6))
+        stop = min(
+            len(self.pairs), (b_idx + 1 + self.conf.prefetch_factor) * self.batch_size
+        )
         with self.images_cv:
             for idx in range(b_idx * self.batch_size, stop):
                 name0, name1 = self.pairs[idx]
                 for i, name in enumerate((name0, name1)):
                     if name not in self.images and self.image_dir[i] is not None:
                         self.pool.submit(
-                            self.preprocess, name, None, self.image_dir[i] / name)
+                            self.preprocess, name, None, self.image_dir[i] / name
+                        )
 
             for idx in range(
                 b_idx * self.batch_size,
@@ -368,7 +363,7 @@ class ImagePairDataset(torch.utils.data.Dataset):
 
             if len(self.images) > self.cache_size:
                 remove_names = tuple(self.images.keys())[
-                    self.n_keep: self.n_keep + self.cache_size
+                    self.n_keep : self.n_keep + self.cache_size
                 ]
                 for name in remove_names:
                     self.images.pop(name)
@@ -405,8 +400,7 @@ def match_dense_from_paths(
     pairs = find_unique_new_pairs(pairs, None if overwrite else match_path)
     required_queries = set(sum(pairs, ()))
 
-    name2ref = {n: i for i, p in enumerate(
-        feature_paths_refs) for n in list_h5_names(p)}
+    name2ref = {n: i for i, p in enumerate(feature_paths_refs) for n in list_h5_names(p)}
     existing_refs = required_queries.intersection(set(name2ref.keys()))
     required_queries = required_queries - existing_refs
 
@@ -437,9 +431,7 @@ def match_dense_from_paths(
                 if "scores" in fd[name].keys():
                     kp_scores = fd[name]["scores"].__array__()
                 else:
-                    kp_scores = [
-                        conf.init_ref_score for _ in range(
-                            kps.shape[0])]
+                    kp_scores = [conf.init_ref_score for _ in range(kps.shape[0])]
                 assign_keypoints(
                     kps,
                     cpdict[name],
@@ -511,8 +503,7 @@ def match_dense_from_paths(
                 )
 
                 # Build matches from assignments
-                matches0, scores0 = kpids_to_matches0(
-                    kpt_ids0, kpt_ids1, scores)
+                matches0, scores0 = kpids_to_matches0(kpt_ids0, kpt_ids1, scores)
 
                 # Write matches and matching scores in hloc format
                 pair = names_to_pair(name0, name1)
@@ -538,10 +529,8 @@ def match_dense_from_paths(
                         kp_score = bindict[name]
                         cpdict[name] = np.vstack(cpdict[name])
                     else:
-                        kp_score = [c.most_common(1)[0][1]
-                                    for c in bindict[name]]
-                        cpdict[name] = [
-                            c.most_common(1)[0][0] for c in bindict[name]]
+                        kp_score = [c.most_common(1)[0][1] for c in bindict[name]]
+                        cpdict[name] = [c.most_common(1)[0][0] for c in bindict[name]]
                         cpdict[name] = np.array(cpdict[name], dtype=np.float32)
                     if max_kps:
                         top_k = min(max_kps, cpdict[name].shape[0])
@@ -610,8 +599,8 @@ def main(
             compressed image data.
     """
     logger.info(
-        "Extracting semi-dense features with configuration:\n%s",
-        pprint.pformat(conf))
+        "Extracting semi-dense features with configuration:\n%s", pprint.pformat(conf)
+    )
 
     if features is None:
         features = "feats_"
@@ -655,19 +644,11 @@ if __name__ == "__main__":
     parser.add_argument("--pairs", type=Path, required=True)
     parser.add_argument("--image_dir", type=Path, required=True)
     parser.add_argument("--export_dir", type=Path, required=True)
-    parser.add_argument(
-        "--matches",
-        type=Path,
-        default=confs["loftr"]["output"])
+    parser.add_argument("--matches", type=Path, default=confs["loftr"]["output"])
     parser.add_argument(
         "--features", type=str, default="feats_" + confs["loftr"]["output"]
     )
-    parser.add_argument(
-        "--conf",
-        type=str,
-        default="loftr",
-        choices=list(
-            confs.keys()))
+    parser.add_argument("--conf", type=str, default="loftr", choices=list(confs.keys()))
     args = parser.parse_args()
     main(
         confs[args.conf],

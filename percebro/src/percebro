@@ -35,14 +35,12 @@ from scene_common import log
 
 def build_argparser():
     parser = ArgumentParser()
-    parser.add_argument("broker", nargs="?", default="localhost",
-                        help="hostname or IP of MQTT broker")
     parser.add_argument(
-        "--camerachain",
-        "-m",
-        "--model",
-        help="model to use for camera",
-        type=str)
+        "broker", nargs="?", default="localhost", help="hostname or IP of MQTT broker"
+    )
+    parser.add_argument(
+        "--camerachain", "-m", "--model", help="model to use for camera", type=str
+    )
     parser.add_argument(
         "--camera",
         "-i",
@@ -50,140 +48,155 @@ def build_argparser():
         action="append",
         help="video source to be used. If using /dev/video0 the"
         " argument should be -i 0",
-        required=True)
-    parser.add_argument("--cameraid", "--mqttid", action="append",
-                        help="camera id to use instead of MAC+input")
+        required=True,
+    )
+    parser.add_argument(
+        "--cameraid",
+        "--mqttid",
+        action="append",
+        help="camera id to use instead of MAC+input",
+    )
     parser.add_argument(
         "--sensor",
         action="append",
-        help="name and optional bounding box to publish as sensor")
-    parser.add_argument("--sensorchain", action="append",
-                        help="model chain to use for sensor")
+        help="name and optional bounding box to publish as sensor",
+    )
+    parser.add_argument(
+        "--sensorchain", action="append", help="model chain to use for sensor"
+    )
     parser.add_argument(
         "--sensorattrib",
         action="append",
-        help="attribute/field name of data to use for sensor value")
+        help="attribute/field name of data to use for sensor value",
+    )
     parser.add_argument(
         "-e",
         "--threshold",
         help="Threshold to filter keypoints",
         type=float,
-        default=0.5)
+        default=0.5,
+    )
+    parser.add_argument("--window", action="store_true", help="Display a window")
     parser.add_argument(
-        "--window",
+        "--usetimestamps",
         action="store_true",
-        help="Display a window")
-    parser.add_argument("--usetimestamps", action="store_true",
-                        help="Use file timestamps to synchronize videos")
-    parser.add_argument(
-        "--ntp",
-        help="NTP server, default is to use mqtt broker")
-    parser.add_argument("--virtual",
-                        help="JSON list for virtual cameras")
+        help="Use file timestamps to synchronize videos",
+    )
+    parser.add_argument("--ntp", help="NTP server, default is to use mqtt broker")
+    parser.add_argument("--virtual", help="JSON list for virtual cameras")
     parser.add_argument(
         "--debug",
         action="store_true",
-        help="Run in debug mode, don't connect to MQTT broker or NTP server")
+        help="Run in debug mode, don't connect to MQTT broker or NTP server",
+    )
     parser.add_argument("--aspect", help="aspect ratio to force")
     parser.add_argument(
         "--intrinsics",
         action="append",
-        help="camera intrinsics as diagonal_fov, \"[horizontal_fov, vertical_fov]\", or \"[fx, fy, cx, cy]\"")
+        help='camera intrinsics as diagonal_fov, "[horizontal_fov, vertical_fov]", or "[fx, fy, cx, cy]"',
+    )
     parser.add_argument(
         "--distortion",
         action="append",
-        help="camera distortion coeffs, \"[k1,k2,p1,p2[,k3[,k4,k5,k6[,s1,s2,s3,s4[,taux,tauy]]]]]\"")
+        help='camera distortion coeffs, "[k1,k2,p1,p2[,k3[,k4,k5,k6[,s1,s2,s3,s4[,taux,tauy]]]]]"',
+    )
     parser.add_argument(
         "--override-saved-intrinsics",
         action="store_true",
-        help="Override camera intrinsics in database with command line values")
+        help="Override camera intrinsics in database with command line values",
+    )
     parser.add_argument(
-        "--frames",
-        type=int,
-        help="process this many frames and then exit")
+        "--frames", type=int, help="process this many frames and then exit"
+    )
+    parser.add_argument("--stats", action="store_true", help="Print FPS/latency stats")
     parser.add_argument(
-        "--stats",
+        "--waitforstable", action="store_true", help="Print FPS/latency stats"
+    )
+    parser.add_argument(
+        "--preprocess",
         action="store_true",
-        help="Print FPS/latency stats")
-    parser.add_argument(
-        "--waitforstable",
-        action="store_true",
-        help="Print FPS/latency stats")
-    parser.add_argument("--preprocess", action="store_true",
-                        help="Preprocess video files into json files and exit")
+        help="Preprocess video files into json files and exit",
+    )
     parser.add_argument(
         "--realtime",
         action="store_true",
         help="Drop frames to keep video at original speed during processing"
-        " <preprocess only>")
+        " <preprocess only>",
+    )
     parser.add_argument(
         "--faketime",
         action="store_true",
-        help="Write timestamps as fast as they occur <preprocess only>")
+        help="Write timestamps as fast as they occur <preprocess only>",
+    )
     parser.add_argument(
         "--modelconfig",
         help="JSON file with model configuration",
-        default="model-config.json")
-    parser.add_argument("--resturl", default="web.scenescape.intel.com",
-                        help="URL of REST server")
+        default="model-config.json",
+    )
+    parser.add_argument(
+        "--resturl", default="web.scenescape.intel.com", help="URL of REST server"
+    )
     parser.add_argument(
         "--rootcert",
         default="/run/secrets/certs/scenescape-ca.pem",
-        help="path to ca certificate")
+        help="path to ca certificate",
+    )
     parser.add_argument("--cert", help="path to client certificate")
     parser.add_argument(
-        "--auth",
-        help="user:password or JSON file for MQTT authentication")
+        "--auth", help="user:password or JSON file for MQTT authentication"
+    )
     parser.add_argument(
-        "--cvcores",
-        help="Number of threads to request for OpenCV",
-        type=int,
-        default=2)
+        "--cvcores", help="Number of threads to request for OpenCV", type=int, default=2
+    )
     parser.add_argument(
         "--ovcores",
         help="Number of threads to request for OpenVINO",
         type=int,
-        default=4)
+        default=4,
+    )
     parser.add_argument(
-        "--unwarp",
-        action="store_true",
-        help="Unwarp image before inference")
+        "--unwarp", action="store_true", help="Unwarp image before inference"
+    )
+    parser.add_argument("--ovmshost", help="OVMS host", type=str, default="ovms:9000")
     parser.add_argument(
-        "--ovmshost",
-        help="OVMS host",
-        type=str,
-        default="ovms:9000")
-    parser.add_argument("--resolution", action="append",
-                        help="Requested frame resolution (WxH)")
-    parser.add_argument("--framerate", action="append",
-                        help="Requested framerate", type=float)
+        "--resolution", action="append", help="Requested frame resolution (WxH)"
+    )
+    parser.add_argument(
+        "--framerate", action="append", help="Requested framerate", type=float
+    )
     parser.add_argument(
         "--cv_subsystem",
         default="CPU",
         help="Hardware device requested for decoding. "
-        "Options are 'CPU' (default), 'ANY', 'GPU', or 'GPU.X' where X refers to the card available at /dev/dri/cardX")
+        "Options are 'CPU' (default), 'ANY', 'GPU', or 'GPU.X' where X refers to the card available at /dev/dri/cardX",
+    )
     parser.add_argument(
         "--maxcache",
         help="Max video cache size in frames. Specify the desired max number of frames to process in parallel.",
         type=int,
-        default=0)
+        default=0,
+    )
     parser.add_argument(
         "--filter",
         type=str,
         help="Bounding box filtering for sub-detections. Options are 'bottom', 'top', or 'none'."
-        " This will allow only the bottom-most, top-most, or all detections through. Default is 'none'")
+        " This will allow only the bottom-most, top-most, or all detections through. Default is 'none'",
+    )
     parser.add_argument(
         "--disable_rotation",
-        action='store_true',
-        help="Disable closest face rotation algorithm for 3d object detection")
+        action="store_true",
+        help="Disable closest face rotation algorithm for 3d object detection",
+    )
     parser.add_argument(
         "--maxdistance",
         help="Max distance from camera for object detection. Objects beyond this threshold will be dropped.",
-        action='append')
+        action="append",
+    )
     parser.add_argument(
         "--infrared",
         help="Use infrared channel, for RealSense cameras or ROSBAG files. Note this will affect all cameras for this instance.",
-        action='store_true')
+        action="store_true",
+    )
     return parser
 
 
@@ -194,7 +207,8 @@ def _json_default(obj):
         return obj.tolist()
     raise TypeError(
         f"Object of type {
-            obj.__class__.__name__} is not JSON serializable")
+            obj.__class__.__name__} is not JSON serializable"
+    )
 
 
 def mqttDidConnect(client, userdata, flags, rc):
@@ -211,22 +225,20 @@ def mqttDidConnect(client, userdata, flags, rc):
         client.addCallback(cam.camcalibtopic, handleCameraMessage)
         log.info(
             "Subscribing",
-            PubSub.formatTopic(
-                PubSub.SYS_PERCEBRO_STATUS,
-                camera_id=cam.mqttID))
+            PubSub.formatTopic(PubSub.SYS_PERCEBRO_STATUS, camera_id=cam.mqttID),
+        )
         client.addCallback(
-            PubSub.formatTopic(
-                PubSub.SYS_PERCEBRO_STATUS,
-                camera_id=cam.mqttID),
-            handleSysPercebroMessage)
+            PubSub.formatTopic(PubSub.SYS_PERCEBRO_STATUS, camera_id=cam.mqttID),
+            handleSysPercebroMessage,
+        )
         cam.sendImage = True
 
     return
 
 
 def getMACAddress():
-    if 'MACADDR' in os.environ:
-        return os.environ['MACADDR']
+    if "MACADDR" in os.environ:
+        return os.environ["MACADDR"]
 
     log.info("Getting MAC the hard way")
     a = get_mac()
@@ -242,25 +254,36 @@ def findUnique(name, all):
     for path in all:
         revAll.append(path[::-1])
     commonSuffix = os.path.commonprefix(revAll)
-    return name[len(commonPrefix):-len(commonSuffix)]
+    return name[len(commonPrefix) : -len(commonSuffix)]
 
 
-def publishObjects(all_objects, ts, mac_addr, mqttid, client, rate,
-                   ts_end, processing_time, intrinsics, frame_rate=-1):
-    pub = {'timestamp': ts,
-           'debug_timestamp_end': ts_end,
-           'debug_processing_time': processing_time,
-           'debug_mac': mac_addr,
-           'id': mqttid,
-           'objects': all_objects,
-           'rate': rate,
-           'intrinsics': intrinsics['intrinsics'],
-           'distortion': intrinsics['distortion'],
-           'frame_rate': frame_rate
-           }
+def publishObjects(
+    all_objects,
+    ts,
+    mac_addr,
+    mqttid,
+    client,
+    rate,
+    ts_end,
+    processing_time,
+    intrinsics,
+    frame_rate=-1,
+):
+    pub = {
+        "timestamp": ts,
+        "debug_timestamp_end": ts_end,
+        "debug_processing_time": processing_time,
+        "debug_mac": mac_addr,
+        "id": mqttid,
+        "objects": all_objects,
+        "rate": rate,
+        "intrinsics": intrinsics["intrinsics"],
+        "distortion": intrinsics["distortion"],
+        "frame_rate": frame_rate,
+    }
     client.publish(
         PubSub.formatTopic(PubSub.DATA_CAMERA, camera_id=mqttid),
-        json.dumps(pub, default=_json_default)
+        json.dumps(pub, default=_json_default),
     )
     return
 
@@ -270,10 +293,9 @@ def handleSysPercebroMessage(client, userdata, message):
     msg = message.payload.decode("utf-8")
     if str(msg) == "isAlive":
         client.publish(
-            PubSub.formatTopic(
-                PubSub.SYS_PERCEBRO_STATUS,
-                camera_id=topic['camera_id']),
-            "running")
+            PubSub.formatTopic(PubSub.SYS_PERCEBRO_STATUS, camera_id=topic["camera_id"]),
+            "running",
+        )
     return
 
 
@@ -283,40 +305,40 @@ def handleCameraMessage(client, userdata, message):
 
     topic = PubSub.parseTopic(message.topic)
     msg = str(message.payload.decode("utf-8"))
-    camName = topic['camera_id']
+    camName = topic["camera_id"]
     for cam in cams:
         if cam.mqttID == camName:
             if msg == "getimage":
                 cam.sendImage = True
 
             elif msg.startswith("getimage:"):
-                descriptor = json.loads(msg[len("getimage:"):])
+                descriptor = json.loads(msg[len("getimage:") :])
                 vdata = cam.frameBuffer.getFrame()
                 if not vdata:
                     return
 
-                topic = PubSub.formatTopic(
-                    PubSub.CHANNEL, channel=descriptor['channel'])
+                topic = PubSub.formatTopic(PubSub.CHANNEL, channel=descriptor["channel"])
                 timestamp_iso, frame = _parseVdata(descriptor, vdata)
                 publishImage(topic, frame, vdata, client, timestamp_iso)
                 log.info("PUBLISHED", topic, timestamp_iso)
 
             elif msg == "startcapture":
-                if not hasattr(cam, 'vcr'):
+                if not hasattr(cam, "vcr"):
                     cam.vcr = VCR(cam.url)
                 cam.vcr.startCapture()
 
             elif msg == "stopcapture":
-                if hasattr(cam, 'vcr'):
+                if hasattr(cam, "vcr"):
                     cam.vcr.stopCapture()
 
             elif msg.startswith("getvideo:"):
-                if hasattr(cam, 'vcr'):
-                    descriptor = json.loads(msg[len("getimage:"):])
+                if hasattr(cam, "vcr"):
+                    descriptor = json.loads(msg[len("getimage:") :])
                     topic = PubSub.formatTopic(
                         PubSub.VIDEO_CHANNEL,
                         camera_id=cam.mqttID,
-                        channel=descriptor['channel'])
+                        channel=descriptor["channel"],
+                    )
                     cam.vcr.publishVideoInNewThread(client, topic)
 
             elif msg == "localize":
@@ -326,10 +348,11 @@ def handleCameraMessage(client, userdata, message):
             elif msg == "getcalibrationimage":
                 cam.sendImageForCalibration = True
 
-            elif 'updatecamera' in msg:
-                data = json.loads(msg).get('updatecamera')
+            elif "updatecamera" in msg:
+                data = json.loads(msg).get("updatecamera")
                 intrinsics = CameraIntrinsics(
-                    data.get('intrinsics'), data.get('distortion'))
+                    data.get("intrinsics"), data.get("distortion")
+                )
                 cam.intrinsics = intrinsics
             break
     else:
@@ -340,7 +363,7 @@ def handleCameraMessage(client, userdata, message):
 
 def _parseVdata(descriptor, vdata):
     timestamp_iso = get_iso_time(vdata.begin)
-    frameType = descriptor.get('frame_type', "annotated")
+    frameType = descriptor.get("frame_type", "annotated")
     frame = None
     if isinstance(frameType, str):
         frameType = [frameType]
@@ -370,11 +393,11 @@ def logStats(models, vdata, cams, vcache, latencyAvg, averageStable):
         fpsStr += cam.mqttID + " FPS %02.1f" % (1 / cam.frameAvg)
         total += 1 / cam.frameAvg
     avgStr = "%0.2f %0.3fms" % (total, latencyAvg * 1000)
-    eol = '\n'
+    eol = "\n"
     if sys.stdout.isatty():
         color = "green" if averageStable else "yellow"
         avgStr = colored(avgStr, color)
-        eol = '\r'
+        eol = "\r"
 
     print(vdata.frameCount, avgStr, fpsStr + "   ", end=eol, file=sys.stderr)
     return
@@ -386,7 +409,7 @@ def extractOffsets(inputs):
         o = 0
         match = re.search("=([-+][.0-9]+)$", name)
         if match:
-            name = name[:match.start()]
+            name = name[: match.start()]
             o = float(match.group(1))
             log.debug("OFFSET", o)
         offsets.append((name, o))
@@ -396,45 +419,46 @@ def extractOffsets(inputs):
 
 def extractResolution(resolution, idx):
     if resolution and idx < len(resolution):
-        sep = resolution[idx].find('x')
+        sep = resolution[idx].find("x")
         if sep < 0:
             log.error("Invalid resolution requested. Need WxH")
         else:
             width = int(resolution[idx][:sep])
-            height = int(resolution[idx][sep + 1:])
+            height = int(resolution[idx][sep + 1 :])
             return (width, height)
     return None
 
 
 def extractAspectRatio(aspect, cam):
     if aspect:
-        sep = aspect.find(':')
+        sep = aspect.find(":")
         if sep < 0:
-            sep = aspect.find('x')
+            sep = aspect.find("x")
         if sep < 0:
             ar = float(aspect)
         else:
-            ar = float(aspect[:sep]) / float(aspect[sep + 1:])
+            ar = float(aspect[:sep]) / float(aspect[sep + 1 :])
         cam.aspect = ar
     return
 
 
 def setupCameras(
-        mac_addr,
-        inputs,
-        intrinsics,
-        distortion,
-        aspect,
-        mqttid,
-        realtime,
-        usetimestamps,
-        preprocess,
-        unwarpFlag,
-        REST_client=None,
-        cvSubsystem='ANY',
-        resolution=None,
-        framerate=None,
-        max_distance=None):
+    mac_addr,
+    inputs,
+    intrinsics,
+    distortion,
+    aspect,
+    mqttid,
+    realtime,
+    usetimestamps,
+    preprocess,
+    unwarpFlag,
+    REST_client=None,
+    cvSubsystem="ANY",
+    resolution=None,
+    framerate=None,
+    max_distance=None,
+):
     cams = []
     names, offsets = extractOffsets(inputs)
     startTime = endTime = None
@@ -450,14 +474,16 @@ def setupCameras(
             cam_info = REST_client.getCamera(mqttid[idx])
             if cam_info.statusCode == 200:
                 stored_intrins = cam_info.get("intrinsics", use_intrins)
-                if 'fx' in stored_intrins and 'fy' in stored_intrins:
-                    use_intrins['fx'], use_intrins['fy'] = stored_intrins['fx'], stored_intrins['fy']
+                if "fx" in stored_intrins and "fy" in stored_intrins:
+                    use_intrins["fx"], use_intrins["fy"] = (
+                        stored_intrins["fx"],
+                        stored_intrins["fy"],
+                    )
                 use_distort = cam_info.get("distortion", use_distort)
             else:
                 log.info("No stored camera info for ", mqttid[idx])
 
-        use_max_distance = float(
-            max_distance[idx]) if max_distance is not None else None
+        use_max_distance = float(max_distance[idx]) if max_distance is not None else None
         cam = VideoSource(
             name,
             use_intrins,
@@ -466,17 +492,16 @@ def setupCameras(
             loop=not preprocess,
             cvSubsystem=cvSubsystem,
             resolution=cam_resolution,
-            max_distance=use_max_distance)
-        if not hasattr(cam, 'intrinsics'):
+            max_distance=use_max_distance,
+        )
+        if not hasattr(cam, "intrinsics"):
             log.error("Intrinsics required for:", name)
             exit(1)
         cam.unwarp = unwarpFlag
 
         if framerate and idx < len(framerate):
             if not cam.setFramerate(framerate[idx]):
-                log.error(
-                    "Failed setting desired framerate {}".format(
-                        framerate[idx]))
+                log.error("Failed setting desired framerate {}".format(framerate[idx]))
                 return None
 
         if mqttid and idx < len(mqttid):
@@ -495,10 +520,10 @@ def setupCameras(
         if cam.frameCount == 1:
             cam.loop = True
 
-        cam.mqttTopic = PubSub.formatTopic(
-            PubSub.CMD_CAMERA, camera_id=cam.mqttID)
+        cam.mqttTopic = PubSub.formatTopic(PubSub.CMD_CAMERA, camera_id=cam.mqttID)
         cam.camcalibtopic = PubSub.formatTopic(
-            PubSub.DATA_AUTOCALIB_CAM_POSE, camera_id="#")
+            PubSub.DATA_AUTOCALIB_CAM_POSE, camera_id="#"
+        )
         cam.startOffset = offset
         cam.realTime = realtime or not preprocess
         cam.sendImage = False
@@ -575,12 +600,8 @@ def connectToMQTT(auth, cert, rootcert, broker):
 
 
 def getVideoFrame(
-        virtual,
-        cam,
-        now,
-        filtering=None,
-        disable_3d_rotation=False,
-        use_infrared=False):
+    virtual, cam, now, filtering=None, disable_3d_rotation=False, use_infrared=False
+):
     """! Creates and configures Video Frame object
 
     @param    virtual   Virtual cameras loaded from JSON file.
@@ -594,7 +615,7 @@ def getVideoFrame(
     if frame is None:
         return None
 
-    if not hasattr(cam, 'frameCount'):
+    if not hasattr(cam, "frameCount"):
         cam.frameCount = 0
     cam.frameCount += 1
 
@@ -610,7 +631,8 @@ def getVideoFrame(
                 depth=frame.depth,
                 filtering=filtering,
                 disable_3d_rotation=disable_3d_rotation,
-                is_gray=True)
+                is_gray=True,
+            )
         else:
             vdata = VideoFrame(
                 cam,
@@ -618,7 +640,8 @@ def getVideoFrame(
                 virtual,
                 depth=frame.depth,
                 filtering=filtering,
-                disable_3d_rotation=disable_3d_rotation)
+                disable_3d_rotation=disable_3d_rotation,
+            )
 
     else:
         vdata = VideoFrame(
@@ -626,9 +649,10 @@ def getVideoFrame(
             frame,
             virtual,
             filtering=filtering,
-            disable_3d_rotation=disable_3d_rotation)
+            disable_3d_rotation=disable_3d_rotation,
+        )
 
-    if hasattr(cam, 'jsonFile'):
+    if hasattr(cam, "jsonFile"):
         vdata.jsonFile = cam.jsonFile
     vdata.begin = now
     vdata.frameCount = cam.frameCount
@@ -644,7 +668,7 @@ def frameToBase64(frame):
     @return   Base64 encoding of the frame
     """
     _, jpeg = cv2.imencode(".jpg", frame)
-    return base64.b64encode(jpeg).decode('utf-8')
+    return base64.b64encode(jpeg).decode("utf-8")
 
 
 def publishImage(topic, frame, vdata, client, ts, additional_data=None):
@@ -663,14 +687,14 @@ def publishImage(topic, frame, vdata, client, ts, additional_data=None):
     camDistortion = vdata.cam.intrinsics.distortion.tolist()
 
     image_dict = {
-        'timestamp': ts,
-        'intrinsics': camIntrinsics,
-        'distortion': camDistortion,
-        'id': vdata.cam.mqttID,
+        "timestamp": ts,
+        "intrinsics": camIntrinsics,
+        "distortion": camDistortion,
+        "id": vdata.cam.mqttID,
     }
 
     if frame is not None:
-        image_dict['image'] = frameToBase64(frame)
+        image_dict["image"] = frameToBase64(frame)
 
     if additional_data:
         image_dict.update(additional_data)
@@ -697,22 +721,23 @@ def processSensors(sensors, now, client):
             else:
                 data = {}
                 for attrib in object:
-                    if not attrib.startswith(
-                            "debug_") and attrib not in ("id", "category"):
+                    if not attrib.startswith("debug_") and attrib not in (
+                        "id",
+                        "category",
+                    ):
                         data[attrib] = object[attrib]
             value.append(data)
         if len(value) == 1:
             value = value[0]
 
         sensorData = {
-            'id': sensor.mqttID,
-            'subtype': flatObjects[0]['category'],
-            'timestamp': get_iso_time(vdata.begin),
-            'value': value,
+            "id": sensor.mqttID,
+            "subtype": flatObjects[0]["category"],
+            "timestamp": get_iso_time(vdata.begin),
+            "value": value,
         }
         if client:
-            topic = PubSub.formatTopic(
-                PubSub.DATA_SENSOR, sensor_id=sensorData['id'])
+            topic = PubSub.formatTopic(PubSub.DATA_SENSOR, sensor_id=sensorData["id"])
             client.publish(topic, json.dumps(sensorData))
         else:
             log.info("Detected", sensorData)
@@ -728,12 +753,13 @@ def main():
     if not args.camerachain and not args.sensorchain:
         log.error("No camerachain or sensorchain provided")
         exit(1)
-    if args.filter \
-            and args.filter != 'bottom' \
-            and args.filter != 'top' \
-            and args.filter != 'none':
-        log.error(
-            "Invalid filtering requested. Must be 'bottom', 'top', or 'none'.")
+    if (
+        args.filter
+        and args.filter != "bottom"
+        and args.filter != "top"
+        and args.filter != "none"
+    ):
+        log.error("Invalid filtering requested. Must be 'bottom', 'top', or 'none'.")
         exit(1)
     cv2.setNumThreads(args.cvcores)
 
@@ -753,8 +779,9 @@ def main():
     sensors = []
 
     if not args.debug and not args.preprocess and not args.override_saved_intrinsics:
-        REST_client = RESTClient("https://" + args.resturl + "/api/v1",
-                                 args.rootcert, args.auth)
+        REST_client = RESTClient(
+            "https://" + args.resturl + "/api/v1", args.rootcert, args.auth
+        )
 
     cams = setupCameras(
         mac_addr,
@@ -771,19 +798,20 @@ def main():
         args.cv_subsystem,
         args.resolution,
         args.framerate,
-        args.maxdistance)
+        args.maxdistance,
+    )
 
     if cams is None:
         log.error("Camera setup failed!")
         return 1
 
-    infParams = InferenceParameters(
-        args.threshold, args.ovcores, args.ovmshost)
+    infParams = InferenceParameters(args.threshold, args.ovcores, args.ovmshost)
     cameraChain = ModelChain(args.camerachain, infParams)
 
     if args.sensor:
         sensors = PercebroSensor.initializeSensors(
-            args.sensor, args.sensorattrib, args.sensorchain, infParams)
+            args.sensor, args.sensorattrib, args.sensorchain, infParams
+        )
 
     # Enable video loop for videos with fewer frames than requested in command
     # line
@@ -793,11 +821,7 @@ def main():
                 cam.loop = True
 
     if not args.debug and not args.preprocess:
-        client = connectToMQTT(
-            args.auth,
-            args.cert,
-            args.rootcert,
-            args.broker)
+        client = connectToMQTT(args.auth, args.cert, args.rootcert, args.broker)
 
     if args.window:
         for cam in cams:
@@ -828,7 +852,13 @@ def main():
             now = get_epoch_time()
             if not args.debug and not args.preprocess:
                 timeOffset, lastTimeSync = adjust_time(
-                    now, ntpServer, ntpClient, lastTimeSync, timeOffset, ntplib.NTPException)
+                    now,
+                    ntpServer,
+                    ntpClient,
+                    lastTimeSync,
+                    timeOffset,
+                    ntplib.NTPException,
+                )
             now += timeOffset
 
             vdata = None
@@ -848,12 +878,8 @@ def main():
                         now = get_epoch_time()
 
                 vdata = getVideoFrame(
-                    virtual,
-                    cam,
-                    now,
-                    args.filter,
-                    args.disable_rotation,
-                    args.infrared)
+                    virtual, cam, now, args.filter, args.disable_rotation, args.infrared
+                )
 
                 if not vdata and not cam.loop:
                     done = True
@@ -872,7 +898,7 @@ def main():
             if vdata:
                 vdata.cam.frameBuffer.addFrame(vdata)
                 vdata.updateFrameAverage()
-                if hasattr(vdata.cam, 'averageStable'):
+                if hasattr(vdata.cam, "averageStable"):
                     averageStable = vdata.cam.averageStable
                 unannotated_frame = vdata.unannotatedFrame()
                 annotated_frame = unannotated_frame.copy()
@@ -893,22 +919,25 @@ def main():
                     fps = round(1 / vdata.cam.frameAvg, 1)
                 if not args.debug and not args.preprocess:
                     # FIXME - publish all objects at top level
-                    publishObjects(allObjects,
-                                   ts,
-                                   mac_addr,
-                                   vdata.cam.mqttID,
-                                   client,
-                                   fps,
-                                   ts_end,
-                                   vdata.end - vdata.begin,
-                                   vdata.cam.intrinsics.asDict(),
-                                   int(cam.fps))
+                    publishObjects(
+                        allObjects,
+                        ts,
+                        mac_addr,
+                        vdata.cam.mqttID,
+                        client,
+                        fps,
+                        ts_end,
+                        vdata.end - vdata.begin,
+                        vdata.cam.intrinsics.asDict(),
+                        int(cam.fps),
+                    )
                 elif args.preprocess:
-                    detections = {'timestamp': ts,
-                                  'id': vdata.cam.mqttID,
-                                  'frame': int(vdata.frameNum),
-                                  'objects': flatObjects
-                                  }
+                    detections = {
+                        "timestamp": ts,
+                        "id": vdata.cam.mqttID,
+                        "frame": int(vdata.frameNum),
+                        "objects": flatObjects,
+                    }
                     vdata.jsonFile.write(json.dumps(detections))
                     vdata.jsonFile.write("\n")
 
@@ -919,14 +948,19 @@ def main():
                         cams,
                         cameraChain.vcache,
                         vdata.cam.latencyAvg,
-                        averageStable)
+                        averageStable,
+                    )
 
                 if sendAllCamImages:
                     for cam in cams:
                         cam.sendImage = True
                     sendAllCamImages = False
 
-                if args.window or vdata.cam.sendImage or vdata.cam.sendImageForCalibration:
+                if (
+                    args.window
+                    or vdata.cam.sendImage
+                    or vdata.cam.sendImageForCalibration
+                ):
                     # FIXME - annotate sensor detections too
                     for sensor in sensors:
                         if sensor.bounds:
@@ -934,37 +968,51 @@ def main():
                                 annotated_frame,
                                 *sensor.bounds.cv,
                                 VideoFrame.COLOR_VIRTUAL,
-                                4)
+                                4,
+                            )
                     vdata.annotateObjects(annotated_frame, flatObjects)
 
                     if client is not None:
                         if vdata.cam.sendImage:
                             vdata.cam.sendImage = False
                             topic = PubSub.formatTopic(
-                                PubSub.IMAGE_CAMERA, camera_id=vdata.cam.mqttID)
+                                PubSub.IMAGE_CAMERA, camera_id=vdata.cam.mqttID
+                            )
                             annotated_frame = vdata.cam.intrinsics.pinholeUndistort(
-                                annotated_frame)
-                            publishImage(
-                                topic, annotated_frame, vdata, client, ts)
-                        if vdata.cam.sendImageForCalibration and unannotated_frame is not None:
+                                annotated_frame
+                            )
+                            publishImage(topic, annotated_frame, vdata, client, ts)
+                        if (
+                            vdata.cam.sendImageForCalibration
+                            and unannotated_frame is not None
+                        ):
                             vdata.cam.sendImageForCalibration = False
                             topic = PubSub.formatTopic(
-                                PubSub.IMAGE_CALIBRATE, camera_id=vdata.cam.mqttID)
-                            if hasattr(
-                                    vdata.cam,
-                                    'autocalibrate') and vdata.cam.autocalibrate:
+                                PubSub.IMAGE_CALIBRATE, camera_id=vdata.cam.mqttID
+                            )
+                            if (
+                                hasattr(vdata.cam, "autocalibrate")
+                                and vdata.cam.autocalibrate
+                            ):
                                 vdata.cam.autocalibrate = False
                                 publishImage(
-                                    topic, unannotated_frame, vdata, client, ts, {
-                                        'calibrate': True})
+                                    topic,
+                                    unannotated_frame,
+                                    vdata,
+                                    client,
+                                    ts,
+                                    {"calibrate": True},
+                                )
                             else:
-                                publishImage(
-                                    topic, unannotated_frame, vdata, client, ts)
+                                publishImage(topic, unannotated_frame, vdata, client, ts)
                     if args.window:
                         cv2.imshow(vdata.cam.mqttID, annotated_frame)
 
-                if args.frames and vdata.frameCount >= args.frames \
-                   and (not args.waitforstable or averageStable):
+                if (
+                    args.frames
+                    and vdata.frameCount >= args.frames
+                    and (not args.waitforstable or averageStable)
+                ):
                     done = True
 
         processSensors(sensors, now, client)
@@ -983,7 +1031,7 @@ def main():
     cameraChain.terminate()
 
     if args.stats:
-        print('', file=sys.stderr)
+        print("", file=sys.stderr)
 
     if args.preprocess:
         for cam in cams:
@@ -1005,5 +1053,5 @@ def _getNextCam(nextCam):
     return cam, nextCam
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main() or 0)

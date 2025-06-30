@@ -30,23 +30,21 @@ def test_sensor_area_main(params, record_xml_attribute):
         sensor_id = "test_sensor"
         sensor_name = "Sensor_0"
         scene_name = common.TEST_SCENE_NAME
-        common.create_sensor_from_scene(
-            browser, sensor_id, sensor_name, scene_name)
+        common.create_sensor_from_scene(browser, sensor_id, sensor_name, scene_name)
         print("Navigating to sensor edit tab ...")
         browser.find_element(By.LINK_TEXT, "Sensors").click()
         browser.find_element(
-            By.XPATH,
-            "//*[text()='" +
-            sensor_name +
-            "']/parent::tr/td[4]/a").click()
+            By.XPATH, "//*[text()='" + sensor_name + "']/parent::tr/td[4]/a"
+        ).click()
         get_radio = browser.find_elements(By.XPATH, "//*[@type='radio']")
         count_radio = len(get_radio)
         radio_list = []
         if count_radio == 3:
             for elem in get_radio:
-                radio_list.append(elem.get_attribute('value'))
+                radio_list.append(elem.get_attribute("value"))
             print(
-                f"There are {count_radio} area types as a radio button: \n{radio_list}")
+                f"There are {count_radio} area types as a radio button: \n{radio_list}"
+            )
 
         entire_scene = browser.find_element(By.ID, "id_area_0")
         assert entire_scene.is_selected()
@@ -99,9 +97,10 @@ def test_sensor_area_main(params, record_xml_attribute):
         all_points = browser.find_elements(By.CLASS_NAME, "vertex")
         save_polygon = browser.find_element(By.NAME, "save")
         for point in all_points:
-            if float(
-                    point.get_attribute("cx")) == p_list[0] and float(
-                    point.get_attribute("cy")) == p_list[1]:
+            if (
+                float(point.get_attribute("cx")) == p_list[0]
+                and float(point.get_attribute("cy")) == p_list[1]
+            ):
                 point.click()
                 print(f"POLYGON with 3 points created \n{p_list}")
                 save_polygon.click()

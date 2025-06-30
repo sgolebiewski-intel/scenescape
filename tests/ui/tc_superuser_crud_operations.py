@@ -25,7 +25,7 @@ def create_user(browser, user_name, pwd):
     # Checking that we have only two windows open
     assert len(browser.window_handles) == 2
 
-    admin_page_title = 'Site administration | Django site admin'
+    admin_page_title = "Site administration | Django site admin"
     browser.switch_to.window(browser.window_handles[-1])
     print("Switched page to:", browser.title)
     if browser.title != admin_page_title:
@@ -80,41 +80,37 @@ def test_crud_operations(params, record_xml_attribute):
         # cameras manage and delete
         cameras_tab_xpath = "//a[@title = 'Cameras Tab']"
         browser.find_element(By.XPATH, cameras_tab_xpath).click()
-        admin_new_camera_btn = browser.find_elements(
-            By.LINK_TEXT, '+ New Camera')
+        admin_new_camera_btn = browser.find_elements(By.LINK_TEXT, "+ New Camera")
         manage_camera1_xpath = "//a[@title = 'Manage camera1']"
-        admin_manage_camera1_btn = browser.find_elements(
-            By.XPATH, manage_camera1_xpath)
+        admin_manage_camera1_btn = browser.find_elements(By.XPATH, manage_camera1_xpath)
         delete_camera1_btn = "//a[@title = 'Delete camera1']"
-        admin_delete_camera1_btn = browser.find_elements(
-            By.XPATH, delete_camera1_btn)
+        admin_delete_camera1_btn = browser.find_elements(By.XPATH, delete_camera1_btn)
 
         # Sensors Regions Tripwire Creation btns
         browser.find_element(By.ID, "sensors-tab").click()
-        admin_new_sensor_btn = browser.find_elements(
-            By.LINK_TEXT, '+ New Sensor')
+        admin_new_sensor_btn = browser.find_elements(By.LINK_TEXT, "+ New Sensor")
         browser.find_element(By.ID, "regions-tab").click()
-        admin_new_region_btn = browser.find_elements(By.ID, 'new-roi')
+        admin_new_region_btn = browser.find_elements(By.ID, "new-roi")
         browser.find_element(By.ID, "tripwires-tab").click()
-        admin_new_tripwire_btn = browser.find_elements(By.ID, 'new-tripwire')
+        admin_new_tripwire_btn = browser.find_elements(By.ID, "new-tripwire")
 
-        admin_privileged_link = browser.find_elements(
-            By.XPATH, "//a[@href = '/admin']")
+        admin_privileged_link = browser.find_elements(By.XPATH, "//a[@href = '/admin']")
 
         print(
             "Edit Demo (icon), Delete Demo (icon), Manage camera1 (icon), Delete camera1"
-            " (icon), +New Sensor, +New Region, +New Tripwire")
+            " (icon), +New Sensor, +New Region, +New Tripwire"
+        )
 
         # Adding testuser
         user_cred = {
-            'user': 'testuser',
-            'password': '#dummy_pwd123',
-            'weburl': params['weburl']
+            "user": "testuser",
+            "password": "#dummy_pwd123",
+            "weburl": params["weburl"],
         }
 
-        assert create_user(browser, user_cred['user'], user_cred['password'])
+        assert create_user(browser, user_cred["user"], user_cred["password"])
         print("Logging Out...")
-        browser.find_element(By.LINK_TEXT, 'Log Out').click()
+        browser.find_element(By.LINK_TEXT, "Log Out").click()
         assert common.check_page_login(browser, user_cred)
 
         print("Logged in as an unpriviledged test user.")
@@ -129,44 +125,55 @@ def test_crud_operations(params, record_xml_attribute):
         # cameras manage and delete
         cameras_tab_xpath = "//a[@title = 'Cameras Tab']"
         browser.find_element(By.XPATH, cameras_tab_xpath).click()
-        new_camera_btn = browser.find_elements(By.LINK_TEXT, '+ New Camera')
+        new_camera_btn = browser.find_elements(By.LINK_TEXT, "+ New Camera")
         manage_camera1_xpath = "//a[@title = 'Manage camera1']"
-        manage_camera1_btn = browser.find_elements(
-            By.XPATH, manage_camera1_xpath)
+        manage_camera1_btn = browser.find_elements(By.XPATH, manage_camera1_xpath)
         delete_camera1_btn = "//a[@title = 'Delete camera1']"
-        delete_camera1_btn = browser.find_elements(
-            By.XPATH, delete_camera1_btn)
+        delete_camera1_btn = browser.find_elements(By.XPATH, delete_camera1_btn)
 
         # Sensors Regions Tripwire Creation btns
         browser.find_element(By.ID, "sensors-tab").click()
-        new_sensor_btn = browser.find_elements(By.LINK_TEXT, '+ New Sensor')
+        new_sensor_btn = browser.find_elements(By.LINK_TEXT, "+ New Sensor")
         browser.find_element(By.ID, "regions-tab").click()
-        new_region_btn = browser.find_elements(By.LINK_TEXT, '+ New Region')
+        new_region_btn = browser.find_elements(By.LINK_TEXT, "+ New Region")
         browser.find_element(By.ID, "tripwires-tab").click()
-        new_tripwire_btn = browser.find_elements(
-            By.LINK_TEXT, '+ New Tripwire')
+        new_tripwire_btn = browser.find_elements(By.LINK_TEXT, "+ New Tripwire")
 
         admin_unprivileged_link = browser.find_elements(
-            By.XPATH, "//a[@href = '/admin']")
+            By.XPATH, "//a[@href = '/admin']"
+        )
 
         # All of the below elements must be 0 as the test
         # user is not expected to have these elements
-        assert not len(edit_demo_btn) and not len(delete_demo_btn) \
-            and not len(new_camera_btn) and not len(manage_camera1_btn) \
-            and not len(delete_camera1_btn) and not len(new_sensor_btn) \
-            and not len(new_region_btn) and not len(new_tripwire_btn) \
+        assert (
+            not len(edit_demo_btn)
+            and not len(delete_demo_btn)
+            and not len(new_camera_btn)
+            and not len(manage_camera1_btn)
+            and not len(delete_camera1_btn)
+            and not len(new_sensor_btn)
+            and not len(new_region_btn)
+            and not len(new_tripwire_btn)
             and not len(admin_unprivileged_link)
+        )
 
         # All of the below elements must be non-zero for the admin user
-        assert len(admin_edit_demo_btn) and len(admin_del_demo_btn) \
-            and len(admin_new_camera_btn) and len(admin_manage_camera1_btn) \
-            and len(admin_delete_camera1_btn) and len(admin_new_sensor_btn) \
-            and len(admin_new_region_btn) and len(admin_new_tripwire_btn) \
+        assert (
+            len(admin_edit_demo_btn)
+            and len(admin_del_demo_btn)
+            and len(admin_new_camera_btn)
+            and len(admin_manage_camera1_btn)
+            and len(admin_delete_camera1_btn)
+            and len(admin_new_sensor_btn)
+            and len(admin_new_region_btn)
+            and len(admin_new_tripwire_btn)
             and len(admin_privileged_link)
+        )
 
         print(
             "Edit Demo (icon), Delete Demo (icon), Manage camera1 (icon), Delete camera1"
-            " (icon), +New Sensor, +New Region, +New Tripwire")
+            " (icon), +New Sensor, +New Region, +New Tripwire"
+        )
         print("Test user does not have the above mentioned elements as Expected")
         exit_code = 0
 

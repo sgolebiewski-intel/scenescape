@@ -18,10 +18,10 @@ class SceneModel:
         self.map_file = map_file
         if map_file:
             # FIXME: get the image binary data using url rather than this hack
-            if 'http' in map_file:
+            if "http" in map_file:
                 map_file = map_file.replace(
-                    'https://web.scenescape.intel.com',
-                    '/home/scenescape/SceneScape')
+                    "https://web.scenescape.intel.com", "/home/scenescape/SceneScape"
+                )
             if os.path.exists(map_file):
                 self.background = cv2.imread(map_file)
                 self.extractMapTriangleMesh(map_file, scale)
@@ -61,26 +61,24 @@ class SceneModel:
 
     def serialize(self):
         data = {
-            'uid': self.name,
-            'name': self.name,
-            'output_lla': self.output_lla,
+            "uid": self.name,
+            "name": self.name,
+            "output_lla": self.output_lla,
         }
 
         # children
         # current objects/things
 
         if self.cameras:
-            data['cameras'] = {x: self.cameras[x].serialize()
-                               for x in self.cameras}
+            data["cameras"] = {x: self.cameras[x].serialize() for x in self.cameras}
         if self.sensors:
-            data['sensors'] = {x: self.sensors[x].serialize()
-                               for x in self.sensors}
+            data["sensors"] = {x: self.sensors[x].serialize() for x in self.sensors}
         if self.regions:
-            data['regions'] = {x: self.regions[x].serialize()
-                               for x in self.regions}
+            data["regions"] = {x: self.regions[x].serialize() for x in self.regions}
         if self.tripwires:
-            data['tripwires'] = {x: self.tripwires[x].serialize()
-                                 for x in self.tripwires}
+            data["tripwires"] = {
+                x: self.tripwires[x].serialize() for x in self.tripwires
+            }
 
         return data
 
@@ -91,8 +89,11 @@ class SceneModel:
         maxMetersX = bgRes[0] / self.scale
         maxMetersY = bgRes[1] / self.scale
         for pt in pixelCoords:
-            if pt[0] is not None and pt[1] is not None \
-               and (pt[0] > 2 * maxMetersX or pt[1] > 2 * maxMetersY):
+            if (
+                pt[0] is not None
+                and pt[1] is not None
+                and (pt[0] > 2 * maxMetersX or pt[1] > 2 * maxMetersY)
+            ):
                 return True
         return False
 
@@ -100,6 +101,7 @@ class SceneModel:
         if self.background is None:
             return pixelCoords
         bgRes = self.background.shape[1::-1]
-        points = [[c[0] / self.scale,
-                   (bgRes[1] - c[1]) / self.scale] for c in pixelCoords]
+        points = [
+            [c[0] / self.scale, (bgRes[1] - c[1]) / self.scale] for c in pixelCoords
+        ]
         return points

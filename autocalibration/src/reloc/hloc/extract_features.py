@@ -74,13 +74,13 @@ command line using their name. Each is a dictionary with the following entries:
 
 def resize_image(image, size, interp):
     if interp.startswith("cv2_"):
-        interp = getattr(cv2, "INTER_" + interp[len("cv2_"):].upper())
+        interp = getattr(cv2, "INTER_" + interp[len("cv2_") :].upper())
         h, w = image.shape[:2]
         if interp == cv2.INTER_AREA and (w < size[0] or h < size[1]):
             interp = cv2.INTER_LINEAR
         resized = cv2.resize(image, size, interpolation=interp)
     elif interp.startswith("pil_"):
-        interp = getattr(PIL.Image, interp[len("pil_"):].upper())
+        interp = getattr(PIL.Image, interp[len("pil_") :].upper())
         resized = PIL.Image.fromarray(image.astype(np.uint8))
         resized = resized.resize(size, resample=interp)
         resized = np.asarray(resized, dtype=image.dtype)
@@ -118,16 +118,13 @@ class ImageDataset(torch.utils.data.Dataset):
             if isinstance(paths, (Path, str)):
                 self.names = parse_image_lists(paths)
             elif isinstance(paths, collections.Iterable):
-                self.names = [
-                    p.as_posix() if isinstance(
-                        p, Path) else p for p in paths]
+                self.names = [p.as_posix() if isinstance(p, Path) else p for p in paths]
             else:
                 raise ValueError(f"Unknown format for path argument {paths}.")
 
             for name in self.names:
                 if not (root / name).exists():
-                    raise ValueError(
-                        f"Image {name} does not exists in root: {root}.")
+                    raise ValueError(f"Image {name} does not exists in root: {root}.")
 
     def __getitem__(self, idx):
         name = self.names[idx]
@@ -173,8 +170,10 @@ def main(
     overwrite: bool = False,
 ) -> Path:
     logger.info(
-        "Extracting local features with configuration:" f"\n{
-            pprint.pformat(conf)}")
+        "Extracting local features with configuration:"
+        f"\n{
+            pprint.pformat(conf)}"
+    )
 
     loader = ImageDataset(image_dir, conf["preprocessing"], image_list)
     loader = torch.utils.data.DataLoader(loader, num_workers=0)
@@ -182,8 +181,9 @@ def main(
     if feature_path is None:
         feature_path = Path(export_dir, conf["output"] + ".h5")
     feature_path.parent.mkdir(exist_ok=True, parents=True)
-    skip_names = set(list_h5_names(feature_path)
-                     if feature_path.exists() and not overwrite else ())
+    skip_names = set(
+        list_h5_names(feature_path) if feature_path.exists() and not overwrite else ()
+    )
     if set(loader.dataset.names).issubset(set(skip_names)):
         logger.info("Skipping the extraction.")
         return feature_path
@@ -211,7 +211,7 @@ def main(
                 if (dt == np.float32) and (dt != np.float16):
                     pred[k] = pred[k].astype(np.float16)
 
-        with h5py.File(str(feature_path), 'a', libver='latest') as fd:
+        with h5py.File(str(feature_path), "a", libver="latest") as fd:
             try:
                 if name in fd:
                     del fd[name]
@@ -240,11 +240,8 @@ if __name__ == "__main__":
     parser.add_argument("--image_dir", type=Path, required=True)
     parser.add_argument("--export_dir", type=Path, required=True)
     parser.add_argument(
-        "--conf",
-        type=str,
-        default="superpoint_aachen",
-        choices=list(
-            confs.keys()))
+        "--conf", type=str, default="superpoint_aachen", choices=list(confs.keys())
+    )
     parser.add_argument("--as_half", action="store_true")
     parser.add_argument("--image_list", type=Path)
     parser.add_argument("--feature_path", type=Path)

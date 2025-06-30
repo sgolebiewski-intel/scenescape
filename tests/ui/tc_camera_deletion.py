@@ -40,17 +40,14 @@ def test_camera_deletion_main(params, record_xml_attribute):
         browser.find_element(By.ID, "id_scene").click()
         select = Select(browser.find_element(By.ID, "id_scene"))
         select.select_by_visible_text(scene_name)
-        browser.find_element(By.CSS_SELECTOR,
-                             ".col-sm-10 > .btn.btn-primary").click()
+        browser.find_element(By.CSS_SELECTOR, ".col-sm-10 > .btn.btn-primary").click()
 
         # After update button the page is redirected to scene page, here 'Demo'
         # scene page
         available_cameras = browser.find_elements(
-            By.CSS_SELECTOR, ".card.count-item.camera-card > .card-header")
-        camera_names_list = [
-            name.text.replace(
-                "--\n",
-                "") for name in available_cameras]
+            By.CSS_SELECTOR, ".card.count-item.camera-card > .card-header"
+        )
+        camera_names_list = [name.text.replace("--\n", "") for name in available_cameras]
         log.info("Available cameras before deletion: ", camera_names_list)
         xpath = "//a[@title = 'Delete " + camera_name + "']"
         browser.find_element(By.XPATH, xpath).click()

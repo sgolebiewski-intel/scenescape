@@ -14,7 +14,7 @@ EXPECTED_FRAME_COUNT = 90
 
 
 def stream_url(request):
-    return request.config.getoption('--url')
+    return request.config.getoption("--url")
 
 
 def test_main(record_xml_attribute, request):
@@ -25,7 +25,10 @@ def test_main(record_xml_attribute, request):
     frame_count = 0
 
     rtsp_link = stream_url(request)
-    src = "rtspsrc location=%s protocols=tcp ! rtph264depay ! avdec_h264 ! videoconvert ! appsink max-buffers=1 drop=true" % rtsp_link
+    src = (
+        "rtspsrc location=%s protocols=tcp ! rtph264depay ! avdec_h264 ! videoconvert ! appsink max-buffers=1 drop=true"
+        % rtsp_link
+    )
 
     cap = cv2.VideoCapture(src)
 

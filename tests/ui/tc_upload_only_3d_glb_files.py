@@ -36,8 +36,7 @@ def test_only_upload_glb_main(params, record_xml_attribute):
             print("Filename: ", name)
             file_path = os.path.join(common.TEST_MEDIA_PATH, name)
             file_object = common.File(file_path, element_id, element_location)
-            assert not common.upload_scene_file(
-                browser, scene_name, file_object)
+            assert not common.upload_scene_file(browser, scene_name, file_object)
 
         exit_code = 0
 

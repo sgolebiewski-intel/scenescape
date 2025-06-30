@@ -193,8 +193,7 @@ def visualize_sfm(
             dset_im = o3d.io.read_image(str(dataset_dir / image.name))
             dset_imbuf = np.asarray(dset_im)
             dset_imbuf[:] = 170 + dset_imbuf[:] / 3
-            render.scene.set_background(
-                color=[1.0, 1.0, 1.0, 0.0], image=dset_im)
+            render.scene.set_background(color=[1.0, 1.0, 1.0, 0.0], image=dset_im)
             pose = pose_matrix_from_qvec_tvec(image.qvec, image.tvec)
             render.setup_camera(camK, pose, camera.width, camera.height)
             im = render.render_to_image()
@@ -207,11 +206,7 @@ def visualize_sfm(
         )
 
     if show_cameras:
-        o3d.visualization.draw(
-            cam_vis,
-            show_ui=True,
-            show_skybox=False,
-            point_size=5)
+        o3d.visualization.draw(cam_vis, show_ui=True, show_skybox=False, point_size=5)
 
 
 def pipeline_sfm(
@@ -230,8 +225,7 @@ def pipeline_sfm(
     """
 
     image_dir = Path(dataset_dir) / "rgb"
-    output_dir = Path(
-        output_dir) if output_dir is not None else Path(dataset_dir)
+    output_dir = Path(output_dir) if output_dir is not None else Path(dataset_dir)
     sfm_pairs = output_dir / "pairs-netvlad.txt"
 
     retrieval_conf = extract_features.confs[config.hloc.global_feature]
@@ -240,11 +234,8 @@ def pipeline_sfm(
     local_feature = next(iter(config.hloc.local_feature))
     matcher = next(iter(config.hloc.matcher))
 
-    retrieval_path = extract_features.main(
-        retrieval_conf, image_dir, output_dir)
-    pairs_from_retrieval.main(
-        retrieval_path, sfm_pairs, num_matched=config.hloc.num_loc
-    )
+    retrieval_path = extract_features.main(retrieval_conf, image_dir, output_dir)
+    pairs_from_retrieval.main(retrieval_path, sfm_pairs, num_matched=config.hloc.num_loc)
 
     if local_feature == "-":  # semi-dense / direct matching
         matcher_conf = match_dense.confs[matcher] | config.matcher[matcher]
@@ -298,19 +289,16 @@ def pipeline_sfm(
     print(
         f"Saved SfM sparse point cloud to {
             output_dir /
-            'sparse-points.ply'}")
+            'sparse-points.ply'}"
+    )
 
 
 def main():
     parser = ArgumentParser(description=__doc__)
     parser.add_argument(
-        "config",
-        type=Path,
-        help="Path to the configuration file (json format).")
-    parser.add_argument(
-        "dataset_dir",
-        type=Path,
-        help="Path to the dataset directory.")
+        "config", type=Path, help="Path to the configuration file (json format)."
+    )
+    parser.add_argument("dataset_dir", type=Path, help="Path to the dataset directory.")
     parser.add_argument(
         "--output_dir",
         type=Path,
@@ -342,16 +330,8 @@ def main():
         camera = next(iter(cameras.values()))
     else:
         camera = None
-    pipeline_sfm(
-        config,
-        args.dataset_dir,
-        args.output_dir /
-        "sfm",
-        camera=camera)
-    import_from_colmap(
-        args.dataset_dir,
-        args.output_dir / "sfm",
-        args.output_dir)
+    pipeline_sfm(config, args.dataset_dir, args.output_dir / "sfm", camera=camera)
+    import_from_colmap(args.dataset_dir, args.output_dir / "sfm", args.output_dir)
     visualize_sfm(
         args.output_dir / "images.txt",
         args.output_dir / "cameras.txt",

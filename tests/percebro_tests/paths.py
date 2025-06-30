@@ -12,17 +12,10 @@ import sys
 
 
 def init():
-    test_dir_path = os.path.dirname(
-        os.path.dirname(os.path.realpath(__file__)))
+    test_dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     root_dir_path = os.path.dirname(test_dir_path)
-    percebro_path = os.path.join(
-        os.path.join(
-            root_dir_path,
-            'percebro'),
-        'percebro')
-    spec = spec_from_loader(
-        "percebro", SourceFileLoader(
-            "percebro", percebro_path))
+    percebro_path = os.path.join(os.path.join(root_dir_path, "percebro"), "percebro")
+    spec = spec_from_loader("percebro", SourceFileLoader("percebro", percebro_path))
     percebro = module_from_spec(spec)
     spec.loader.exec_module(percebro)
     return percebro

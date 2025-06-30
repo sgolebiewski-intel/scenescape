@@ -9,12 +9,16 @@ import numpy as np
 from scene_common import geometry
 
 
-@pytest.mark.parametrize("width, height, depth, expected_output",
-                         [(None, None, None, "Passed arguments do not make a size"),
-                          (1, 2, None, (1, 2, None)),
-                          (1, 2, 3, (1, 2, 3))])
+@pytest.mark.parametrize(
+    "width, height, depth, expected_output",
+    [
+        (None, None, None, "Passed arguments do not make a size"),
+        (1, 2, None, (1, 2, None)),
+        (1, 2, 3, (1, 2, 3)),
+    ],
+)
 def test_size_init(width, height, depth, expected_output):
-    """! Verifies the output of 'geometry.Size.__init__()' method. """
+    """! Verifies the output of 'geometry.Size.__init__()' method."""
 
     try:
         if depth is None:
@@ -32,7 +36,7 @@ def test_size_init(width, height, depth, expected_output):
 
 
 def test_depth(size3d):
-    """! Verifies the output of 'geometry.Size.depth' property. """
+    """! Verifies the output of 'geometry.Size.depth' property."""
 
     expected_result = 5
     depth = size3d.depth
@@ -42,7 +46,7 @@ def test_depth(size3d):
 
 
 def test_asNumpy(size2d):
-    """! Verifies the output of 'geometry.Size.asNumpy' property. """
+    """! Verifies the output of 'geometry.Size.asNumpy' property."""
 
     expected_result = np.float64([size2d.width, size2d.height])
     size_asnumpy = size2d.asNumpy
@@ -51,10 +55,11 @@ def test_asNumpy(size2d):
     return
 
 
-@pytest.mark.parametrize("fixture, expected_result",
-                         [("size2d", False), ("size3d", True)])
+@pytest.mark.parametrize(
+    "fixture, expected_result", [("size2d", False), ("size3d", True)]
+)
 def test_is3D(fixture, expected_result, request):
-    """! Verifies the output of 'geometry.Size.is3D' property. """
+    """! Verifies the output of 'geometry.Size.is3D' property."""
 
     size = request.getfixturevalue(fixture)
     assert size.is3D == expected_result
@@ -62,11 +67,12 @@ def test_is3D(fixture, expected_result, request):
     return
 
 
-@pytest.mark.parametrize("fixture, expected_result",
-                         [("size2d", "(1.000, 3.000)"),
-                          ("size3d", "(1.000, 3.000, 5.000)")])
+@pytest.mark.parametrize(
+    "fixture, expected_result",
+    [("size2d", "(1.000, 3.000)"), ("size3d", "(1.000, 3.000, 5.000)")],
+)
 def test_log(fixture, expected_result, request):
-    """! Verifies the output of 'geometry.Size.log' property. """
+    """! Verifies the output of 'geometry.Size.log' property."""
 
     size = request.getfixturevalue(fixture)
     assert size.log == expected_result
@@ -74,11 +80,12 @@ def test_log(fixture, expected_result, request):
     return
 
 
-@pytest.mark.parametrize("fixture, expected_result",
-                         [("size2d", "Size: (1.000, 3.000)"),
-                          ("size3d", "Size: (1.000, 3.000, 5.000)")])
+@pytest.mark.parametrize(
+    "fixture, expected_result",
+    [("size2d", "Size: (1.000, 3.000)"), ("size3d", "Size: (1.000, 3.000, 5.000)")],
+)
 def test_repr(fixture, expected_result, request):
-    """! Verifies the output of 'geometry.Size.__repr__()' dunder method. """
+    """! Verifies the output of 'geometry.Size.__repr__()' dunder method."""
 
     size = request.getfixturevalue(fixture)
     assert repr(size) == expected_result

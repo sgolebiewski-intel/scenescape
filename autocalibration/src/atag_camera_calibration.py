@@ -34,6 +34,7 @@ class CameraCalibrationApriltag:
     """
     Class performs the auto-camera-calibration tasks on the map_image and camera image.
     """
+
     atag_detector = None
     result_data_3d = None
     apriltags_2d_data = None
@@ -46,12 +47,8 @@ class CameraCalibrationApriltag:
     extrinsic_matrix = None
 
     def __init__(
-            self,
-            map_filename,
-            scale,
-            scene_name,
-            intrinsic_matrix=None,
-            tag_size=TAG_SIZE):
+        self, map_filename, scale, scene_name, intrinsic_matrix=None, tag_size=TAG_SIZE
+    ):
         """! Initializes the class with various data necessary for preprocessing.
         @param   map_filename        Filename of map object (image/object file).
         @param   scale               Scale size in float(as in database).
@@ -68,8 +65,7 @@ class CameraCalibrationApriltag:
         self.map_info = []
         self.tag_size = tag_size
         self.fixed_step_size = 4 * self.tag_size
-        self.zval = self.fixed_step_size / \
-            math.tan(math.radians(DEFAULT_FOV / 2))
+        self.zval = self.fixed_step_size / math.tan(math.radians(DEFAULT_FOV / 2))
 
         supported_types = ["png", "jpg", "jpeg"]
         if map_filename.split(".")[-1].lower() in supported_types:
@@ -79,26 +75,23 @@ class CameraCalibrationApriltag:
             self.map_info.append(map_filename)
 
         # Get the detector object.
-        self.atag_detector = Detector(searchpath=['apriltags'],
-                                      families='tag36h11',
-                                      nthreads=1,
-                                      quad_decimate=1.0,
-                                      quad_sigma=0.0,
-                                      refine_edges=1,
-                                      decode_sharpening=0.25,
-                                      debug=0)
+        self.atag_detector = Detector(
+            searchpath=["apriltags"],
+            families="tag36h11",
+            nthreads=1,
+            quad_decimate=1.0,
+            quad_sigma=0.0,
+            refine_edges=1,
+            decode_sharpening=0.25,
+            debug=0,
+        )
         self.intrinsic_matrix_2d = intrinsic_matrix
 
         return
 
     def renderCamView(
-            self,
-            mesh,
-            tensor_mesh,
-            intrinsic_matrix,
-            extrinsic_matrix,
-            res_x,
-            res_y):
+        self, mesh, tensor_mesh, intrinsic_matrix, extrinsic_matrix, res_x, res_y
+    ):
         """! Render an image on camera plane with given intrinsic and extrinsic matrices
         @param   mesh                Triangular mesh.
         @param   intrinsic_matrix    Camera intrinsic matrix.
@@ -112,14 +105,13 @@ class CameraCalibrationApriltag:
         if tensor_mesh is None:
             material = o3d.visualization.rendering.MaterialRecord()
             material.shader = mesh.material.material_name
-            material.albedo_img = mesh.material.texture_maps["albedo"].to_legacy(
-            )
+            material.albedo_img = mesh.material.texture_maps["albedo"].to_legacy()
         else:
             material = materialToMaterialRecord(tensor_mesh[0].material)
         renderer.scene.add_geometry("mesh", mesh, material)
-        renderer.scene.scene.set_sun_light(SUNLIGHT_DIRECTION,
-                                           SUNLIGHT_COLOR,
-                                           SUNLIGHT_INTENSITY)
+        renderer.scene.scene.set_sun_light(
+            SUNLIGHT_DIRECTION, SUNLIGHT_COLOR, SUNLIGHT_INTENSITY
+        )
         renderer.scene.scene.enable_sun_light(True)
         renderer.scene.show_axes(False)
         renderer.setup_camera(intrinsic_matrix, extrinsic_matrix, res_x, res_y)
@@ -134,7 +126,9 @@ class CameraCalibrationApriltag:
 
         @return  dict            Return data format {"apriltag_id":"apriltag_id_centers"}.
         """
-        intrinsics_matrix = intrinsics if intrinsics is not None else self.intrinsic_matrix_2d
+        intrinsics_matrix = (
+            intrinsics if intrinsics is not None else self.intrinsic_matrix_2d
+        )
         grayed_image = cv2.cvtColor(source_image, cv2.COLOR_BGR2GRAY)
         tags = self.atag_detector.detect(
             grayed_image,
@@ -143,8 +137,10 @@ class CameraCalibrationApriltag:
                 intrinsics_matrix[0][0],
                 intrinsics_matrix[1][1],
                 intrinsics_matrix[0][2],
-                intrinsics_matrix[1][2]),
-            tag_size=self.tag_size)
+                intrinsics_matrix[1][2],
+            ),
+            tag_size=self.tag_size,
+        )
         apriltag_2d_centers = {str(tag.tag_id): tag.center for tag in tags}
         if store:
             self.apriltags_2d_data = apriltag_2d_centers
@@ -160,10 +156,11 @@ class CameraCalibrationApriltag:
         """
         apriltag_3d_data = {}
         new_intrinsic_matrix = CameraIntrinsics(
-            intrinsics=DEFAULT_FOV, resolution=[
-                TILE_SIZE, TILE_SIZE]).intrinsics
+            intrinsics=DEFAULT_FOV, resolution=[TILE_SIZE, TILE_SIZE]
+        ).intrinsics
         self.triangle_mesh, self.tensor_tmesh = extractTriangleMesh(
-            self.map_info, DEFAULT_MESH_ROTATION)
+            self.map_info, DEFAULT_MESH_ROTATION
+        )
         scene = o3d.t.geometry.RaycastingScene()
         scene.add_triangles(self.triangle_mesh)
         max_bounding_box = self.triangle_mesh.get_max_bound()
@@ -176,23 +173,27 @@ class CameraCalibrationApriltag:
             bbx = min_bounding_box[0].item()
             while bbx < max_bounding_box[0].item():
                 pose_dict = {
-                    'rotation': rotational_matrix,
-                    'translation': [bbx, bby, self.zval],
-                    'scale': [1.0, 1.0, 1.0]
+                    "rotation": rotational_matrix,
+                    "translation": [bbx, bby, self.zval],
+                    "scale": [1.0, 1.0, 1.0],
                 }
-                camera_pose = CameraPose(pose=pose_dict,
-                                         intrinsics=new_intrinsic_matrix)
+                camera_pose = CameraPose(pose=pose_dict, intrinsics=new_intrinsic_matrix)
                 extrinsic_matrix = np.linalg.inv(camera_pose.pose_mat)
-                rendered_img = self.renderCamView(self.triangle_mesh,
-                                                  self.tensor_tmesh,
-                                                  new_intrinsic_matrix,
-                                                  extrinsic_matrix,
-                                                  res_x, res_y)
+                rendered_img = self.renderCamView(
+                    self.triangle_mesh,
+                    self.tensor_tmesh,
+                    new_intrinsic_matrix,
+                    extrinsic_matrix,
+                    res_x,
+                    res_y,
+                )
                 imgpts = self.findApriltagsInFrame(
-                    rendered_img, intrinsics=new_intrinsic_matrix)
+                    rendered_img, intrinsics=new_intrinsic_matrix
+                )
                 if len(imgpts) != 0:
                     current_apriltags = self.getCorresponding3DPoints(
-                        imgpts, new_intrinsic_matrix, camera_pose.pose_mat, scene)
+                        imgpts, new_intrinsic_matrix, camera_pose.pose_mat, scene
+                    )
                     apriltag_3d_data |= current_apriltags
                 bbx = bbx + self.fixed_step_size
             bby = bby + self.fixed_step_size
@@ -208,17 +209,22 @@ class CameraCalibrationApriltag:
 
         @return   rays              List of rays.
         """
-        homogeneous_pose_mat = np.matmul(pose_mat,
-                                         np.array([0.0, 0.0, 0.0, 1]))[:3]
+        homogeneous_pose_mat = np.matmul(pose_mat, np.array([0.0, 0.0, 0.0, 1]))[:3]
         rays = []
         for id in img_pts:
             undistort_points = cv2.undistortPoints(
-                np.float64(img_pts[id]), intrinsic_matrix, None)[0][0]
+                np.float64(img_pts[id]), intrinsic_matrix, None
+            )[0][0]
             undistorted_pose_mat = np.matmul(
-                pose_mat, np.append(
-                    undistort_points, [
-                        1., 1, ]))[
-                0:3]
+                pose_mat,
+                np.append(
+                    undistort_points,
+                    [
+                        1.0,
+                        1,
+                    ],
+                ),
+            )[0:3]
             ray = [homogeneous_pose_mat, undistorted_pose_mat]
             rays.append(ray)
         rays = [[r[0], r[1] - r[0]] for r in rays]
@@ -238,21 +244,17 @@ class CameraCalibrationApriltag:
         for i, id in enumerate(img_pts.keys()):
             # Results of succesful hit of rays from image to mesh.
             # http://www.open3d.org/docs/release/python_api/open3d.t.geometry.RaycastingScene.html
-            pt = rays[i][:3] + rays[i][-3:] * cast_results['t_hit'][i]
+            pt = rays[i][:3] + rays[i][-3:] * cast_results["t_hit"][i]
             point = pt.numpy().tolist()
-            if float('inf') not in point or float('-inf') not in point:
+            if float("inf") not in point or float("-inf") not in point:
                 result_array_3d[id] = point
 
         return result_array_3d
 
     def getCorresponding3DPoints(self, points_2d, intrinsics, pose_mat, scene):
-        rays = self.createRaysForCasting(points_2d,
-                                         pose_mat,
-                                         intrinsics)
+        rays = self.createRaysForCasting(points_2d, pose_mat, intrinsics)
         cast_results = scene.cast_rays(rays)
-        return self.getImagePointsFromRayCasting(rays,
-                                                 points_2d,
-                                                 cast_results)
+        return self.getImagePointsFromRayCasting(rays, points_2d, cast_results)
 
     def calculatePointCorrespondences(self, intrinsics, pose_mat):
         """! Calculate correspondences between points in 2D and 3D using the scene mesh.
@@ -264,12 +266,12 @@ class CameraCalibrationApriltag:
         scene = o3d.t.geometry.RaycastingScene()
         if not self.triangle_mesh:
             self.triangle_mesh, self.tensor_tmesh = extractTriangleMesh(
-                self.map_info, DEFAULT_MESH_ROTATION)
+                self.map_info, DEFAULT_MESH_ROTATION
+            )
         scene.add_triangles(self.triangle_mesh)
-        result_array_3d = self.getCorresponding3DPoints(self.apriltags_2d_data,
-                                                        intrinsics,
-                                                        pose_mat,
-                                                        scene)
+        result_array_3d = self.getCorresponding3DPoints(
+            self.apriltags_2d_data, intrinsics, pose_mat, scene
+        )
         points_3d, points_2d = [], []
         for point in self.apriltags_2d_data:
             if point in result_array_3d:
@@ -284,8 +286,10 @@ class CameraCalibrationApriltag:
         @return  pose_mat   Camera pose matrix i.e camera to world transform
         """
         # We need a minimum of 4 points for SolvePNP algorithm to work.
-        if len(self.apriltags_2d_data) < MIN_APRILTAG_COUNT or \
-           len(self.result_data_3d) < MIN_APRILTAG_COUNT:
+        if (
+            len(self.apriltags_2d_data) < MIN_APRILTAG_COUNT
+            or len(self.result_data_3d) < MIN_APRILTAG_COUNT
+        ):
             return None
         points_3d, points_2d = [], []
         for key in self.apriltags_2d_data:
@@ -293,17 +297,17 @@ class CameraCalibrationApriltag:
                 points_3d.append(self.result_data_3d[key])
                 points_2d.append(self.apriltags_2d_data[key])
         if len(points_2d) < MIN_APRILTAG_COUNT:
-            raise TypeError(f"{len(points_2d)} apriltags found in camera feed, "
-                            f"at least {MIN_APRILTAG_COUNT} expected")
+            raise TypeError(
+                f"{len(points_2d)} apriltags found in camera feed, "
+                f"at least {MIN_APRILTAG_COUNT} expected"
+            )
         computed_pose_data = {
-            "camera points": np.array(
-                points_2d, dtype="float32"), "map points": np.array(
-                points_3d, dtype="float32"), "resolution": (
-                TILE_SIZE, TILE_SIZE)}
-        camera_intrinsics = CameraIntrinsics(
-            intrinsics=self.intrinsic_matrix_2d)
-        return CameraPose(pose=computed_pose_data,
-                          intrinsics=camera_intrinsics).pose_mat
+            "camera points": np.array(points_2d, dtype="float32"),
+            "map points": np.array(points_3d, dtype="float32"),
+            "resolution": (TILE_SIZE, TILE_SIZE),
+        }
+        camera_intrinsics = CameraIntrinsics(intrinsics=self.intrinsic_matrix_2d)
+        return CameraPose(pose=computed_pose_data, intrinsics=camera_intrinsics).pose_mat
 
     def getCameraFrustum(self):
         """! Creates 5 points, when connected by a line, looks like a camera view of the scene.
@@ -311,12 +315,12 @@ class CameraCalibrationApriltag:
         @return  points   Five points on image, when connected by a line looks like a frustum.
         """
         res_x, res_y = TILE_SIZE, TILE_SIZE
-        bottom_right_corner = cv2.undistortPoints(np.float64([res_x, res_y]),
-                                                  self.intrinsic_matrix_2d,
-                                                  None)[0][0].tolist()
-        top_left_corner = cv2.undistortPoints(np.float64([0, 0]),
-                                              self.intrinsic_matrix_2d,
-                                              None)[0][0].tolist()
+        bottom_right_corner = cv2.undistortPoints(
+            np.float64([res_x, res_y]), self.intrinsic_matrix_2d, None
+        )[0][0].tolist()
+        top_left_corner = cv2.undistortPoints(
+            np.float64([0, 0]), self.intrinsic_matrix_2d, None
+        )[0][0].tolist()
         return [
             [0, 0, 0],
             [bottom_right_corner[0], bottom_right_corner[1], 1],

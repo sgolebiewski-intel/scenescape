@@ -22,11 +22,11 @@ class ModelChain:
             self.stack = []
             pos = 0
             while True:
-                bidx = spec.find('[')
-                eidx = spec.find(']')
+                bidx = spec.find("[")
+                eidx = spec.find("]")
                 if bidx >= 0 and bidx < eidx:
                     self.push(spec[:bidx])
-                    inner = self.__class__(spec[bidx + 1:])
+                    inner = self.__class__(spec[bidx + 1 :])
                     self.stack.append(inner)
                     eidx = inner.pos + 1 + bidx
                     spec = spec[eidx:]
@@ -43,17 +43,17 @@ class ModelChain:
             return
 
         def push(self, spec):
-            idx = spec.find('+')
+            idx = spec.find("+")
             if idx >= 0 and idx < len(spec) - 1:
-                self.push(spec[:idx + 1])
-                self.push(spec[idx + 1:])
+                self.push(spec[: idx + 1])
+                self.push(spec[idx + 1 :])
             else:
-                idx = spec.find(',')
+                idx = spec.find(",")
                 if idx < 0:
                     if len(spec):
                         self.stack.append(spec)
                 else:
-                    clist = spec.split(',')
+                    clist = spec.split(",")
                     if len(clist[0]) == 0:
                         clist = clist[1:]
                     self.stack.extend(clist)
@@ -65,13 +65,14 @@ class ModelChain:
                 idx += 1
                 if isinstance(inner, ModelChain.Stack):
                     inner.groupDependencies(0)
-                elif isinstance(inner, str) and inner[-1] == '+':
-                    if isinstance(
-                            self.stack[idx], ModelChain.Stack) or idx + 1 == len(self.stack):
+                elif isinstance(inner, str) and inner[-1] == "+":
+                    if isinstance(self.stack[idx], ModelChain.Stack) or idx + 1 == len(
+                        self.stack
+                    ):
                         continue
                     self.groupDependencies(idx)
-                    if self.stack[idx][-1] == '+':
-                        self.stack[idx] = self.stack[idx:idx + 2]
+                    if self.stack[idx][-1] == "+":
+                        self.stack[idx] = self.stack[idx : idx + 2]
                         self.stack.pop(idx + 1)
             return
 
@@ -82,7 +83,7 @@ class ModelChain:
                 p = self.stack[idx]
                 if isinstance(p, str):
                     isParent = False
-                    if p[-1] == '+':
+                    if p[-1] == "+":
                         isParent = True
                         p = p[:-1]
                     chain = Inferizer(p, params, device)
@@ -93,8 +94,7 @@ class ModelChain:
                             children = Inferizer(children, params, device)
                             childModels = {children.modelID: children}
                         else:
-                            childModels = children.setupModels(
-                                params, chain.device)
+                            childModels = children.setupModels(params, chain.device)
                         for cm in childModels:
                             if childModels[cm].dependencies is None:
                                 childModels[cm].dependencies = chain.modelID
@@ -190,9 +190,12 @@ class ModelChain:
             for model in self.orderedModels:
                 chain = self.orderedModels[model]
                 dep = chain.dependencies
-                if dep and videoFrame.modelComplete(dep) \
-                        and not videoFrame.modelComplete(model) \
-                        and not videoFrame.modelPending(model):
+                if (
+                    dep
+                    and videoFrame.modelComplete(dep)
+                    and not videoFrame.modelComplete(model)
+                    and not videoFrame.modelPending(model)
+                ):
                     idata = videoFrame.prepareData(dep, model)
                     if idata is not None:
                         self.inputReady.append([model, idata])
@@ -233,18 +236,18 @@ class ModelChain:
         for otype in self.knownTypes:
             objects[otype] = []
 
-        if modelID not in videoFrame.output or len(
-                videoFrame.output[modelID].data) == 0:
+        if modelID not in videoFrame.output or len(videoFrame.output[modelID].data) == 0:
             return
         data_len = len(videoFrame.output[modelID].data)
-        if hasattr(
-                videoFrame.input[modelID],
-                'virtual') and videoFrame.input[modelID].virtual:
+        if (
+            hasattr(videoFrame.input[modelID], "virtual")
+            and videoFrame.input[modelID].virtual
+        ):
             data_len -= len(videoFrame.input[modelID].virtual)
         for idx in range(data_len):
             data = videoFrame.output[modelID].data[idx]
             for obj in data:
-                otype = obj['category']
+                otype = obj["category"]
 
                 if otype not in objects:
                     objects[otype] = []
@@ -252,40 +255,43 @@ class ModelChain:
         return objects
 
     def updateObjectsForModel(self, modelID, videoFrame):
-        if modelID not in videoFrame.output or len(
-                videoFrame.output[modelID].data) == 0:
+        if modelID not in videoFrame.output or len(videoFrame.output[modelID].data) == 0:
             return
         data_len = len(videoFrame.output[modelID].data)
-        if hasattr(
-                videoFrame.input[modelID],
-                'virtual') and videoFrame.input[modelID].virtual:
+        if (
+            hasattr(videoFrame.input[modelID], "virtual")
+            and videoFrame.input[modelID].virtual
+        ):
             data_len -= len(videoFrame.input[modelID].virtual)
         for idx in range(data_len):
             data = videoFrame.output[modelID].data[idx]
             invalid_objects = []
             for objidx, obj in enumerate(data):
-                otype = obj['category']
+                otype = obj["category"]
                 if otype == "vehicle" or otype == "bicycle":
                     # When scene is too dark all vehicle detections are false
                     # positives
-                    obj['debug_brightness'] = videoFrame.brightness
-                    if obj['debug_brightness'] < 65:
+                    obj["debug_brightness"] = videoFrame.brightness
+                    if obj["debug_brightness"] < 65:
                         invalid_objects.append(objidx)
                         continue
                 bbox = None
-                if 'bounding_box' in obj:
-                    bbox = obj['bounding_box']
-                if 'parent_bounding_box' in obj:
-                    bbox = obj['parent_bounding_box']
+                if "bounding_box" in obj:
+                    bbox = obj["bounding_box"]
+                if "parent_bounding_box" in obj:
+                    bbox = obj["parent_bounding_box"]
                 if bbox:
                     bounds = Rectangle(bbox)
                     agnostic = bounds
                     if not bounds.is3D:
-                        agnostic = videoFrame.cam.intrinsics.infer3DCoordsFrom2DDetection(
-                            bounds)
-                        obj['bounding_box_px'] = bounds.asDict
+                        agnostic = (
+                            videoFrame.cam.intrinsics.infer3DCoordsFrom2DDetection(
+                                bounds
+                            )
+                        )
+                        obj["bounding_box_px"] = bounds.asDict
 
-                    obj['bounding_box'] = agnostic.asDict
+                    obj["bounding_box"] = agnostic.asDict
                 if otype not in self.knownTypes:
                     self.knownTypes.append(otype)
             for idx in sorted(invalid_objects, reverse=True):
@@ -318,11 +324,11 @@ class ModelChain:
         flatObjects = []
 
         for _, ogroup in objects.items():
-            ModelChain.serializeVectors(ogroup, 'reid')
+            ModelChain.serializeVectors(ogroup, "reid")
             flatObjects.extend(ogroup)
 
         for idx, obj in enumerate(flatObjects):
-            obj['id'] = idx + 1
+            obj["id"] = idx + 1
 
         return flatObjects
 
@@ -333,7 +339,7 @@ class ModelChain:
             if isinstance(obj[key], np.ndarray):
                 vector = obj[key].flatten().tolist()
                 vector = struct.pack("256f", *vector)
-                vector = base64.b64encode(vector).decode('utf-8')
+                vector = base64.b64encode(vector).decode("utf-8")
                 obj[key] = vector
         return
 

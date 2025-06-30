@@ -21,9 +21,11 @@ def convert_json(bag_frames):
         data = json.load(json_str)
         txt = open(os.path.join(bag_frames, "cameras.txt"), "w")
         txt.write("#camera_id model width height params\n")
-        intrinsic = data['intrinsic_matrix']
-        txt.write(f"0 OPENCV {data['width']} {data['height']} {intrinsic[0]} {
-                  intrinsic[4]} {intrinsic[6]} {intrinsic[7]} 0 0 0 0")
+        intrinsic = data["intrinsic_matrix"]
+        txt.write(
+            f"0 OPENCV {data['width']} {data['height']} {intrinsic[0]} {
+                  intrinsic[4]} {intrinsic[6]} {intrinsic[7]} 0 0 0 0"
+        )
         txt.close()
 
 
@@ -39,5 +41,5 @@ def main():
     os.rename(args.bag_frames + "/color", args.bag_frames + "/rgb")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main() or 0)

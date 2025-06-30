@@ -18,25 +18,23 @@ from scene_common.timestamp import get_epoch_time, get_iso_time
 def build_argparser():
     parser = argparse.ArgumentParser()
     parser.add_argument("camera", help="IP/hostname of camera")
-    parser.add_argument("--auth", default="admin:admin123",
-                        help="user:pass to authenticate as")
     parser.add_argument(
-        "--flag",
-        action="store_true",
-        help="flag to do something")
+        "--auth", default="admin:admin123", help="user:pass to authenticate as"
+    )
+    parser.add_argument("--flag", action="store_true", help="flag to do something")
     return parser
 
 
 def main():
     args = build_argparser().parse_args()
 
-    idx = args.auth.find(':')
+    idx = args.auth.find(":")
     if idx < 0:
         print("Need both user and password separated by a colon for authentication")
         exit(1)
 
     user = args.auth[:idx]
-    password = args.auth[idx + 1:]
+    password = args.auth[idx + 1 :]
 
     auth = HTTPDigestAuth(user, password)
     cmd = "http://" + args.camera + "/cgi-bin/mediaFileFind.cgi?action=factory.create"
@@ -48,17 +46,22 @@ def main():
     ts_start = get_iso_time(start)
     ts_end = get_iso_time(now)
 
-    cmd = "http://" + args.camera + "/cgi-bin/mediaFileFind.cgi" \
-          "?action=findFile&object=%s&condition.Channel=0" \
-          "&condition.StartTime=%s" \
-          "&condition.EndTime=%s" % (factory, percent_encode(ts_start), percent_encode(ts_end))
+    cmd = (
+        "http://" + args.camera + "/cgi-bin/mediaFileFind.cgi"
+        "?action=findFile&object=%s&condition.Channel=0"
+        "&condition.StartTime=%s"
+        "&condition.EndTime=%s"
+        % (factory, percent_encode(ts_start), percent_encode(ts_end))
+    )
     res = requests.get(cmd, auth=auth)
 
     cookies = {"DhWebClientSessionID": str(factory)}
 
-    files = requests.get("http://" + args.camera + "/cgi-bin/mediaFileFind.cgi"
-                         "?action=findNextFile&object=%s&count=99" % (factory),
-                         auth=auth)
+    files = requests.get(
+        "http://" + args.camera + "/cgi-bin/mediaFileFind.cgi"
+        "?action=findNextFile&object=%s&count=99" % (factory),
+        auth=auth,
+    )
 
     for line in files.iter_lines():
         line = line.decode()
@@ -70,8 +73,10 @@ def main():
             with open("-".join(cmd.split(os.path.sep)[-6:]), "wb") as out:
                 out.write(resp.content)
 
-    cmd = "http://" + args.camera + "/cgi-bin/mediaFileFind.cgi" \
-          "?action=close&object=%s" % (factory)
+    cmd = (
+        "http://" + args.camera + "/cgi-bin/mediaFileFind.cgi"
+        "?action=close&object=%s" % (factory)
+    )
     ok = requests.get(cmd, auth=auth)
 
     return

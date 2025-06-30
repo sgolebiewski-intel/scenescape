@@ -29,7 +29,7 @@ def sanitizePath(user_path):
 
 class DetectorDS(Detector):
     def loadModule(self):
-        ds_module_path = os.environ.get('DS_MODULE')
+        ds_module_path = os.environ.get("DS_MODULE")
         self.model_loaded = False
         if ds_module_path is not None:
             log.info("DetectorDS: Loading dependencies")
@@ -41,8 +41,7 @@ class DetectorDS(Detector):
                 if mod_dir not in sys.path:
                     sys.path.append(mod_dir)
 
-                mod_spec = importlib.util.spec_from_file_location(
-                    mod_name, mod_path)
+                mod_spec = importlib.util.spec_from_file_location(mod_name, mod_path)
                 module = importlib.util.module_from_spec(mod_spec)
                 mod_spec.loader.exec_module(module)
 
@@ -67,7 +66,7 @@ class DetectorDS(Detector):
 
     def getPassword(self, password_path):
         password = None
-        with open(password_path, 'r') as fd:
+        with open(password_path, "r") as fd:
             password = fd.readline().strip()
 
         if password is None:
@@ -76,8 +75,7 @@ class DetectorDS(Detector):
 
     def modelLoad(self):
         if self.password is None:
-            log.error(
-                "DetectorDS: Need a valid password file path to open this model.")
+            log.error("DetectorDS: Need a valid password file path to open this model.")
             raise RuntimeError("DetectorDS: Valid Password file not provided")
         model_bytes = self.model_decrypt(self.password, self.model_path)
         self.model = self.core.read_model(model=io.BytesIO(model_bytes))
@@ -95,31 +93,30 @@ class DetectorDS(Detector):
         return
 
     def loadConfig(self, mdict):
-        if 'password_file' not in mdict:
+        if "password_file" not in mdict:
             log.error("DetectorDS: Need a password file path to open this model.")
             raise RuntimeError("DetectorDS: Password not provided")
 
-        self.password = self.getPassword(sanitizePath(mdict['password_file']))
-        self.model_path = sanitizePath(mdict['model_path'])
+        self.password = self.getPassword(sanitizePath(mdict["password_file"]))
+        self.model_path = sanitizePath(mdict["model_path"])
         if not self.model_loaded:
             self.exec_network = None
             raise RuntimeError("DetectorDS: Module not loaded")
 
-        if 'nms_threshold' in mdict:
-            self.nms_threshold = mdict['nms_threshold']
-        if 'threshold' in mdict:
-            self.threshold = mdict['threshold']
+        if "nms_threshold" in mdict:
+            self.nms_threshold = mdict["nms_threshold"]
+        if "threshold" in mdict:
+            self.threshold = mdict["threshold"]
 
         self.categories = None
-        if 'categories' in mdict:
-            if isinstance(mdict['categories'], list):
-                self.categories = mdict['categories']
-            elif isinstance(mdict['categories'], str):
-                categories_path = sanitizePath(mdict['categories'])
+        if "categories" in mdict:
+            if isinstance(mdict["categories"], list):
+                self.categories = mdict["categories"]
+            elif isinstance(mdict["categories"], str):
+                categories_path = sanitizePath(mdict["categories"])
                 with open(categories_path) as fd:
                     self.categories = json.load(fd)
-                    self.class_ids = [category['id']
-                                      for category in self.categories]
+                    self.class_ids = [category["id"] for category in self.categories]
 
         return
 
@@ -133,20 +130,28 @@ class DetectorDS(Detector):
         max_distance_sq = input.max_distance_squared
         for frame in input.data:
             in_frame, intrinsics_scaled = self.model_preprocess(
-                frame, intrinsics, (self.h, self.w))
-            prepared.append(IAData(in_frame, input.id, [
-                            frame.shape[1::-1], intrinsics_scaled, max_distance_sq]))
+                frame, intrinsics, (self.h, self.w)
+            )
+            prepared.append(
+                IAData(
+                    in_frame,
+                    input.id,
+                    [frame.shape[1::-1], intrinsics_scaled, max_distance_sq],
+                )
+            )
         return prepared
 
     def postprocess(self, result):
-        data = {'output': result.data}
+        data = {"output": result.data}
         shape, intrinsics, max_distance_sq = result.save
-        annotations = self.model_postprocess(data,
-                                             intrinsics,
-                                             (self.h, self.w),
-                                             self.class_ids,
-                                             score_threshold=self.threshold,
-                                             nms_threshold=self.nms_threshold)
+        annotations = self.model_postprocess(
+            data,
+            intrinsics,
+            (self.h, self.w),
+            self.class_ids,
+            score_threshold=self.threshold,
+            nms_threshold=self.nms_threshold,
+        )
 
         return self.postprocessResults(annotations, max_distance_sq)
 
@@ -154,11 +159,13 @@ class DetectorDS(Detector):
         objects = []
 
         for ann in annotations:
-            category_id = ann['category_id']
+            category_id = ann["category_id"]
             category = next(
-                (item['name'] for item in self.categories if item['id'] == category_id), None)
+                (item["name"] for item in self.categories if item["id"] == category_id),
+                None,
+            )
 
-            if ann['score'] < self.threshold:
+            if ann["score"] < self.threshold:
                 continue
 
             # Skip detections for unknown categories
@@ -166,30 +173,34 @@ class DetectorDS(Detector):
                 continue
 
             if max_distance_sq and max_distance_sq > 0:
-                obj_dist = ann['translation'][0] ** 2 + \
-                    ann['translation'][1] ** 2 + ann['translation'][2] ** 2
+                obj_dist = (
+                    ann["translation"][0] ** 2
+                    + ann["translation"][1] ** 2
+                    + ann["translation"][2] ** 2
+                )
                 if obj_dist > max_distance_sq:
                     continue
 
             obj = {}
-            obj['category'] = category
-            obj['confidence'] = ann['score']
-            obj['translation'] = ann['translation']
-            obj['rotation'] = ann['rotation']
-            obj['size'] = ann['dimension']
-            obj['id'] = len(objects) + 1
+            obj["category"] = category
+            obj["confidence"] = ann["score"]
+            obj["translation"] = ann["translation"]
+            obj["rotation"] = ann["rotation"]
+            obj["size"] = ann["dimension"]
+            obj["id"] = len(objects) + 1
 
-            x_min, y_min, z_min = obj['translation']
-            x_size, y_size, z_size = obj['size']
+            x_min, y_min, z_min = obj["translation"]
+            x_size, y_size, z_size = obj["size"]
             x_max, y_max, z_max = x_min + x_size, y_min + y_size, z_min + z_size
-            bounding_box = Rectangle(origin=Point(x_min, y_min, z_min),
-                                     opposite=Point(x_max, y_max, z_max))
+            bounding_box = Rectangle(
+                origin=Point(x_min, y_min, z_min), opposite=Point(x_max, y_max, z_max)
+            )
 
             com_w, com_h = bounding_box.width / 3, bounding_box.height / 4
-            com_x, com_y = int(
-                bounding_box.x + com_w), int(bounding_box.y + com_h)
-            center_of_mass = Rectangle(origin=Point(com_x, com_y, com_x),
-                                       size=(com_w, com_h, com_w))
-            obj['center_of_mass'] = center_of_mass.asDict
+            com_x, com_y = int(bounding_box.x + com_w), int(bounding_box.y + com_h)
+            center_of_mass = Rectangle(
+                origin=Point(com_x, com_y, com_x), size=(com_w, com_h, com_w)
+            )
+            obj["center_of_mass"] = center_of_mass.asDict
             objects.append(obj)
         return objects

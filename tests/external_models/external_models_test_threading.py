@@ -15,15 +15,18 @@ TEST_NAME = "Geti: Threading Support test"
 
 def build_argparser():
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument(
         "-z",
         "--zip",
         type=str,
         help="Path to the .zip file of the model.",
-        required=True)
-    parser.add_argument("-i", "--inputs", type=str,
-                        help="Camera device you are using.", required=True)
+        required=True,
+    )
+    parser.add_argument(
+        "-i", "--inputs", type=str, help="Camera device you are using.", required=True
+    )
     return parser
 
 
@@ -39,12 +42,12 @@ def test_threading_support():
         common.clean_model(env_model)
         cfg_file = common.prepare_model(zip_path, env_model)
 
-        os.environ['INPUTS'] = args.inputs
-        os.environ['MODELS'] = env_model
-        os.environ['MODEL_CONFIG'] = cfg_file
-        os.environ['VIDEO_FRAMES'] = "500"
+        os.environ["INPUTS"] = args.inputs
+        os.environ["MODELS"] = env_model
+        os.environ["MODEL_CONFIG"] = cfg_file
+        os.environ["VIDEO_FRAMES"] = "500"
 
-        testCommand = ['tests/perf_tests/tc_inference_threading.sh']
+        testCommand = ["tests/perf_tests/tc_inference_threading.sh"]
 
         testResult = common.run_and_check_output(testCommand, env_model)
 
@@ -61,5 +64,5 @@ def test_threading_support():
     return testResult
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(test_threading_support() or 0)

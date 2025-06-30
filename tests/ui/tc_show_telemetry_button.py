@@ -28,14 +28,16 @@ NO_FPS_STATUS = "--"
 class WillOurShipGo(UserInterfaceTest):
     def __init__(self, testName, request, recordXMLAttribute):
         super().__init__(testName, request, recordXMLAttribute)
-        self.sceneName = self.params['scene']
-        self.sceneUID = self.params['scene_id']
+        self.sceneName = self.params["scene"]
+        self.sceneUID = self.params["scene_id"]
 
-        self.pubsub = PubSub(self.params['auth'],
-                             None,
-                             self.params['rootcert'],
-                             self.params['broker_url'],
-                             int(self.params['broker_port']))
+        self.pubsub = PubSub(
+            self.params["auth"],
+            None,
+            self.params["rootcert"],
+            self.params["broker_url"],
+            int(self.params["broker_port"]),
+        )
 
         self.pubsub.connect()
         self.pubsub.loopStart()
@@ -48,12 +50,13 @@ class WillOurShipGo(UserInterfaceTest):
         try:
             waitTopic = PubSub.formatTopic(PubSub.DATA_CAMERA, camera_id="+")
             assert self.waitForTopic(
-                waitTopic, MAX_CONTROLLER_WAIT), "Percebro not ready"
+                waitTopic, MAX_CONTROLLER_WAIT
+            ), "Percebro not ready"
 
-            waitTopic = PubSub.formatTopic(
-                PubSub.DATA_REGULATED, scene_id=self.sceneUID)
+            waitTopic = PubSub.formatTopic(PubSub.DATA_REGULATED, scene_id=self.sceneUID)
             assert self.waitForTopic(
-                waitTopic, MAX_CONTROLLER_WAIT), "Scene controller not ready"
+                waitTopic, MAX_CONTROLLER_WAIT
+            ), "Scene controller not ready"
 
             assert self.login()
             assert self.navigateToScene(self.sceneName)
@@ -94,5 +97,5 @@ def main():
     return test_telemetry_button(None, None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     os._exit(main() or 0)

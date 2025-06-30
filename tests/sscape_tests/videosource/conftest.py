@@ -17,7 +17,7 @@ TEST_NAME = "NEX-T10453"
 
 
 def pytest_sessionstart():
-    """! Executes at the beginning of the session. """
+    """! Executes at the beginning of the session."""
 
     print(f"Executing: {TEST_NAME}")
 
@@ -25,29 +25,29 @@ def pytest_sessionstart():
 
 
 def pytest_sessionfinish(exitstatus):
-    """! Executes at the end of the session. """
+    """! Executes at the end of the session."""
 
     common.record_test_result(TEST_NAME, exitstatus)
     return
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def videoSourceObj():
-    """! Creates a VideoSource object for this module """
+    """! Creates a VideoSource object for this module"""
 
     intrinsics = [1271, 1271, 320, 240]
     return VideoSource(VIDEO_PATH, intrinsics, None)
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def camIntrinsics():
-    """! Creates a CameraIntrinsics object for this module """
+    """! Creates a CameraIntrinsics object for this module"""
 
     intrinsics = CameraIntrinsics([1271, 1271, 320, 240])
     return intrinsics
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def getFrame(videoSourceObj):
     """! Creates a getFrame object for this module
 

@@ -5,6 +5,7 @@
 
 import collections.abc as collections
 import torch
+
 string_classes = str
 
 
@@ -18,5 +19,4 @@ def map_tensor(input_, func):
     elif isinstance(input_, collections.Sequence):
         return [map_tensor(sample, func) for sample in input_]
     else:
-        raise TypeError(
-            f'input must be tensor, dict or list; found {type(input_)}')
+        raise TypeError(f"input must be tensor, dict or list; found {type(input_)}")

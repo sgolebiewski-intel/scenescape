@@ -15,9 +15,9 @@ random_array = np.random.randint(255, size=(5, 10))
 # Tests for NumpyEncoder class
 
 
-@pytest.mark.parametrize("object, expected_output",
-                         [(random_array, random_array.tolist()),
-                          ([1, 2, 3], None)])
+@pytest.mark.parametrize(
+    "object, expected_output", [(random_array, random_array.tolist()), ([1, 2, 3], None)]
+)
 def test_default(object, expected_output):
     """! Verifies the output of 'detector.NumpyEncoder.default()' method.
 

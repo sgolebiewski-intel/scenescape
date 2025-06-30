@@ -25,17 +25,18 @@ def enter_and_validate_parameters(browser, button_id, initial_value, step):
     # Enter parameters
     assert common.wait_for_elements(browser, "id_intrinsics_fx", findBy=By.ID)
     parameter_elems = browser.find_elements(
-        By.CSS_SELECTOR, "[id^=id_intrinsics], [id^=id_distortion]")
+        By.CSS_SELECTOR, "[id^=id_intrinsics], [id^=id_distortion]"
+    )
     value = initial_value
     for elem in parameter_elems:
         readonly = elem.get_attribute("readonly")
         catch_value = elem.get_attribute("value")
         if not readonly:
             elem.clear()
-            elem.send_keys('{:.1f}'.format(value))
+            elem.send_keys("{:.1f}".format(value))
         value += step
 
-    print('Saving changes...')
+    print("Saving changes...")
     browser.find_element(By.ID, button_id).click()
 
     assert common.wait_for_elements(browser, camera1_element_id)
@@ -44,16 +45,18 @@ def enter_and_validate_parameters(browser, button_id, initial_value, step):
     # Validate parameters
     assert common.wait_for_elements(browser, "id_intrinsics_fx", findBy=By.ID)
     parameter_elems = browser.find_elements(
-        By.CSS_SELECTOR, "[id^=id_intrinsics], [id^=id_distortion]")
+        By.CSS_SELECTOR, "[id^=id_intrinsics], [id^=id_distortion]"
+    )
     value = initial_value
     for elem in parameter_elems:
-        current_value = elem.get_attribute('value')
+        current_value = elem.get_attribute("value")
         readonly = elem.get_attribute("readonly")
         if not readonly:
             print(f"Expected value: {value}, Current value: {current_value}")
-            if current_value != '{:.1f}'.format(value):
+            if current_value != "{:.1f}".format(value):
                 raise RuntimeError(
-                    f"Value mismatch: Expected {value}, but current {current_value}.")
+                    f"Value mismatch: Expected {value}, but current {current_value}."
+                )
         value += step
     return True
 
@@ -73,16 +76,13 @@ def test_camera_intrinsics_main(params, record_xml_attribute):
         print("Executing: " + TEST_NAME)
         browser = Browser()
         assert common.check_page_login(browser, params)
-        buttons = {
-            "top_save": 5,
-            "bottom_save": 10
-        }
+        buttons = {"top_save": 5, "bottom_save": 10}
         for button_id, initial_value in buttons.items():
             print(
-                f"Entering parameters, clicking {button_id} button, and validating parameters...")
+                f"Entering parameters, clicking {button_id} button, and validating parameters..."
+            )
             assert common.navigate_to_scene(browser, common.TEST_SCENE_NAME)
-            assert enter_and_validate_parameters(
-                browser, button_id, initial_value, 5)
+            assert enter_and_validate_parameters(browser, button_id, initial_value, 5)
 
         exit_code = 0
 

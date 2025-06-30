@@ -27,24 +27,25 @@ def test_scene_details_main(params, record_xml_attribute):
         assert common.check_page_login(browser, params)
         scene_name = "Demo"
         browser.find_element(
-            By.CSS_SELECTOR,
-            ".navbar-nav > .nav-item:nth-child(1) > .nav-link").click()
+            By.CSS_SELECTOR, ".navbar-nav > .nav-item:nth-child(1) > .nav-link"
+        ).click()
         assert scene_name in browser.page_source
 
         print("Scene is accessible from the list of scenes")
         browser.find_element(
-            By.XPATH,
-            "//*[text()='" +
-            scene_name +
-            "']/parent::*/div[2]/div/a[1]").click()
+            By.XPATH, "//*[text()='" + scene_name + "']/parent::*/div[2]/div/a[1]"
+        ).click()
         time.sleep(3)
-        status_scene_name = browser.find_element(
-            By.ID, "scene_name").is_displayed()
+        status_scene_name = browser.find_element(By.ID, "scene_name").is_displayed()
         status_floorplan = browser.find_element(
-            By.CSS_SELECTOR, "#svgout > image:nth-child(4)").is_displayed()
-        status_cameras = browser.find_element(
-            By.CSS_SELECTOR, "#camera1").is_displayed()
-        assert status_scene_name is True or status_floorplan is True or status_cameras is True
+            By.CSS_SELECTOR, "#svgout > image:nth-child(4)"
+        ).is_displayed()
+        status_cameras = browser.find_element(By.CSS_SELECTOR, "#camera1").is_displayed()
+        assert (
+            status_scene_name is True
+            or status_floorplan is True
+            or status_cameras is True
+        )
         print("Details are displayed in the scene summary view")
         exit_code = 0
     finally:
@@ -54,5 +55,5 @@ def test_scene_details_main(params, record_xml_attribute):
     return exit_code
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(test_scene_details_main() or 0)

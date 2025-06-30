@@ -22,25 +22,29 @@ connected = False
 
 def buildArgparser():
     parser = ArgumentParser()
-    parser.add_argument("input", nargs="+",
-                        help="Detection JSON file text files.")
-    parser.add_argument("--rate", default=30.0, type=float,
-                        help="Framerate desired to push the detections at.")
-    parser.add_argument("--frames", type=int,
-                        help="Number of 'frames' desired to push.")
+    parser.add_argument("input", nargs="+", help="Detection JSON file text files.")
+    parser.add_argument(
+        "--rate",
+        default=30.0,
+        type=float,
+        help="Framerate desired to push the detections at.",
+    )
+    parser.add_argument("--frames", type=int, help="Number of 'frames' desired to push.")
     parser.add_argument(
         "-b",
         "--broker",
         default="broker.scenescape.intel.com",
-        help="hostname or IP of MQTT broker")
+        help="hostname or IP of MQTT broker",
+    )
     parser.add_argument(
         "--rootcert",
         default="/run/secrets/certs/scenescape-ca.pem",
-        help="path to ca certificate")
+        help="path to ca certificate",
+    )
     parser.add_argument("--cert", help="path to client certificate")
     parser.add_argument(
-        "--auth",
-        help="user:password or JSON file for MQTT authentication")
+        "--auth", help="user:password or JSON file for MQTT authentication"
+    )
     parser.add_argument("--loop", help="Loop input files", action="store_true")
     return parser
 
@@ -48,7 +52,7 @@ def buildArgparser():
 def processObjects(objects):
     sorted_objs = {}
     for obj in objects:
-        otype = obj['category']
+        otype = obj["category"]
         if otype not in sorted_objs:
             sorted_objs[otype] = []
         sorted_objs[otype].append(obj)
@@ -61,15 +65,15 @@ def load_input_files(inputs, frames):
     for input in inputs:
         print("Loading input file {}".format(input))
         try:
-            with open(input, 'r') as det_file:
+            with open(input, "r") as det_file:
                 cur_file = {}
-                cur_file['data'] = det_file.readlines()
+                cur_file["data"] = det_file.readlines()
                 if frames is not None:
-                    cur_file['frames'] = frames
+                    cur_file["frames"] = frames
                 else:
-                    cur_file['frames'] = len(cur_file['data'])
-                cur_file['current'] = 0
-                cur_file['sent'] = 0
+                    cur_file["frames"] = len(cur_file["data"])
+                cur_file["current"] = 0
+                cur_file["sent"] = 0
                 detection_data.append(cur_file)
                 detection_files += 1
         except BaseException:
@@ -140,26 +144,25 @@ def main():
 
         jcount, camDetect, frame = mgr.nextFrame(scene=None, loop=args.loop)
 
-        if len(camDetect['objects']):
-            sorted_objs = processObjects(camDetect['objects'])
+        if len(camDetect["objects"]):
+            sorted_objs = processObjects(camDetect["objects"])
 
-            camDetect['timestamp'] = get_iso_time(now)
-            camDetect['frame'] = current_frame_out
+            camDetect["timestamp"] = get_iso_time(now)
+            camDetect["frame"] = current_frame_out
 
             for category in sorted_objs:
-                camDetect['objects'] = sorted_objs[category]
-                camDetect['real_stamp'] = get_epoch_time()
+                camDetect["objects"] = sorted_objs[category]
+                camDetect["real_stamp"] = get_epoch_time()
                 line = json.dumps(camDetect).strip()
-                topic = PubSub.formatTopic(
-                    PubSub.DATA_CAMERA, camera_id=camDetect['id'])
+                topic = PubSub.formatTopic(PubSub.DATA_CAMERA, camera_id=camDetect["id"])
                 mqttinfo = client.publish(topic, line)
                 if not mqttinfo.is_published():
                     print("Failed sending!", mqttinfo.rc)
 
             total_messages_published += 1
 
-        total_detections_published += len(camDetect['objects'])
-        current_objects_published += len(camDetect['objects'])
+        total_detections_published += len(camDetect["objects"])
+        current_objects_published += len(camDetect["objects"])
         current_frame_out += 1
 
         if args.frames and current_frame_out >= args.frames:
@@ -177,21 +180,30 @@ def main():
             current_time = time_end - test_start_time
             message_rate = total_messages_published / current_time
             usable_message_rate = total_loops_published / current_time
-            print("Det {}, obj {}, Current rate {} / {}"
-                  .format(total_messages_published, total_detections_published,
-                          message_rate, usable_message_rate))
+            print(
+                "Det {}, obj {}, Current rate {} / {}".format(
+                    total_messages_published,
+                    total_detections_published,
+                    message_rate,
+                    usable_message_rate,
+                )
+            )
             sys.stdout.flush()
     test_end_time = get_epoch_time()
     total_time = test_end_time - test_start_time
 
     message_rate = total_messages_published / total_time
     object_rate = total_detections_published / total_time
-    print("GEN: {}: Ran {:.3f} s, {} messages, {} detections published" .format(
-        TestName, total_time, total_messages_published, total_detections_published))
+    print(
+        "GEN: {}: Ran {:.3f} s, {} messages, {} detections published".format(
+            TestName, total_time, total_messages_published, total_detections_published
+        )
+    )
     print(
         "GEN: Message Rate {:.3f}, Detection Rate {:.3f}".format(
-            message_rate,
-            object_rate))
+            message_rate, object_rate
+        )
+    )
     if message_rate * 1.10 < args.rate:
         print("GEN: WARNING: Test could not keep up with desired rate.")
     time.sleep(20)
@@ -199,5 +211,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     os._exit(main() or 0)

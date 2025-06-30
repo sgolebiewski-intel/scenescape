@@ -11,8 +11,9 @@ import numpy as np
 from conftest import scene_map
 
 
-def verify_findApriltagsInFrame(camcalibration, src_image, intrinsics,
-                                actual_centers_2d, relative_tolerance):
+def verify_findApriltagsInFrame(
+    camcalibration, src_image, intrinsics, actual_centers_2d, relative_tolerance
+):
     """! Test for function that computes apriltag centers in an image.
     @param    camcalibration       controller test class object.
     @param    src_image            input image to compute apriltags.
@@ -24,7 +25,8 @@ def verify_findApriltagsInFrame(camcalibration, src_image, intrinsics,
     """
     img = cv2.imread(src_image)
     apriltag2d_centers = camcalibration.findApriltagsInFrame(
-        img, store=True, intrinsics=intrinsics)
+        img, store=True, intrinsics=intrinsics
+    )
 
     assert len(apriltag2d_centers) == 5
     for tag_id, tag in apriltag2d_centers.items():
@@ -33,8 +35,9 @@ def verify_findApriltagsInFrame(camcalibration, src_image, intrinsics,
     return
 
 
-def verify_getCameraPoseInScene(camcalibration, apriltags2d, result_data,
-                                pose, intrinsics, relative_tolerance):
+def verify_getCameraPoseInScene(
+    camcalibration, apriltags2d, result_data, pose, intrinsics, relative_tolerance
+):
     """! Test for function that computes real world pose based on apriltag centers.
     @param    camcalibration       controller test class object.
     @param    apriltags2d          input image to compute apriltags.
@@ -75,18 +78,21 @@ def verify_getCameraFrustum(camcalibration, frustum, relative_tolerance):
 
 
 def test_cameraCalibrationApriltag(
-        camcalibration,
-        apriltags2d,
-        result_data,
-        pose,
-        intrinsics,
-        actual_centers_2d,
-        frustum,
-        relative_tolerance):
-    verify_findApriltagsInFrame(camcalibration, scene_map, intrinsics,
-                                actual_centers_2d, relative_tolerance)
-    verify_getCameraPoseInScene(camcalibration, apriltags2d, result_data,
-                                pose, intrinsics, relative_tolerance)
+    camcalibration,
+    apriltags2d,
+    result_data,
+    pose,
+    intrinsics,
+    actual_centers_2d,
+    frustum,
+    relative_tolerance,
+):
+    verify_findApriltagsInFrame(
+        camcalibration, scene_map, intrinsics, actual_centers_2d, relative_tolerance
+    )
+    verify_getCameraPoseInScene(
+        camcalibration, apriltags2d, result_data, pose, intrinsics, relative_tolerance
+    )
     verify_getCameraFrustum(camcalibration, frustum, relative_tolerance)
 
     return

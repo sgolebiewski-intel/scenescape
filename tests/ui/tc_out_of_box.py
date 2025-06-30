@@ -45,11 +45,7 @@ def on_connect(mqttc, data, flags, rc):
         topic = PubSub.formatTopic(PubSub.IMAGE_CAMERA, camera_id=cam)
         mqttc.subscribe(topic, 0)
         print("Subscribed to the topic {}".format(topic))
-        mqttc.publish(
-            PubSub.formatTopic(
-                PubSub.CMD_CAMERA,
-                camera_id=cam),
-            "getimage")
+        mqttc.publish(PubSub.formatTopic(PubSub.CMD_CAMERA, camera_id=cam), "getimage")
     return
 
 
@@ -63,38 +59,34 @@ def on_image_message(mqttc, condlock, msg):
     global counter_img
     global last_image
     topic = PubSub.parseTopic(msg.topic)
-    camera_id = topic['camera_id']
+    camera_id = topic["camera_id"]
 
     real_msg = str(msg.payload.decode("utf-8"))
     json_data = json.loads(real_msg)
-    if 'image' in json_data:
+    if "image" in json_data:
         # Ignore images we already looked at, by timestamp.
-        if json_data['timestamp'] not in timestamp_img:
-            img = json_data['image']
+        if json_data["timestamp"] not in timestamp_img:
+            img = json_data["image"]
             im_bytes = base64.b64decode(img)
             img_as_np = np.frombuffer(im_bytes, dtype=np.uint8)
-            last_image[camera_id] = cv2.imdecode(
-                img_as_np, flags=cv2.IMREAD_COLOR)
+            last_image[camera_id] = cv2.imdecode(img_as_np, flags=cv2.IMREAD_COLOR)
 
         if counter_img[camera_id] < MAX_IMAGES:
             # Ignore images we already looked at, by timestamp.
-            if json_data['timestamp'] not in timestamp_img:
-                img = json_data['image']
+            if json_data["timestamp"] not in timestamp_img:
+                img = json_data["image"]
                 im_bytes = base64.b64decode(img)
                 im_arr = np.frombuffer(im_bytes, dtype=np.uint8)
 
                 image_history[camera_id].append(
-                    cv2.imdecode(im_arr, flags=cv2.IMREAD_COLOR))
+                    cv2.imdecode(im_arr, flags=cv2.IMREAD_COLOR)
+                )
                 counter_img[camera_id] += 1
                 condlock.acquire()
                 condlock.notify()
                 condlock.release()
 
-    mqttc.publish(
-        PubSub.formatTopic(
-            PubSub.CMD_CAMERA,
-            camera_id=camera_id),
-        "getimage")
+    mqttc.publish(PubSub.formatTopic(PubSub.CMD_CAMERA, camera_id=camera_id), "getimage")
     return
 
 
@@ -103,16 +95,14 @@ def get_person_marks(browser):
     @param   browser     Object wrapping the Selenium driver.
     @return  BOOL        Boolean representing a successful reset.
     """
-    marks_class = 'mark'
+    marks_class = "mark"
     marks_found = []
     assert common.wait_for_elements(
-        browser,
-        marks_class,
-        findBy=By.CLASS_NAME,
-        maxWait=20)
+        browser, marks_class, findBy=By.CLASS_NAME, maxWait=20
+    )
     get_marks = browser.find_elements(By.CLASS_NAME, marks_class)
     for marks in get_marks:
-        marks_found.append(marks.get_attribute('transform'))
+        marks_found.append(marks.get_attribute("transform"))
     return marks_found
 
 
@@ -122,8 +112,7 @@ def check_person_marks(browser, camera_id):
     @return  BOOL       Boolean representing a successful reset.
     """
     global UI_MARKS_DELAY
-    video_frame = common.wait_for_elements(
-        browser, camera_id, findBy=By.CSS_SELECTOR)
+    video_frame = common.wait_for_elements(browser, camera_id, findBy=By.CSS_SELECTOR)
 
     marks_before = marks_after = []
     attempt = 0
@@ -173,11 +162,12 @@ def test_out_of_box(params, record_xml_attribute):
 
     try:
         client = PubSub(
-            params['auth'],
+            params["auth"],
             None,
-            params['rootcert'],
-            params['broker_url'],
-            userdata=message_received)
+            params["rootcert"],
+            params["broker_url"],
+            userdata=message_received,
+        )
 
         global counter_img
         global last_image
@@ -189,10 +179,8 @@ def test_out_of_box(params, record_xml_attribute):
             image_history[cam] = []
             counter_img[cam] = 0
             client.addCallback(
-                PubSub.formatTopic(
-                    PubSub.IMAGE_CAMERA,
-                    camera_id=cam),
-                on_image_message)
+                PubSub.formatTopic(PubSub.IMAGE_CAMERA, camera_id=cam), on_image_message
+            )
         client.connect()
 
         # collects images
@@ -201,7 +189,7 @@ def test_out_of_box(params, record_xml_attribute):
         client.loopStart()
 
         for cam in cameras:
-            while (counter_img[cam] < MAX_IMAGES):
+            while counter_img[cam] < MAX_IMAGES:
                 message_received.wait(timeout=TEST_WAIT_TIME)
                 print("{} images obtained".format(counter_img[cam]))
                 testTime = get_epoch_time()
@@ -225,10 +213,10 @@ def test_out_of_box(params, record_xml_attribute):
         browser = Browser()
         assert common.check_page_login(browser, params)
         assert common.navigate_to_scene(browser, "Retail")
-        assert check_person_marks(browser, '#camera1')
+        assert check_person_marks(browser, "#camera1")
 
         assert common.navigate_to_scene(browser, "Queuing")
-        assert check_person_marks(browser, '#atag-qcam1')
+        assert check_person_marks(browser, "#atag-qcam1")
 
         print("Camera images ARE updating on the scene")
         exit_code = 0

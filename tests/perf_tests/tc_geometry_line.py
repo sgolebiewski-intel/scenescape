@@ -14,9 +14,7 @@ def compareLines2D(cpp_ln: cppLine, py_ln: pyLine):
     delta_angle = abs(cpp_ln.angle - py_ln.angle)
     delta_length = abs(cpp_ln.length - py_ln.length)
     delta_azimuth = abs(cpp_ln.azimuth - py_ln.azimuth)
-    if delta_angle > 0.01 \
-            or delta_length > 0.01 \
-            or delta_azimuth > 0.01:
+    if delta_angle > 0.01 or delta_length > 0.01 or delta_azimuth > 0.01:
         print("Angle:", cpp_ln.angle, py_ln.angle)
         print("Length:", cpp_ln.length, py_ln.length)
         print("Azimuth:", cpp_ln.azimuth, py_ln.azimuth)
@@ -90,13 +88,13 @@ def testLines2DCross(start_range, stop_range, step):
                 cpp_ln = cppLine(cpp_pt1, cpp_pt2)
                 py_ln = pyLine(py_pt1, py_pt2)
 
-                cpp_pt3_i = cppPoint(
-                    (x + y) / 2, ((x + y) / 2) * m + b, polar=False)
+                cpp_pt3_i = cppPoint((x + y) / 2, ((x + y) / 2) * m + b, polar=False)
 
                 if b == 0:
                     b = 0.5
                 cpp_pt3_o = cppPoint(
-                    (x + y) / 2, ((x + y) / 2) * (m * 1.1) + (b * 1.1), polar=False)
+                    (x + y) / 2, ((x + y) / 2) * (m * 1.1) + (b * 1.1), polar=False
+                )
 
                 exp_y = cpp_ln.isPointOnLine(cpp_pt3_i)
                 exp_n = cpp_ln.isPointOnLine(cpp_pt3_o)
@@ -106,21 +104,11 @@ def testLines2DCross(start_range, stop_range, step):
                 if exp_n:
                     print("Failed at line v Point OUT", x, y, cpp_pt3_o)
                     return False
-                if exp_y != py_ln.isPointOnLine(
-                        pyPoint(cpp_pt3_i.x, cpp_pt3_i.y)):
-                    print(
-                        "Failed at line v Point IN vs legacy",
-                        x,
-                        y,
-                        cpp_pt3_i)
+                if exp_y != py_ln.isPointOnLine(pyPoint(cpp_pt3_i.x, cpp_pt3_i.y)):
+                    print("Failed at line v Point IN vs legacy", x, y, cpp_pt3_i)
                     return False
-                if exp_n != py_ln.isPointOnLine(
-                        pyPoint(cpp_pt3_o.x, cpp_pt3_o.y)):
-                    print(
-                        "Failed at line v Point OUT vs legacy",
-                        x,
-                        y,
-                        cpp_pt3_i)
+                if exp_n != py_ln.isPointOnLine(pyPoint(cpp_pt3_o.x, cpp_pt3_o.y)):
+                    print("Failed at line v Point OUT vs legacy", x, y, cpp_pt3_i)
                     return False
     log.log("Lines cross points: ok")
     return True
@@ -134,5 +122,5 @@ def test():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(test() or 0)

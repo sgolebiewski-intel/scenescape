@@ -37,16 +37,16 @@ class RESTClient:
         """
         user = pw = None
         if os.path.exists(auth):
-            with open(auth, encoding='utf-8') as json_file:
+            with open(auth, encoding="utf-8") as json_file:
                 data = json.load(json_file)
-            user = data['user']
-            pw = data['password']
+            user = data["user"]
+            pw = data["password"]
         else:
-            sep = auth.find(':')
+            sep = auth.find(":")
             if sep < 0:
                 raise ValueError("Invalid user/password")
             user = auth[:sep]
-            pw = auth[sep + 1:]
+            pw = auth[sep + 1 :]
         res = self.authenticate(user, pw)
         if not res:
             error_message = (
@@ -60,12 +60,15 @@ class RESTClient:
 
     @property
     def isAuthenticated(self):
-        return hasattr(self, 'token') and self.token is not None
+        return hasattr(self, "token") and self.token is not None
 
     def decodeReply(self, reply, expectedStatus, successContent=None):
         result = RESTResult(statusCode=reply.status_code)
         decoded = False
-        if 'Content-Type' in reply.headers and reply.headers['Content-Type'] == "application/json":
+        if (
+            "Content-Type" in reply.headers
+            and reply.headers["Content-Type"] == "application/json"
+        ):
             try:
                 content = json.loads(reply.content)
                 decoded = True
@@ -73,13 +76,13 @@ class RESTClient:
                 content = reply.content
         else:
             content = {
-                'data': reply.content,
+                "data": reply.content,
             }
-            if 'Content-Disposition' in reply.headers:
+            if "Content-Disposition" in reply.headers:
                 fname = re.findall(
-                    "filename=(.+)",
-                    reply.headers['Content-Disposition'])[0]
-                content['filename'] = fname
+                    "filename=(.+)", reply.headers["Content-Disposition"]
+                )[0]
+                content["filename"] = fname
             decoded = True
 
         if reply.status_code == expectedStatus:
@@ -106,21 +109,18 @@ class RESTClient:
         try:
             reply = self.session.post(
                 auth_url,
-                data={
-                    'username': user,
-                    'password': password},
-                verify=self.rootcert)
+                data={"username": user, "password": password},
+                verify=self.rootcert,
+            )
         except requests.exceptions.ConnectionError as err:
-            result = RESTResult(
-                "ConnectionError", errors=(
-                    "Connection error", str(err)))
+            result = RESTResult("ConnectionError", errors=("Connection error", str(err)))
         else:
             result = self.decodeReply(
-                reply, HTTPStatus.OK, successContent={
-                    'authenticated': True})
+                reply, HTTPStatus.OK, successContent={"authenticated": True}
+            )
             if reply.status_code == HTTPStatus.OK:
                 data = json.loads(reply.content)
-                self.token = data['token']
+                self.token = data["token"]
         return result
 
     def dataIsNested(self, data):
@@ -130,12 +130,13 @@ class RESTClient:
         return False
 
     def prepareDataArgs(self, data, files):
-        data_args = {'data': data}
+        data_args = {"data": data}
         if not files:
-            data_args = {'json': data}
+            data_args = {"json": data}
         elif self.dataIsNested(data):
             raise ValueError(
-                "requests library can't combine files and nested dictionaries")
+                "requests library can't combine files and nested dictionaries"
+            )
         return data_args
 
     def _create(self, endpoint, data, files=None):
@@ -149,10 +150,11 @@ class RESTClient:
                                     empty with `errors` set on failure
         """
         full_path = urljoin(self.url, endpoint)
-        headers = {'Authorization': f"Token {self.token}"}
+        headers = {"Authorization": f"Token {self.token}"}
         data_args = self.prepareDataArgs(data, files)
-        reply = self.session.post(full_path, **data_args, files=files,
-                                  headers=headers, verify=self.rootcert)
+        reply = self.session.post(
+            full_path, **data_args, files=files, headers=headers, verify=self.rootcert
+        )
         return self.decodeReply(reply, HTTPStatus.CREATED)
 
     def _get(self, endpoint, parameters):
@@ -165,9 +167,10 @@ class RESTClient:
                                     empty with `errors` set on failure
         """
         full_path = urljoin(self.url, endpoint)
-        headers = {'Authorization': f"Token {self.token}"}
-        reply = self.session.get(full_path, params=parameters, headers=headers,
-                                 verify=self.rootcert)
+        headers = {"Authorization": f"Token {self.token}"}
+        reply = self.session.get(
+            full_path, params=parameters, headers=headers, verify=self.rootcert
+        )
         return self.decodeReply(reply, HTTPStatus.OK)
 
     def _update(self, endpoint, data, files=None):
@@ -181,10 +184,11 @@ class RESTClient:
                                     empty with `errors` set on failure
         """
         full_path = urljoin(self.url, endpoint)
-        headers = {'Authorization': f"Token {self.token}"}
+        headers = {"Authorization": f"Token {self.token}"}
         data_args = self.prepareDataArgs(data, files)
-        reply = self.session.post(full_path, **data_args, files=files,
-                                  headers=headers, verify=self.rootcert)
+        reply = self.session.post(
+            full_path, **data_args, files=files, headers=headers, verify=self.rootcert
+        )
         return self.decodeReply(reply, HTTPStatus.OK)
 
     def _delete(self, endpoint):
@@ -195,9 +199,8 @@ class RESTClient:
                                     empty with `errors` set on failure
         """
         full_path = urljoin(self.url, endpoint)
-        headers = {'Authorization': f"Token {self.token}"}
-        reply = self.session.delete(
-            full_path, headers=headers, verify=self.rootcert)
+        headers = {"Authorization": f"Token {self.token}"}
+        reply = self.session.delete(full_path, headers=headers, verify=self.rootcert)
         return self.decodeReply(reply, HTTPStatus.OK)
 
     def _separateFiles(self, data, fields):
@@ -227,7 +230,7 @@ class RESTClient:
         @return                     RESTResult with decoded objects on success,
                                     empty with `errors` set on failure
         """
-        data, files = self._separateFiles(data, ['map', 'thumbnail'])
+        data, files = self._separateFiles(data, ["map", "thumbnail"])
         return self._create("scene", data, files)
 
     def getScene(self, uid):
@@ -248,7 +251,7 @@ class RESTClient:
         @return                     RESTResult with decoded object on success,
                                     empty with `errors` set on failure
         """
-        data, files = self._separateFiles(data, ['map', 'thumbnail'])
+        data, files = self._separateFiles(data, ["map", "thumbnail"])
         return self._update(f"scene/{uid}", data, files)
 
     def deleteScene(self, uid):
@@ -312,7 +315,7 @@ class RESTClient:
         @param      uid             uid of camera to get frame from
         @param      timestamp       timestamp in ISO 8601 format
         """
-        return self._get(f"frame", {'camera': uid, 'timestamp': timestamp})
+        return self._get(f"frame", {"camera": uid, "timestamp": timestamp})
 
     # Sensor
     def getSensors(self, filter):

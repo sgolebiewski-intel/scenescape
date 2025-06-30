@@ -18,39 +18,41 @@ USER_ACCESS_CONFIG = "user_access_config.json"
 class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
-            "auth",
-            nargs='+',
-            help="One or more user:password/JSON files")
-        parser.add_argument("--skip-existing", action="store_true",
-                            help="Ignore users that already exist")
+            "auth", nargs="+", help="One or more user:password/JSON files"
+        )
+        parser.add_argument(
+            "--skip-existing",
+            action="store_true",
+            help="Ignore users that already exist",
+        )
         return
 
     def handle(self, *args, **options):
         self.loadUserAccessConfig()
-        for auth in options['auth']:
+        for auth in options["auth"]:
             log.info(f"Adding {auth} to database...")
             user = pw = None
 
             auth_conf = self.user_access_config.get(os.path.basename(auth), {})
-            is_superuser = auth_conf.get('is_superuser', False)
-            acl_data = auth_conf.get('acls', [])
+            is_superuser = auth_conf.get("is_superuser", False)
+            acl_data = auth_conf.get("acls", [])
 
             if os.path.exists(auth):
                 with open(auth) as json_file:
                     data = json.load(json_file)
-                user = data.get('user')
-                pw = data.get('password')
+                user = data.get("user")
+                pw = data.get("password")
             else:
-                sep = auth.find(':')
+                sep = auth.find(":")
                 if sep < 0:
                     log.error(f"Invalid user/password format in {auth}")
                     continue
                 user = auth[:sep]
-                pw = auth[sep + 1:]
+                pw = auth[sep + 1 :]
 
             if User.objects.filter(username=user).exists():
-                if not options['skip_existing']:
-                    log.error(f"User \"{user}\" already exists")
+                if not options["skip_existing"]:
+                    log.error(f'User "{user}" already exists')
                     exit(1)
                 current_user = User.objects.get(username=user)
                 current_user.is_superuser = is_superuser
@@ -58,16 +60,14 @@ class Command(BaseCommand):
 
             else:
                 current_user = User.objects.create_user(
-                    username=user,
-                    password=pw,
-                    is_superuser=is_superuser
+                    username=user, password=pw, is_superuser=is_superuser
                 )
 
             for acl in acl_data:
                 PubSubACL.objects.update_or_create(
                     user=current_user,
-                    topic=acl.get('topic'),
-                    defaults={'access': acl.get('access', 0)}
+                    topic=acl.get("topic"),
+                    defaults={"access": acl.get("access", 0)},
                 )
 
     def loadUserAccessConfig(self):

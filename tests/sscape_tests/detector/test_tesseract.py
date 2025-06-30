@@ -21,9 +21,9 @@ def verify_outputs(results, expected_results):
 
     for result in results:
         assert result
-        assert result['category'] == 'text'
-        assert result['text'] in expected_results
-        assert result['bounding_box']
+        assert result["category"] == "text"
+        assert result["text"] in expected_results
+        assert result["bounding_box"]
 
     return
 
@@ -35,7 +35,7 @@ def test_detect(tesseract_detector, text_frame):
     @param    text_frame               IAData object that contains an image with text
     """
 
-    expected_words = {'this', 'is', 'a', 'sample', 'text'}
+    expected_words = {"this", "is", "a", "sample", "text"}
     words = tesseract_detector.detect(text_frame)
     verify_outputs(words.data[0], expected_words)
 
@@ -49,8 +49,8 @@ def test_detect_none_input(tesseract_detector):
     @param    tesseract_detector       TesseractDetector object
     """
     frame_id = uuid.uuid4()
-    raw_results = [[(0, 5, 10, 5), 'dummy']]
-    expected_results = {'dummy'}
+    raw_results = [[(0, 5, 10, 5), "dummy"]]
+    expected_results = {"dummy"}
 
     dummy_result = detector.IAData(raw_results, frame_id)
     tesseract_detector.tasksComplete.append([dummy_result])
@@ -76,9 +76,12 @@ def test_detect_none_bbox_and_text(tesseract_detector):
     sec_word.GetUTF8Text = MagicMock()
     sec_word.GetUTF8Text.strip = MagicMock(return_value=[])
 
-    with patch('percebro.detector_tesseract.iterate_level', return_value=[first_word, sec_word]):
-        words = tesseract_detector.detect(detector.IAData(
-            [np.zeros((10, 10, 3), dtype=np.uint8)], 1))
+    with patch(
+        "percebro.detector_tesseract.iterate_level", return_value=[first_word, sec_word]
+    ):
+        words = tesseract_detector.detect(
+            detector.IAData([np.zeros((10, 10, 3), dtype=np.uint8)], 1)
+        )
         assert len(words.data[0]) == 0
 
     return
@@ -94,7 +97,8 @@ def test_preprocess(tesseract_detector, text_frame):
     grayscale = tesseract_detector.preprocess(text_frame)
     assert grayscale[0].shape == (
         text_frame.data[0].shape[0],
-        text_frame.data[0].shape[1])
+        text_frame.data[0].shape[1],
+    )
 
     return
 
@@ -106,8 +110,8 @@ def test_postprocess(tesseract_detector):
     """
 
     frame_id = uuid.uuid4()
-    raw_results = [[(0, 5, 10, 5), 'dummy']]
-    expected_results = {'dummy'}
+    raw_results = [[(0, 5, 10, 5), "dummy"]]
+    expected_results = {"dummy"}
     iadata = detector.IAData(raw_results, frame_id)
 
     results = tesseract_detector.postprocess(iadata)

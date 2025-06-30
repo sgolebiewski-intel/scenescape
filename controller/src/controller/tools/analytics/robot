@@ -13,39 +13,35 @@ from scene_common import log
 from scene_common.mqtt import PubSub
 
 my_parser = argparse.ArgumentParser()
-my_parser.add_argument('-b', '--broker',
-                       action='store',
-                       help='MQTT broker',
-                       default='localhost')
+my_parser.add_argument(
+    "-b", "--broker", action="store", help="MQTT broker", default="localhost"
+)
 
-my_parser.add_argument('--port',
-                       type=int,
-                       help='MQTT port',
-                       default=1883)
+my_parser.add_argument("--port", type=int, help="MQTT port", default=1883)
 
-my_parser.add_argument('-r', '--region',
-                       action='store',
-                       help='Region of Interest (RoI) name',
-                       default='Hazard')
+my_parser.add_argument(
+    "-r",
+    "--region",
+    action="store",
+    help="Region of Interest (RoI) name",
+    default="Hazard",
+)
 
-my_parser.add_argument('-s', '--scene',
-                       action='store',
-                       help='Scene name',
-                       default='Demo')
+my_parser.add_argument(
+    "-s", "--scene", action="store", help="Scene name", default="Demo"
+)
 
-my_parser.add_argument('-a', '--auth',
-                       help='Scenescape Auth file')
+my_parser.add_argument("-a", "--auth", help="Scenescape Auth file")
 
-my_parser.add_argument('-p', '--password',
-                       help='MQTT password')
+my_parser.add_argument("-p", "--password", help="MQTT password")
 
-my_parser.add_argument('-u', '--username',
-                       help='MQTT user name')
+my_parser.add_argument("-u", "--username", help="MQTT user name")
 
 my_parser.add_argument(
     "--rootcert",
     default="/run/secrets/certs/scenescape-ca.pem",
-    help="path to ca certificate")
+    help="path to ca certificate",
+)
 
 # Global flag for scene occupancy to stop the robot if nobody is around
 occupied = False
@@ -67,8 +63,11 @@ def on_message(mqttc, obj, msg):
         # SceneScape issue: scene enumeration rather than name is used in the
         # topic
         topic_info = client.parseTopic(msg.topic)
-        if 'data/scene' in msg.topic \
-                and topic_info['scene_id'] == args.scene and topic_info['thing_type'] == 'person':
+        if (
+            "data/scene" in msg.topic
+            and topic_info["scene_id"] == args.scene
+            and topic_info["thing_type"] == "person"
+        ):
             message = json.loads(msg.payload)
             scene_count = len(message["objects"])
 
@@ -84,9 +83,11 @@ def on_message(mqttc, obj, msg):
 
         # Stop the robot if people are in the scene and anyone is in the target
         # region
-        elif 'event/' in msg.topic \
-                and topic_info['scene_id'] == args.scene \
-                and topic_info['region_id'] == args.region:
+        elif (
+            "event/" in msg.topic
+            and topic_info["scene_id"] == args.scene
+            and topic_info["region_id"] == args.region
+        ):
             message = json.loads(msg.payload)
             region_count = message["counts"]["person"]
 
@@ -128,16 +129,9 @@ topic = "scenescape/#"
 
 auth_str = args.auth
 if auth_str is None:
-    auth_str = args.username + ':' + args.password
+    auth_str = args.username + ":" + args.password
 
-client = PubSub(
-    auth_str,
-    None,
-    args.rootcert,
-    args.broker,
-    args.port,
-    60,
-    userdata=args)
+client = PubSub(auth_str, None, args.rootcert, args.broker, args.port, 60, userdata=args)
 client.onMessage = on_message
 client.onLog = on_log
 client.onConnect = on_connect

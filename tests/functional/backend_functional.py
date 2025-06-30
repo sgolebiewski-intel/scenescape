@@ -30,8 +30,9 @@ class BackendFunctionalTest(FunctionalTest):
         @return   (response, res_arr)     The query response and the response array.
         """
 
-        assert isinstance(reid_vectors, list) or isinstance(reid_vectors, int), \
-            log.error("reid_vectors is neither a list nor an integer!")
+        assert isinstance(reid_vectors, list) or isinstance(
+            reid_vectors, int
+        ), log.error("reid_vectors is neither a list nor an integer!")
 
         if isinstance(reid_vectors, int):
             iterations = reid_vectors
@@ -40,19 +41,20 @@ class BackendFunctionalTest(FunctionalTest):
                 values = [random.uniform(-1, 1) for _ in range(256)]
                 reid_vectors.append(values)
 
-        blob = [[np.array(reid_vector, dtype="float32").tobytes()]
-                for reid_vector in reid_vectors]
+        blob = [
+            [np.array(reid_vector, dtype="float32").tobytes()]
+            for reid_vector in reid_vectors
+        ]
 
-        find = [{
-            "FindDescriptor": {
-                "set": "reid_vector",
-                "k_neighbors": 20,
-                "results": {
-                    "list": ["_distance"],
-                    "blob": True
+        find = [
+            {
+                "FindDescriptor": {
+                    "set": "reid_vector",
+                    "k_neighbors": 20,
+                    "results": {"list": ["_distance"], "blob": True},
                 }
             }
-        }]
+        ]
 
         query = find * len(reid_vectors)
         response, res_arr = self.vdb.db.query(query, blob)

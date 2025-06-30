@@ -19,13 +19,13 @@ TEST_NAME = "NEX-T10451"
 
 
 def pytest_sessionstart():
-    """! Executes at the beginning of the session. """
+    """! Executes at the beginning of the session."""
     print(f"Executing: {TEST_NAME}")
     return
 
 
 def pytest_sessionfinish(exitstatus):
-    """! Executes at the end of the session. """
+    """! Executes at the end of the session."""
     common.record_test_result(TEST_NAME, exitstatus)
     return
 
@@ -36,12 +36,12 @@ def camera_param():
     @return param: DICT of camera object parameters.
     """
     sParam = {}
-    sParam['cameraID'] = "camera1"
-    sParam['scale'] = 100.0
-    sParam['width'] = 640
-    sParam['height'] = 480
-    sParam['camPts'] = [[278, 61], [621, 132], [559, 460], [66, 289]]
-    sParam['mapPts'] = [[10, 105], [304, 108], [305, 401], [10, 398]]
+    sParam["cameraID"] = "camera1"
+    sParam["scale"] = 100.0
+    sParam["width"] = 640
+    sParam["height"] = 480
+    sParam["camPts"] = [[278, 61], [621, 132], [559, 460], [66, 289]]
+    sParam["mapPts"] = [[10, 105], [304, 108], [305, 401], [10, 398]]
     return sParam
 
 
@@ -52,16 +52,17 @@ def get_cent_mass(bBox):
     @return centMass: DICT detected object center of mass bounding box.
     """
     centMass = {}
-    centMass['width'] = bBox['width'] / 3
-    centMass['height'] = bBox['height'] / 4
-    centMass['x'] = bBox['x'] + centMass['width']
-    centMass['y'] = bBox['y'] + centMass['height']
+    centMass["width"] = bBox["width"] / 3
+    centMass["height"] = bBox["height"] / 4
+    centMass["x"] = bBox["x"] + centMass["width"]
+    centMass["y"] = bBox["y"] + centMass["height"]
     return centMass
 
 
 def fps():
-    """! Defines FPS """
+    """! Defines FPS"""
     return 15.0
+
 
 ####################################################
 # Fixtures
@@ -76,13 +77,13 @@ def camera_obj():
     """
     param = camera_param()
     cameraInfo = {
-        'width': param['width'],
-        'height': param['height'],
-        'camera points': param['camPts'],
-        'map points': param['mapPts'],
-        'intrinsics': 70,
+        "width": param["width"],
+        "height": param["height"],
+        "camera points": param["camPts"],
+        "map points": param["mapPts"],
+        "intrinsics": 70,
     }
-    return Camera(param['cameraID'], cameraInfo)
+    return Camera(param["cameraID"], cameraInfo)
 
 
 @pytest.fixture()
@@ -94,7 +95,7 @@ def scene_obj():
     return Scene("test", "sample_data/HazardZoneSceneLarge.png")
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def scene_obj_with_scale():
     """!
     Returns a scene object with scale value set.

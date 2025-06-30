@@ -23,11 +23,12 @@ class JUnit:
         else:
             self.xmldoc = minidom.parseString(
                 '<?xml version="1.0" encoding="utf-8"?>'
-                '<testsuites>'
+                "<testsuites>"
                 '<testsuite tests="1">'
                 '<testcase classname="unknown"></testcase>'
-                '</testsuite>'
-                '</testsuites>')
+                "</testsuite>"
+                "</testsuites>"
+            )
         return
 
     def save(self, path=None):
@@ -37,9 +38,8 @@ class JUnit:
         os.makedirs(directory, exist_ok=True)
         with codecs.open(path, "w", "utf-8") as f:
             xml = self.xmldoc.toxml()
-            escaped = xml.encode('ascii', 'xmlcharrefreplace').decode('ascii')
-            escaped = "".join([c for c in escaped if c >=
-                              ' ' or c in VALID_CONTROL])
+            escaped = xml.encode("ascii", "xmlcharrefreplace").decode("ascii")
+            escaped = "".join([c for c in escaped if c >= " " or c in VALID_CONTROL])
             f.write(escaped)
         return
 
@@ -97,11 +97,11 @@ class JUnit:
             return
 
         count = self.updateTagAttribute(
-            "testsuite",
-            "failures",
-            "1" if value == TestResult.FAILED else "0")
-        self.updateTagAttribute("testsuites", "failures", str(
-            count) if value == TestResult.FAILED else "0")
+            "testsuite", "failures", "1" if value == TestResult.FAILED else "0"
+        )
+        self.updateTagAttribute(
+            "testsuites", "failures", str(count) if value == TestResult.FAILED else "0"
+        )
         if value == TestResult.FAILED:
             if self.errorText is None:
                 self.errorText = "Test failed"
@@ -109,11 +109,11 @@ class JUnit:
             self.deleteTag("failure")
 
         count = self.updateTagAttribute(
-            "testsuite",
-            "skipped",
-            "1" if value == TestResult.SKIPPED else "0")
-        self.updateTagAttribute("testsuites", "skipped", str(
-            count) if value == TestResult.SKIPPED else "0")
+            "testsuite", "skipped", "1" if value == TestResult.SKIPPED else "0"
+        )
+        self.updateTagAttribute(
+            "testsuites", "skipped", str(count) if value == TestResult.SKIPPED else "0"
+        )
         if value == TestResult.SKIPPED:
             skipped = self.xmldoc.getElementsByTagName("skipped")
             if not skipped:

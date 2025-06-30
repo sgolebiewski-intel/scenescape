@@ -21,7 +21,8 @@ def validate_glb(value):
         mesh = o3d.io.read_triangle_model(glb_file.name)
         if len(mesh.meshes) == 0 or mesh.materials[0].shader is None:
             raise ValidationError(
-                "Only valid glTF binary (.glb) files are supported for 3D assets.")
+                "Only valid glTF binary (.glb) files are supported for 3D assets."
+            )
         return value
 
 
@@ -30,13 +31,14 @@ def validate_image(value):
         try:
             img.verify()
         except Exception as e:
-            raise ValidationError(f'Failed to read image file.{e}')
+            raise ValidationError(f"Failed to read image file.{e}")
         header = img.format.lower()
         extension = os.path.splitext(value.name)[1].lower()[1:]
         extension = "jpeg" if extension == "jpg" else extension
         if header != extension:
             raise ValidationError(
-                f"Mismatch between file extension {extension} and file header {header}")
+                f"Mismatch between file extension {extension} and file header {header}"
+            )
     return value
 
 
@@ -53,10 +55,8 @@ def validate_map_file(value):
 
 def add_form_error(error, form):
     error = error.args[0]
-    key = error[error.find('(') + 1: error.find(')')]
-    form.add_error(
-        key, "Sensor with this {} already exists.".format(
-            key.capitalize()))
+    key = error[error.find("(") + 1 : error.find(")")]
+    form.add_error(key, "Sensor with this {} already exists.".format(key.capitalize()))
     return form
 
 
@@ -68,23 +68,33 @@ def verify_image_set(files_list, basefilename):
     @param    basefilename   Root folder name of the zip file uploaded.
     @return   boolean
     """
-    if len(list(filter(lambda v: re.match(f"{basefilename}/keyframes", v),
-                       files_list))) == 0:
+    if (
+        len(list(filter(lambda v: re.match(f"{basefilename}/keyframes", v), files_list)))
+        == 0
+    ):
         return False
-    images_list = [file for file in files_list if basefilename +
-                   "/keyframes/images" in file and file.endswith(".jpg")]
-    depth_list = [file for file in files_list if basefilename +
-                  "/keyframes/depth" in file and file.endswith(".png")]
+    images_list = [
+        file
+        for file in files_list
+        if basefilename + "/keyframes/images" in file and file.endswith(".jpg")
+    ]
+    depth_list = [
+        file
+        for file in files_list
+        if basefilename + "/keyframes/depth" in file and file.endswith(".png")
+    ]
     camera_json_list = [
-        file for file in files_list if basefilename +
-        "/keyframes/cameras" in file and file.endswith(".json")]
-    return (len(images_list) == len(depth_list) == len(camera_json_list))
+        file
+        for file in files_list
+        if basefilename + "/keyframes/cameras" in file and file.endswith(".json")
+    ]
+    return len(images_list) == len(depth_list) == len(camera_json_list)
 
 
 def poly_datasets(filenames):
     """! Filter for polycam dataset folders"""
-    folders = {filename.split('/')[0] for filename in filenames}
-    return [folder for folder in folders if '-poly' in folder]
+    folders = {filename.split("/")[0] for filename in filenames}
+    return [folder for folder in folders if "-poly" in folder]
 
 
 def is_polycam_dataset(basefilename, filenames):
@@ -94,9 +104,11 @@ def is_polycam_dataset(basefilename, filenames):
     @param  filenames      List of files in the dataset zip file
     @return boolean        Is the input a valid polycam dataset
     """
-    return (basefilename + "/raw.glb" in filenames and
-            basefilename + "/mesh_info.json" in filenames and
-            verify_image_set(filenames, basefilename))
+    return (
+        basefilename + "/raw.glb" in filenames
+        and basefilename + "/mesh_info.json" in filenames
+        and verify_image_set(filenames, basefilename)
+    )
 
 
 def validate_zip_file(value):
@@ -110,10 +122,9 @@ def validate_zip_file(value):
         filenames = ZipFile(value, "r").namelist()
         datasets = poly_datasets(filenames)
         if len(datasets) == 0:
-            raise ValidationError('Zip file contains no polycam dataset')
+            raise ValidationError("Zip file contains no polycam dataset")
         if len(datasets) > 1:
-            raise ValidationError(
-                "Zip file contains multiple polycam datasets")
+            raise ValidationError("Zip file contains multiple polycam datasets")
         if not is_polycam_dataset(datasets[0], filenames):
             raise ValidationError("Invalid or unexpected dataset format.")
 

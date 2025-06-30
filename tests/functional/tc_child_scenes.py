@@ -32,7 +32,7 @@ cur_parent = None
 cur_category = None
 pose = None
 count = 0
-test_cases = [([1., 0., 0.], [0., 0., 0.], CHILD_NAME, "parent", "person")]
+test_cases = [([1.0, 0.0, 0.0], [0.0, 0.0, 0.0], CHILD_NAME, "parent", "person")]
 parent_id = None
 child_id = None
 
@@ -65,35 +65,29 @@ def on_message(mqttc, pose, msg):
     @param    msg       The instance of MQTTMessage.
     @return   None
     """
-    global recent_data, parent_translation, \
-        parent_id, cur_category, count, child_id
+    global recent_data, parent_translation, parent_id, cur_category, count, child_id
 
     parent_data = None
     child_data = None
     topic = PubSub.parseTopic(msg.topic)
 
-    if topic['scene_id'] == parent_id:
+    if topic["scene_id"] == parent_id:
         real_msg = str(msg.payload.decode("utf-8"))
         parent_data = json.loads(real_msg)
-        for p_obj in parent_data['objects']:
-            if p_obj['category'] == cur_category:
+        for p_obj in parent_data["objects"]:
+            if p_obj["category"] == cur_category:
                 recent_data.append(p_obj)
 
-    elif topic['scene_id'] == child_id:
+    elif topic["scene_id"] == child_id:
         real_msg = str(msg.payload.decode("utf-8"))
         child_data = json.loads(real_msg)
-        for c_obj in child_data['objects']:
-            if c_obj['category'] == cur_category:
+        for c_obj in child_data["objects"]:
+            if c_obj["category"] == cur_category:
                 recent_data.clear()
                 recent_data.append(c_obj)
 
     if len(recent_data) == 2:
-        transform_data(
-            recent_data,
-            parent_translation,
-            cur_category,
-            count,
-            pose)
+        transform_data(recent_data, parent_translation, cur_category, count, pose)
         count += 1
     return
 
@@ -109,13 +103,18 @@ def verify_linking_children(parent_scene, children, rest_client, pose):
     """
     log.info("Verifying linking multiple children to parent")
     for child in children:
-        child_scene = rest_client.createScene({'name': child})
-        res = rest_client.updateScene(child_scene['uid'], {
-            'parent': parent_scene['uid'],
-            'transform': pose.asDict,
-        })
+        child_scene = rest_client.createScene({"name": child})
+        res = rest_client.updateScene(
+            child_scene["uid"],
+            {
+                "parent": parent_scene["uid"],
+                "transform": pose.asDict,
+            },
+        )
         assert res
-        assert res.statusCode == 200, f"Expected status code 200, got {
+        assert (
+            res.statusCode == 200
+        ), f"Expected status code 200, got {
             res.statusCode}"
     return
 
@@ -130,28 +129,30 @@ def verify_circular_linking_fails(parent_scene, children, rest_client):
     """
     log.info("Verifying linking B->A fails with existing A->B")
     for child in children:
-        child_scene = rest_client.getScenes({'name': child})['results'][0]
+        child_scene = rest_client.getScenes({"name": child})["results"][0]
         res = rest_client.updateScene(
-            parent_scene['uid'], {
-                'parent': child_scene['uid']})
-        assert res.statusCode == 400, f"Expected status code 400, got {
+            parent_scene["uid"], {"parent": child_scene["uid"]}
+        )
+        assert (
+            res.statusCode == 400
+        ), f"Expected status code 400, got {
             res.statusCode}"
-        assert 'circular dependency' in res.errors[0]
+        assert "circular dependency" in res.errors[0]
 
     log.info("Verifying that linking C->A fails with existing A->B->C")
-    sub_child = rest_client.createScene({'name': 'sc1'})
-    res = rest_client.updateScene(
-        sub_child['uid'], {
-            'parent': child_scene['uid']})
+    sub_child = rest_client.createScene({"name": "sc1"})
+    res = rest_client.updateScene(sub_child["uid"], {"parent": child_scene["uid"]})
     assert res
-    assert res.statusCode == 200, f"Expected status code 200, got {
+    assert (
+        res.statusCode == 200
+    ), f"Expected status code 200, got {
         res.statusCode}"
-    res = rest_client.updateScene(
-        parent_scene['uid'], {
-            'parent': sub_child['uid']})
-    assert res.statusCode == 400, f"Expected status code 400, got {
+    res = rest_client.updateScene(parent_scene["uid"], {"parent": sub_child["uid"]})
+    assert (
+        res.statusCode == 400
+    ), f"Expected status code 400, got {
         res.statusCode}"
-    assert 'circular dependency' in res.errors[0]
+    assert "circular dependency" in res.errors[0]
     return
 
 
@@ -166,14 +167,19 @@ def verify_unique_parent(child_scene, parents, rest_client, pose):
     """
     log.info("Verifying linking child to multiple parents fails")
     for parent in parents:
-        parent_scene = rest_client.createScene({'name': parent})
-        res = rest_client.updateScene(child_scene['uid'], {
-            'parent': parent_scene['uid'],
-            'transform': pose.asDict,
-        })
-        assert res.statusCode == 400, f"Expected status code 400, got {
+        parent_scene = rest_client.createScene({"name": parent})
+        res = rest_client.updateScene(
+            child_scene["uid"],
+            {
+                "parent": parent_scene["uid"],
+                "transform": pose.asDict,
+            },
+        )
+        assert (
+            res.statusCode == 400
+        ), f"Expected status code 400, got {
             res.statusCode}"
-        assert 'already exists' in res.errors[0]
+        assert "already exists" in res.errors[0]
     return
 
 
@@ -189,30 +195,28 @@ def transform_data(data, parent_translation, cur_category, count, pose):
     @return   None
     """
 
-    if data[0]['category'] == cur_category and \
-            data[1]['category'] == cur_category:
+    if data[0]["category"] == cur_category and data[1]["category"] == cur_category:
         expected_translation = Point(data[0]["translation"])
-        expected_translation = np.hstack(
-            [expected_translation.asNumpyCartesian, [1]])
-        expected_translation = np.matmul(
-            pose.pose_mat, expected_translation)[:3]
+        expected_translation = np.hstack([expected_translation.asNumpyCartesian, [1]])
+        expected_translation = np.matmul(pose.pose_mat, expected_translation)[:3]
 
-        parent_translation['expected_x'].append(expected_translation[0])
-        parent_translation['expected_y'].append(expected_translation[1])
-        parent_translation['predicted_x'].append(data[1]["translation"][0])
-        parent_translation['predicted_y'].append(data[1]["translation"][1])
+        parent_translation["expected_x"].append(expected_translation[0])
+        parent_translation["expected_y"].append(expected_translation[1])
+        parent_translation["predicted_x"].append(data[1]["translation"][0])
+        parent_translation["predicted_y"].append(data[1]["translation"][1])
 
         if count < DEBUG_MSGS:
             log.info(
-                'expected parent translation: ({},{})'.format(
-                    round(
-                        expected_translation[0], 2), round(
-                        expected_translation[1], 2)))
+                "expected parent translation: ({},{})".format(
+                    round(expected_translation[0], 2), round(expected_translation[1], 2)
+                )
+            )
             log.info(
-                'actual parent translation: ({},{})'.format(
-                    round(
-                        data[1]['translation'][0], 2), round(
-                        data[1]['translation'][1], 2)))
+                "actual parent translation: ({},{})".format(
+                    round(data[1]["translation"][0], 2),
+                    round(data[1]["translation"][1], 2),
+                )
+            )
     return
 
 
@@ -221,27 +225,29 @@ def calculate_mse(parent_translation):
     @param    parent_translation           Dict of expected and actual object locations.
     @return   mse                          Dict containing mse.
     """
-    assert len(
-        parent_translation['expected_x']) == len(
-        parent_translation['expected_y'])
-    assert len(
-        parent_translation['predicted_x']) == len(
-        parent_translation['predicted_y'])
+    assert len(parent_translation["expected_x"]) == len(parent_translation["expected_y"])
+    assert len(parent_translation["predicted_x"]) == len(
+        parent_translation["predicted_y"]
+    )
 
-    length = [parent_translation['expected_x'].index(
-        i) for i in parent_translation['expected_x']]
+    length = [
+        parent_translation["expected_x"].index(i)
+        for i in parent_translation["expected_x"]
+    ]
     expected = metrics.Track(
-        parent_translation['expected_x'],
-        parent_translation['expected_y'],
+        parent_translation["expected_x"],
+        parent_translation["expected_y"],
         None,
         length,
-        None)
+        None,
+    )
     predicted = metrics.Track(
-        parent_translation['predicted_x'],
-        parent_translation['predicted_y'],
+        parent_translation["predicted_x"],
+        parent_translation["predicted_y"],
         None,
         length,
-        None)
+        None,
+    )
     mse = metrics.getMSE(expected, predicted)
     return mse
 
@@ -267,13 +273,17 @@ def publish_data(obj_data, obj_location, client, obj_cat):
 
 
 @pytest.mark.parametrize("translation,rotation,child,parent,obj_cat", test_cases)
-def test_child_scenes(objData, obj_location, record_xml_attribute,
-                      translation,
-                      rotation,
-                      child,
-                      parent,
-                      obj_cat,
-                      params):
+def test_child_scenes(
+    objData,
+    obj_location,
+    record_xml_attribute,
+    translation,
+    rotation,
+    child,
+    parent,
+    obj_cat,
+    params,
+):
     """! This function creates and updates the child scene. It also verifies that
     the data received from the parent is correct after applying different transforms based on the test
     cases provided above.
@@ -288,26 +298,25 @@ def test_child_scenes(objData, obj_location, record_xml_attribute,
     @param    params                  Dict of test parameters.
     @return   exit_code               Indicates test success or failure.
     """
-    global parent_translation, \
-        cur_parent, cur_category, count, parent_id, child_id
+    global parent_translation, cur_parent, cur_category, count, parent_id, child_id
 
     parent_translation = {
-        'expected_x': [],
-        'expected_y': [],
-        'predicted_x': [],
-        'predicted_y': []
+        "expected_x": [],
+        "expected_y": [],
+        "predicted_x": [],
+        "predicted_y": [],
     }
 
     transform = {
         "translation": translation,
         "rotation": rotation,
-        "scale": [1., 1., 1.],
+        "scale": [1.0, 1.0, 1.0],
     }
 
     cur_parent = parent
     cur_category = obj_cat
-    children = ['c1', 'c2', 'c3']
-    parents = ['p1', 'p2', 'p3']
+    children = ["c1", "c2", "c3"]
+    parents = ["p1", "p2", "p3"]
     exit_code = 1
     mse = None
 
@@ -315,8 +324,14 @@ def test_child_scenes(objData, obj_location, record_xml_attribute,
     record_xml_attribute("name", TEST_NAME)
     log.info("Executing: " + TEST_NAME)
     pose = CameraPose(transform, None)
-    client = PubSub(params["auth"], None, params["rootcert"],
-                    params["broker_url"], params["broker_port"], userdata=pose)
+    client = PubSub(
+        params["auth"],
+        None,
+        params["rootcert"],
+        params["broker_url"],
+        params["broker_port"],
+        userdata=pose,
+    )
     client.onConnect = on_connect
     client.onMessage = on_message
     client.connect()
@@ -325,24 +340,27 @@ def test_child_scenes(objData, obj_location, record_xml_attribute,
     assert os.path.exists(map_image)
 
     try:
-        rest_client = RESTClient(params['resturl'],
-                                 rootcert=params['rootcert'])
-        assert rest_client.authenticate(params['user'], params['password'])
+        rest_client = RESTClient(params["resturl"], rootcert=params["rootcert"])
+        assert rest_client.authenticate(params["user"], params["password"])
         with open(map_image, "rb") as f:
             map_data = f.read()
         parent_scene = rest_client.createScene(
-            {'name': parent, 'map': (map_image, map_data)})
-        parent_id = parent_scene['uid']
+            {"name": parent, "map": (map_image, map_data)}
+        )
+        parent_id = parent_scene["uid"]
         log.info("Parent scene:", parent, parent_scene)
         assert parent_scene
-        scenes = rest_client.getScenes({'name': child})
-        assert scenes['results']
-        child_scene = scenes['results'][0]
-        child_id = child_scene['uid']
-        result = rest_client.updateScene(child_scene['uid'], {
-            'parent': parent_scene['uid'],
-            'transform': pose.asDict,
-        })
+        scenes = rest_client.getScenes({"name": child})
+        assert scenes["results"]
+        child_scene = scenes["results"][0]
+        child_id = child_scene["uid"]
+        result = rest_client.updateScene(
+            child_scene["uid"],
+            {
+                "parent": parent_scene["uid"],
+                "transform": pose.asDict,
+            },
+        )
         assert result
 
         client.loopStart()
@@ -351,14 +369,16 @@ def test_child_scenes(objData, obj_location, record_xml_attribute,
 
         assert mse is not None
         log.info("MSE: ", round(mse["euclidean_mse"], 2))
-        assert mse["euclidean_mse"] <= ERROR, f"The MSE is not within limit (max: {ERROR})!"
+        assert (
+            mse["euclidean_mse"] <= ERROR
+        ), f"The MSE is not within limit (max: {ERROR})!"
 
         verify_unique_parent(child_scene, parents, rest_client, pose)
         verify_linking_children(parent_scene, children, rest_client, pose)
         verify_circular_linking_fails(parent_scene, children, rest_client)
-        res = rest_client.deleteScene(parent_scene['uid'])
-        res = rest_client.getScenes({'name': child})
-        assert res['results'][0]
+        res = rest_client.deleteScene(parent_scene["uid"])
+        res = rest_client.getScenes({"name": child})
+        assert res["results"][0]
         exit_code = 0
 
     finally:

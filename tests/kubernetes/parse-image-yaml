@@ -13,18 +13,14 @@ def parseYamlFiles(fileList):
     images = []
     options = []
     for file in fileList:
-        with open(file, 'r') as stream:
+        with open(file, "r") as stream:
             try:
                 data = yaml.safe_load(stream)
-                if 'services' in data:
-                    for service in data['services']:
-                        if 'EXAMPLEDB' in data.get(
-                            'services',
-                            {}).get(
-                            'pgserver',
-                            {}).get(
-                            'environment',
-                                {}):
+                if "services" in data:
+                    for service in data["services"]:
+                        if "EXAMPLEDB" in data.get("services", {}).get(
+                            "pgserver", {}
+                        ).get("environment", {}):
                             service += ":EXAMPLEDB"
                         else:
                             service += ":"
@@ -46,8 +42,12 @@ def checkImages(images, validImages):
             if option:
                 imageOption[image] = option
 
-    result = ' '.join(
-        [f"{validImages[image]}:{imageOption[image]}={count}" for image, count in imageCount.items()])
+    result = " ".join(
+        [
+            f"{validImages[image]}:{imageOption[image]}={count}"
+            for image, count in imageCount.items()
+        ]
+    )
 
     return result
 
@@ -57,16 +57,16 @@ if __name__ == "__main__":
         print(f"Usage: python {sys.argv[0]} 'file1.yml:file2.yml:file3.yml'")
         sys.exit(1)
 
-    fileList = sys.argv[1].split(':')
+    fileList = sys.argv[1].split(":")
     # Make sure that the service names in our docker compose match the
     # Kubernetes deployments
     validImages = {
-        'pgserver': 'pgserver',
-        'broker': 'broker',
-        'web': 'web',
-        'ntpserv': 'ntp',
-        'scene': 'scene',
-        'camcalibration': 'camcalibration'
+        "pgserver": "pgserver",
+        "broker": "broker",
+        "web": "web",
+        "ntpserv": "ntp",
+        "scene": "scene",
+        "camcalibration": "camcalibration",
     }
 
     images = parseYamlFiles(fileList)

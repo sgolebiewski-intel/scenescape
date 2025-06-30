@@ -23,19 +23,23 @@ class Custom500Middleware:
     def process_exception(self, request, exception):
         error_message = traceback.format_exc()
         log.error(error_message)
-        response = render(request, 'sscape/500_error.html', {
-            'error_message': error_message,
-            'request_info': self._stringify_request(request),
-        })
+        response = render(
+            request,
+            "sscape/500_error.html",
+            {
+                "error_message": error_message,
+                "request_info": self._stringify_request(request),
+            },
+        )
         response.status_code = 500
         return response
 
     def _stringify_request(self, request):
         request_data = {
-            'method': request.method,
-            'path': request.path,
-            'GET': request.GET.dict(),
-            'POST': request.POST.dict(),
-            'headers': {k: v for k, v in request.headers.items()},
+            "method": request.method,
+            "path": request.path,
+            "GET": request.GET.dict(),
+            "POST": request.POST.dict(),
+            "headers": {k: v for k, v in request.headers.items()},
         }
         return json.dumps(request_data, indent=2)

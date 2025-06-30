@@ -42,7 +42,7 @@ def get_detections(tracked_data, scene, objects, jdata):
         for obj in curr_objects:
             obj_list.append(obj)
 
-    jdata['objects'] = buildDetectionsList(obj_list, None)
+    jdata["objects"] = buildDetectionsList(obj_list, None)
     tracked_data.append(jdata)
     return
 
@@ -58,9 +58,11 @@ def track(params):
         # run the tests with 1 fps camera files
         dir = os.path.dirname(os.path.abspath(__file__))
         input_cam_1 = os.path.join(
-            dir, "test_data/Cam_x1_0_" + str(params["camera_frame_rate"]) + "fps.json")
+            dir, "test_data/Cam_x1_0_" + str(params["camera_frame_rate"]) + "fps.json"
+        )
         input_cam_2 = os.path.join(
-            dir, "test_data/Cam_x2_0_" + str(params["camera_frame_rate"]) + "fps.json")
+            dir, "test_data/Cam_x2_0_" + str(params["camera_frame_rate"]) + "fps.json"
+        )
         params["input"] = [input_cam_1, input_cam_2]
     tracked_data = []
     scene = SceneLoader(params["config"], scene_model=Scene).scene
@@ -68,19 +70,26 @@ def track(params):
 
     with open(params["trackerconfig"]) as f:
         trackerConfigData = json.load(f)
-    scene.max_unreliable_time = trackerConfigData["max_unreliable_frames"] / \
-        trackerConfigData["baseline_frame_rate"]
-    scene.non_measurement_time_dynamic = trackerConfigData[
-        "non_measurement_frames_dynamic"] / trackerConfigData["baseline_frame_rate"]
-    scene.non_measurement_time_static = trackerConfigData["non_measurement_frames_static"] / \
-        trackerConfigData["baseline_frame_rate"]
+    scene.max_unreliable_time = (
+        trackerConfigData["max_unreliable_frames"]
+        / trackerConfigData["baseline_frame_rate"]
+    )
+    scene.non_measurement_time_dynamic = (
+        trackerConfigData["non_measurement_frames_dynamic"]
+        / trackerConfigData["baseline_frame_rate"]
+    )
+    scene.non_measurement_time_static = (
+        trackerConfigData["non_measurement_frames_static"]
+        / trackerConfigData["baseline_frame_rate"]
+    )
     scene.updateTracker(
         scene.max_unreliable_time,
         scene.non_measurement_time_dynamic,
-        scene.non_measurement_time_static)
+        scene.non_measurement_time_static,
+    )
     camera_fps = []
     for input_file in params["input"]:
-        cam = cv2.VideoCapture(input_file.removesuffix('.json') + '.mp4')
+        cam = cv2.VideoCapture(input_file.removesuffix(".json") + ".mp4")
         fps = cam.get(cv2.CAP_PROP_FPS)
         if fps == 0.0:
             fps = int(params["default_camera_frame_rate"])  # default value
@@ -89,8 +98,8 @@ def track(params):
     scene.ref_camera_frame_rate = int(min(camera_fps))
     print("reference camera frame rate = ", scene.ref_camera_frame_rate)
 
-    if 'assets' in params:
-        scene.tracker.updateObjectClasses(params['assets'])
+    if "assets" in params:
+        scene.tracker.updateObjectClasses(params["assets"])
 
     while True:
         _, cam_detect, _ = mgr.nextFrame(scene, loop=False)
@@ -102,7 +111,7 @@ def track(params):
         jdata = {
             "cam_id": cam_detect["id"],
             "frame": cam_detect["frame"],
-            "timestamp": cam_detect["timestamp"]
+            "timestamp": cam_detect["timestamp"],
         }
         get_detections(tracked_data, scene, objects, jdata)
 
@@ -130,8 +139,10 @@ def test_tracker_metric(params, assets, record_xml_attribute):
             pred_data = track(params)
             _, curr_std_velocity = metrics.getVelocity(pred_data)
             print("std velocity: {}".format(curr_std_velocity))
-            assert curr_std_velocity <= (
-                1.0 + float(params["threshold"])) * STD_VELOCITY_MAX
+            assert (
+                curr_std_velocity
+                <= (1.0 + float(params["threshold"])) * STD_VELOCITY_MAX
+            )
             result = 0
 
         elif params["metric"] == "msoce":
