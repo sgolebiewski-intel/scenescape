@@ -50,8 +50,10 @@ class Image:
         response = None
         try:
             log.debug("Fetch try 1", self.url)
-            # nosec B501 - bandit scan ignore
-            response = requests.get(self.url, verify=False)
+
+            response = requests.get(
+                self.url, verify=False
+            )  # nosec B501 - bandit scan ignore
         except (urllib3.exceptions.MaxRetryError, requests.exceptions.SSLError):
             log.debug("Failed to fetch image try 1", self.url)
             pass
