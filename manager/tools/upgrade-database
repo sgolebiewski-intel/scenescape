@@ -160,7 +160,7 @@ backup_database() {
     local pg_uid=$(stat -c '%u' ${dbdir})
     
     log_message "Creating backup of existing database..."
-    mkdir ${backup}
+    mkdir "${backup}"
     rsync -a ${dbdir} ${migrationsdir} ${backup}/.
     
     # Configure backup database
