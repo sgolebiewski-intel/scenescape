@@ -305,7 +305,7 @@ lint-python-pylint:
 .PHONY: lint-python-flake8
 lint-python-flake8:
 	@echo "==> Linting Python files - flake8..."
-	@flake8 --config .github/resources/.flake8 || (echo "Python linting failed" && exit 1)
+	@.github/resources/list_python_files.py | xargs flake8 --config .github/resources/.flake8 || (echo "Python linting failed" && exit 1)
 	@echo "DONE ==> Linting Python files - flake8"
 
 .PHONY: lint-javascript
