@@ -2,8 +2,7 @@
 
 # SPDX-FileCopyrightText: (C) 2024 - 2025 Intel Corporation
 # SPDX-License-Identifier: LicenseRef-Intel-Edge-Software
-# This file is licensed under the Limited Edge Software Distribution
-# License Agreement.
+# This file is licensed under the Limited Edge Software Distribution License Agreement.
 
 import os
 import numpy as np
@@ -12,95 +11,94 @@ from scene_common import log
 
 TEST_NAME = "NEX-T10516"
 
-
 class VDMSSimilaritySearch(BackendFunctionalTest):
-    def __init__(self, testName, request, recordXMLAttribute):
-        super().__init__(testName, request, recordXMLAttribute)
-        self.thing_1 = self.generate_random_vector()
-        self.thing_2 = self.generate_random_vector()
-        self.thing_2_match = self.generate_random_vector()
+  def __init__(self, testName, request, recordXMLAttribute):
+    super().__init__(testName, request, recordXMLAttribute)
+    self.thing_1 = self.generate_random_vector()
+    self.thing_2 = self.generate_random_vector()
+    self.thing_2_match = self.generate_random_vector()
 
-    def descriptor_set_reid(self):
-        log.info("Add the descriptor set for RE-ID data")
-        descriptor_set = {
-            "AddDescriptorSet": {
-                "name": "reid_vectors",
-                "metric": "L2",
-                "dimensions": 256,
-            }
-        }
-        all_queries = []
-        all_queries.append(descriptor_set)
+  def descriptor_set_reid(self):
+    log.info("Add the descriptor set for RE-ID data")
+    descriptor_set = {
+      "AddDescriptorSet": {
+        "name": "reid_vectors",
+        "metric": "L2",
+        "dimensions": 256
+      }
+    }
+    all_queries = []
+    all_queries.append(descriptor_set)
 
-        response, res_arr = self.vdb.db.query(all_queries)
-        log.debug(f"RESPONSE: {response}\nRES_ARR: {res_arr}")
-        assert (
-            response[0]["AddDescriptorSet"]["status"] == 0
-        ), "The response status for the descriptor set should be 0!"
-        return
+    response, res_arr = self.vdb.db.query(all_queries)
+    log.debug(f"RESPONSE: {response}\nRES_ARR: {res_arr}")
+    assert response[0]['AddDescriptorSet']['status'] == 0, "The response status for the descriptor set should be 0!"
+    return
 
-    def descriptor_objects(self):
-        log.info("Add descriptors for two distinct objects")
-        blob_1 = np.array(self.thing_1, dtype="float32")
-        blob_2 = np.array(self.thing_2, dtype="float32")
+  def descriptor_objects(self):
+    log.info("Add descriptors for two distinct objects")
+    blob_1 = np.array(self.thing_1, dtype="float32")
+    blob_2 = np.array(self.thing_2, dtype="float32")
 
-        descriptor_blob = []
-        descriptor_blob.append(blob_1.tobytes())
-        descriptor_blob.append(blob_2.tobytes())
+    descriptor_blob = []
+    descriptor_blob.append(blob_1.tobytes())
+    descriptor_blob.append(blob_2.tobytes())
 
-        descriptor_1 = {"AddDescriptor": {"set": "reid_vector", "label": "Person 1"}}
+    descriptor_1 = {
+      "AddDescriptor": {
+        "set": "reid_vector",
+        "label": "Person 1"
+      }
+    }
 
-        descriptor_2 = {"AddDescriptor": {"set": "reid_vector", "label": "Person 2"}}
+    descriptor_2 = {
+      "AddDescriptor": {
+        "set": "reid_vector",
+        "label": "Person 2"
+      }
+    }
 
-        all_queries = []
-        all_queries.append(descriptor_1)
-        all_queries.append(descriptor_2)
+    all_queries = []
+    all_queries.append(descriptor_1)
+    all_queries.append(descriptor_2)
 
-        response, res_arr = self.vdb.db.query(all_queries, [descriptor_blob])
+    response, res_arr = self.vdb.db.query(all_queries, [descriptor_blob])
 
-        log.debug(f"RESPONSE: {response}\nRES_ARR: {res_arr}")
-        assert (
-            response[0]["AddDescriptor"]["status"] == 0
-            and response[1]["AddDescriptor"]["status"] == 0
-        ), "The response status for both descriptors should be 0!"
-        return
+    log.debug(f"RESPONSE: {response}\nRES_ARR: {res_arr}")
+    assert response[0]['AddDescriptor']['status'] == 0 and response[1]['AddDescriptor']['status'] == 0, \
+      "The response status for both descriptors should be 0!"
+    return
 
-    def get_similarity(self):
-        log.info(
-            "Pass a third RE-ID vector from one of the two initial objects and get a similarity search comparison. It should have low distance from one of the entries."
-        )
-        response, res_arr = self.get_similarity_comparison([self.thing_2_match])
-        log.debug(f"RESPONSE: {response}\nRES_ARR: {res_arr}")
-        assert (
-            response[0]["FindDescriptor"]["returned"] == 2
-        ), "There should be only 2 entities returned!"
-        return
-
+  def get_similarity(self):
+    log.info("Pass a third RE-ID vector from one of the two initial objects and get a similarity search comparison. It should have low distance from one of the entries.")
+    response, res_arr = self.get_similarity_comparison([self.thing_2_match])
+    log.debug(f"RESPONSE: {response}\nRES_ARR: {res_arr}")
+    assert response[0]['FindDescriptor']['returned'] == 2, \
+      "There should be only 2 entities returned!"
+    return
 
 def test_vdms_similarity_search(request, record_xml_attribute):
-    """! Verify similarity search with RE-ID vectors using VDMS.
-    @param    request                 Dict of test parameters.
-    @param    record_xml_attribute    Pytest fixture recording the test name.
-    @return   exit_code               Indicates test success or failure.
-    """
+  """! Verify similarity search with RE-ID vectors using VDMS.
+  @param    request                 Dict of test parameters.
+  @param    record_xml_attribute    Pytest fixture recording the test name.
+  @return   exit_code               Indicates test success or failure.
+  """
 
-    test = VDMSSimilaritySearch(TEST_NAME, request, record_xml_attribute)
-    try:
-        test.vdms_connect()
-        test.descriptor_set_reid()
-        test.descriptor_objects()
-        test.get_similarity()
-        test.exitCode = 0
-    finally:
-        test.recordTestResult()
+  test = VDMSSimilaritySearch(TEST_NAME, request, record_xml_attribute)
+  try:
+    test.vdms_connect()
+    test.descriptor_set_reid()
+    test.descriptor_objects()
+    test.get_similarity()
+    test.exitCode = 0
+  finally:
+    test.recordTestResult()
 
-    assert test.exitCode == 0
-    return test.exitCode
-
+  assert test.exitCode == 0
+  return test.exitCode
 
 def main():
-    return test_vdms_similarity_search(None, None)
+  return test_vdms_similarity_search(None, None)
 
-
-if __name__ == "__main__":
-    os._exit(main() or 0)
+if __name__ == '__main__':
+  os._exit(main() or 0)
