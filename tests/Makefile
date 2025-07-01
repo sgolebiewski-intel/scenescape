@@ -146,27 +146,15 @@ release-tests: \
   randomly-failing-tests \
 
 broken-tests: \
-  orphaned-sensor \
-  sensors-send-events \
-  auto-calibration \
   3d-camera-control-panel \
   april-tag-setup \
   rtsp-stream \
   detector-unit \
-  scene-performance-full \
   views-unit \
   mqtt-sensor-roi \
   mqtt-slow-sensor-roi \
-  delete-roi-mqtt \
-  delete-tripwire-mqtt \
-  delete-sensor-mqtt \
-  sensor-area \
-  sensor-location \
-  upload-3d-glb-file \
-  view-3d-glb-file \
-  out-of-box-no-ntp \
-  out-of-box \
-  object-crud \
+  orphaned-sensor \
+  sensors-send-events \
 
 randomly-failing-tests: \
   3d-scene-control-panel \
@@ -177,30 +165,38 @@ basic-acceptance-tests: \
   infra-tests \
   geometry-conformance \
 
+# FIXME: run functional tests in parallel
 standard-tests: \
-  vdms-similarity-search \
-  functional-tests \
+  _functional-tests \
   metric-tests \
+  ui-tests \
   show-telemetry-button \
   upload-only-3d-glb-files \
-  ui-tests \
   unit-tests \
 
 functional-tests:
 	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) BASE_IMAGE=$(BASE_IMAGE) -k
 
 _functional-tests: \
+  auto-calibration \
   add-orphaned-cameras \
   api-large-strings \
   bounding-box \
+  delete-roi-mqtt \
+  delete-tripwire-mqtt \
+  delete-sensor-mqtt \
   geospatial-ingest-publish \
   mqtt-auth \
   mqtt-cert \
   mqtt-large-messages \
   mqtt-roi \
   mqtt-tripwire \
+  out-of-box-no-ntp \
+  out-of-box \
   percebro-3d-msgs \
   rest-test \
+  child-scenes \
+  vdms-similarity-search \
 
 metric-tests:
 	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) -k
@@ -219,10 +215,15 @@ _ui-tests: \
   camera-intrinsics \
   delete-sensor-scene \
   delete-sensors \
+  object-crud \
   persistence \
   restricted-media-access \
   scenes-summary \
+  sensor-area \
+  sensor-location \
   sensor-scene \
+  upload-3d-glb-file \
+  view-3d-glb-file \
 
 unit-tests:
 	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) -k
