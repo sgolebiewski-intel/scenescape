@@ -16,29 +16,26 @@ CONFIG_FULLPATH = os.path.join(sscape_tests_path, "config.json")
 CAMERA_NAME = "Cam_x2_2"
 SCENE_NAME = "Demo"
 
-
 def test_init(manager):
-    assert manager.configFile == CONFIG_FULLPATH
-    assert type(manager.scene) == Scene
-    assert type(manager.scene.cameras[CAMERA_NAME]) == Camera
-    assert type(manager.scene.regions[CAMERA_NAME]) == Region
-    assert type(manager.scene.tripwires[CAMERA_NAME]) == Tripwire
+  assert manager.configFile == CONFIG_FULLPATH
+  assert type(manager.scene) == Scene
+  assert type(manager.scene.cameras[CAMERA_NAME]) == Camera
+  assert type(manager.scene.regions[CAMERA_NAME]) == Region
+  assert type(manager.scene.tripwires[CAMERA_NAME]) == Tripwire
 
-    return
-
+  return
 
 def test_sceneWithName():
-    SceneLoader.addScene(SceneLoader.scene)
-    scene = SceneLoader.sceneWithName(SCENE_NAME)
+  SceneLoader.addScene(SceneLoader.scene)
+  scene = SceneLoader.sceneWithName(SCENE_NAME)
 
-    assert scene
-    assert type(scene) == Scene
-    assert scene.name == SCENE_NAME
-    return
-
+  assert scene
+  assert type(scene) == Scene
+  assert scene.name == SCENE_NAME
+  return
 
 def test_addScene():
-    SceneLoader.addScene(SceneLoader.scene)
+  SceneLoader.addScene(SceneLoader.scene)
 
-    assert SceneLoader.scenes[SCENE_NAME] == SceneLoader.scene
-    return
+  assert SceneLoader.scenes[SCENE_NAME] == SceneLoader.scene
+  return

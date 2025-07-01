@@ -5,12 +5,12 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="controller",
-    package_dir={"": "."},
+    name='controller',
+    package_dir={'': '.'},
     packages=find_packages(),
-    python_requires=">=3.7",
-    license="Intel Confidential",
-    version="1.0.0",
-    author="Intel Corporation",
-    description="SceneScape core functionality",
+    python_requires='>=3.7',
+    license='Intel Confidential',
+    version='1.0.0',
+    author='Intel Corporation',
+    description='SceneScape core functionality',
 )

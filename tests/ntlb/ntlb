@@ -17,179 +17,139 @@ from test_result import TestResult
 
 TESTS_DIR = "tests"
 
-
 def build_argparser():
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
-    parser.add_argument(
-        "--junitdir",
-        default="tests/reports/test_reports",
-        help="directory with junit xml files",
-    )
+  parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+  parser.add_argument("--junitdir", default="tests/reports/test_reports",
+                      help="directory with junit xml files")
 
-    subparsers = parser.add_subparsers(help="commands", dest="command")
+  subparsers = parser.add_subparsers(help="commands", dest="command")
 
-    sub_parser = subparsers.add_parser(
-        "update-junit", help="Parse output from `make --trace`" " and update junit files"
-    )
-    sub_parser.add_argument("log", help="Path to log file with `make -C tests` output")
-    sub_parser.add_argument(
-        "--ignore-skipped",
-        action="store_true",
-        help="Don't create/update junit files of skipped tests",
-    )
-    sub_parser.add_argument(
-        "--no-overwrite", action="store_true", help="Don't overwrite junit files"
-    )
+  sub_parser = subparsers.add_parser("update-junit", help="Parse output from `make --trace`"
+                                     " and update junit files")
+  sub_parser.add_argument("log", help="Path to log file with `make -C tests` output")
+  sub_parser.add_argument("--ignore-skipped", action="store_true",
+                          help="Don't create/update junit files of skipped tests")
+  sub_parser.add_argument("--no-overwrite", action="store_true",
+                          help="Don't overwrite junit files")
 
-    sub_parser = subparsers.add_parser(
-        "check-zephyr-test-id", help="Check that all tests have a Zephyr test ID"
-    )
+  sub_parser = subparsers.add_parser("check-zephyr-test-id",
+                                     help="Check that all tests have a Zephyr test ID")
 
-    sub_parser = subparsers.add_parser(
-        "check-collection", help="Check that all tests are in a collection"
-    )
+  sub_parser = subparsers.add_parser("check-collection",
+                                     help="Check that all tests are in a collection")
 
-    sub_parser = subparsers.add_parser(
-        "newly-broken", help="List tests which were recently flagged as broken"
-    )
-    sub_parser.add_argument(
-        "commit", nargs="?", help="get list of broken tests added by commit"
-    )
-    sub_parser.add_argument(
-        "--all",
-        action="store_true",
-        help="Print all tests marked as broken instead of finding newest",
-    )
-    sub_parser.add_argument(
-        "--broken-only",
-        action="store_true",
-        help="do not print tests that have been fixed",
-    )
+  sub_parser = subparsers.add_parser("newly-broken",
+                                     help="List tests which were recently flagged as broken")
+  sub_parser.add_argument("commit", nargs="?", help="get list of broken tests added by commit")
+  sub_parser.add_argument("--all", action="store_true",
+                          help="Print all tests marked as broken instead of finding newest")
+  sub_parser.add_argument("--broken-only", action="store_true",
+                          help="do not print tests that have been fixed")
 
-    return parser
-
+  return parser
 
 def update_junit(args):
-    mp = MakefileParser(TESTS_DIR)
-    allTests = mp.allTargets
+  mp = MakefileParser(TESTS_DIR)
+  allTests = mp.allTargets
 
-    lp = LogParser(args.log)
-    lp.updateTests(allTests)
+  lp = LogParser(args.log)
+  lp.updateTests(allTests)
 
-    ju = ReportUpdater(args.junitdir, not args.no_overwrite)
-    broken = mp.brokenTests(os.path.join(mp.directory, "Makefile"))
-    ju.update(allTests, broken=broken, ignoreSkipped=args.ignore_skipped)
+  ju = ReportUpdater(args.junitdir, not args.no_overwrite)
+  broken = mp.brokenTests(os.path.join(mp.directory, "Makefile"))
+  ju.update(allTests, broken=broken, ignoreSkipped=args.ignore_skipped)
 
-    print()
-    print("Total tests:", len(allTests))
-    print(
-        "   executed:",
-        len([x for x in allTests if allTests[x].status != TestResult.SKIPPED]),
-    )
-    print(
-        "     failed:",
-        len([x for x in allTests if allTests[x].status == TestResult.FAILED]),
-    )
-    print(
-        "    skipped:",
-        len([x for x in allTests if allTests[x].status == TestResult.SKIPPED]),
-    )
+  print()
+  print("Total tests:", len(allTests))
+  print("   executed:", len([x for x in allTests if allTests[x].status != TestResult.SKIPPED]))
+  print("     failed:", len([x for x in allTests if allTests[x].status == TestResult.FAILED]))
+  print("    skipped:", len([x for x in allTests if allTests[x].status == TestResult.SKIPPED]))
 
-    return
-
+  return
 
 def check_zephyr_test_id(args):
-    mp = MakefileParser(TESTS_DIR)
-    allTests = mp.allTargets
+  mp = MakefileParser(TESTS_DIR)
+  allTests = mp.allTargets
 
-    errors = 0
+  errors = 0
 
-    for target in allTests:
-        test = allTests[target]
-        if test.zephyrTestID is None:
-            print("Missing Zephyr test ID:", target)
-            errors += 1
+  for target in allTests:
+    test = allTests[target]
+    if test.zephyrTestID is None:
+      print("Missing Zephyr test ID:", target)
+      errors += 1
 
-    return errors
-
+  return errors
 
 def check_collection(args):
-    mp = MakefileParser(TESTS_DIR)
-    allTests = mp.allTargets
+  mp = MakefileParser(TESTS_DIR)
+  allTests = mp.allTargets
 
-    errors = 0
+  errors = 0
 
-    for target in allTests:
-        test = allTests[target]
-        if not hasattr(test, "collections") or not test.collections:
-            print("Missing collection:", target)
-            errors += 1
+  for target in allTests:
+    test = allTests[target]
+    if not hasattr(test, 'collections') or not test.collections:
+      print("Missing collection:", target)
+      errors += 1
 
-    return errors
-
+  return errors
 
 def broken_in_commit(mp, commit, path):
-    temp = tempfile.NamedTemporaryFile()
-    cmd = ["git", "show", commit + ":" + path]
-    subprocess.run(cmd, stdout=temp)
-    temp.flush
-    return mp.brokenTests(temp.name)
-
+  temp = tempfile.NamedTemporaryFile()
+  cmd = ["git", "show", commit + ":" + path]
+  subprocess.run(cmd, stdout=temp)
+  temp.flush
+  return mp.brokenTests(temp.name)
 
 def newly_broken(args):
-    mp = MakefileParser(TESTS_DIR)
-    path = os.path.join(mp.directory, "Makefile")
+  mp = MakefileParser(TESTS_DIR)
+  path = os.path.join(mp.directory, "Makefile")
 
-    commits = mp.getCommitIDs(args.commit)
-    start = commits[0]
+  commits = mp.getCommitIDs(args.commit)
+  start = commits[0]
 
-    cur_broken = broken_in_commit(mp, start, path)
-    if args.all:
-        print(f"Tests marked as broken in commit {start}")
-        for test in cur_broken:
-            print(test)
-        return
-
-    prev_broken = set()
-    commit = None
-    for commit in commits[1:]:
-        prev_broken = broken_in_commit(mp, commit, path)
-        if (
-            not args.broken_only and cur_broken != prev_broken
-        ) or cur_broken - prev_broken:
-            break
-
-    newly_broken = cur_broken - prev_broken
-    newly_fixed = prev_broken - cur_broken
-    if newly_broken:
-        print(f"Tests added to broken after commit {commit}")
-        for test in newly_broken:
-            print(test)
-
-    if newly_fixed and not args.broken_only:
-        print(f"Tests fixed after commit {commit}")
-        for test in newly_fixed:
-            print(test)
-
+  cur_broken = broken_in_commit(mp, start, path)
+  if args.all:
+    print(f"Tests marked as broken in commit {start}")
+    for test in cur_broken:
+      print(test)
     return
 
+  prev_broken = set()
+  commit = None
+  for commit in commits[1:]:
+    prev_broken = broken_in_commit(mp, commit, path)
+    if (not args.broken_only and cur_broken != prev_broken) or cur_broken - prev_broken:
+      break
+
+  newly_broken = cur_broken - prev_broken
+  newly_fixed = prev_broken - cur_broken
+  if newly_broken:
+    print(f"Tests added to broken after commit {commit}")
+    for test in newly_broken:
+      print(test)
+
+  if newly_fixed and not args.broken_only:
+    print(f"Tests fixed after commit {commit}")
+    for test in newly_fixed:
+      print(test)
+
+  return
 
 def main():
-    args = build_argparser().parse_args()
+  args = build_argparser().parse_args()
 
-    if args.command == "update-junit":
-        return update_junit(args)
-    elif args.command == "check-zephyr-test-id":
-        return check_zephyr_test_id(args)
-    elif args.command == "check-collection":
-        return check_collection(args)
-    elif args.command == "newly-broken":
-        return newly_broken(args)
+  if args.command == "update-junit":
+    return update_junit(args)
+  elif args.command == "check-zephyr-test-id":
+    return check_zephyr_test_id(args)
+  elif args.command == "check-collection":
+    return check_collection(args)
+  elif args.command == "newly-broken":
+    return newly_broken(args)
 
-    return
+  return
 
-
-if __name__ == "__main__":
-    exit(main() or 0)
+if __name__ == '__main__':
+  exit(main() or 0)

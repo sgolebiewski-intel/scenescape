@@ -8,12 +8,10 @@ import os
 
 from percebro.detector import Detector
 
-
 def main():
-    infeng = Detector(asynchronous=True, distributed=False)
-    infeng.setParameters("retail", "GPU", None, 0.8, 4, False)
-    return
+  infeng = Detector(asynchronous=True, distributed=False)
+  infeng.setParameters("retail", "GPU", None, 0.8, 4, False)
+  return
 
-
-if __name__ == "__main__":
-    os._exit(main() or 0)
+if __name__ == '__main__':
+  os._exit(main() or 0)
