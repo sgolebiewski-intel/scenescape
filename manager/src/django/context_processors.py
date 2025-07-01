@@ -4,10 +4,11 @@
 
 from django.conf import settings
 
+
 def selected_settings(request):
-  return {
-    'APP_VERSION_NUMBER': settings.APP_VERSION_NUMBER,
-    'APP_PROPER_NAME': settings.APP_PROPER_NAME,
-    'APP_BASE_NAME': settings.APP_BASE_NAME,
-    'KUBERNETES_SERVICE_HOST': settings.KUBERNETES_SERVICE_HOST,
-  }
+    return {
+        "APP_VERSION_NUMBER": settings.APP_VERSION_NUMBER,
+        "APP_PROPER_NAME": settings.APP_PROPER_NAME,
+        "APP_BASE_NAME": settings.APP_BASE_NAME,
+        "KUBERNETES_SERVICE_HOST": settings.KUBERNETES_SERVICE_HOST,
+    }

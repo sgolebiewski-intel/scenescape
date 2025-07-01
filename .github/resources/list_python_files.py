@@ -17,7 +17,9 @@ def main():
         cmd_find_files_with_shebang, stdout=subprocess.PIPE
     )
     python_files_without_extension = subprocess.run(
-        ["grep", "-v", "\\.py$"], input=files_with_shebang.stdout, stdout=subprocess.PIPE
+        ["grep", "-v", "\\.py$"],
+        input=files_with_shebang.stdout,
+        stdout=subprocess.PIPE,
     )
 
     all_python_files = files_with_py_extension.stdout.decode(
