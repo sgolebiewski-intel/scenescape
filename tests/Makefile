@@ -184,7 +184,6 @@ _functional-tests: \
   bounding-box \
   delete-roi-mqtt \
   delete-tripwire-mqtt \
-  delete-sensor-mqtt \
   geospatial-ingest-publish \
   mqtt-auth \
   mqtt-cert \
@@ -213,6 +212,7 @@ ui-tests:
 _ui-tests: \
   add-delete-3d-object \
   camera-intrinsics \
+  delete-sensor-mqtt \
   delete-sensor-scene \
   delete-sensors \
   object-crud \
