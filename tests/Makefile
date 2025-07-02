@@ -123,6 +123,7 @@ basic-acceptance-tests: \
 # FIXME: run functional tests in parallel
 standard-tests: \
   _functional-tests \
+  non-functional-tests \
   metric-tests \
   ui-tests \
   show-telemetry-button \
@@ -151,6 +152,18 @@ _functional-tests: \
   rest-test \
   child-scenes \
   vdms-similarity-search \
+
+non-functional-tests:
+	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) -k
+
+_non-functional-tests: \
+  build-time \
+
+non-functional-tests:
+	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) -k
+
+_non-functional-tests: \
+  build-time \
 
 metric-tests:
 	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) -k
@@ -238,6 +251,20 @@ native-tracker:
 	  ; tools/scenescape-start controller/tools/tracker/tracker-test controller/tools/tracker/standard-tests.json | tee -i $(LOGFILE) \
 	  ; echo "MAKE_TARGET: $@" | tee -ia $(LOGFILE) \
 	  ; echo END TEST $@
+
+build-time: # NEX-T12520
+	$(eval LOGFILE=$(TEST_DATA)/$@-$(shell date -u +"%F-%T").log)
+	@set -ex \
+	  ; echo RUNNING TEST $@ \
+	  ; cd $(CURDIR)/.. \
+	  ; mkdir -p $(shell dirname $(LOGFILE)) \
+	  ; python3 tests/scripts/build-time.py \
+	  --time-limit 600 \
+	  --clean-cmd "make clean-all && docker builder prune -af" \
+	  --build-cmd "make FOLDERS=autocalibration broker controller manager model_installer" \
+	  --test-name "NEX-T12520" \
+	  2>&1 | tee -i $(LOGFILE) \
+	  ; echo "MAKE_TARGET: $@" | tee -ia $(LOGFILE)
 
 deploy: # NEX-T10422
 	$(eval LOGFILE=$(TEST_DATA)/code_build/$@-$(shell date -u +"%F-%T").log)
