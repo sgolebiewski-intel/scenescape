@@ -159,12 +159,6 @@ non-functional-tests:
 _non-functional-tests: \
   build-time \
 
-non-functional-tests:
-	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) -k
-
-_non-functional-tests: \
-  build-time \
-
 metric-tests:
 	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) -k
 
