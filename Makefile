@@ -66,8 +66,6 @@ help:
 	@echo "  <image folder>              Build a specific microservice image (autocalibration, broker, etc.)"
 	@echo ""
 	@echo "  demo                        Start the SceneScape demo. Percebro-based visual analytics pipelines are used by default."
-	@echo "                              (the demo target requires the SUPASS environment variable to be set"
-	@echo "                              as the super user password for logging into Intel® SceneScape)"
 	@echo ""
 	@echo "  list-dependencies           List all apt/pip dependencies for all microservices"
 	@echo "  build-sources-image         Build the image with 3rd party sources"
@@ -107,7 +105,7 @@ help:
 	@echo "  add-licensing FILE=<file>   Add licensing headers to a file"
 	@echo ""
 	@echo "Usage:"
-	@echo "  - Use 'SUPASS=<password> make build-all demo' to build Intel® SceneScape and run demo."
+	@echo "  - Use 'make build-all demo' to build Intel® SceneScape and run demo."
 	@echo ""
 	@echo "Tips:"
 	@echo "  - Use 'DLS=1 make demo' to run demo with DLStreamer-based visual analytics pipelines."
@@ -369,11 +367,6 @@ add-licensing:
 
 .PHONY: demo
 demo: docker-compose.yml .env
-	@if [ -z "$$SUPASS" ]; then \
-	    echo "Please set the SUPASS environment variable before starting the demo for the first time."; \
-	    echo "The SUPASS environment variable is the super user password for logging into Intel® SceneScape."; \
-	    exit 1; \
-	fi
 	@if [ "$${DLS}" = "1" ]; then \
 	    $(MAKE) $(DLSTREAMER_SAMPLE_VIDEOS); \
 	fi
@@ -405,7 +398,7 @@ $(DLSTREAMER_SAMPLE_VIDEOS): ./dlstreamer-pipeline-server/convert_video_to_ts.sh
 # ======================= Secrets Management =========================
 
 .PHONY: init-secrets
-init-secrets: $(SECRETSDIR) certificates authfiles django-secrets
+init-secrets: $(SECRETSDIR) certificates authfiles django-secrets supass-secret
 
 $(SECRETSDIR):
 	mkdir -p $@
@@ -414,6 +407,11 @@ $(SECRETSDIR):
 .PHONY: $(SECRETSDIR) certificates
 certificates:
 	@make -C ./tools/certificates CERTPASS=$$(openssl rand -base64 12) SECRETSDIR=$(SECRETSDIR) CERTDOMAIN=$(CERTDOMAIN)
+
+.PHONY: supass-secret
+supass-secret: $(SECRETSDIR)
+	@cp sample_data/supass $(SECRETSDIR)/supass
+	@chmod 0600 $(SECRETSDIR)/supass
 
 %.auth:
 	@set -e; \

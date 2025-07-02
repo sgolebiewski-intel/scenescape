@@ -37,6 +37,8 @@ secrets:
     file: ${SECRETSDIR}/browser.auth
   calibration.auth:
     file: ${SECRETSDIR}/calibration.auth
+  supass:
+    file: ${SECRETSDIR}/supass
 
 services:
   ntpserv:
@@ -82,7 +84,6 @@ services:
     networks:
       scenescape:
     environment:
-     - "SUPASS"
      - "DBROOT"
     command: database --preloadexample
     cap_add:
@@ -102,6 +103,7 @@ services:
      - percebro.auth
      - browser.auth
      - calibration.auth
+     - supass
     restart: always
 
   web:

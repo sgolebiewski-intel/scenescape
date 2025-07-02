@@ -21,10 +21,6 @@ DB=${DBROOT}/db
 if [ ! -e ${MIGRATIONS} ] || [ ! -e ${DB}/postgresql.conf ] ; then
     CREATEDB=1
 fi
-if [ ${CREATEDB} = 1 ] && [ -z "${SUPASS}" ] ; then
-    echo "Need to set up SUPASS before creating the DB."
-    exit 1
-fi
 
 if [ ${CREATEDB} = 1 ]; then
     mkdir -p ${DB}
@@ -104,13 +100,20 @@ if [ ${CREATEDB} = 1 ] ; then
     echo "Adding django admin"
     echo '#############'
     echo ''
+    SUPASS_FILE="${RUNSECRETS}/supass"
+
+    if [ ! -f "$SUPASS_FILE" ] || ! jq empty "$SUPASS_FILE" 2>/dev/null; then
+        echo "Error: Superuser password file missing or invalid." >&2
+        exit 1
+    fi
+
     if [ -t 1 ] ; then
         sudo -u ${WSUSER} -E -H ./manage.py createsuperuser
     else
-        DJANGO_SUPERUSER_PASSWORD="${SUPASS}" sudo -u ${WSUSER} -E -H \
+        DJANGO_SUPERUSER_PASSWORD="$(jq -r '.password' "$SUPASS_FILE")" sudo -u ${WSUSER} -E -H \
                                 ./manage.py createsuperuser \
                                 --no-input \
-                                --username=admin \
+                                --username=$(jq -r '.user' "$SUPASS_FILE") \
                                 --email=admin@domain.com
     fi
     if [ -e ${WORKSPACE}/${EXAMPLEDB} ] ; then

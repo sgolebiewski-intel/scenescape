@@ -48,6 +48,7 @@ RUN : \
         apache2 \
         bindfs \
         bzip2 \
+        jq \
         libegl1 \
         libgl1 \
         libapache2-mod-wsgi-py3 \
