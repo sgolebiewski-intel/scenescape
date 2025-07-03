@@ -19,15 +19,20 @@ TW_NAME = "Tripwire_to_be_Deleted"
 OBJECT_CATEGORY = "custom_object"
 is_receiving_message = False
 
-def on_connect(mqttc, obj, flags, rc):
-  """! Call back which subscribes to topic
-  @param    mqttc     the mqtt client object
-  @param    obj       the private user data
-  @param    flags     the response sent by the broker
-  @param    rc        the connection result
-  """
-  print("Connected!")
-  return
+
+def create_tripwire_by_ratio(tripwire_name, scene_id, x_ratio):
+    demo_scene_width = 900
+    demo_scene_height = 643
+    demo_scene_scale = 100
+
+    # Create tripwire across the center point (origin is bottom left in meters)
+    cx = demo_scene_width / (2 * demo_scene_scale)
+    cy = demo_scene_height / (2 * demo_scene_scale)
+    dx = cx * x_ratio
+    pt1 = (cx - dx, cy)
+    pt2 = (cx + dx, cy)
+    tripwire_data = {'scene': scene_id, 'name': tripwire_name, 'points': (pt1, pt2)}
+    return tripwire_data
 
 def eventReceived(pahoClient, userdata, message):
   """! Call back fuction for for receiving messages
@@ -40,30 +45,16 @@ def eventReceived(pahoClient, userdata, message):
   is_receiving_message = True
   return
 
-def verify_message_mqtt(client):
+def verify_message_mqtt(client, objData, objLocation):
   global is_receiving_message
   is_receiving_message = False
-  current_line = 0
-  data = open(GOOD_DATA_PATH, 'r')
-  g_data = data.readlines()
-
-  for line in g_data:
-    if line.startswith( '#' ):
-      pass
-    else:
-      jdata = json.loads(line.strip())
-      camera_id = jdata['id']
-      jdata['timestamp'] = get_iso_time()
-      line = json.dumps(jdata)
-
-      print('Sending frame {} id {}'.format(current_line, camera_id))
-      client.publish(PubSub.formatTopic(PubSub.DATA_CAMERA, camera_id=camera_id),
-                      line.strip())
-
-      time.sleep(1/10)
-      current_line += 1
-
-  data.close()
+  publishTopic = PubSub.formatTopic(PubSub.DATA_CAMERA, camera_id=objData['id'])
+  for yLoc in objLocation:
+    objData["timestamp"] = get_iso_time()
+    objData["objects"]['person'][0]["bounding_box"]["y"] = yLoc
+    line = json.dumps(objData)
+    client.publish(publishTopic, line)
+    time.sleep( 1/10 )
   return is_receiving_message
 
 def getTripwireUid(rest, tw_name):
@@ -72,7 +63,7 @@ def getTripwireUid(rest, tw_name):
   # Get the uid of the first result
   return res["results"][0]['uid']
 
-def test_create_and_delete_tripwire_mqtt(params, record_xml_attribute):
+def test_create_and_delete_tripwire_mqtt(params, record_xml_attribute, objData, objLocation):
   """! This function creates Trip wire horizontally and the data is published
   such that the object (category ["custom_person"]) moves vertically across the
   tripwrire triggerring event data. The tripwire is deleted and the object data
@@ -102,7 +93,8 @@ def test_create_and_delete_tripwire_mqtt(params, record_xml_attribute):
     print("Logged in")
 
     assert common.navigate_to_scene(browser, common.TEST_SCENE_NAME)
-    assert common.create_tripwire(browser, TW_NAME)
+    tripwire_data = create_tripwire_by_ratio(TW_NAME, common.TEST_SCENE_ID, 0.8)
+    res = rest.createTripwire(tripwire_data)
 
     # Subscribe the newly created tripwire
     tw_uid = getTripwireUid(rest, TW_NAME)
@@ -121,16 +113,18 @@ def test_create_and_delete_tripwire_mqtt(params, record_xml_attribute):
     assert tw_uid_check == tw_uid, f"The tripwire UUID after the modification doesn't match!" \
       " Before: {tw_uid} - After: {tw_uid_check}"
     print("Events should be received from the sensor...")
-    message_received = verify_message_mqtt(client)
+    message_received = verify_message_mqtt(client, objData, objLocation)
+
     assert message_received, "The scene hasn't processed any event from the tripwire!"
     exit_code -= 1
 
     # Deleting the tripwire and click on save tripwire and region button
     common.delete_tripwire(browser, tw_uid)
+    time.sleep(5)
     # Make sure that the tripwire does not exist
     assert not common.verify_tripwire_persistence(browser, TW_NAME)
     print("Events should not be received from the tripwire because it was deleted...")
-    message_received = verify_message_mqtt(client)
+    message_received = verify_message_mqtt(client, objData, objLocation)
     # Test should fail if scene processed any of the sensors tested
     assert not message_received, "The scene processed events from the tripwire!"
     exit_code -= 1

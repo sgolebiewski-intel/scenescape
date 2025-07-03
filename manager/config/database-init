@@ -124,6 +124,8 @@ if [ ${CREATEDB} = 1 ] ; then
         echo "Preloading example"
         echo '#############'
         echo ''
+        echo DKA ${DBROOT}/media
+        chown ${WSUSER} ${DBROOT}/media
         sudo -u ${WSUSER} tar -C ${DBROOT}/media -xf ${EXAMPLEDB}
         ./manage.py loaddata ${DBROOT}/media/data.json
         rm -f ${DBROOT}/media/data.json ${DBROOT}/media/meta.json

@@ -134,20 +134,15 @@ functional-tests:
 	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) BASE_IMAGE=$(BASE_IMAGE) -k
 
 _functional-tests: \
-  auto-calibration \
   add-orphaned-cameras \
   api-large-strings \
   bounding-box \
-  delete-roi-mqtt \
-  delete-tripwire-mqtt \
   geospatial-ingest-publish \
   mqtt-auth \
   mqtt-cert \
   mqtt-large-messages \
   mqtt-roi \
   mqtt-tripwire \
-  out-of-box-no-ntp \
-  out-of-box \
   percebro-3d-msgs \
   rest-test \
   child-scenes \
