@@ -99,8 +99,8 @@ AXES_LOCKOUT_PARAMETERS = [["username", "ip_address"]]
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 # fmt: off
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
         "ATOMIC_REQUESTS": True,
         "NAME": APP_BASE_NAME,
         "USER": APP_BASE_NAME,
