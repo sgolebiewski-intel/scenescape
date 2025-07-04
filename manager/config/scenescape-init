@@ -207,7 +207,7 @@ if [ -e ${MANAGERDIR}/manager/secrets.py ] ; then
     DBPASS=$(sed -r -n -e "/DATABASE_PASSWORD=/s/.*'([^']+)'/\1/p" \
                  ${MANAGERDIR}/manager/secrets.py)
 fi
-export -n DBPASS SUPASS
+export -n DBPASS
 
 # Start the things
 

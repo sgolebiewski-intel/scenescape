@@ -16,6 +16,8 @@ secrets:
     file: ./manager/secrets/browser.auth
   scenescape-ca.pem:
     file: ./manager/secrets/certs/scenescape-ca.pem
+  supass:
+    file: ./manager/secrets/supass
 
 services:
   pgserver:
@@ -24,7 +26,6 @@ services:
     networks:
       scenescape-test:
     environment:
-     - "SUPASS"
      - "DBROOT"
     command: database --preloadexample
     cap_add:
@@ -42,4 +43,5 @@ services:
      - percebro.auth
      - browser.auth
      - scenescape-ca.pem
+     - supass
     restart: on-failure

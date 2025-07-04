@@ -26,15 +26,13 @@ NPROCS?=$(shell echo $(shell grep -c ^processor /proc/cpuinfo)/3 | bc)
 COMPOSE=tests/compose
 EXAMPLEDB=tests/testdb.tar.bz2
 SECRETSDIR ?= $(PWD)/manager/secrets
+SUPASS_FILE=$(SECRETSDIR)/supass
 
 ifeq ($(KUBERNETES),1)
     RUNTEST=tests/kubernetes/runtest
 else
     RUNTEST=tests/runtest
 endif
-
-RANDPASS:=$(shell openssl rand -base64 12)
-export SUPASS?=$(RANDPASS)
 
 define common-recipe =
 	$(eval YML=$1)
@@ -47,7 +45,7 @@ define common-recipe =
 	$(eval LOGFILE=$(TEST_DATA)/smoke/$@-$(shell date -u +"%F-%T").log)
 	@set -ex \
 	  ; if [ x$(REQUIRE_SUPASS) = xtrue ] ; then \
-	      EXTRAS="--password=$(SUPASS)"; \
+	      EXTRAS="--password=$(jq -r '.password' "$SUPASS_FILE" | base64 -d)"; \
 	  fi \
 	  ; if [ ! -z "$(AUTH_USER)" ]; then \
 	      EXTRAS="$${EXTRAS} $(AUTH_USER)"; \
@@ -132,7 +130,7 @@ standard-tests: \
   unit-tests \
 
 functional-tests:
-	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) BASE_IMAGE=$(BASE_IMAGE) -k
+	$(MAKE) -Otarget -j $(NPROCS) _$@ BASE_IMAGE=$(BASE_IMAGE) -k
 
 _functional-tests: \
   add-orphaned-cameras \
@@ -154,13 +152,13 @@ _functional-tests: \
   vdms-similarity-search \
 
 non-functional-tests:
-	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) -k
+	$(MAKE) -Otarget -j $(NPROCS) _$@ -k
 
 _non-functional-tests: \
   build-time \
 
 metric-tests:
-	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) -k
+	$(MAKE) -Otarget -j $(NPROCS) _$@ -k
 
 _metric-tests: \
   idc-error-metric \
@@ -169,7 +167,7 @@ _metric-tests: \
   msoce-metric \
 
 ui-tests:
-	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) -k
+	$(MAKE) -Otarget -j $(NPROCS) _$@ -k
 
 _ui-tests: \
   add-delete-3d-object \
@@ -188,7 +186,7 @@ _ui-tests: \
   view-3d-glb-file \
 
 unit-tests:
-	$(MAKE) -Otarget -j $(NPROCS) _$@ SUPASS=$(SUPASS) -k
+	$(MAKE) -Otarget -j $(NPROCS) _$@ -k
 
 _unit-tests: \
   autocamcalib-unit \
@@ -266,7 +264,7 @@ deploy: # NEX-T10422
 	  ; echo RUNNING TEST $@ \
 	  ; cd .. \
 	  ; mkdir -p $(shell dirname $(LOGFILE)) \
-	  ; SKIP_BRINGUP=1 REQUIRED_FPS=0 CERTPASS=$$(openssl rand -base64 12) SKIPYML=1 SUPASS=$(SUPASS) ./deploy.sh 2>&1 | tee -i $(LOGFILE) \
+	  ; SKIP_BRINGUP=1 REQUIRED_FPS=0 CERTPASS=$$(openssl rand -base64 12) SKIPYML=1 ./deploy.sh 2>&1 | tee -i $(LOGFILE) \
 	  ; echo "MAKE_TARGET: $@" | tee -ia $(LOGFILE) \
 	  ; echo END TEST $@
 

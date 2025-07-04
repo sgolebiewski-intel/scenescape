@@ -18,6 +18,8 @@ secrets:
     file: ./manager/secrets/calibration.auth
   scenescape-ca.pem:
     file: ./manager/secrets/certs/scenescape-ca.pem
+  supass:
+    file: ./manager/secrets/supass
 
 services:
   pgserver:
@@ -26,7 +28,6 @@ services:
     networks:
       scenescape-test:
     environment:
-     - "SUPASS"
      - "DBROOT"
      - "EXAMPLEDB"
     command: database --preloadexample
@@ -46,4 +47,5 @@ services:
      - browser.auth
      - calibration.auth
      - scenescape-ca.pem
+     - supass
     restart: on-failure

@@ -16,7 +16,7 @@ define perf-recipe =
 endef
 
 performance_tests:
-	$(MAKE) -Otarget -j 1 _performance_tests SUPASS=$(SUPASS) -k
+	$(MAKE) -Otarget -j 1 _performance_tests -k
 
 _performance_tests: \
   inference-conformance \

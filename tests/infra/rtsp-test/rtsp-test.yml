@@ -5,13 +5,16 @@
 networks:
   scenescape-rtsp:
 
+secrets:
+  supass:
+    file: ./manager/secrets/supass
+
 services:
   rtsp:
     image: aler9/rtsp-simple-server
     networks:
       - scenescape-rtsp
     environment:
-     - "SUPASS"
      - "DBROOT"
     cap_add:
      - SYS_ADMIN
@@ -21,6 +24,8 @@ services:
      - apparmor:unconfined
     volumes:
      - ./:/workspace
+    secrets:
+     - supass
     tty: true
     restart: always
 
