@@ -184,7 +184,7 @@ done
 
 if [ -n "${DBHOST}" ] ; then
     echo "Setting host to '${DBHOST}'"
-    sed -e "s/'HOST': '[^']*'/'HOST': '${DBHOST}'/" \
+    sed -e "s/\"HOST\": \"[^\"]*\"/\"HOST\": \"${DBHOST}\"/" \
         -i ${MANAGERDIR}/manager/settings.py
     grep HOST ${MANAGERDIR}/manager/settings.py
 fi

@@ -105,7 +105,7 @@ DATABASES = {
         "NAME": APP_BASE_NAME,
         "USER": APP_BASE_NAME,
         "PASSWORD": DATABASE_PASSWORD,
-        'HOST': 'localhost',
+        "HOST": "localhost",
         "PORT": "",
     }
 }
