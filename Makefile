@@ -18,7 +18,7 @@ REBUILDFLAGS :=
 # Image variables
 IMAGE_PREFIX := scenescape
 SOURCES_IMAGE := $(IMAGE_PREFIX)-sources
-VERSION := $(if $(VERSION),$(VERSION),$(shell cat ./version.txt))
+VERSION := $(shell cat ./version.txt)
 
 # User configurable variables
 # - User can adjust build output folder (defaults to $PWD/build)
