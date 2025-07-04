@@ -102,7 +102,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'ATOMIC_REQUESTS': True,
-        'NAME': APP_BASE_NAME,
+        "NAME": APP_BASE_NAME,
         "USER": APP_BASE_NAME,
         "PASSWORD": DATABASE_PASSWORD,
         'HOST': 'localhost',
