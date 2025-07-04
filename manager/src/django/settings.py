@@ -97,7 +97,7 @@ AXES_LOCKOUT_PARAMETERS = [["username", "ip_address"]]
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
+# fmt: off
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -109,7 +109,7 @@ DATABASES = {
         'PORT': '',
     }
 }
-
+# fmt: on
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
