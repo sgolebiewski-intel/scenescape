@@ -204,7 +204,7 @@ if [ -e ${RUNSECRETS}/django/secrets.py ] ; then
     chown -R $WSUID:$WSGID ${MANAGERDIR}/manager/secrets.py
 fi
 if [ -e ${MANAGERDIR}/manager/secrets.py ] ; then
-    DBPASS=$(sed -r -n -e "/DATABASE_PASSWORD=/s/.*'([^']+)'/\1/p" \
+    DBPASS=$(sed -r -n -e "/DATABASE_PASSWORD=/s/.*\"([^\"]+)\"/\1/p" \
                  ${MANAGERDIR}/manager/secrets.py)
 fi
 export -n DBPASS SUPASS

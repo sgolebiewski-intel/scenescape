@@ -34,9 +34,9 @@ wait_for_container() {
     local max_wait=30
     local cur_wait=0
     local container_ready=0
-    
+
     log_message "Waiting for container '${containername}' to start..."
-    
+
     # Wait for container to exist
     while [ -z "$(docker ps -q -f name=${containername})" ]; do
         sleep 2
@@ -45,28 +45,28 @@ wait_for_container() {
             log_message "ERROR: Container '${containername}' failed to start within ${max_wait} seconds"
             return 1
         fi
-        
+
         # Show progress
         if (( cur_wait % 10 == 0 )); then
             log_message "Still waiting for container to start... (${cur_wait}s)"
         fi
     done
-    
+
     log_message "Container '${containername}' is running, waiting for readiness signal..."
-    
+
     # Reset counter for next phase
     cur_wait=0
-    
+
     # Wait for container to be ready
     while true; do
         if docker logs ${containername} 2>&1 | grep -q "${waitforstring}"; then
             log_message "Container '${containername}' is ready!"
             return 0
         fi
-        
+
         sleep 2
         ((cur_wait+=2))
-        
+
         # Show progress periodically
         if (( cur_wait % 10 == 0 )); then
             log_message "Waiting for container readiness... (${cur_wait}s)"
@@ -76,7 +76,7 @@ wait_for_container() {
                 log_message "  | $line"
             done
         fi
-        
+
         if [[ $cur_wait -ge $max_wait ]]; then
             log_message "WARNING: Failed to detect readiness string '${waitforstring}' in container logs"
             log_message "Container may still be functional. Continuing..."
@@ -93,25 +93,25 @@ check_prerequisites() {
         log_message "No upgrade or migration needed."
         exit 1
     fi
-    
+
     # Get PostgreSQL versions
     pg_db_version=$(cat ${dbdir}/PG_VERSION)
     pg_new_version=$(docker run --rm ${scenescape_image} /bin/sh -c \
                      'echo -n PG_NEW_VERSION= ; ls /usr/lib/postgresql' \
                      | awk -F= '/PG_NEW_VERSION/{print $2}' | tr -d '\015')
-    
+
     if [ -z "${pg_new_version}" ]; then
         log_message "Unknown Postgres version"
         exit 1
     fi
-    
+
     log_message "Current PostgreSQL version: ${pg_db_version}"
     log_message "Target PostgreSQL version: ${pg_new_version}"
 }
 
 check_migration_needed() {
     local pg_container="pg_check"
-    
+
     if [ "${pg_new_version}" -le "${pg_db_version}" ]; then
         log_message "Postgres server version ${pg_new_version} is not newer than existing database version ${pg_db_version}"
 
@@ -134,20 +134,20 @@ check_migration_needed() {
             -e PYTHONPATH=${appdir} \
             ${scenescape_image} \
             database
-        
+
         wait_for_container ${pg_container}
-        
+
         if ! docker exec -it ${pg_container} /bin/bash manager/tools/migration --check; then
             log_message "No migration needed"
             docker stop ${pg_container}
             docker rm ${pg_container}
             exit 0
         fi
-        
+
         docker stop ${pg_container}
         docker rm ${pg_container}
     fi
-    
+
     if [ ${check_only} = 1 ]; then
         log_message "Migration check complete. Migration is needed."
         exit 0
@@ -158,18 +158,18 @@ backup_database() {
     local backup="${dbdir}-backup-${now}"
     local pg_container="pg_backup"
     local pg_uid=$(stat -c '%u' ${dbdir})
-    
+
     log_message "Creating backup of existing database..."
     mkdir "${backup}"
     rsync -a ${dbdir} ${migrationsdir} ${backup}/.
-    
+
     # Configure backup database
     cp ${dbdir}/pg_hba.conf ${backup}/${dbdir}/pg_hba.conf-orig
     cat > ${backup}/${dbdir}/pg_hba.conf <<EOF
 local all all trust
 host all all 0.0.0.0/0 trust
 EOF
-    
+
     # Start database container for backup
     log_message "Starting PostgreSQL ${pg_db_version} container for backup..."
     docker run \
@@ -182,29 +182,29 @@ EOF
         -d \
         postgres:${pg_db_version} \
         -c "usermod --uid=${pg_uid} postgres ; id postgres ; exec docker-entrypoint.sh postgres"
-    
+
     wait_for_container ${pg_container} "database system is ready to accept connections"
-    
+
     # Create SQL backup
     log_message "Creating SQL backup of database..."
     docker exec ${pg_container} /bin/bash -c 'su postgres -c "pg_dump -U scenescape"' > ${backup}.psql
-    
+
     docker stop ${pg_container}
     docker rm ${pg_container}
     log_message "Database backup created at: ${backup}"
     log_message "SQL backup created at: ${backup}.psql"
-    
+
     return 0
 }
 
 initialize_volumes() {
     local temp_container="init_volumes"
-    
+
     log_message "Preparing Docker volumes..."
     docker volume rm scenescape_vol-db scenescape_vol-migrations 2>/dev/null || true
     docker volume create scenescape_vol-db
     docker volume create scenescape_vol-migrations
-    
+
     # Copy migrations to volume
     log_message "Initializing migrations volume..."
     docker run --name ${temp_container} \
@@ -212,7 +212,7 @@ initialize_volumes() {
         -v ${PWD}/${migrationsdir}:/source/migrations \
         -v scenescape_vol-migrations:/dest/migrations \
         alpine:latest sleep 10
-    
+
     docker exec ${temp_container} /bin/sh -c "cp -r /source/migrations/* /dest/migrations/"
     docker stop ${temp_container} && docker rm ${temp_container}
 }
@@ -220,7 +220,7 @@ initialize_volumes() {
 upgrade_database() {
     local pg_container="pg_upgrade"
     local backup="${dbdir}-backup-${now}"
-    
+
     log_message "Starting PostgreSQL ${pg_new_version} container..."
     docker run \
         --name ${pg_container} \
@@ -231,14 +231,14 @@ upgrade_database() {
         -v scenescape_vol-db:/var/lib/postgresql/data \
         -d \
         postgres:${pg_new_version}
-    
+
     wait_for_container ${pg_container} "database system is ready to accept connections"
-    
+
     log_message "Restoring database from backup..."
     docker cp ${backup}.psql ${pg_container}:/tmp/backup.psql
     docker exec ${pg_container} /bin/bash -c \
         "su postgres -c 'psql -U scenescape -d scenescape < /tmp/backup.psql'"
-    
+
     log_message "Stopping and removing upgrade container..."
     docker stop ${pg_container}
     docker rm ${pg_container}
@@ -246,7 +246,7 @@ upgrade_database() {
 
 run_migration() {
     local pg_container="pg_migration"
-    
+
     log_message "Running database migration..."
     docker run \
         --name ${pg_container} \
@@ -266,7 +266,7 @@ run_migration() {
         -e PYTHONPATH=${appdir} \
         ${scenescape_image} \
         database
-    
+
     # Check if container is ready
     if ! wait_for_container ${pg_container}; then
         log_message "ABORTING: Container failed to initialize properly"
@@ -275,20 +275,20 @@ run_migration() {
         docker rm ${pg_container} 2>/dev/null || true
         return 1
     fi
-    
+
     # Execute migration
     docker exec -it ${pg_container} /bin/bash manager/tools/migration
     local migration_status=$?
-    
+
     log_message "Stopping and removing migration container..."
     docker stop ${pg_container}
     docker rm ${pg_container}
-    
+
     if [[ $migration_status -ne 0 ]]; then
         log_message "Migration failed with status ${migration_status}"
         return $migration_status
     fi
-    
+
     return 0
 }
 
@@ -307,35 +307,35 @@ main() {
         esac
         shift
     done
-    
+
     now=$(date +"%y%m%d-%H%M%S")
-    
+
     # Step 1: Check if prerequisites are met
     check_prerequisites
-    
+
     # Step 2: Check if migration is needed
     check_migration_needed
-    
+
     # Step 3: Get database password
-    dbpass=$(sed -r -n -e "/DATABASE_PASSWORD=/s/.*'([^']+)'/\1/p" ${dbdir}/../manager/secrets/django/secrets.py)
-    
+    dbpass=$(sed -r -n -e "/DATABASE_PASSWORD=/s/.*\"([^\"]+)\"/\1/p" ${dbdir}/../manager/secrets/django/secrets.py)
+
     # Step 4: Backup existing database
     backup_database
-    
+
     # Step 5: Initialize volumes for upgrade
     initialize_volumes
-    
+
     # Step 6: Upgrade database
     upgrade_database
-    
+
     # Step 7: Run migration
     run_migration
     migration_result=$?
-    
+
     # Step 8: Show results
     if [[ $migration_result -eq 0 ]]; then
         log_message "Database upgrade completed successfully"
-        echo 
+        echo
         echo "Old database has been backed up to: ${dbdir}-backup-${now}"
         echo "                     SQL backup at: ${dbdir}-backup-${now}.psql"
         echo
