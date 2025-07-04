@@ -317,7 +317,7 @@ main() {
     check_migration_needed
 
     # Step 3: Get database password
-    dbpass=$(sed -r -n -e "/DATABASE_PASSWORD=/s/.*\"([^\"]+)\"/\1/p" ${dbdir}/../manager/secrets/django/secrets.py)
+    dbpass=$(sed -r -n -e "/DATABASE_PASSWORD=/s/.*'([^']+)'/\1/p" ${dbdir}/../manager/secrets/django/secrets.py)
 
     # Step 4: Backup existing database
     backup_database
