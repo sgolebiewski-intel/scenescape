@@ -169,18 +169,6 @@ get_password()
     done
 }
 
-if [ -n "${SUPASS}" ] ; then
-    if ! ok_password "${SUPASS}" ; then
-        echo Please do not use "${CLEAN}" characters in SUPASS
-        exit 1
-    fi
-else
-    echo 'Enter a "superuser" password (SUPASS) for logging in to the web interface.'
-    echo "Acceptable characters are upper and lowercase letters, numbers, and the symbols -,_."
-    get_password "Enter SUPASS: "
-    SUPASS="${PASSWORD}"
-fi
-
 if [ -n "${DBPASS}" ] ; then
     if ! ok_password "${DBPASS}" ; then
         echo Please do not use "${CLEAN}" characters in DBPASS
@@ -205,7 +193,7 @@ if ! groups | grep docker > /dev/null ; then
     sudo usermod -a -G docker ${USER}
     echo
     echo Please enter the password for $USER to continue building
-    exec su - ${USER} -c "env SKIPYML=1 SUPASS=${SUPASS} DBPASS=${DBPASS} CERTPASS=${CERTPASS} ${SHELL} -c 'cd '${PWD}' && ./$0'"
+    exec su - ${USER} -c "env SKIPYML=1 DBPASS=${DBPASS} CERTPASS=${CERTPASS} ${SHELL} -c 'cd '${PWD}' && ./$0'"
 fi
 
 echo '########################################'
@@ -257,5 +245,5 @@ if manager/tools/upgrade-database --check ; then
 fi
 
 if [ "${SKIP_BRINGUP}" != "1" ] ; then
-    make demo DLS=$DLS SUPASS=$SUPASS
+    make demo DLS=$DLS
 fi

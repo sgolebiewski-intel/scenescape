@@ -110,11 +110,11 @@ if [ ${CREATEDB} = 1 ] ; then
     if [ -t 1 ] ; then
         sudo -u ${WSUSER} -E -H ./manage.py createsuperuser
     else
-        DJANGO_SUPERUSER_PASSWORD="$(jq -r '.password' "$SUPASS_FILE")" sudo -u ${WSUSER} -E -H \
-                                ./manage.py createsuperuser \
-                                --no-input \
-                                --username=$(jq -r '.user' "$SUPASS_FILE") \
-                                --email=admin@domain.com
+        DJANGO_SUPERUSER_PASSWORD="$(jq -r '.password' "$SUPASS_FILE" | base64 -d)" sudo -u ${WSUSER} -E -H \
+                    ./manage.py createsuperuser \
+                    --no-input \
+                    --username=$(jq -r '.user' "$SUPASS_FILE") \
+                    --email=admin@domain.com
     fi
     if [ -e ${WORKSPACE}/${EXAMPLEDB} ] ; then
         EXAMPLEDB=${WORKSPACE}/${EXAMPLEDB}
