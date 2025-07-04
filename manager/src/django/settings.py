@@ -106,7 +106,7 @@ DATABASES = {
         'USER': APP_BASE_NAME,
         'PASSWORD': DATABASE_PASSWORD,
         'HOST': 'localhost',
-        'PORT': '',
+        "PORT": "",
     }
 }
 # fmt: on
