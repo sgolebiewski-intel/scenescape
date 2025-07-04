@@ -101,7 +101,7 @@ AXES_LOCKOUT_PARAMETERS = [["username", "ip_address"]]
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'ATOMIC_REQUESTS': True,
+        "ATOMIC_REQUESTS": True,
         "NAME": APP_BASE_NAME,
         "USER": APP_BASE_NAME,
         "PASSWORD": DATABASE_PASSWORD,
