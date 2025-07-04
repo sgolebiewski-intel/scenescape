@@ -104,8 +104,8 @@ DATABASES = {
         'ATOMIC_REQUESTS': True,
         'NAME': APP_BASE_NAME,
         'USER': APP_BASE_NAME,
-        'PASSWORD': DATABASE_PASSWORD,
-        "HOST": "localhost",
+        "PASSWORD": DATABASE_PASSWORD,
+        'HOST': 'localhost',
         "PORT": "",
     }
 }
