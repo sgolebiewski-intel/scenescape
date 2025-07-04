@@ -13,9 +13,7 @@ from argparse import ArgumentParser
 TIMEOUT = 600
 NUM_RETRIES = "6"
 OMZ_DIR = "/usr/local/lib/open_model_zoo"
-MODEL_DIR = (
-    os.environ.get("MODEL_DIR") if "MODEL_DIR" in os.environ else "/workspace/models"
-)
+MODEL_DIR = os.environ.get("MODEL_DIR") if "MODEL_DIR" in os.environ else "/workspace/models"
 SYMLINK_MODEL_DIR = os.path.join(MODEL_DIR, "ovms")
 MODEL_CACHE_DIR = os.path.join(SYMLINK_MODEL_DIR, "cache")
 MODEL_CONFIGFILE = "/workspace/percebro/config/model-config.json"
@@ -23,197 +21,174 @@ OVMS_CONFIGFILE = "/workspace/model_installer/models/ovms-config.json"
 OMZ_BASE_URL = "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1"
 
 _DEFAULT_MODELS = [
-    "person-detection-retail-0013",
-    "person-reidentification-retail-0277",
-    "human-pose-estimation-0001",
+  'person-detection-retail-0013',
+  'person-reidentification-retail-0277',
+  'human-pose-estimation-0001',
 ]
 
 _OCR_MODELS = [
-    "horizontal-text-detection-0001",
-    "text-recognition-resnet-fc",
+  'horizontal-text-detection-0001',
+  'text-recognition-resnet-fc',
 ]
 
-_ALL_MODELS = (
-    _DEFAULT_MODELS
-    + _OCR_MODELS
-    + [
-        "pedestrian-and-vehicle-detector-adas-0001",
-        "person-vehicle-bike-detection-2000",
-        "person-vehicle-bike-detection-2001",
-        "person-vehicle-bike-detection-2002",
-        "person-vehicle-bike-detection-crossroad-0078",
-        "person-vehicle-bike-detection-crossroad-1016",
-        "vehicle-detection-0200",
-        "vehicle-detection-0201",
-        "vehicle-detection-0202",
-        "vehicle-detection-adas-0002",
-    ]
-)
+_ALL_MODELS = _DEFAULT_MODELS + _OCR_MODELS + [
+  'pedestrian-and-vehicle-detector-adas-0001',
+  'person-vehicle-bike-detection-2000',
+  'person-vehicle-bike-detection-2001',
+  'person-vehicle-bike-detection-2002',
+  'person-vehicle-bike-detection-crossroad-0078',
+  'person-vehicle-bike-detection-crossroad-1016',
+  'vehicle-detection-0200',
+  'vehicle-detection-0201',
+  'vehicle-detection-0202',
+  'vehicle-detection-adas-0002'
+]
 
 _PUBLIC_MODELS = [
-    "text-recognition-resnet-fc",
+  'text-recognition-resnet-fc',
 ]
 
-
 def _build_argparser():
-    parser = ArgumentParser()
-    parser.add_argument(
-        "--default", action="store_true", help="Download default models"
-    )
-    parser.add_argument("--ocr", action="store_true", help="Download OCR models")
-    parser.add_argument("--all", action="store_true", help="Download all models")
-    parser.add_argument(
-        "--precisions",
-        help="Donwload models with specific precisions."
-        "Comma separated value, with no extra spaces.",
-        type=str,
-        default="FP32",
-    )
+  parser = ArgumentParser()
+  parser.add_argument("--default", action="store_true", help="Download default models")
+  parser.add_argument("--ocr", action="store_true", help="Download OCR models")
+  parser.add_argument("--all", action="store_true", help="Download all models")
+  parser.add_argument("--precisions", help="Donwload models with specific precisions."
+                      "Comma separated value, with no extra spaces.",
+                      type=str, default="FP32")
 
-    return parser
-
+  return parser
 
 def _make_dir(path):
-    if not os.path.exists(path):
-        os.makedirs(path)
+  if not os.path.exists(path):
+    os.makedirs(path)
 
-    return
-
+  return
 
 def _create_ovms_configfile(filepath):
-    data = {"model_config_list": []}
+  data = {
+    "model_config_list" : []
+  }
 
-    _write_json(filepath, data)
-    return
-
+  _write_json(filepath, data)
+  return
 
 def _write_json(filepath, data):
-    with open(filepath, "w") as datafile:
-        datafile.write(json.dumps(data, indent=2))
+  with open(filepath, "w") as datafile:
+    datafile.write(json.dumps(data, indent=2))
 
-    return
-
+  return
 
 def _read_json(filepath):
-    with open(filepath, "r") as datafile:
-        data = datafile.read()
+  with open(filepath, 'r') as datafile:
+    data = datafile.read()
 
-    config = json.loads(data)
-    return config
-
+  config = json.loads(data)
+  return config
 
 def _find_existing_config(ovms_config):
-    existing_config = {
-        config["config"]["name"] for config in ovms_config["model_config_list"]
-    }
-    return existing_config
-
+  existing_config = {config["config"]["name"] for config in ovms_config["model_config_list"]}
+  return existing_config
 
 def _download_model(model, precisions, model_subdir):
-    # Download model files (.xml and .bin) for each specified precision from archive
-    exit_code = 0
-    for prec in precisions.split(","):
-        prec = prec.strip()
-        model_url_dir = f"{OMZ_BASE_URL}/{model}/{prec}"
-        dest_dir = os.path.join(MODEL_DIR, model_subdir, model, prec)
-        _make_dir(dest_dir)
-        try:
-            print(f"Downloading {model} ({prec})...")
-            xml_url = f"{model_url_dir}/{model}.xml"
-            bin_url = f"{model_url_dir}/{model}.bin"
-            subprocess.run(
-                ["wget", "-nv", "-O", os.path.join(dest_dir, f"{model}.xml"), xml_url],
-                timeout=TIMEOUT,
-                check=True,
-            )
-            subprocess.run(
-                ["wget", "-nv", "-O", os.path.join(dest_dir, f"{model}.bin"), bin_url],
-                timeout=TIMEOUT,
-                check=True,
-            )
-        except Exception as e:
-            print(f"Failed to download {model} ({prec}): {e}")
-            shutil.rmtree(dest_dir, ignore_errors=True)
-            exit_code = 1
-    return exit_code
-
+  # Download model files (.xml and .bin) for each specified precision from archive
+  exit_code = 0
+  for prec in precisions.split(","):
+    prec = prec.strip()
+    model_url_dir = f"{OMZ_BASE_URL}/{model}/{prec}"
+    dest_dir = os.path.join(MODEL_DIR, model_subdir, model, prec)
+    _make_dir(dest_dir)
+    try:
+      print(f"Downloading {model} ({prec})...")
+      xml_url = f"{model_url_dir}/{model}.xml"
+      bin_url = f"{model_url_dir}/{model}.bin"
+      subprocess.run(
+        ["wget", "-nv", "-O", os.path.join(dest_dir, f"{model}.xml"), xml_url],
+        timeout=TIMEOUT, check=True
+      )
+      subprocess.run(
+        ["wget", "-nv", "-O", os.path.join(dest_dir, f"{model}.bin"), bin_url],
+        timeout=TIMEOUT, check=True
+      )
+    except Exception as e:
+      print(f"Failed to download {model} ({prec}): {e}")
+      shutil.rmtree(dest_dir, ignore_errors=True)
+      exit_code = 1
+  return exit_code
 
 def _create_symlink(source, destination):
-    dir = os.path.dirname(destination)
-    _make_dir(dir)
+  dir = os.path.dirname(destination)
+  _make_dir(dir)
 
-    source = os.path.relpath(source, dir)
-    os.symlink(source, destination)
+  source = os.path.relpath(source, dir)
+  os.symlink(source, destination)
 
-    return
-
+  return
 
 def _update_ovms_config(ovms_config, model_config, model):
-    modelname = None
-    for config in model_config:
-        if "external_id" in config and config["external_id"] == model:
-            modelname = config["external_id"]
-            break
+  modelname = None
+  for config in model_config:
+    if 'external_id' in config and config['external_id'] == model:
+      modelname = config['external_id']
+      break
 
-    if modelname:
-        new_config = {
-            "config": {
-                "name": modelname,
-                "base_path": os.path.join("/models/ovms", model),
-                "shape": "auto",
-                "batch_size": "1",
-                "plugin_config": {"PERFORMANCE_HINT": "LATENCY"},
-                "allow_cache": True,
-            }
-        }
-        ovms_config["model_config_list"].append(new_config)
+  if modelname:
+    new_config = {
+      "config":{
+        "name": modelname,
+        "base_path": os.path.join("/models/ovms", model),
+        "shape": "auto",
+        "batch_size": "1",
+        "plugin_config": {"PERFORMANCE_HINT": "LATENCY"},
+        "allow_cache": True
+      }
+    }
+    ovms_config["model_config_list"].append(new_config)
 
-    return
-
+  return
 
 def main():
-    args = _build_argparser().parse_args()
-    if args.all:
-        models = _ALL_MODELS
-    elif args.ocr:
-        models = _OCR_MODELS
-    else:
-        models = _DEFAULT_MODELS
+  args = _build_argparser().parse_args()
+  if args.all:
+    models = _ALL_MODELS
+  elif args.ocr:
+    models = _OCR_MODELS
+  else:
+    models = _DEFAULT_MODELS
 
-    precisions = args.precisions
+  precisions = args.precisions
 
-    _make_dir(SYMLINK_MODEL_DIR)
-    _make_dir(MODEL_CACHE_DIR)
+  _make_dir(SYMLINK_MODEL_DIR)
+  _make_dir(MODEL_CACHE_DIR)
 
-    if not os.path.exists(OVMS_CONFIGFILE):
-        _create_ovms_configfile(OVMS_CONFIGFILE)
+  if not os.path.exists(OVMS_CONFIGFILE):
+    _create_ovms_configfile(OVMS_CONFIGFILE)
 
-    model_config = _read_json(MODEL_CONFIGFILE)
-    ovms_config = _read_json(OVMS_CONFIGFILE)
-    existing_config = _find_existing_config(ovms_config)
+  model_config = _read_json(MODEL_CONFIGFILE)
+  ovms_config = _read_json(OVMS_CONFIGFILE)
+  existing_config = _find_existing_config(ovms_config)
 
-    ovms_config_len = len(ovms_config["model_config_list"])
+  ovms_config_len = len(ovms_config["model_config_list"])
 
-    for model in models:
-        model_subdir = "public" if model in _PUBLIC_MODELS else "intel"
-        if not os.path.isdir(os.path.join(MODEL_DIR, model_subdir, model)):
-            # Download model
-            _download_model(model, precisions, model_subdir)
+  for model in models:
+    model_subdir = "public" if model in _PUBLIC_MODELS else "intel"
+    if not os.path.isdir(os.path.join(MODEL_DIR, model_subdir, model)):
+      # Download model
+      _download_model(model, precisions, model_subdir)
 
-            source = os.path.join(MODEL_DIR, model_subdir, model, "FP32")
+      source = os.path.join(MODEL_DIR, model_subdir, model, "FP32")
 
-            # Create symlink
-            destination = os.path.join(SYMLINK_MODEL_DIR, model, "1")
-            _create_symlink(source, destination)
+      # Create symlink
+      destination = os.path.join(SYMLINK_MODEL_DIR, model, "1")
+      _create_symlink(source, destination)
 
-        if model not in existing_config:
-            _update_ovms_config(ovms_config, model_config, model)
+    if model not in existing_config:
+      _update_ovms_config(ovms_config, model_config, model)
 
-    if len(ovms_config["model_config_list"]) > ovms_config_len:
-        _write_json(OVMS_CONFIGFILE, ovms_config)
+  if len(ovms_config["model_config_list"]) > ovms_config_len:
+    _write_json(OVMS_CONFIGFILE, ovms_config)
 
-    return
-
+  return
 
 if __name__ == "__main__":
-    main()
+  main()

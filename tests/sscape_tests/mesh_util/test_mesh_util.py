@@ -12,17 +12,13 @@ import os
 dir = os.path.dirname(os.path.abspath(__file__))
 TEST_DATA = os.path.join(dir, "test_data/scene.glb")
 
-
-@pytest.mark.parametrize(
-    "input,expected",
-    [
-        (TEST_DATA, 1),
-    ],
-)
+@pytest.mark.parametrize("input,expected", [
+  (TEST_DATA, 1),
+])
 def test_merge_mesh(input, expected):
-    merged_mesh = mergeMesh(input)
-    assert merged_mesh.metadata["name"] == "mesh_0"
-    merged_mesh.export(input)
-    mesh = o3d.io.read_triangle_model(input)
-    assert len(mesh.meshes) == expected
-    return
+  merged_mesh = mergeMesh(input)
+  assert merged_mesh.metadata["name"] == "mesh_0"
+  merged_mesh.export(input)
+  mesh =  o3d.io.read_triangle_model(input)
+  assert len(mesh.meshes) == expected
+  return
