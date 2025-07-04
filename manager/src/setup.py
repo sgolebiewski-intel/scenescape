@@ -7,26 +7,26 @@ from setuptools import setup, find_packages
 import os
 
 # Application Naming
-APP_NAME = 'manager'
-APP_PROPER_NAME = 'SceneScape'
-APP_BASE_NAME = 'scenescape'
+APP_NAME = "manager"
+APP_PROPER_NAME = "SceneScape"
+APP_BASE_NAME = "scenescape"
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 try:
-  with open(BASE_DIR + '/' + APP_NAME + '/version.txt') as f:
-    APP_VERSION_NUMBER = f.readline().rstrip()
-    print(APP_PROPER_NAME + " version " + APP_VERSION_NUMBER)
+    with open(BASE_DIR + "/" + APP_NAME + "/version.txt") as f:
+        APP_VERSION_NUMBER = f.readline().rstrip()
+        print(APP_PROPER_NAME + " version " + APP_VERSION_NUMBER)
 except IOError:
-  print(APP_PROPER_NAME + " version.txt file not found.")
-  APP_VERSION_NUMBER = "Unknown"
+    print(APP_PROPER_NAME + " version.txt file not found.")
+    APP_VERSION_NUMBER = "Unknown"
 
 setup(
-    name='manager',
+    name="manager",
     packages=find_packages(),
-    license='Intel Confidential',
+    license="Intel Confidential",
     version=APP_VERSION_NUMBER,
-    author='Intel Corporation',
-    description='SceneScape core functionality',
-    )
+    author="Intel Corporation",
+    description="SceneScape core functionality",
+)

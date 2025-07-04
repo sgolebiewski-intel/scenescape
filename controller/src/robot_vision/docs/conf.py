@@ -24,31 +24,33 @@ import sphinx_rtd_theme
 
 import robot_vision
 
-project = 'robot_vision'
-copyright = '2023, Intel Corporation - Intel Confidential'
-author = 'Intel Corporation - Intel Confidential'
+project = "robot_vision"
+copyright = "2023, Intel Corporation - Intel Confidential"
+author = "Intel Corporation - Intel Confidential"
 
 # The full version, including alpha/beta/rc tags
-release = '1.1.0'
-version  = '1.1.0~scenescape'
+release = "1.1.0"
+version = "1.1.0~scenescape"
 
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx.ext.autodoc",
-             'sphinx.ext.doctest',
-             'sphinx.ext.napoleon',
-             'sphinx.ext.autosummary',
-             "sphinx.ext.viewcode",
-             "sphinx.ext.intersphinx",
-             "sphinx.ext.autosectionlabel",
-             "sphinx.ext.mathjax"]
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.doctest",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.mathjax",
+]
 
 autodoc_default_options = {
     "members": True,
-    "special-members": '__init__',
+    "special-members": "__init__",
     "exclude-members": "__weakref__",
 }
 
@@ -60,12 +62,12 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -79,9 +81,9 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
-pygments_style = 'sphinx'
+pygments_style = "sphinx"
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
@@ -90,12 +92,12 @@ todo_include_todos = True
 autodoc_inherit_docstrings = False
 
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3', None),
-    'numpy': ('https://numpy.org/doc/stable', None),
+    "python": ("https://docs.python.org/3", None),
+    "numpy": ("https://numpy.org/doc/stable", None),
 }
 
 
 latex_elements = {
-    'printindex': '\\def\\twocolumn[#1]{#1}\\printindex',
+    "printindex": "\\def\\twocolumn[#1]{#1}\\printindex",
 }
-latex_show_urls = 'footnote'
+latex_show_urls = "footnote"
