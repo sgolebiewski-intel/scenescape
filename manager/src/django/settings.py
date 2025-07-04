@@ -47,37 +47,37 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django_session_timeout.middleware.SessionTimeoutMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'axes.middleware.AxesMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django_session_timeout.middleware.SessionTimeoutMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "axes.middleware.AxesMiddleware",
 ]
 
-ROOT_URLCONF = APP_NAME + '.urls'
+ROOT_URLCONF = APP_NAME + ".urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                APP_NAME + '.context_processors.selected_settings',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                APP_NAME + ".context_processors.selected_settings",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = APP_NAME + '.wsgi.application'
+WSGI_APPLICATION = APP_NAME + ".wsgi.application"
 
 LOGOUT_EXPIRES = 10 * 60 * 60  # 10 hours cookie timeout
 SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -92,8 +92,8 @@ SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True  # Reset expire timer after user activ
 AXES_ENABLED = True
 AXES_FAILURE_LIMIT = 10
 AXES_COOLOFF_TIME = timedelta(seconds=30)
-AXES_LOCKOUT_URL = '/account_locked'
-AXES_LOCKOUT_PARAMETERS = [['username', 'ip_address']]
+AXES_LOCKOUT_URL = "/account_locked"
+AXES_LOCKOUT_PARAMETERS = [["username", "ip_address"]]
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
