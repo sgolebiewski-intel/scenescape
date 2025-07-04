@@ -148,62 +148,62 @@ USE_I18N = True
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
 
-DOCS_ROOT = os.path.join(BASE_DIR, 'manager', 'docs')
-DOCS_URL = '/docs/'
+DOCS_ROOT = os.path.join(BASE_DIR, "manager", "docs")
+DOCS_URL = "/docs/"
 
-MODEL_ROOT = os.path.join(BASE_DIR, 'models')
-MODEL_URL = '/models/'
+MODEL_ROOT = os.path.join(BASE_DIR, "models")
+MODEL_URL = "/models/"
 
-LOGIN_URL = 'sign_in'
+LOGIN_URL = "sign_in"
 
 # Get the running host
-KUBERNETES_SERVICE_HOST = 'KUBERNETES_SERVICE_HOST' in os.environ
+KUBERNETES_SERVICE_HOST = "KUBERNETES_SERVICE_HOST" in os.environ
 
 # Get the version number
 try:
-    with open(BASE_DIR + '/' + APP_NAME + '/version.txt') as f:
+    with open(BASE_DIR + "/" + APP_NAME + "/version.txt") as f:
         APP_VERSION_NUMBER = f.readline().rstrip()
-        print(APP_PROPER_NAME + ' version ' + APP_VERSION_NUMBER)
+        print(APP_PROPER_NAME + " version " + APP_VERSION_NUMBER)
 except IOError:
-    print(APP_PROPER_NAME + ' version.txt file not found.')
-    APP_VERSION_NUMBER = 'Unknown'
+    print(APP_PROPER_NAME + " version.txt file not found.")
+    APP_VERSION_NUMBER = "Unknown"
 
 # Set up support for proxy headers
 USE_X_FORWARDED_HOST = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 if DEBUG:
-    INSTALLED_APPS += ('debug_toolbar',)
+    INSTALLED_APPS += ("debug_toolbar",)
     MIDDLEWARE += (
-        'manager.middleware.Custom500Middleware',
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
+        "manager.middleware.Custom500Middleware",
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
     )
     DEBUG_TOOLBAR_PANELS = [
-        'debug_toolbar.panels.versions.VersionsPanel',
-        'debug_toolbar.panels.timer.TimerPanel',
-        'debug_toolbar.panels.settings.SettingsPanel',
-        'debug_toolbar.panels.headers.HeadersPanel',
-        'debug_toolbar.panels.request.RequestPanel',
-        'debug_toolbar.panels.sql.SQLPanel',
-        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-        'debug_toolbar.panels.templates.TemplatesPanel',
-        'debug_toolbar.panels.cache.CachePanel',
-        'debug_toolbar.panels.signals.SignalsPanel',
-        'debug_toolbar.panels.redirects.RedirectsPanel',
+        "debug_toolbar.panels.versions.VersionsPanel",
+        "debug_toolbar.panels.timer.TimerPanel",
+        "debug_toolbar.panels.settings.SettingsPanel",
+        "debug_toolbar.panels.headers.HeadersPanel",
+        "debug_toolbar.panels.request.RequestPanel",
+        "debug_toolbar.panels.sql.SQLPanel",
+        "debug_toolbar.panels.staticfiles.StaticFilesPanel",
+        "debug_toolbar.panels.templates.TemplatesPanel",
+        "debug_toolbar.panels.cache.CachePanel",
+        "debug_toolbar.panels.signals.SignalsPanel",
+        "debug_toolbar.panels.redirects.RedirectsPanel",
     ]
 
     def true(request):
         return False  # True
 
     DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': '%s.true' % __name__,
+        "SHOW_TOOLBAR_CALLBACK": "%s.true" % __name__,
     }
 
     DEBUG_PROPAGATE_EXCEPTIONS = True
 
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-BROWSER_AUTH_FILE = '/run/secrets/browser.auth'
-ROOT_CERT_FILE = '/run/secrets/certs/scenescape-ca.pem'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+BROWSER_AUTH_FILE = "/run/secrets/browser.auth"
+ROOT_CERT_FILE = "/run/secrets/certs/scenescape-ca.pem"
