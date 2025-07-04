@@ -21,7 +21,7 @@ def run_command(command, description, timed=False):
         stderr=subprocess.STDOUT,
         text=True,
         shell=True,  # this is needed to run clean-cmd
-    )
+    ) # nosec B602 - bandit scan ignore
 
     for line in process.stdout:
         print(line, end="")
