@@ -45,7 +45,7 @@ define common-recipe =
 	$(eval LOGFILE=$(TEST_DATA)/smoke/$@-$(shell date -u +"%F-%T").log)
 	@set -ex \
 	  ; if [ x$(REQUIRE_SUPASS) = xtrue ] ; then \
-	      EXTRAS="--password=$(jq -r '.password' "$SUPASS_FILE" | base64 -d)"; \
+	      EXTRAS="--password=$(shell jq -r '.password' '$(SUPASS_FILE)' | base64 -d)"; \
 	  fi \
 	  ; if [ ! -z "$(AUTH_USER)" ]; then \
 	      EXTRAS="$${EXTRAS} $(AUTH_USER)"; \
