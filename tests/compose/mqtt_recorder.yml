@@ -20,9 +20,9 @@ services:
     command: bash -c "PYTHONPATH=/workspace tests/perf_tests/scene_perf/scene_mqtt_recorder.py"
     privileged: true
     volumes:
-     - ./:/workspace
+      - ./:/workspace
     secrets:
-     - supass
-     - source: root-cert
-       target: certs/scenescape-ca.pem
+      - supass
+      - source: root-cert
+        target: certs/scenescape-ca.pem
     tty: true
