@@ -24,8 +24,8 @@ This directory contains the following:
 3. Edit `.env` and set the following values:
     * `https_proxy` is the outbound web proxy, used to fetch package dependencies.
     * `instance_ip` is the IP address of the instance under test.
-    * `auth_username` is the superuser of your instance (usually `admin`).
-    * `auth_password` is the superuser's password (usually whatever `SUPASS` was when you deployed).
+    * `auth_username` is the superuser of your instance (by default it's `admin` unless not changed in `sample_data/supass` differently).
+    * `auth_password` is the superuser's password (by default it's `admin` unless not changed in `sample_data/supass` differently).
     * `restler_mode` is the RESTler mode to run. Supported values are `fuzz`, `fuzz-lean`, and `test`. See RESTler documentation for more details.
     * `time_budget` is the length of time, in hours, that the `fuzz` mode will spend testing the API.
 4. From the fuzzing folder, execute the Docker command to launch a RESTler container and run our script:

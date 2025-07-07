@@ -96,8 +96,13 @@ def test_mqtt_recorder():
   args = build_argparser().parse_args()
 
   result = 1
-  supass = os.getenv('SUPASS')
-  auth_string = f'admin:{supass}'
+  # Read user and password from secret file and decode password
+  with open('./manager/secrets/supass', 'r') as f:
+      secret = json.load(f)
+      user = secret['user']
+      password_b64 = secret['password']
+      password = base64.b64decode(password_b64).decode('utf-8')
+  auth_string = f'{user}:{password}'
   client = PubSub(auth_string, None, TEST_MQTT_DEFAULT_ROOTCA,
                   "broker.scenescape.intel.com")
 

@@ -99,7 +99,7 @@ Note that the parameters of these certificates are specified in `certificates/Ma
 
 ## Intel® SceneScape Passwords
 
-Upon first executing the `deploy.sh` script, the user will be asked to enter a superuser (SUPASS) password. This password is used by the web server for authentication. When accessing the web interface, the default superuser login is “admin” and then the SUPASS entered at deployment is used as the password. This password can be changed using the Admin panel once logged in to the system, and additional users can be added.
+By default, the demo uses credentials stored in the `sample_data/supass` file, which is a JSON file containing the authentication user and a base64-encoded password. The default user is `admin` and the default password is `admin`. Changing these credentials is optional and can be done by editing the `supass` file before deployment. The password can also be changed later using the Admin panel once logged in to the system, and additional users can be added.
 
 The deploy script will also create additional passwords, keys, and certificates. All will be stored under the path `manager/secrets`, which is created during the building step. These secrets are unique to the current Intel® SceneScape instance.
 

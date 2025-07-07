@@ -63,12 +63,9 @@ This step generates dependency lists. Two separate files are created for system 
 
 ### Step 5: Deploy Intel® SceneScape demo to the target system
 
-Before deploying the demo of Intel® SceneScape for the first time, please set the environment variable SUPASS with the super user password for logging into Intel® SceneScape.
-Important: This should be different than the password for your system user.
+By default, the demo uses credentials stored in the `sample_data/supass` file, which is a JSON file containing the authentication user and a base64-encoded password. The default user is `admin` and the default password is `admin`.
 
-  ```bash
-  export SUPASS=<password>
-  ```
+If you wish to change the default credentials, edit the `sample_data/supass` file before deployment. Set the `user` field to your desired username and the `password` field to your desired password, encoded in base64.
 
   ```bash
   make demo
@@ -81,7 +78,7 @@ If you are running remotely, connect using ```"https://<ip_address>"``` or ```"h
 > **Note:** These certificate warnings are expected due to the use of a self-signed certificate for initial deployment purposes. This certificate is generated at deploy time and is unique to the instance.
 
 ### Logging In
-Enter "admin" for the user name and the value you typed earlier for SUPASS.
+Enter credentials provided in the `sample_data/supass`.  The default user is `admin` and the default password is `admin`.
 
 ### Stopping the System
 

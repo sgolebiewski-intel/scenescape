@@ -23,7 +23,7 @@ define selenium-recipe =
 	      WAITFORCONTAINERS=$(CONTAINERS) \
 	      $(RUNTEST) $(YML) $(SELENIUM_TEST_COVERAGE_CMD) \
 	      --data-file=$(SELENIUM_COVERAGE_DATA_FILE) pytest -s $(GENERATE_JUNITXML) \
-	      $(TEST_SCRIPT) --password=$(SUPASS) 2>&1 | tee -i $(LOGFILE) \
+	      $(TEST_SCRIPT) --password=$(shell jq -r '.password' '$(SUPASS_FILE)' | base64 -d) 2>&1 | tee -i $(LOGFILE) \
 	  ; echo "MAKE_TARGET: $@" | tee -ia $(LOGFILE) \
 	  ; if [ `grep -c "Traceback" $(LOGFILE)` -ne 0 ] ; then echo "Found error in $@ !"; exit 1; fi \
 	  ; echo END TEST $@
@@ -95,9 +95,9 @@ persistence: # NEX-T10393
 	  ; echo RUNNING TEST $@ \
 	  ; cd .. \
 	  ; EXAMPLEDB=$(EXAMPLEDB) \
-	  ; env IMAGE=$(BASE_IMAGE):$(VERSION) DBROOT=$(DBROOT) EXAMPLEDB=$${EXAMPLEDB} $(RUNTEST) $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml $(SELENIUM_TEST_COVERAGE_CMD) --data-file=$(SELENIUM_COVERAGE_DATA_FILE) pytest -s $(GENERATE_JUNITXML) tests/ui/tc_persistence_on_page_navigate.py --password=$(SUPASS) 2>&1 | tee -i $(LOGFILE_NAVIGATE) \
+	  ; env IMAGE=$(BASE_IMAGE):$(VERSION) DBROOT=$(DBROOT) EXAMPLEDB=$${EXAMPLEDB} $(RUNTEST) $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml $(SELENIUM_TEST_COVERAGE_CMD) --data-file=$(SELENIUM_COVERAGE_DATA_FILE) pytest -s $(GENERATE_JUNITXML) tests/ui/tc_persistence_on_page_navigate.py --password=$(shell jq -r '.password' '$(SUPASS_FILE)' | base64 -d) 2>&1 | tee -i $(LOGFILE_NAVIGATE) \
 	  ; echo "MAKE_TARGET: $@" | tee -ia $(LOGFILE_NAVIGATE) \
-	  ; env IMAGE=$(BASE_IMAGE):$(VERSION) DBROOT=$(DBROOT) KEEP_DB=1 EXAMPLEDB=$${EXAMPLEDB} $(RUNTEST) $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml $(SELENIUM_TEST_COVERAGE_CMD) --data-file=$(SELENIUM_COVERAGE_DATA_FILE) pytest -s $(GENERATE_JUNITXML) tests/ui/tc_persistence_on_restart.py --password=$(SUPASS) 2>&1 | tee -i $(LOGFILE_RESTART) \
+	  ; env IMAGE=$(BASE_IMAGE):$(VERSION) DBROOT=$(DBROOT) KEEP_DB=1 EXAMPLEDB=$${EXAMPLEDB} $(RUNTEST) $(COMPOSE)/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml $(SELENIUM_TEST_COVERAGE_CMD) --data-file=$(SELENIUM_COVERAGE_DATA_FILE) pytest -s $(GENERATE_JUNITXML) tests/ui/tc_persistence_on_restart.py --password=$(shell jq -r '.password' '$(SUPASS_FILE)' | base64 -d) 2>&1 | tee -i $(LOGFILE_RESTART) \
 	  ; echo "MAKE_TARGET: $@" | tee -ia $(LOGFILE_RESTART) \
 	  ; echo END TEST $@
 
