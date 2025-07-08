@@ -29,6 +29,7 @@ FOLDERS ?= $(IMAGE_FOLDERS)
 JOBS ?= $(shell nproc)
 # - User can adjust the target branch
 TARGET_BRANCH ?= $(if $(CHANGE_TARGET),$(CHANGE_TARGET),$(BRANCH_NAME))
+TEST_TARGET ?= $(if $(TEST_TARGET),$(TEST_TARGET),"_functional-tests")
 # Ensure BUILD_DIR path is absolute, so that it works correctly in recursive make calls
 ifeq ($(filter /%,$(BUILD_DIR)),)
 override BUILD_DIR := $(PWD)/$(BUILD_DIR)
@@ -286,6 +287,12 @@ setup_tests: build-images
 run_tests: setup_tests
 	@echo "Running tests..."
 	$(MAKE) --trace -C tests -j 1 || (echo "Tests failed" && exit 1)
+	@echo "DONE ==> Running tests"
+
+.PHONY: run_tests_target
+run_tests_target:
+	@echo "Running tests for target: $(TEST_TARGET)..."
+	$(MAKE) --trace -C tests $(TEST_TARGET) -j 1 SUPASS=$(SUPASS) || (echo "Tests failed" && exit 1)
 	@echo "DONE ==> Running tests"
 
 .PHONY: run_performance_tests
