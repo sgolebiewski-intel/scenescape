@@ -26,7 +26,7 @@ NPROCS?=$(shell echo $(shell grep -c ^processor /proc/cpuinfo)/3 | bc)
 COMPOSE=tests/compose
 EXAMPLEDB=tests/testdb.tar.bz2
 SECRETSDIR ?= $(PWD)/manager/secrets
-SUPASS_FILE=$(SECRETSDIR)/supass
+SUPASS_FILE ?= $(abspath $(CURDIR)/../manager/secrets/supass)
 
 ifeq ($(KUBERNETES),1)
     RUNTEST=tests/kubernetes/runtest
