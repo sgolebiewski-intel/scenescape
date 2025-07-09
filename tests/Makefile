@@ -138,7 +138,7 @@ _functional-tests: \
   add-orphaned-cameras \
   api-large-strings \
   bounding-box \
-#  delete-roi-mqtt
+  delete-roi-mqtt \
   delete-tripwire-mqtt \
   geospatial-ingest-publish \
   mqtt-auth \
