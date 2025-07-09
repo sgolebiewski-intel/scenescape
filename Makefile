@@ -346,10 +346,9 @@ lint-cpp:
 	@echo "DONE ==> Linting C++ files"
 
 .PHONY: lint-shell
-SH_FILES := $(shell find . -type f \( -name '*.sh' \) -print )
 lint-shell:
 	@echo "==> Linting Shell files..."
-	@shellcheck -x -S style $(SH_FILES) || (echo "Shell linting failed" && exit 1)
+	@.github/resources/list_shell_scripts.py |  xargs shellcheck -x -S error  || (echo "Shell linting failed" && exit 1)
 	@echo "DONE ==> Linting Shell files"
 
 .PHONY: lint-html

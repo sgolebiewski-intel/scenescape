@@ -50,7 +50,7 @@ jobs:
       - name: Install python linters
         run: |
           pip install -r .github/resources/requirements.txt
-      - name: Install Javascript linter and prettier tool
+      - name: Install Javascript linter
         run: |
           npm install --save-dev eslint@latest @eslint/js@latest
       - name: Install cpp linter
