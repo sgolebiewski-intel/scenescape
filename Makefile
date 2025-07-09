@@ -348,7 +348,7 @@ lint-cpp:
 .PHONY: lint-shell
 lint-shell:
 	@echo "==> Linting Shell files..."
-	@.github/resources/list_shell_scripts.py |  xargs shellcheck -x -S error  || (echo "Shell linting failed" && exit 1)
+	@.github/resources/list_shell_scripts.py |  xargs shellcheck -x -S warning  || (echo "Shell linting failed" && exit 1)
 	@echo "DONE ==> Linting Shell files"
 
 .PHONY: lint-html

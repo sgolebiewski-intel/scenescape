@@ -6,7 +6,7 @@
 
 echo "Starting Kubernetes runtest."
 
-echo "Command that started the script: $0 $@"
+echo "Command that started the script:" "$0" "$@"
 
 # Initialize variables
 IMAGE=${IMAGE:-scenescape}
@@ -155,7 +155,7 @@ fi
 
 # Parse arguments for kubernetes to properly scale the containers
 IMAGE_SCALE=$(tests/kubernetes/parse-image-yaml $COMPOSE_FILES)
-for DEP_SCALE in ${IMAGE_SCALE[@]}; do
+for DEP_SCALE in "${IMAGE_SCALE[@]}"; do
     IMG_NAME_OPTION="${DEP_SCALE%%=*}" # Extract the part before the '='
     IMG_SCALE="${DEP_SCALE#*=}" # Extract the part after the '='
     IMG_NAME="${IMG_NAME_OPTION%%:*}-dep" # Extract the part before the ':'
@@ -221,7 +221,7 @@ RUN_TEST=1
 # Run tests
 if [ "${RUN_TEST}" = 1 ]; then
     tools/scenescape-start --image ${BROWSER_IMAGE} --network ${TEST_NETWORK} \
-        $@ --broker_url=${CERT_KUB_BROKER_URL} --weburl=${PYTEST_KUB_WEB_URL} --resturl=${PYTEST_KUB_REST_URL} \
+        "$@" --broker_url=${CERT_KUB_BROKER_URL} --weburl=${PYTEST_KUB_WEB_URL} --resturl=${PYTEST_KUB_REST_URL} \
         --auth=${PYTEST_KUB_AUTH} --rootcert=${PYTEST_KUB_ROOTCERT}
     STATUS=$?
 else

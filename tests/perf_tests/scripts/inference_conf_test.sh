@@ -27,8 +27,9 @@ INPDIR="./sample_data/"
 INPUT="apriltag-cam1.mp4"
 INPUT2="apriltag-cam2.mp4"
 INPUT3="apriltag-cam3.mp4"
-VIDEO_FRAMES=1789
+export VIDEO_FRAMES=1789
 
+ # shellcheck disable=SC2089
 INTRINSICS="{\"fov\":70}"
 
 OUTPUTFILE=$( echo $INPUT | sed -e 's/mp4/json/g' )
@@ -79,9 +80,12 @@ echo ""
 echo "Single Camera / Single Model : Performing inference on ${INPUT}"
 
 START=$SECONDS
-VAL=$( ${CMD} -i ${INPDIR}/${INPUT} --mqttid camera1 --intrinsics=${INTRINSICS} -m retail ${INPUT_LEN} ${CORESSTR} --modelconfig ${MODEL_CONFIG} ${EXTRA_ARGS} > /dev/null 2>&1 )
+# shellcheck disable=SC2090
+${CMD} -i ${INPDIR}/${INPUT} --mqttid camera1 --intrinsics=${INTRINSICS} -m retail ${INPUT_LEN} ${CORESSTR} --modelconfig ${MODEL_CONFIG} ${EXTRA_ARGS} > /dev/null 2>&1
 END=$SECONDS
 CPUUSE=$( cat /proc/loadavg | awk '{print $1}' )
+PROCTIME=$(( $END - $START ))
+echo "CPU use: $CPUUSE, Wall time ${PROCTIME}"
 
 echo "Inference done"
 
@@ -106,9 +110,12 @@ echo ""
 echo "Dual Camera / Single Model : "
 
 START=$SECONDS
-VAL=$( ${CMD} -i ${INPDIR}/${INPUT} --mqttid camera1  --intrinsics=${INTRINSICS} -i ${INPDIR}/${INPUT2} --mqttid camera2  --intrinsics=${INTRINSICS} -m retail ${INPUT_LEN} ${CORESSTR} --modelconfig ${MODEL_CONFIG}  ${EXTRA_ARGS} > /dev/null 2>&1 )
+# shellcheck disable=SC2090
+${CMD} -i ${INPDIR}/${INPUT} --mqttid camera1  --intrinsics=${INTRINSICS} -i ${INPDIR}/${INPUT2} --mqttid camera2  --intrinsics=${INTRINSICS} -m retail ${INPUT_LEN} ${CORESSTR} --modelconfig ${MODEL_CONFIG}  ${EXTRA_ARGS} > /dev/null 2>&1
 END=$SECONDS
 CPUUSE=$( cat /proc/loadavg | awk '{print $1}' )
+PROCTIME=$(( $END - $START ))
+echo "CPU use: $CPUUSE, Wall time ${PROCTIME}"
 
 echo "Inference done"
 
@@ -141,9 +148,13 @@ then
     echo "Dual Camera / Dual Model : "
 
     START=$SECONDS
-    VAL=$( ${CMD} -i ${INPDIR}/${INPUT} --mqttid camera1 --intrinsics=${INTRINSICS} -i ${INPDIR}/${INPUT2} --mqttid camera2 --intrinsics=${INTRINSICS} -m retail+reid ${INPUT_LEN} ${CORESSTR} --modelconfig ${MODEL_CONFIG}  ${EXTRA_ARGS} > /dev/null 2>&1 )
+    # shellcheck disable=SC2090
+
+    ${CMD} -i ${INPDIR}/${INPUT} --mqttid camera1 --intrinsics=${INTRINSICS} -i ${INPDIR}/${INPUT2} --mqttid camera2 --intrinsics=${INTRINSICS} -m retail+reid ${INPUT_LEN} ${CORESSTR} --modelconfig ${MODEL_CONFIG}  ${EXTRA_ARGS} > /dev/null 2>&1
     END=$SECONDS
     CPUUSE=$( cat /proc/loadavg | awk '{print $1}' )
+    PROCTIME=$(( $END - $START ))
+    echo "CPU use: $CPUUSE, Wall time ${PROCTIME}"
 
 
     if [[ "${CONFORMANCE_CHECK}" == "YES" ]]
@@ -178,9 +189,12 @@ echo ""
 echo "Triple Camera / Single Model : "
 
 START=$SECONDS
-VAL=$( ${CMD} -i ${INPDIR}/${INPUT} --mqttid camera1 --intrinsics=${INTRINSICS} -i ${INPDIR}/${INPUT2} --mqttid camera2 --intrinsics=${INTRINSICS} -i ${INPDIR}/${INPUT3} --mqttid camera3 --intrinsics=${INTRINSICS} -m retail ${INPUT_LEN} ${CORESSTR} --modelconfig ${MODEL_CONFIG}  ${EXTRA_ARGS} > /dev/null 2>&1  )
+# shellcheck disable=SC2090
+${CMD} -i ${INPDIR}/${INPUT} --mqttid camera1 --intrinsics=${INTRINSICS} -i ${INPDIR}/${INPUT2} --mqttid camera2 --intrinsics=${INTRINSICS} -i ${INPDIR}/${INPUT3} --mqttid camera3 --intrinsics=${INTRINSICS} -m retail ${INPUT_LEN} ${CORESSTR} --modelconfig ${MODEL_CONFIG}  ${EXTRA_ARGS} > /dev/null 2>&1
 END=$SECONDS
 CPUUSE=$( cat /proc/loadavg | awk '{print $1}' )
+PROCTIME=$(( $END - $START ))
+echo "CPU use: $CPUUSE, Wall time ${PROCTIME}"
 
 
 if [[ "${CONFORMANCE_CHECK}" == "YES" ]]
@@ -212,9 +226,12 @@ then
     echo "Triple Camera / Triple Model :"
 
     START=$SECONDS
-    VAL=$( ${CMD} -i ${INPDIR}/${INPUT} --mqttid camera1 --intrinsics=${INTRINSICS} -i ${INPDIR}/${INPUT2} --mqttid camera2 --intrinsics=${INTRINSICS} -i ${INPDIR}/${INPUT3} --mqttid camera3 --intrinsics=${INTRINSICS} -m apriltag,retail+reid  ${INPUT_LEN} ${CORESSTR} --modelconfig ${MODEL_CONFIG}  ${EXTRA_ARGS} > /dev/null 2>&1  )
+    # shellcheck disable=SC2090
+    ${CMD} -i ${INPDIR}/${INPUT} --mqttid camera1 --intrinsics=${INTRINSICS} -i ${INPDIR}/${INPUT2} --mqttid camera2 --intrinsics=${INTRINSICS} -i ${INPDIR}/${INPUT3} --mqttid camera3 --intrinsics=${INTRINSICS} -m apriltag,retail+reid  ${INPUT_LEN} ${CORESSTR} --modelconfig ${MODEL_CONFIG}  ${EXTRA_ARGS} > /dev/null 2>&1
     END=$SECONDS
     CPUUSE=$( cat /proc/loadavg | awk '{print $1}' )
+    PROCTIME=$(( $END - $START ))
+    echo "CPU use: $CPUUSE, Wall time ${PROCTIME}"
 
     if [[ "${CONFORMANCE_CHECK}" == "YES" ]]
     then

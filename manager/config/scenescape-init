@@ -47,10 +47,10 @@ if [ -d "${WORKSPACE}" ] ; then
             WSUID=${MANAGERDIR_UID}
             WSGID=${MANAGERDIR_UID}
     fi
-    if [ ${WSGID} != $(id -g ${WSUSER}) ] ; then
+    if [ ${WSGID} != "$(id -g ${WSUSER})" ] ; then
         groupmod -g ${WSGID} ${WSUSER}
     fi
-    if [ ${WSGID} != $(id -g ${WSUSER}) -o ${WSUID} != $(id -u ${WSUSER}) ] ; then
+    if [ ${WSGID} != "$(id -g ${WSUSER})" ] || [ ${WSUID} != "$(id -u ${WSUSER})" ] ; then
         usermod -u ${WSUID} -g ${WSGID} ${WSUSER}
     fi
 
@@ -97,7 +97,7 @@ if [ -n "${SECRETSDIR}" ] ; then
     esac
 fi
 
-while [ $# -gt 0 -a x$(expr substr "$1" 1 2) = "x--" ] ; do
+while [ $# -gt 0 ] && [ "x$(expr substr $1 1 2)" = "x--" ] ; do
     case "$1" in
         --shell)
             DO_SHELL=user
@@ -136,7 +136,7 @@ esac
 
 PRELOAD=0
 
-while [ $# -gt 0 -a x$(expr substr "${1:-empty}" 1 2) = "x--" ] ; do
+while [ $# -gt 0 ] && [ "x$(expr substr ${1:-empty} 1 2)" = "x--" ] ; do
     case "$1" in
         # global options
         --broker)
@@ -195,7 +195,7 @@ if [[ ${DEBUG} -eq 1 ]] ; then
     sed -i "s/DEBUG = False/DEBUG = True/g" ${MANAGERDIR}/manager/settings.py
 fi
 
-if [ ! -e ${RUNSECRETS} -a -n "${SECRETSDIR}" -a -d "${SECRETSDIR}" ] ; then
+if [ ! -e ${RUNSECRETS} ] && [ -n "${SECRETSDIR}" ] && [ -d "${SECRETSDIR}" ] ; then
     echo Found some secrets
     ln -s ${SECRETSDIR} ${RUNSECRETS}
 fi
@@ -244,10 +244,10 @@ else
         if [ $# -gt 0 ] ; then
             # echo "Starting shell with command: $@"
             IFS=
-            sudo -u ${WSUSER} -E -H -s $@
+            sudo -u "${WSUSER}" -E -H -s "$@"
         else
             # echo "Starting shell"
-            su ${WSUSER}
+            su "${WSUSER}"
         fi
     elif [ "${DO_SHELL}" = 'super' ] ; then
         if [ $# -gt 0 ] ; then
@@ -260,9 +260,9 @@ else
     else
         if [ $# -gt 0 ] ; then
             IFS=
-            sudo -u ${WSUSER} -E -H $@
+            sudo -u "${WSUSER}" -E -H "$@"
         else
-            su ${WSUSER}
+            su "${WSUSER}"
         fi
     fi
     STATUS=$?

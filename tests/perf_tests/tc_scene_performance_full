@@ -15,7 +15,7 @@ TARGET_RATE=40
 DATA_BASE=sample_data
 PREFIX=apriltag-cam
 
-while [ $# -gt 0 -a x$(expr substr "${1:-empty}" 1 2) = "x--" ] ; do
+while [ $# -gt 0 ] && [ "x$(expr substr ${1:-empty} 1 2)" = "x--" ] ; do
   case "$1" in
     --target)
       TARGET_RATE=$2

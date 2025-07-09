@@ -8,7 +8,8 @@ PROJECT=test$$
 COMPOSE_FILES=$(echo $1 | sed -e 's/:/ /g')
 shift
 
-source $(dirname $(readlink -f $0))/../tools/yaml_parse.sh
+DIR="$(readlink -f $0)"
+source "$(dirname $DIR)"/../tools/yaml_parse.sh
 
 # Remove the previous DBROOT directory before starting the new containers
 if [ "${KEEP_DB}" != 1 ] ; then
@@ -19,7 +20,7 @@ fi
 COMPOSE_FLAGS=""
 COMPOSE_DELETE=""
 for COMPOSE in ${COMPOSE_FILES} ; do
-    eval $(parse_yaml ${COMPOSE} COMPOSE_)
+    eval "$(parse_yaml ${COMPOSE} COMPOSE_)"
     NETWORK=${COMPOSE_networks}
     if [ -z "${NETWORK}" ] ; then
         parse_yaml ${COMPOSE} COMPOSE_
@@ -56,7 +57,8 @@ RUN_TEST=1
 
 if [ -n "$WAITFORCONTAINERS" ]; then
     declare -a "container_config=($(echo $WAITFORCONTAINERS | tr '`$<>' '????'))"
-    for conf in ${container_config[@]}; do
+    # shellcheck disable=SC2154
+    for conf in "${container_config[@]}"; do
         IFS=":", read -ra container_args <<< ${conf}
         container=${container_args[0]}
         wait_text=${container_args[1]:-"Container is ready"}
@@ -75,7 +77,7 @@ if [ -n "$WAITFORCONTAINERS" ]; then
 fi
 
 if [ "${RUN_TEST}" = 1 ] ; then
-    CMD="PYTHONPATH=/home/scenescape/SceneScape/ $@"
+    CMD="PYTHONPATH=/home/scenescape/SceneScape/ $*"
     tools/scenescape-start --image ${IMAGE} --network ${PROJECT}_${NETWORK} ${CMD}
     STATUS=$?
 else
@@ -88,7 +90,7 @@ if [ -n "$LOGSFORCONTAINER" ] ; then
         echo '---------------------------------'
         echo "docker logs ${PROJECT}-$container"
         LOG_CMD="docker logs ${PROJECT}-${container}-1 2>&1 | sed -e 's/^/${container} /'"
-        if [ -n ${LOG} ] ; then
+        if [ -n "${LOG}" ] ; then
             LOG_CMD+="| tee -a ${LOG}"
         fi
         eval "${LOG_CMD}"

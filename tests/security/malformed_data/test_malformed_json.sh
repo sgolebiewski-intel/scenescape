@@ -7,7 +7,7 @@
 SECURITY_TEST_BASE=tests/security
 COMPOSE=tests/compose
 BADDATA_TEST_BASE=${SECURITY_TEST_BASE}/malformed_data
-rm -rf ${BADDATA_TEST_BASE}/{db,media,migrations}
+rm -rf ${BADDATA_TEST_BASE:?}/{db,media,migrations}
 export SUPASS=admin123
 TESTDB=malformed_test_db.tar.bz2
 export EXAMPLEDB=${TESTDB}
@@ -34,7 +34,6 @@ EXPECTED_GOOD=$( grep GOOD ${BADDATA_TEST_BASE}/${INPUT_DATA} | awk '{print $3}'
 EXPECTED_INVALID=$( grep INVALID ${BADDATA_TEST_BASE}/${INPUT_DATA} | awk '{print $4}' | sort -u )
 EXPECTED_UNKNOWN=$( grep UNKNOWN ${BADDATA_TEST_BASE}/${INPUT_DATA} | awk '{print $4}' | sort -u )
 
-TOTAL_EXPECTED=${EXPECTED_GOOD}
 
 TOTAL_FOUND=$( grep 'Msg' ${LOG} | wc -l )
 NUM_GOOD_FOUND=0

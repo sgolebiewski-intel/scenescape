@@ -15,7 +15,7 @@ run_test_case() {
     # Remove if exists
     rm -f $OUTPUT_DIR/errors.json
     touch $OUTPUT_DIR/errors.json
-    for i in $(ls $DATASET_DIR/distorted/*.jpg); do
+    for i in $DATASET_DIR/distorted/*.jpg; do
         CAMERA_ID=$(basename $i .jpg)
         echo "Collecting image"
         python tests/percebro_tests/tc_pinhole_undistort/test_code/receive_image_and_calculate_error.py --original_image_file $DATASET_DIR/original/${CAMERA_ID}.jpg --output_image_file $OUTPUT_DIR/${CAMERA_ID}.jpg --output_json_file $OUTPUT_DIR/errors.json --camera_name ${CAMERA_ID} &

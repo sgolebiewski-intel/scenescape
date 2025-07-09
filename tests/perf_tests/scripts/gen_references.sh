@@ -6,9 +6,9 @@
 
 INPDIR="/workspace/sample_data"
 OUTDIR="/workspace/tests/perf_tests/gen_ref"
-BINDIR="/workspace/tests/perf_tests/scripts/"
 
 NUMFRAMES=500
+# shellcheck disable=SC2089
 INTRINSICS="{\"fov\":70}"
 
 mkdir -p $OUTDIR
@@ -28,6 +28,7 @@ do
     CORESTR="--cvcores 1 --ovcores 10 "
 
     echo "Generating triple"
+    # shellcheck disable=SC2090
     percebro/percebro -i ${INPDIR}/${INPUT} --mqttid camera1  -i ${INPDIR}/${INPUT2} --mqttid camera2 -i ${INPDIR}/${INPUT3} --mqttid camera3 -m retail --intrinsics=${INTRINSICS} --intrinsics=${INTRINSICS} --intrinsics=${INTRINSICS} --debug ${CORESTR} --preprocess  --frames ${NUMFRAMES}
 
     cp ${INPDIR}/$OUTPUTFILE ${OUTDIR}/xFULLREF_RETAIL_${OUTPUTFILE}
@@ -35,16 +36,17 @@ do
     cp ${INPDIR}/$OUTPUTFILE3 ${OUTDIR}/xFULLREF_RETAIL_${OUTPUTFILE3}
 
     echo "Generating triple (all)"
+    # shellcheck disable=SC2090
     percebro/percebro -i ${INPDIR}/${INPUT} --mqttid camera1  -i ${INPDIR}/${INPUT2} --mqttid camera2 -i ${INPDIR}/${INPUT3} --mqttid camera3 -m apriltag,retail+reid --intrinsics=${INTRINSICS} --intrinsics=${INTRINSICS} --intrinsics=${INTRINSICS} --debug ${CORESTR} --preprocess  --frames ${NUMFRAMES}
 
     cp ${INPDIR}/$OUTPUTFILE ${OUTDIR}/xFULLREF_ALL_${OUTPUTFILE}
     cp ${INPDIR}/$OUTPUTFILE2 ${OUTDIR}/xFULLREF_ALL_${OUTPUTFILE2}
     cp ${INPDIR}/$OUTPUTFILE3 ${OUTDIR}/xFULLREF_ALL_${OUTPUTFILE3}
 
-    for i in ${OUTDIR}/xFULLREF*
+    for j in ${OUTDIR}/xFULLREF*
     do
-        FNAME=$( echo $i | sed -e 's/xFULLREF/xREF/g' -e 's/json/txt/g' )
-        cp $i ${FNAME}
+        FNAME=$( echo $j | sed -e 's/xFULLREF/xREF/g' -e 's/json/txt/g' )
+        cp $j ${FNAME}
 
     done
 

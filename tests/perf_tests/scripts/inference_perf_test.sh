@@ -36,6 +36,7 @@ echo "Using ${CVCORES} cores for OpenCV and ${OVCORES} cores for OpenVINO"
 CMD="percebro/src/percebro"
 CORESSTR="--cvcores ${CVCORES} --ovcores ${OVCORES} "
 EXTRA_ARGS="--stats --debug"
+# shellcheck disable=SC2089
 INTRINSICS="{\"fov\":70}"
 
 echo "Processing inputs ${INPUTS}"
@@ -56,6 +57,7 @@ then
   CMD_OPTS="${CMD_OPTS} --cpu-decode"
 fi
 echo Running "${CMD} ${CMD_OPTS}"
+# shellcheck disable=SC2090
 ${CMD} ${CMD_OPTS}  2> ${PERFLOG}
 STATUS=$?
 if [ $STATUS != 0 ] ; then
@@ -98,7 +100,7 @@ PROCTIME=$(( ${END} - ${START} ))
 
 echo ""
 echo ""
-echo "Achieved $FPS fps per camera, $TOTFPS total, threads used: ${NUMTHREADS} Test CPU load: ${CPUUSE}"
+echo "Achieved $FPS fps per camera, $TOTFPS total, threads used: ${NUMTHREADS} Test CPU load: ${CPUUSE} Test time: ${PROCTIME} seconds"
 
 RESULT=$( awk -v ft="${TARGET_FPS}" -v fr="$TOTFPS" 'BEGIN {printf (fr>=ft?0:1)}' )
 

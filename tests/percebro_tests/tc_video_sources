@@ -53,7 +53,7 @@ else
   done < ${SOURCES_CONFIG_FILE}
 fi
 
-for arg_num in ${!ARG_SOURCES[@]}
+for arg_num in "${!ARG_SOURCES[@]}"
 do
   arg=${ARG_SOURCES[$arg_num]}
   FOUND=0
@@ -76,7 +76,7 @@ do
       if [[ "${USB_DEVICE_NAME}" != "" ]]
       then
         echo "Camera of type ${arg} is found at /dev/video${vid}"
-        VIDEO_SOURCES+=( ${vid} )
+        VIDEO_SOURCES+=( "${vid}" )
         FOUND=1
         break
       fi
@@ -88,7 +88,7 @@ do
     if [[ -f "${arg}" ]]
     then
       echo "Adding file ${arg}"
-      VIDEO_SOURCES+=( ${arg} )
+      VIDEO_SOURCES+=( "${arg}" )
     else
       echo "Failed finding source for ${arg}! Aborting"
       exit 1
@@ -100,7 +100,7 @@ done
 # If we did find sources plugged in, then run the test with them.
 if [[ ${#VIDEO_SOURCES[@]} -gt 0 ]]
 then
-  for src_num in ${!VIDEO_SOURCES[@]}
+  for src_num in "${!VIDEO_SOURCES[@]}"
   do
     SOURCE=${VIDEO_SOURCES[$src_num]}
 

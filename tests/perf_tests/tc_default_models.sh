@@ -21,7 +21,7 @@ do
     echo "Testing model: ${model}"
     tools/scenescape-start percebro/percebro -m $model -i $INPUTS \
                             --modelconfig percebro/config/model-config.json \
-                            --intrinsics={\"fov\":70} \
+                            --intrinsics="{\"fov\":70}" \
                             --frames $VIDEO_FRAMES --preprocess
     STATUS=$?
 

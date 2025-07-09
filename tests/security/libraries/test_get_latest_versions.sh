@@ -5,7 +5,6 @@
 # This file is licensed under the Limited Edge Software Distribution License Agreement.
 
 UBUNTUPKGMAIN="https://packages.ubuntu.com"
-UBUNTUPKGURL="${UBUNTUPKGMAIN}/source"
 
 UBUNTUVERSIONBASE="focal"
 UBUNTUVERSION="focal-updates"

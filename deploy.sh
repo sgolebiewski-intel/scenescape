@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # SPDX-FileCopyrightText: (C) 2021 - 2025 Intel Corporation
 # SPDX-License-Identifier: LicenseRef-Intel-Edge-Software
@@ -133,7 +133,7 @@ done
 ok_password()
 {
     PWCHECK="$1"
-    CLEAN=$(echo "${PASSWORD}" | sed -e 's/[- .,_/A-Za-z0-9]//g')
+    CLEAN=$(echo "${PWCHECK}" | sed -e 's/[- .,_/A-Za-z0-9]//g')
     if [ -n "${CLEAN}" ] ; then
         return 1
     fi
@@ -154,7 +154,7 @@ get_password()
         fi
 
         if ! ok_password "${PASSWORD}" ; then
-            echo Please do not use "${CLEAN}" characters in the password
+            echo "Please do not use ${CLEAN} characters in the password"
             continue
         fi
 
@@ -171,7 +171,7 @@ get_password()
 
 if [ -n "${SUPASS}" ] ; then
     if ! ok_password "${SUPASS}" ; then
-        echo Please do not use "${CLEAN}" characters in SUPASS
+        echo "Please do not use ${CLEAN} characters in SUPASS"
         exit 1
     fi
 else
@@ -183,14 +183,14 @@ fi
 
 if [ -n "${DBPASS}" ] ; then
     if ! ok_password "${DBPASS}" ; then
-        echo Please do not use "${CLEAN}" characters in DBPASS
+        echo "Please do not use ${CLEAN} characters in DBPASS"
         exit 1
     fi
 fi
 
 if [ -n "${CERTPASS}" ] ; then
     if ! ok_password "${CERTPASS}" ; then
-        echo Please do not use "${CLEAN}" characters in CERTPASS
+        echo "Please do not use ${CLEAN} characters in CERTPASS"
         exit 1
     fi
 else
@@ -204,7 +204,7 @@ fi
 if ! groups | grep docker > /dev/null ; then
     sudo usermod -a -G docker ${USER}
     echo
-    echo Please enter the password for $USER to continue building
+    echo "Please enter the password for ${USER} to continue building"
     exec su - ${USER} -c "env SKIPYML=1 SUPASS=${SUPASS} DBPASS=${DBPASS} CERTPASS=${CERTPASS} ${SHELL} -c 'cd '${PWD}' && ./$0'"
 fi
 
@@ -246,7 +246,7 @@ if manager/tools/upgrade-database --check ; then
     UPGRADE_LOG=/tmp/upgrade.$$.log
     manager/tools/upgrade-database 2>&1 | tee ${UPGRADE_LOG}
     NEW_DB=$(egrep 'Upgraded database .* has been created' ${UPGRADE_LOG} | awk '{print $NF}')
-    if [ ! -d "${NEW_DB}/db" -o ! -d "${NEW_DB}/migrations" ] ; then
+    if [ ! -d "${NEW_DB}/db" ] || [ ! -d "${NEW_DB}/migrations" ] ; then
         echo
         echo "ABORTING"
         echo "Automatic upgrade of database failed"

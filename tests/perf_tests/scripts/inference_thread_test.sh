@@ -26,6 +26,7 @@ echo "Inputs: ${INPUTS}"
 
 CMD="percebro/src/percebro"
 EXTRA_ARGS="--stats --debug"
+# shellcheck disable=SC2089
 INTRINSICS="{\"fov\":70}"
 
 RESULT=0
@@ -46,6 +47,7 @@ function run_thread_test()
     OVCORES=$1
     CVCORES=$2
     CORESSTR="--cvcores ${CVCORES} --ovcores ${OVCORES} "
+    # shellcheck disable=SC2090
     ${CMD} ${INP_STR} -m ${MODELS} ${INPUT_LEN} ${CORESSTR} --modelconfig ${MODEL_CONFIG} ${EXTRA_ARGS} \
       --frames ${VIDEO_FRAMES} --stats --waitforstable --preprocess > /dev/null 2>&1 &
     TESTPID=$!

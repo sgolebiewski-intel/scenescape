@@ -18,7 +18,7 @@ HIDE_SUMMARY=${HIDE_SUMMARY:-false}
 PASS_COUNTER=0
 FAIL_COUNTER=0
 
-while [ $# -gt 0 -a x$(expr substr "${1:-empty}" 1 2) = "x--" ] ; do
+while [ $# -gt 0 ] && [ "x$(expr substr ${1:-empty} 1 2)" = "x--" ] ; do
     case "$1" in
         --listlog)
             LISTLOG=1
@@ -36,8 +36,8 @@ while [ $# -gt 0 -a x$(expr substr "${1:-empty}" 1 2) = "x--" ] ; do
 done
 
 if [ x${HIDE_DISABLED} = xtrue ] ; then \
-    IGNORE=($( sed -e ':a;N;$!ba;s/\\\n/ /g' ${MAKEFILES[@]} | grep '^disabled[-a-zA-Z0-9_]*:' | awk -F ':' '{print $2}' ))
-    echo IGNORING ${IGNORE}
+    IGNORE=($( sed -e ':a;N;$!ba;s/\\\n/ /g' "${MAKEFILES[@]}" | grep '^disabled[-a-zA-Z0-9_]*:' | awk -F ':' '{print $2}' ))
+    echo IGNORING "${IGNORE[@]}"
 fi
 
 TEST_DATA=$1
@@ -52,17 +52,24 @@ find $TEST_DATA -iname "*.log" -print \
     | awk '{t = $1 ; sub(/[_-][0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]:[0-9][0-9]:[0-9][0-9].log/, "", t); if (t != p) print $1; p=t}' \
     | while read FILE
 do
-    TARGET=$(grep -ohP '(?<=MAKE_TARGET:)'.*$ $FILE)
+    TARGET=$(grep -ohP "(?<=MAKE_TARGET:).*$" $FILE)
     # condition to check if current target in IGNORE
-    if [[ " ${IGNORE[@]} " =~ ${TARGET} ]] ; then \
-        continue
-    fi
-    grep -ohP 'NEX-T.*':.*$ $FILE \
+    for i in "${IGNORE[@]}"; do
+        MATCH=0
+        if [[ ${TARGET} =~ $i ]]; then
+            MATCH=1
+            break
+        fi
+        if [[ ${MATCH} -eq 1 ]] ; then \
+            continue
+        fi
+    done
+    grep -ohP "NEX-T.*:.*$" $FILE \
     | while read TEST;
     do
         TEST_NAME=$(echo "$TEST" | grep -oP 'NEX-T.*?(?=\:)')
         RESULT=$(echo "$TEST" | grep -oE 'PASS')
-        if [ -n "$TARGET" -o -n "$TEST_NAME" ]
+        if [ -n "$TARGET" ] || [ -n "$TEST_NAME" ]
         then
             if [ -z "$TARGET" ]
             then

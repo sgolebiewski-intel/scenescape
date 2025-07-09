@@ -49,7 +49,7 @@ fi
 /etc/init.d/postgresql start
 COUNT=0
 PIDFILE=/run/postgresql/${PSQLVER}-main.pid
-while [ ! -e ${PIDFILE} -a ${COUNT} -lt 5 ] ; do
+while [ ! -e ${PIDFILE} ] && [ ${COUNT} -lt 5 ] ; do
     COUNT=$(expr ${COUNT} + 1)
     echo Postgres not started yet: ${COUNT}
     sleep 1
@@ -60,7 +60,7 @@ if [ ! -e ${PIDFILE} ] ; then
 fi
 WAITPID="${WAITPID} $(cat ${PIDFILE})"
 
-cd ${MANAGERDIR}
+cd ${MANAGERDIR} || { echo "Failed to change directory to ${MANAGERDIR}"; exit 1; }
 
 if [ ${CREATEDB} = 1 ] ; then
     echo ''
@@ -118,7 +118,7 @@ if [ ${CREATEDB} = 1 ] ; then
     elif [ -e ${MANAGERDIR}/${EXAMPLEDB} ] ; then
         EXAMPLEDB=${MANAGERDIR}/${EXAMPLEDB}
     fi
-    if [ ${PRELOAD} = 1 -a -e ${EXAMPLEDB} ] ; then
+    if [ ${PRELOAD} = 1 ] && [ -e ${EXAMPLEDB} ] ; then
         echo ''
         echo '#############'
         echo "Preloading example"
@@ -143,7 +143,7 @@ PORT=${HOSTPORT[1]}
 fi
 BROKERROOTCERT=${BROKERROOTCERT:-${RUNSECRETS}/scenescape-ca.pem}
 BROKERAUTH=${BROKERAUTH:-${RUNSECRETS}/controller.auth}
-if [ -e ${BROKERAUTH} -a -e ${BROKERROOTCERT} ] ; then
+if [ -e ${BROKERAUTH} ] && [ -e ${BROKERROOTCERT} ] ; then
     AUTH=($(python3 -c "import sys, json; auth=json.load(sys.stdin); print(auth['user'], auth['password'])" < ${BROKERAUTH}))
     mosquitto_pub --tls-version tlsv1.3 --cafile ${BROKERROOTCERT} -h ${HOST} -p ${PORT} \
                 -u ${AUTH[0]} -P ${AUTH[1]} -t scenescape/cmd/database -m "update" &

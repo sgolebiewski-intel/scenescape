@@ -12,7 +12,7 @@ DBROOT=${DBROOT:-/workspace}
 WSUSER=${WSUSER:-scenescape}
 CHECK_ONLY=0
 
-while [ $# -gt 0 -a x$(expr substr "${1:-empty}" 1 2) = "x--" ] ; do
+while [ $# -gt 0 ] && [ "x$(expr substr ${1:-empty} 1 2)" = "x--" ] ; do
     case "$1" in
         --check)
             CHECK_ONLY=1
@@ -43,13 +43,13 @@ sudo -u ${WSUSER} -E -H ./manage.py migrate || true
 sudo -u ${WSUSER} -E -H ./manage.py makemigrations --noinput
 
 FILE=$(grep -Prlz "(?s)migrations.RemoveField(.*model_name='cam',.*name='cam_x1',.*)" "${DBROOT}"/migrations/*.py || true)
-if [ $(wc -w <<< "${FILE}") -eq 1 ] ; then
+if [ "$(wc -w <<< ${FILE})" -eq 1 ] ; then
     echo "Applying camera tranform patch.."
     patch "${FILE}" < "${APPDIR}/manager/tools/upgrade_patches/transform_migrate.patch" --fuzz=3
 fi
 
 MAP_MIGRATION_FILE=$(grep -Prlz "(?s)migrations.RemoveField(.*model_name='scene',.*name='map_3d',.*)" "${DBROOT}"/migrations/*.py || true)
-if [ $(wc -w <<< "${MAP_MIGRATION_FILE}") -eq 1 ] ; then
+if [ "$(wc -w <<< ${MAP_MIGRATION_FILE})" -eq 1 ] ; then
     if ! grep "def generate_and_save_thumbnail" "${MAP_MIGRATION_FILE}" ; then
         echo "Applying scene map migration patch.."
         patch "${MAP_MIGRATION_FILE}" < "${APPDIR}/manager/tools/upgrade_patches/scene_map_migrate.patch" --fuzz=3
@@ -57,7 +57,7 @@ if [ $(wc -w <<< "${MAP_MIGRATION_FILE}") -eq 1 ] ; then
 fi
 
 REGION_UUID_MIGRATION_FILE=$(grep -Prlz "(?s)migrations.AddField(.*model_name='region',.*name='uuid',.*)" "${DBROOT}"/migrations/*.py || true)
-if [ $(wc -w <<< "${REGION_UUID_MIGRATION_FILE}") -eq 1 ] ; then
+if [ "$(wc -w <<< ${REGION_UUID_MIGRATION_FILE})" -eq 1 ] ; then
     if ! grep "def populate_uuid" "${REGION_UUID_MIGRATION_FILE}" ; then
         echo "Applying region tripwire uuid migration patch.."
         patch "${REGION_UUID_MIGRATION_FILE}" < "${APPDIR}/manager/tools/upgrade_patches/region_tripwire_uuid.patch" --fuzz=3
@@ -65,7 +65,7 @@ if [ $(wc -w <<< "${REGION_UUID_MIGRATION_FILE}") -eq 1 ] ; then
 fi
 
 TRANSFORMS_MIGRATION_FILE=$(grep -Prlz "(?s)migrations.RemoveField(.*model_name='cam',.*name='transform1',.*)" "${DBROOT}"/migrations/*.py || true)
-if [ $(wc -w <<< "${TRANSFORMS_MIGRATION_FILE}") -eq 1 ] ; then
+if [ "$(wc -w <<< ${TRANSFORMS_MIGRATION_FILE})" -eq 1 ] ; then
     if ! grep "def transfer_transforms_data" "${TRANSFORMS_MIGRATION_FILE}" ; then
         echo "Applying transform migration patch.."
         patch "${TRANSFORMS_MIGRATION_FILE}" < "${APPDIR}/manager/tools/upgrade_patches/transforms_migrate.patch" --fuzz=3
@@ -73,7 +73,7 @@ if [ $(wc -w <<< "${TRANSFORMS_MIGRATION_FILE}") -eq 1 ] ; then
 fi
 
 TRANSFORM_TYPE_MIGRATION_FILE=$(grep -Prlz "(?s)migrations.AlterField(.*model_name='cam',.*name='transform_type',.*)" "${DBROOT}"/migrations/*.py || true)
-if [ $(wc -w <<< "${TRANSFORM_TYPE_MIGRATION_FILE}") -eq 1 ] ; then
+if [ "$(wc -w <<< ${TRANSFORM_TYPE_MIGRATION_FILE})" -eq 1 ] ; then
     if ! grep "def update_transform_type" "${TRANSFORM_TYPE_MIGRATION_FILE}" ; then
         echo "Applying transform type migration patch.."
         patch "${TRANSFORM_TYPE_MIGRATION_FILE}" < "${APPDIR}/manager/tools/upgrade_patches/transform_type_migrate.patch" --fuzz=3
@@ -81,7 +81,7 @@ if [ $(wc -w <<< "${TRANSFORM_TYPE_MIGRATION_FILE}") -eq 1 ] ; then
 fi
 
 SCENE_UUID_MIGRATION_FILE=$(grep -Prlz "(?s)migrations.AlterField(.*model_name='scene',.*name='id',.*)" "${DBROOT}"/migrations/*.py || true)
-if [ $(wc -w <<< "${SCENE_UUID_MIGRATION_FILE}") -eq 1 ] ; then
+if [ "$(wc -w <<< ${SCENE_UUID_MIGRATION_FILE})" -eq 1 ] ; then
     if ! grep "def update_transform_type" "${SCENE_UUID_MIGRATION_FILE}" ; then
         echo "Applying scene uuid migration patch.."
         patch "${SCENE_UUID_MIGRATION_FILE}" < "${APPDIR}/manager/tools/upgrade_patches/scene_uuid.patch" --fuzz=3

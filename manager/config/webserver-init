@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: LicenseRef-Intel-Edge-Software
 # This file is licensed under the Limited Edge Software Distribution License Agreement.
 
-cd ${MANAGERDIR}
+cd ${MANAGERDIR} || { echo "Failed to change directory to ${MANAGERDIR}"; exit 1; }
 echo Waiting for database
 ./manage.py waitfordb
 

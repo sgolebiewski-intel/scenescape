@@ -17,9 +17,11 @@ TEST_DONE=0
 TEST_MAX_WAIT=90
 WAIT_TIME=5
 TEST_RUN_TIME=0
+# shellcheck disable=SC2089
 INTRINSICS="{\"fov\":70}"
 
 echo "Running with extra args ${TEST_EXTRA_ARGS}"
+# shellcheck disable=SC2090
 percebro/percebro  -i "${TEST_SOURCE}" --mqttid camera1 -m ${TEST_MODEL} \
         --cvcores 1 --ovcores 4  --modelconfig percebro/config/model-config.json \
         --stats --frames ${NUM_FRAMES} --debug ${TEST_EXTRA_ARGS} \

@@ -8,12 +8,12 @@ OUTDIR="./tests/perf_tests/gen_ref"
 TGTDIR="${PWD}/tests/perf_tests/references"
 docker run -v ${PWD}:/workspace -v ${PWD}/model_installer/models:/opt/intel/openvino/deployment_tools/intel_models/ --privileged -it scenescape tests/perf_tests/scripts/gen_references.sh
 
-pushd ${OUTDIR}
+pushd ${OUTDIR} || { echo "Failed to change directory to ${OUTDIR}"; exit 1; }
 for i in *txt
 do
     zip ${i}.zip ${i}
     cp ${i}.zip ${TGTDIR}/
     rm ${i}
 done
-popd
+popd || { echo "Failed to change back directory"; exit 1; }
 

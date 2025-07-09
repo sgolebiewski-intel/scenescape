@@ -24,10 +24,10 @@ if [ -d "${WORKSPACE}" ] ; then
         exit 1
     fi
     chown ${WSUID}:${WSGID} ${WORKSPACE}
-    if [ ${WSGID} != $(id -g ${WSUSER}) ] ; then
+    if [ ${WSGID} != "$(id -g ${WSUSER})" ] ; then
         groupmod -g ${WSGID} ${WSUSER}
     fi
-    if [ ${WSGID} != $(id -g ${WSUSER}) -o ${WSUID} != $(id -u ${WSUSER}) ] ; then
+    if [ ${WSGID} != "$(id -g ${WSUSER})" ] || [ ${WSUID} != "$(id -u ${WSUSER})" ] ; then
         usermod -u ${WSUID} -g ${WSGID} ${WSUSER}
     fi
 
@@ -35,12 +35,12 @@ if [ -d "${WORKSPACE}" ] ; then
     if [ -n "${HOSTDIR}" ] ; then
         mkdir -p "${HOSTDIR}"
         mount --bind "${WORKSPACE}" "${HOSTDIR}"
-        cd "${HOSTDIR}"
+        cd "${HOSTDIR}" || { echo "Failed to change directory to ${HOSTDIR}"; exit 1; }
     else
-        cd "${WORKSPACE}"
+        cd "${WORKSPACE}" || { echo "Failed to change directory to ${WORKSPACE}"; exit 1; }
     fi
 else
-    cd "${SSCAPEDIR}"
+    cd "${SSCAPEDIR}" || { echo "Failed to change directory to ${SSCAPEDIR}"; exit 1; }
 fi
 
 if [ -n "${SECRETSDIR}" ] ; then
@@ -55,7 +55,7 @@ if [ ! -e ${RUNSECRETS} ] && [ -n "${SECRETSDIR}" ] && [ -d "${SECRETSDIR}" ] ; 
     ln -s ${SECRETSDIR} ${RUNSECRETS}
 fi
 
-while [ $# -gt 0 -a x$(expr substr "$1" 1 2) = "x--" ] ; do
+while [ $# -gt 0 ] && [ "x$(expr substr $1 1 2)" = "x--" ] ; do
     case "$1" in
         --shell)
             DO_SHELL=user
@@ -78,7 +78,7 @@ if [ "$1" = "percebro" ]; then
     shift
 fi
 
-while [ $# -gt 0 -a x$(expr substr "${1:-empty}" 1 2) = "x--" ] ; do
+while [ $# -gt 0 ] && [ "x$(expr substr ${1:-empty} 1 2)" = "x--" ] ; do
     case "$1" in
         --broker)
             BROKER="$1 $2"
@@ -122,16 +122,16 @@ if [ -n "${WAITPID}" ]; then
 else
     if [ "${DO_SHELL}" = 'user' ] ; then
         if [ $# -gt 0 ] ; then
-            echo "Starting shell with command: $@"
+            echo "Starting shell with command:" "$@"
             IFS=
-            sudo -u ${WSUSER} -E -H -s $@
+            sudo -u ${WSUSER} -E -H -s "$@"
         else
             echo "Starting shell"
             su ${WSUSER}
         fi
     elif [ "${DO_SHELL}" = 'super' ] ; then
         if [ $# -gt 0 ] ; then
-            echo "Starting super shell with command: $@"
+            echo "Starting super shell with command:" "$@"
             /bin/bash -c "$@"
         else
             echo "Starting super shell"
@@ -140,7 +140,7 @@ else
     else
         if [ $# -gt 0 ] ; then
             IFS=
-            sudo -u ${WSUSER} -E -H $@
+            sudo -u ${WSUSER} -E -H "$@"
         else
             su ${WSUSER}
         fi
