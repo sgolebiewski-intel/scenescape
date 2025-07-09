@@ -27,7 +27,7 @@ jobs:
       - name: Setup environment
         uses: open-edge-platform/orch-ci/.github/actions/bootstrap@5ea97eb41959d0922ab99956b4db23910f4fb4a2 # 0.1.31
         with:
-          bootstrap_tools: "base"
+          bootstrap_tools: "baseshellcheck,"
       - name: Install  prettier tool
         run: |
           npm install --save-dev prettier prettier-plugin-jinja-template
@@ -35,6 +35,10 @@ jobs:
         if: always()
         run: |
           make prettier-check
+      - name: Run shell linter - shellcheck
+        if: always()
+        run: |
+          make lint-shell
   optional-linters:
     name: "Run optional linters"
     runs-on: ubuntu-latest
@@ -46,7 +50,7 @@ jobs:
       - name: Setup environment
         uses: open-edge-platform/orch-ci/.github/actions/bootstrap@5ea97eb41959d0922ab99956b4db23910f4fb4a2 # 0.1.31
         with:
-          bootstrap_tools: "base,python,shellcheck,hadolint,"
+          bootstrap_tools: "base,python,hadolint,"
       - name: Install python linters
         run: |
           pip install -r .github/resources/requirements.txt
@@ -75,10 +79,6 @@ jobs:
         if: always()
         run: |
           make lint-cpp
-      - name: Run shell linter - shellcheck
-        if: always()
-        run: |
-          make lint-shell
       - name: Run HTML linter
         if: always()
         run: |
