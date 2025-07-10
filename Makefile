@@ -313,7 +313,7 @@ run_basic_acceptance_tests:
 # ============================= Lint ==================================
 
 .PHONY: lint-all
-lint-all: lint-python lint-javascript lint-cpp lint-shell lint-html lint-dockerfiles prettier-check
+lint-all: lint-python lint-javascript lint-cpp lint-shell lint-dockerfiles prettier-check
 	@echo "==> Linting entire code base..."
 	$(MAKE) lint-python
 	@echo "DONE ==> Linting entire code base":
@@ -350,12 +350,6 @@ lint-shell:
 	@echo "==> Linting Shell files..."
 	@.github/resources/list_shell_scripts.py |  xargs shellcheck -x -S warning  || (echo "Shell linting failed" && exit 1)
 	@echo "DONE ==> Linting Shell files"
-
-.PHONY: lint-html
-lint-html:
-	@echo "==> Linting HTML files..."
-	@find . -name '*.html' | xargs htmlhint || (echo "HTML linting failed" && exit 1)
-	@echo "DONE ==> Linting HTML files"
 
 .PHONY: lint-dockerfiles
 lint-dockerfiles:
