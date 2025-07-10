@@ -66,7 +66,7 @@ This step generates dependency lists. Two separate files are created for system 
 
 By default, the demo uses credentials stored in the `sample_data/supass` file, which is a JSON file containing the authentication user and a base64-encoded password. The default user is `admin` and the default password is `admin`.
 
-If you wish to change the default credentials, edit the `sample_data/supass` file before deployment. Set the `user` field to your desired username and the `password` field to your desired password, encoded in base64.
+If you wish to change the default credentials, edit the `sample_data/supass` file before building. Set the `user` field to your desired username and the `password` field to your desired password, encoded in base64.
 
 ```bash
 make demo
