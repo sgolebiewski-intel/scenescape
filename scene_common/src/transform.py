@@ -165,11 +165,6 @@ class CameraIntrinsics:
       log.debug("Coordinate is already 3D", coords)
       return coords
 
-    if isinstance(coords, Rectangle):
-      origin = self.infer3DCoordsFrom2DDetection(coords.origin, distance)
-      opposite = self.infer3DCoordsFrom2DDetection(coords.opposite, distance)
-      return Rectangle(origin=origin, opposite=opposite)
-
     undistorted_pt = cv2.undistortPoints(coords.as2Dxy.asNumpyCartesian.reshape(-1, 1, 2),
                                          self.intrinsics, self.distortion)
     pt = Point(np.squeeze(undistorted_pt))
@@ -408,7 +403,9 @@ class CameraPose:
   def _calculateRegionOfView(self, size):
     """Calculate the bounds of camera view on the map"""
     self.frameSize = size
-    r = self.intrinsics.infer3DCoordsFrom2DDetection(Rectangle(origin=Point(0, 0), size=tuple(size)))
+    origin = self.intrinsics.infer3DCoordsFrom2DDetection(Rectangle(origin=Point(0, 0), size=tuple(size)).origin)
+    opposite = self.intrinsics.infer3DCoordsFrom2DDetection(Rectangle(origin=Point(0, 0), size=tuple(size)).opposite)
+    r = Rectangle(origin=origin, opposite=opposite)
     ul, ur, bl, br = self._mapCameraViewCornersToWorld(r)
 
     # FIXME - having problems transforming upper right & upper left

@@ -92,7 +92,9 @@ class MovingObject:
       self.boundingBoxPixels = Rectangle(self.info['bounding_box_px'])
       self.info.pop('bounding_box_px')
       if not 'bounding_box' in self.info:
-        agnostic = self.camera.pose.intrinsics.infer3DCoordsFrom2DDetection(self.boundingBoxPixels)
+        origin = self.infer3DCoordsFrom2DDetection(self.boundingBoxPixels.origin)
+        opposite = self.infer3DCoordsFrom2DDetection(self.boundingBoxPixels.opposite)
+        agnostic = Rectangle(origin=origin, opposite=opposite)
         self.boundingBox = agnostic
     if 'bounding_box' in self.info:
       self.boundingBox = Rectangle(self.info['bounding_box'])

@@ -3,7 +3,8 @@
 # This file is licensed under the Limited Edge Software Distribution License Agreement.
 
 from scene_common.geometry import Point
-from scene_common.transform import CameraIntrinsics, CameraPose
+from scene_common.transform import CameraPose
+from robot_vision.cpp_tracking import CameraIntrinsics
 import numpy as np
 
 DEFAULT_TRANSFORM = {
@@ -31,9 +32,18 @@ class Camera:
       resolution = (info['width'], info['height'])
 
     intrinsics = info.get('intrinsics', info.get('fov', None))
+    if isinstance(intrinsics, dict):
+      intrinsics = list(intrinsics.values())
+    elif isinstance(intrinsics, (int, float)):
+      intrinsics = [intrinsics]
+
+    distortion = info.get('distortion', [])
+    if isinstance(distortion, dict):
+      distortion = list(distortion.values())
+
     if intrinsics is not None:
       cam_intrins = CameraIntrinsics(intrinsics,
-                                     info.get('distortion', None),
+                                     distortion,
                                      resolution)
 
       info['resolution'] = resolution
