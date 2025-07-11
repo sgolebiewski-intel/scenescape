@@ -429,7 +429,7 @@ certificates:
 
 .PHONY: supass-secret
 supass-secret: $(SECRETSDIR)
-	@cp sample_data/supass $(SECRETSDIR)/supass
+	@echo '{"user": "admin", "password": "YWRtaW4="}' > $(SECRETSDIR)/supass
 	@chmod 0600 $(SECRETSDIR)/supass
 
 %.auth:
