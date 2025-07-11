@@ -104,7 +104,7 @@ This step generates dependency lists. Two separate files are created for system 
 
 ### Step 5: Deploy Intel® SceneScape demo to the target system
 
-By default, the demo uses credentials created by Makefile (section `supass-secret`), mounted as a secret JSON file containing the authentication user and a base64-encoded password. The default user is `admin` and the default password is `admin`.
+By default, the demo uses credentials created in Makefile (section `supass-secret`), mounted as a secret JSON file containing the authentication user and a base64-encoded password. The default user is `admin` and the default password is `admin`.
 
 If you wish to change the default credentials, edit the `{"user": "admin", "password": "YWRtaW4="}` section in Makefile before building. Set the `user` field to your desired username and the `password` field to your desired password, encoded in base64.
 
@@ -120,7 +120,7 @@ If you are running remotely, connect using `"https://<ip_address>"` or `"https:/
 
 ### Logging In
 
-Enter credentials provided in the `sample_data/supass`.  The default user is `admin` and the default password is `admin`.
+Enter credentials created in Makefile (section `supass-secret`).  The default user is `admin` and the default password is `admin`.
 
 ### Stopping the System
 
