@@ -130,78 +130,12 @@ do
     fi
 done
 
-ok_password()
-{
-    PWCHECK="$1"
-    CLEAN=$(echo "${PASSWORD}" | sed -e 's/[- .,_/A-Za-z0-9]//g')
-    if [ -n "${CLEAN}" ] ; then
-        return 1
-    fi
-    return 0
-}
-
-get_password()
-{
-    PROMPT="$1"
-    while true ; do
-        stty -echo
-        read -p "${PROMPT}" PASSWORD
-        echo ''
-
-        if [ -z "${PASSWORD}" ] ; then
-            echo Please enter a password
-            continue
-        fi
-
-        if ! ok_password "${PASSWORD}" ; then
-            echo Please do not use "${CLEAN}" characters in the password
-            continue
-        fi
-
-        read -p "Verify: " VERIFY
-        echo ''
-        stty echo
-
-        if [ "${PASSWORD}" = "${VERIFY}" ] ; then
-            break
-        fi
-        echo "Password and verify do not match"
-    done
-}
-
-if [ -n "${DBPASS}" ] ; then
-    if ! ok_password "${DBPASS}" ; then
-        echo Please do not use "${CLEAN}" characters in DBPASS
-        exit 1
-    fi
-fi
-
-if [ -n "${CERTPASS}" ] ; then
-    if ! ok_password "${CERTPASS}" ; then
-        echo Please do not use "${CLEAN}" characters in CERTPASS
-        exit 1
-    fi
-else
-    # Randomly generate a certificate password, if the user needs it
-    # they can just regenerate the certs and optionally pass CERTPASS.
-    CERTPASS=$(openssl rand -base64 33)
-    # get_password "Enter CERTPASS: "
-    # CERTPASS="${PASSWORD}"
-fi
-
-if ! groups | grep docker > /dev/null ; then
-    sudo usermod -a -G docker ${USER}
-    echo
-    echo Please enter the password for $USER to continue building
-    exec su - ${USER} -c "env SKIPYML=1 DBPASS=${DBPASS} CERTPASS=${CERTPASS} ${SHELL} -c 'cd '${PWD}' && ./$0'"
-fi
-
 echo '########################################'
 echo Building SceneScape
 echo '########################################'
 
 make -C docs clean
-make CERTPASS="${CERTPASS}" DBPASS="${DBPASS}"
+make
 
 if manager/tools/upgrade-database --check ; then
     UPGRADEDB=0
