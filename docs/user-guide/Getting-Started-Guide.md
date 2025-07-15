@@ -120,7 +120,7 @@ If you are running remotely, connect using `"https://<ip_address>"` or `"https:/
 
 ### Logging In
 
-Enter credentials created in Makefile (section `supass-secret`).  The default user is `admin` and the default password is `admin`.
+Enter credentials created in Makefile (section `supass-secret`). The default user is `admin` and the default password is `admin`.
 
 ### Stopping the System
 
