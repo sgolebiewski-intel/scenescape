@@ -17,7 +17,7 @@ ARG LWS_VERSION
 # Get mosquitto build dependencies.
 RUN set -ex; \
     apt-get update; \
-    apt-get install -y wget build-essential cmake libssl-dev libcjson-dev; \
+    apt-get install -y --no-install-recommends wget build-essential cmake libssl-dev libcjson-dev; \
     wget https://github.com/warmcat/libwebsockets/archive/v${LWS_VERSION}.tar.gz -O /tmp/lws.tar.gz; \
     mkdir -p /build/lws; \
     tar --strip=1 -xf /tmp/lws.tar.gz -C /build/lws; \
@@ -74,13 +74,13 @@ RUN go env; \
   if [ ! -z "$TARGETPLATFORM" ]; then \
     case "$TARGETPLATFORM" in \
   "linux/arm64") \
-    apt update && apt install -y gcc-aarch64-linux-gnu libc6-dev-arm64-cross \
+    apt update && apt install -y --no-install-recommends gcc-aarch64-linux-gnu libc6-dev-arm64-cross \
     ;; \
   "linux/arm/v7") \
-    apt update && apt install -y gcc-arm-linux-gnueabihf libc6-dev-armhf-cross \
+    apt update && apt install -y --no-install-recommends gcc-arm-linux-gnueabihf libc6-dev-armhf-cross \
     ;; \
   "linux/arm/v6") \
-    apt update && apt install -y gcc-arm-linux-gnueabihf libc6-dev-armel-cross libc6-dev-armhf-cross \
+    apt update && apt install -y --no-install-recommends gcc-arm-linux-gnueabihf libc6-dev-armel-cross libc6-dev-armhf-cross \
     ;; \
   esac \
   fi
@@ -101,7 +101,7 @@ FROM debian:stable-slim
 
 RUN set -ex; \
     apt update; \
-    apt install -y libc-ares2 openssl uuid tini libssl-dev libcjson-dev; \
+    apt install -y --no-install-recommends libc-ares2 openssl uuid tini libssl-dev libcjson-dev; \
     mkdir -p /var/lib/mosquitto /var/log/mosquitto; \
     groupadd mosquitto; \
     useradd -s /sbin/nologin mosquitto -g mosquitto -d /var/lib/mosquitto; \
