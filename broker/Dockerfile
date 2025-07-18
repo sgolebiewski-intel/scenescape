@@ -186,5 +186,7 @@ sys_interval 0
 EOF
 EOCMD
 
+USER mosquitto
+
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["/usr/local/sbin/broker-init"]
