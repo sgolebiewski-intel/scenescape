@@ -25,7 +25,7 @@ Intel® SceneScape
    How-to-configure-a-hierarchy-of-scenes
    How-to-create-new-scene
    How-to-enable-reidentification
-   How-to-inference-using-Nvidia-gpu-with-OVMS
+   How-to-inference-using-NVIDIA-gpu-with-OVMS
    How-to-integrate-cameras-and-sensors
    How-to-integrate-geti-trained-model
    How-to-manually-calibrate-cameras
@@ -34,6 +34,8 @@ Intel® SceneScape
    How-to-use-sensor-types
    How-to-visualize-regions
    How-to-configure-geospatial-coordinates
+   How-to-configure-spatial-analytics
+   How-to-define-object-properties
 
 .. toctree::
    :caption: References
