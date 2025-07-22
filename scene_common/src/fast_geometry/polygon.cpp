@@ -37,7 +37,7 @@ bool Polygon::isPointInside(double px, double py) const
     return inside;
 }
 
-std::vector<bool> Polygon::isPointsInside(const std::vector<std::pair<double, double>>& points) const
+std::vector<bool> Polygon::arePointsInside(const std::vector<std::pair<double, double>>& points) const
 {
     std::vector<bool> results;
     results.reserve(points.size());

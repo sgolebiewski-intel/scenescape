@@ -301,7 +301,7 @@ class Scene(SceneModel):
     objects = []
     for key, region in regions.items():
       regionObjects = region.objects.get(detectionType, [])
-      results = region.polygon.isPointsInside(object_coords)
+      results = region.polygon.arePointsInside(object_coords)
       for obj, is_inside in zip(mature_objects, results):
         if is_inside:
           objects.append(obj)
@@ -384,19 +384,18 @@ class Scene(SceneModel):
       if hasattr(camera, 'pose') and hasattr(camera.pose, 'regionOfView'):
         valid_cameras.append((sname, camera))
 
+    for obj in curObjects:
+      obj.visibility = []
+
     if not valid_cameras:
-      for obj in curObjects:
-        obj.visibility = []
       return
 
     object_coords = [(obj.sceneLoc.x, obj.sceneLoc.y) for obj in curObjects]
 
     for sname, camera in valid_cameras:
       region = camera.pose.regionOfView
-      visibility_results = region.polygon.isPointsInside(object_coords)
+      visibility_results = region.polygon.arePointsInside(object_coords)
       for obj, is_visible in zip(curObjects, visibility_results):
-        if not hasattr(obj, 'visibility'):
-          obj.visibility = []
         if is_visible:
           obj.visibility.append(camera.cameraID)
     return
