@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # This file is licensed under Apache 2.0 License.
 
+dill
 mapbox-earcut
 ntplib
 numpy==1.26.4

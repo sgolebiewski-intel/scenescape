@@ -264,11 +264,11 @@ Point Rectangle::topRight() const
 {
     return Point( this->x2(), this->y1() );
 }
-const Point & Rectangle::origin()
+const Point & Rectangle::origin() const
 {
     return this->_origin;
 }
-const Point & Rectangle::opposite()
+const Point & Rectangle::opposite() const
 {
     return this->_opposite;
 }

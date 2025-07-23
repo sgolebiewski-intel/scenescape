@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: (C) 2022 - 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-from queue import Queue
-from threading import Thread
+import multiprocessing
 
 from controller.moving_object import (DEFAULT_EDGE_LENGTH,
                                       DEFAULT_TRACKING_RADIUS, ATagObject,
@@ -10,6 +9,7 @@ from controller.moving_object import (DEFAULT_EDGE_LENGTH,
 from controller.uuid_manager import UUIDManager
 from scene_common import log
 from scene_common.options import TYPE_1
+import dill
 
 object_classes = {
   # class
@@ -20,13 +20,13 @@ MAX_UNRELIABLE_TIME = 0.3333
 NON_MEASUREMENT_TIME_DYNAMIC = 0.2666
 NON_MEASUREMENT_TIME_STATIC = 0.5333
 
-class Tracking(Thread):
+class Tracking(multiprocessing.Process):
   def __init__(self):
     super().__init__()
     self.trackers = {}
     self._objects = self.curObjects = []
     self.already_tracked_objects = []
-    self.queue = Queue()
+    self.queue = multiprocessing.JoinableQueue()
     self.uuid_manager = UUIDManager()
     return
 
@@ -54,7 +54,20 @@ class Tracking(Thread):
         log.info("Tracker work queue is not empty", category, queue.qsize())
         continue
       new_objects = [obj for obj in objects if obj.category == category]
-      queue.put((new_objects, when, already_tracked_objects))
+      # Convert objects to serializable format before passing to multiprocessing queue
+      serializable_objects = []
+      for obj in new_objects:
+        try:
+          # Test if object is serializable
+          dill.dumps(obj)
+          serializable_objects.append(obj)
+        except Exception as e:
+          log.warn(f"Found non-serializable object in {category}: {str(e)}")
+          # You might need to implement a to_dict() method on MovingObject
+          # serializable_objects.append(obj.to_dict())
+      
+      already_tracked_objects = []
+      queue.put((serializable_objects, when, already_tracked_objects))
     return
 
   def updateRefCameraFrameRate(self, ref_camera_frame_rate, category):
@@ -119,13 +132,27 @@ class Tracking(Thread):
   def run(self):
     self.uuid_manager.connectDatabase()
     while True:
-      objects, when, already_tracked_objects = self.queue.get()
-      if objects is None:
+      try:
+        data = self.queue.get()
+        if data is None:
+          self.queue.task_done()
+          break
+          
+        if isinstance(data, bytes):
+          data = dill.loads(data)
+          
+        objects, when, already_tracked_objects = data
+        
+        if objects is None:
+          self.queue.task_done()
+          break
+          
+        self.trackCategory(objects, when, already_tracked_objects)
+        self.curObjects = (self._objects + self.already_tracked_objects).copy()
+      except Exception as e:
+        log.error(f"Error processing queue data: {str(e)}")
+      finally:
         self.queue.task_done()
-        break
-      self.trackCategory(objects, when, already_tracked_objects)
-      self.curObjects = (self._objects + self.already_tracked_objects).copy()
-      self.queue.task_done()
     return
 
   def waitForComplete(self):

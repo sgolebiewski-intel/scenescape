@@ -65,8 +65,8 @@ class Rectangle {
     Point bottomLeft() const;
     Point bottomRight() const;
 
-    const Point & origin();
-    const Point & opposite();
+    const Point & origin() const;
+    const Point & opposite() const;
 
     std::tuple<std::tuple<int, int>, std::tuple<int,int>> cv() const;
     double area() const;

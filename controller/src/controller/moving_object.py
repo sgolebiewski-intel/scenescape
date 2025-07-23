@@ -280,6 +280,8 @@ class MovingObject:
         classDict.update(additionalAttributes)
 
     setattr(newClass, '__init__', custom_init)
+    # Add the new class to the module's globals so it becomes accessible
+    globals()[subclassName] = newClass
     return newClass
 
   ### Below section is for methods that support native tracker or tracker debugger

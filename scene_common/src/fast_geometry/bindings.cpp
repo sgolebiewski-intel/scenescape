@@ -35,6 +35,27 @@ PYBIND11_MODULE( LIBRARY_NAME, m) {
     py::class_<Point>(m, "Point")
         .def(py::init<double, double, bool>(),
             py::arg("x"), py::arg("y"), py::arg("polar") = false )
+        .def(py::pickle(
+            [](const Point &p) { // __getstate__
+                if (p.is3D()) {
+                    return py::make_tuple(p.x(), p.y(), p.z(), p.is3D());
+                } else {
+                    return py::make_tuple(p.x(), p.y(), 0.0, p.is3D());
+                }
+                return py::make_tuple(p.x(), p.y(), p.z(), p.is3D());
+            },
+            [](py::tuple t) { // __setstate__
+                if (t.size() != 4)
+                    throw std::runtime_error("Invalid state!");
+                
+                bool is3D = t[3].cast<bool>();
+                if (is3D) {
+                    return Point(t[0].cast<double>(), t[1].cast<double>(), t[2].cast<double>());
+                } else {
+                    return Point(t[0].cast<double>(), t[1].cast<double>());
+                }
+            }
+        ))
         .def(py::init<double, double, double, bool>(),
             py::arg("x"), py::arg("y"), py::arg("z"), py::arg("polar") = false )
         .def(py::init<std::vector<double>, bool>(),
@@ -88,6 +109,20 @@ PYBIND11_MODULE( LIBRARY_NAME, m) {
         .def(py::init<double, double, double, double>())
         .def(py::init<Point &, Point &, bool>(),
             py::arg("p1"), py::arg("p2"), py::arg("relative") = false )
+        .def(py::pickle(
+            [](const Line &l) { // __getstate__
+                return py::make_tuple(l.origin(), l.end(), l.is3D());
+            },
+            [](py::tuple t) { // __setstate__
+                if (t.size() != 3)
+                    throw std::runtime_error("Invalid state!");
+                
+                Point p1 = t[0].cast<Point>();
+                Point p2 = t[1].cast<Point>();
+                bool relative = false;  // Default value
+                return Line(p1, p2, relative);
+            }
+        ))
         .def("isPointOnLine", &Line::isPointOnLine)
         .def("intersection",  &Line::intersection)
         .def_property_readonly("origin", &Line::origin)
@@ -115,6 +150,19 @@ PYBIND11_MODULE( LIBRARY_NAME, m) {
         .def(py::init<const Point &, const py::tuple &>(),
             py::arg("origin"), py::arg("size"))
         .def(py::init<std::unordered_map<std::string, double> &>())
+        .def(py::pickle(
+            [](const Rectangle &r) { // __getstate__
+                return py::make_tuple(r.origin(), r.opposite(), r.is3D());
+            },
+            [](py::tuple t) { // __setstate__
+                if (t.size() != 3)
+                    throw std::runtime_error("Invalid state!");
+                
+                Point origin = t[0].cast<Point>();
+                Point opposite = t[1].cast<Point>();
+                return Rectangle(origin, opposite);
+            }
+        ))
         .def_property_readonly("size", &Rectangle::size)
         .def_property_readonly("is3D", &Rectangle::is3D)
         .def_property_readonly("width", &Rectangle::width)
@@ -147,6 +195,22 @@ PYBIND11_MODULE( LIBRARY_NAME, m) {
             py::arg("x"), py::arg("y"))
         .def(py::init<double, double, double>(),
             py::arg("x"), py::arg("y"), py::arg("z"))
+            .def(py::pickle(
+                [](const Size &s) { // __getstate__
+                    return py::make_tuple(s.width(), s.height(), s.depth(), s.is3D());
+                },
+                [](py::tuple t) { // __setstate__
+                    if (t.size() != 4)
+                        throw std::runtime_error("Invalid state!");
+                    
+                    bool is3D = t[3].cast<bool>();
+                    if (is3D) {
+                        return Size(t[0].cast<double>(), t[1].cast<double>(), t[2].cast<double>());
+                    } else {
+                        return Size(t[0].cast<double>(), t[1].cast<double>());
+                    }
+                }
+            ))
         .def_property_readonly("width", &Size::width)
         .def_property_readonly("height", &Size::height)
         .def_property_readonly("depth", &Size::depth)
@@ -157,6 +221,18 @@ PYBIND11_MODULE( LIBRARY_NAME, m) {
 
     py::class_<Polygon>(m, "Polygon")
         .def(py::init<const std::vector<std::pair<double, double>>&>())
+        .def(py::pickle(
+            [](const Polygon &p) { // __getstate__
+                return py::make_tuple(p.getVertices());
+            },
+            [](py::tuple t) { // __setstate__
+                if (t.size() != 1)
+                    throw std::runtime_error("Invalid state!");
+                
+                std::vector<std::pair<double, double>> vertices = t[0].cast<std::vector<std::pair<double, double>>>();
+                return Polygon(vertices);
+            }
+        ))
         .def("getVertices", &Polygon::getVertices)
         .def("isPointInside", &Polygon::isPointInside);
 
