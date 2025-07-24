@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: (C) 2021 - 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-import json
 import orjson
 import os
 from collections import defaultdict
@@ -63,7 +62,7 @@ class SceneController:
       script = os.path.realpath(__file__)
       tracker_config_file = os.path.join(os.path.dirname(script), tracker_config_file)
     with open(tracker_config_file) as json_file:
-      tracker_config = json.load(json_file)
+      tracker_config = orjson.loads(json_file.read())
       self.tracker_config_data["max_unreliable_time"] = tracker_config["max_unreliable_frames"]/tracker_config["baseline_frame_rate"]
       self.tracker_config_data["non_measurement_time_dynamic"] = tracker_config["non_measurement_frames_dynamic"]/tracker_config["baseline_frame_rate"]
       self.tracker_config_data["non_measurement_time_static"] = tracker_config["non_measurement_frames_static"]/tracker_config["baseline_frame_rate"]
