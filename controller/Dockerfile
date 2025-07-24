@@ -127,11 +127,12 @@ RUN : \
     && eval WSHOME=~$WSUSER \
     && chmod a+rX "${WSHOME}"
 
-# TODO: uncomment when issue with accessing the secrets is resolved
-# USER $WSUSER
+COPY controller/requirements-runtime.txt /tmp
+RUN chown $WSUSER:$WSUSER /tmp/requirements-runtime.txt
+
+USER $WSUSER
 
 # install only required runtime dependencies
-COPY controller/requirements-runtime.txt /tmp
 RUN : \
     && pip3 install --break-system-packages --upgrade --no-cache-dir -r /tmp/requirements-runtime.txt \
     && rm -rf /tmp/requirements-runtime.txt
@@ -148,7 +149,31 @@ COPY --chown=$WSUSER:$WSUSER --from=scenescape-common-base-24-04 /tmp/tools/wait
 COPY --chown=$WSUSER:$WSUSER ./controller/src/controller-cmd $SCENESCAPE_HOME/controller-cmd
 COPY --chown=$WSUSER:$WSUSER ./controller/src/controller-init /usr/local/bin/
 
-ENTRYPOINT ["/usr/local/bin/controller-init"]
+USER root
+
+RUN <<'EOCMD'
+mkdir -p /usr/local/bin
+cat > /usr/local/bin/controller-entrypoint.sh <<'EOF'
+#!/bin/bash
+set -e
+
+SECRET_SRC="/run/secrets/controller.auth"
+SECRET_DST="$SCENESCAPE_HOME/controller.auth"
+
+# Copy secret if present and set permissions for scenescape user
+if [ -f "$SECRET_SRC" ]; then
+    cp "$SECRET_SRC" "$SECRET_DST"
+    chown scenescape:scenescape "$SECRET_DST"
+    chmod 0400 "$SECRET_DST"
+fi
+
+# Drop privileges to scenescape user and run main entrypoint
+exec su scenescape -s /bin/bash -c "/usr/local/bin/controller-init \"$@\""
+EOF
+chmod +x /usr/local/bin/controller-entrypoint.sh
+EOCMD
+
+ENTRYPOINT ["/usr/local/bin/controller-entrypoint.sh"]
 
 # ---------- Controller Test Stage ------------------
 # This stage is meant to be used for test execution (not for final runtime)

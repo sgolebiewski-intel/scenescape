@@ -137,11 +137,15 @@ if [ -n "\${REST_SERVER}" ] ; then
 fi
 
 cp \${RUNSECRETS}/scenescape-broker.key \${RUNSECRETS}/scenescape-broker.crt /etc/mosquitto/
-chown mosquitto:mosquitto /etc/mosquitto/scenescape-broker.key
+chown mosquitto:mosquitto /etc/mosquitto/scenescape-broker.key /etc/mosquitto/scenescape-broker.crt
+chmod 0400 /etc/mosquitto/scenescape-broker.key /etc/mosquitto/scenescape-broker.crt
+
 echo "Container is ready"
 # for kubernetes readinessProbe
 touch /tmp/healthy
-/usr/sbin/mosquitto -c /etc/mosquitto/mosquitto.conf
+
+# Drop privileges to mosquitto user
+exec su mosquitto -s /bin/sh -c "/usr/sbin/mosquitto -c /etc/mosquitto/mosquitto.conf"
 EOF
 chmod a+x /usr/local/sbin/broker-init
 EOCMD
@@ -185,7 +189,9 @@ sys_interval 0
 EOF
 EOCMD
 
-USER mosquitto
+# Drop privileges to mosquitto user within broker-init
+# trivy:ignore:DS002 AVD-DS-0002
+USER root
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["/usr/local/sbin/broker-init"]
