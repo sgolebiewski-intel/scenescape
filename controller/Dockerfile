@@ -7,7 +7,7 @@ ARG RUNTIME_OS_IMAGE=ubuntu:24.04@sha256:a08e551cb33850e4740772b38217fc1796a66da
 FROM ubuntu:24.04@sha256:a08e551cb33850e4740772b38217fc1796a66da2506d312abe51acda354ff061 AS scenescape-common-base-24-04
 
 # We use root for runtime init. The command in ENTRYPOINT will drop to an unprivileged user.
-# hadolint ignore=DL3002
+# TRIVY::IGNORE:DS002
 USER root
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -149,6 +149,8 @@ COPY --chown=$WSUSER:$WSUSER --from=scenescape-common-base-24-04 /tmp/tools/wait
 COPY --chown=$WSUSER:$WSUSER ./controller/src/controller-cmd $SCENESCAPE_HOME/controller-cmd
 COPY --chown=$WSUSER:$WSUSER ./controller/src/controller-init /usr/local/bin/
 
+# The command in ENTRYPOINT will drop to an unprivileged user.
+# TRIVY::IGNORE:DS002
 USER root
 
 RUN <<'EOCMD'
@@ -168,7 +170,7 @@ if [ -f "$SECRET_SRC" ]; then
 fi
 
 # Drop privileges to scenescape user and run main entrypoint
-exec su scenescape -s /bin/bash -c "/usr/local/bin/controller-init \"$@\""
+exec runuser -u scenescape -- /usr/local/bin/controller-init "$@"
 EOF
 chmod +x /usr/local/bin/controller-entrypoint.sh
 EOCMD
