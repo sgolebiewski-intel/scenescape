@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 networks:
   scenescape:
 
@@ -7,4 +10,4 @@ services:
     command: ./test_get_image_versions.sh > all_packages.txt
     privileged: true
     volumes:
-     - ./:/workspace
+      - ./:/workspace

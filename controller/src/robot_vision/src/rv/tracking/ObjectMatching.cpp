@@ -1,23 +1,10 @@
-// ----------------- BEGIN LICENSE BLOCK ---------------------------------
-//
-// INTEL CONFIDENTIAL
-//
-// Copyright (c) 2019-2023 Intel Corporation
-//
-// This software and the related documents are Intel copyrighted materials, and
-// your use of them is governed by the express license under which they were
-// provided to you (License). Unless the License provides otherwise, you may not
-// use, modify, copy, publish, distribute, disclose or transmit this software or
-// the related documents without Intel's prior written permission.
-//
-// This software and the related documents are provided as is, with no express or
-// implied warranties, other than those that are expressly stated in the License.
-//
-// ----------------- END LICENSE BLOCK -----------------------------------
+// SPDX-FileCopyrightText: 2019 - 2025 Intel Corporation
+// SPDX-License-Identifier: Apache-2.0
 
 #include <functional>
 #include <numeric>
 #include <opencv2/core.hpp>
+#include <omp.h>
 
 #include "rv/tracking/ObjectMatching.hpp"
 #include "rv/apollo/multi_hm_bipartite_graph_matcher.hpp"
@@ -119,6 +106,8 @@ void match(const std::vector<TrackedObject> &tracks,
   apollo::perception::common::SecureMat<double> *costMatrix = matcher.cost_matrix();
   costMatrix->Resize(tracks.size(), measurements.size());
 
+  // Parallelize the cost matrix computation
+  #pragma omp parallel for collapse(2)
   for (size_t i = 0; i < tracks.size(); ++i)
   {
     for (size_t j = 0; j < measurements.size(); ++j)

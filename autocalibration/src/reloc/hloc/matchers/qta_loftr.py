@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 from FeatureMatching.src.utils.misc import lower_config
 from FeatureMatching.src.config.default import get_cfg_defaults
 from FeatureMatching.src.loftr import LoFTR

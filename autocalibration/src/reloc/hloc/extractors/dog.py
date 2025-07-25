@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 import kornia
 from kornia.feature.laf import (
     laf_from_center_scale_ori, extract_patches_from_pyramid)

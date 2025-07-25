@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 """Estimate the camera poses for a dataset using Structure from Motion pipeline
 from hloc / COLMAP. This also estimates SfM scale using depth images. The SfM
 reconstruction can be visualized for validity using:

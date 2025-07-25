@@ -1,2 +1,14 @@
-# Default Code Owners 
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+# Default Code Owners
 @saratpoluri
+
+
+
+
+
+
+# documentation content
+/docs     @open-edge-platform/open-edge-platform-docs-write @saratpoluri
+README.md @open-edge-platform/open-edge-platform-docs-write @saratpoluri

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 generate-coverage-all-app:
 	cd .. ; env SECRETSDIR=/workspace/secrets tools/scenescape-start sh -c \
 	"$(UNIT_TEST_COVERAGE_CMD) --source=alert/ -m pytest -s alert/ \

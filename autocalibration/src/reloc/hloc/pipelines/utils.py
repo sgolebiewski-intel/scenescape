@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 """Example:
 python -m hloc.pipelines.utils --dataset_dir datasets/inloc/
 """

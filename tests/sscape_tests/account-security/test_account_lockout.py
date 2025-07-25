@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User

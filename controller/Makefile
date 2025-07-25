@@ -1,15 +1,12 @@
-# Copyright (C) 2025 Intel Corporation
-#
-# This software and the related documents are Intel copyrighted materials,
-# and your use of them is governed by the express license under which they
-# were provided to you ("License"). Unless the License provides otherwise,
-# you may not use, modify, copy, publish, distribute, disclose or transmit
-# this software or the related documents without Intel's prior written permission.
-#
-# This software and the related documents are provided as is, with no express
-# or implied warranties, other than those that are expressly stated in the License.
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
 
 IMAGE := scenescape-controller
-RUNTIME_OS_IMAGE := ubuntu:22.04
+RUNTIME_OS_IMAGE := ubuntu:24.04@sha256:a08e551cb33850e4740772b38217fc1796a66da2506d312abe51acda354ff061
+TARGET = scenescape-controller-runtime
 
 include ../common.mk
+
+.PHONY: test-build
+test-build:
+	$(MAKE) IMAGE="scenescape-controller-test" TARGET="scenescape-controller-test"

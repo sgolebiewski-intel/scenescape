@@ -1,17 +1,9 @@
 #!/usr/bin/env python3
 
-# Copyright (C) 2021-2024 Intel Corporation
-#
-# This software and the related documents are Intel copyrighted materials,
-# and your use of them is governed by the express license under which they
-# were provided to you ("License"). Unless the License provides otherwise,
-# you may not use, modify, copy, publish, distribute, disclose or transmit
-# this software or the related documents without Intel's prior written permission.
-#
-# This software and the related documents are provided as is, with no express
-# or implied warranties, other than those that are expressly stated in the License.
+# SPDX-FileCopyrightText: (C) 2021 - 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
 
-import json
+import orjson
 import os
 import sys
 import tempfile
@@ -53,10 +45,10 @@ def main():
       linecount += 1
       if not line:
         break
-      unit_test = json.loads(line)
+      unit_test = orjson.loads(line)
 
       cfile, cfname = tempfile.mkstemp()
-      os.write(cfile, bytes(json.dumps(unit_test['config']), 'UTF-8'))
+      os.write(cfile, bytes(orjson.dumps(unit_test['config']), 'UTF-8'))
       os.close(cfile)
       scene = scenescape(cfname).scene
       os.remove(cfname)
@@ -84,7 +76,7 @@ def main():
       if args.redump:
         with open(args.redump, 'w') as outfile:
           unit_test['output'] = scene.tracker.dumpState()
-          json.dump(unit_test, outfile)
+          orjson.dump(unit_test, outfile)
           outfile.write("\n")
 
       if not match:

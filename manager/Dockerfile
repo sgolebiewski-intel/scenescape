@@ -1,17 +1,9 @@
 # -*- mode: Fundamental; indent-tabs-mode: nil -*-
 
-# Copyright (C) 2021-2025 Intel Corporation
-#
-# This software and the related documents are Intel copyrighted materials,
-# and your use of them is governed by the express license under which they
-# were provided to you ("License"). Unless the License provides otherwise,
-# you may not use, modify, copy, publish, distribute, disclose or transmit
-# this software or the related documents without Intel's prior written permission.
-#
-# This software and the related documents are provided as is, with no express
-# or implied warranties, other than those that are expressly stated in the License.
+# SPDX-FileCopyrightText: (C) 2021 - 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
 
-FROM scenescape-common-base AS manager-builder
+FROM scenescape-common-base AS scenescape-manager-builder
 
 # We use root for runtime init. The command in ENTRYPOINT will drop to an unprivileged user.
 # hadolint ignore=DL3002
@@ -29,13 +21,8 @@ RUN : \
         python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# SceneScape requirements
-COPY ./manager/requirements-buildtime.txt /tmp
-RUN pip3 install --upgrade --no-cache-dir \
-        -r /tmp/requirements-buildtime.txt
-
 # ---------- Manager Runtime Stage ------------------
-FROM ubuntu:22.04 AS manager-runtime
+FROM ubuntu:22.04 AS scenescape-manager-runtime
 
 USER root
 SHELL ["/bin/bash", "-e", "-o", "pipefail", "-c"]
@@ -133,16 +120,17 @@ RUN : \
 # End of TLS installation
 
 RUN mkdir -p $SCENESCAPE_HOME/manager
+RUN rm -f ./manager/src/django/secrets.py
 COPY ./manager/src/django/* \
-     ./manager/src/setup.py \
-     ./version.txt $SCENESCAPE_HOME/manager/
+    ./manager/src/setup.py \
+    ./version.txt $SCENESCAPE_HOME/manager/
 COPY ./manager/src/management/ $SCENESCAPE_HOME/manager/management
 COPY ./manager/src/templates/ $SCENESCAPE_HOME/manager/templates
 COPY ./manager/src/static/ $SCENESCAPE_HOME/manager/static
 COPY ./manager/src/templatetags/ $SCENESCAPE_HOME/manager/templatetags
 COPY ./manager/src/django/manage.py $SCENESCAPE_HOME
-COPY --from=manager-builder /usr/local/lib/python3.10/dist-packages/fast_geometry /usr/local/lib/python3.10/dist-packages/fast_geometry
-COPY --from=manager-builder /usr/local/lib/python3.10/dist-packages/scene_common /usr/local/lib/python3.10/dist-packages/scene_common
+COPY --from=scenescape-manager-builder /usr/local/lib/python3.10/dist-packages/fast_geometry /usr/local/lib/python3.10/dist-packages/fast_geometry
+COPY --from=scenescape-manager-builder /usr/local/lib/python3.10/dist-packages/scene_common /usr/local/lib/python3.10/dist-packages/scene_common
 
 # Install SceneScape
 RUN : \
@@ -169,3 +157,43 @@ COPY ./manager/config/webserver-init \
      /usr/local/bin/
 
 ENTRYPOINT ["/usr/local/bin/scenescape-init"]
+
+# ---------- Manager Test Stage ------------------
+# This stage is meant to be used for test execution (not for final runtime)
+FROM scenescape-manager-runtime AS scenescape-manager-test
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN : \
+    ; apt-get update \
+    ; install -d -m 0755 /etc/apt/keyrings \
+    ; apt-get install -y --no-install-recommends \
+        wget \
+        libpci-dev \
+        libnss3-tools \
+        software-properties-common \
+        unzip \
+        xserver-xephyr \
+        xvfb \
+    ; wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null \
+    ; echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null \
+    ; echo -e ' \n\
+Package: * \n\
+Pin: origin packages.mozilla.org \n\
+Pin-Priority: 1000 \n\
+' | tee /etc/apt/preferences.d/mozilla \
+    ; apt-get update && apt-get install -y --no-install-recommends firefox \
+    ; rm -rf /var/lib/apt/lists/*
+
+# Install Python test dependencies
+COPY ./manager/test/requirements-test.txt /tmp
+RUN pip3 install --upgrade --no-cache-dir -r /tmp/requirements-test.txt
+
+ADD ./manager/test/geckodriver.tar.gz /usr/local/bin/
+
+COPY ./manager/test/firefox-profile.tar /home/scenescape/.mozilla/
+
+RUN : \
+    ; eval WSHOME=~$WSUSER \
+    ; chown -R "$WSUSER.$WSUSER" "$WSHOME/.mozilla" \
+    ;

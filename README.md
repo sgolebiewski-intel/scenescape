@@ -1,4 +1,5 @@
 # Intel® SceneScape
+
 Intel® SceneScape makes writing applications based on sensor data faster, easier and better by reaching beyond vision-based AI to realize spatial awareness through contextualization of multimodal sensor data in a common reference frame. It provides a collection of microservices, tools and supporting containers to quickly move from single sensor analytics to a multimodal aggregated scene view.
 
 ## Documentation
@@ -12,7 +13,6 @@ Intel® SceneScape makes writing applications based on sensor data faster, easie
 - **API Reference**
   - [API Reference](docs/user-guide/api-reference.md): Comprehensive OpenAPI (Swagger) documentation for the Intel® SceneScape REST API, including endpoints, schemas, and usage examples.
 
-
 ## Community
 
 - To report a bug, file a documentation issue, or submit a feature request, please open a [GitHub issue](https://github.com/open-edge-platform/scenescape/issues).
@@ -23,7 +23,7 @@ We welcome contributions! Check out our [Contributing Guide](./CONTRIBUTING.md) 
 
 ## License
 
-Intel® SceneScape repository is licensed under [LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE](./LICENSE).
+Intel® SceneScape repository is licensed under [APACHE 2.0 LICENSE](./LICENSES/Apache-2.0.txt).
 
 ## Disclaimers
 

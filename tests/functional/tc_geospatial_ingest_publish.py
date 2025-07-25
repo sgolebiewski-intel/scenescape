@@ -1,23 +1,17 @@
 #!/usr/bin/env python3
 
-# Copyright (C) 2023-2024 Intel Corporation
-#
-# This software and the related documents are Intel copyrighted materials,
-# and your use of them is governed by the express license under which they
-# were provided to you ("License"). Unless the License provides otherwise,
-# you may not use, modify, copy, publish, distribute, disclose or transmit
-# this software or the related documents without Intel's prior written permission.
-#
-# This software and the related documents are provided as is, with no express
-# or implied warranties, other than those that are expressly stated in the License.
+# SPDX-FileCopyrightText: (C) 2023 - 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
 
 import json
 import os
 import time
+import numpy as np
 
 from scene_common.mqtt import PubSub
 from scene_common.rest_client import RESTClient
-from scene_common.timestamp import get_epoch_time, get_iso_time
+from scene_common.timestamp import get_iso_time
+from scene_common.earth_lla import calculateTRSLocal2LLAFromSurfacePoints, convertXYZToLLA
 from tests.functional import FunctionalTest
 
 TEST_NAME = "NEX-T10490"
@@ -29,6 +23,14 @@ MAX_WAIT_TIMEOUT = 30
 LLA_VALUE = [50, 0, -6.37813751e+06]
 TRANSLATION_VALUE = [-0.3278, -0.3907, 0]
 BOUNDING_BOX = {'x': 0.56, 'y': 0.0, 'width': 0.24, 'height': 0.49}
+# the following constants are used to verify that the LLA coordinates of the detected object are correct
+DETECTION_XYZ = [3.8679791719486474, 2.7517397452609087, 1.1225254457301852e-19]
+EXPECTED_DETECTION_LLA = [37.38688947231117, -121.96410520894621, 8.068826778282563]
+# the following values are stored in the test database
+MAP_CORNERS_LLA = [[ 37.38685435, -121.96408120, 8.0], [ 37.38693520, -121.96408120, 8.0],
+      [ 37.38693520, -121.96413896, 8.0], [ 37.38685435, -121.96413896, 8.0]]
+MAP_RESOLUTION = [900, 643]
+MAP_SCALE = 100.0
 
 class GeospatialIngestPublish(FunctionalTest):
   def __init__(self, testName, request, recordXMLAttribute):
@@ -49,16 +51,17 @@ class GeospatialIngestPublish(FunctionalTest):
     self.pubsub.addCallback(self.topic, self.eventReceived)
     self.pubsub.connect()
     self.pubsub.loopStart()
+    self.detectionValidator = None
     return
 
   def pubsubConnected(self, client, userdata, flags, rc):
     self.pubsub.subscribe(self.topic)
     return
 
+  # TODO: refactor this function: we should not use exceptions to control the flow
   def eventReceived(self, pahoClient, userdata, message):
     data = message.payload.decode("utf-8")
     detectionData = json.loads(data)
-
     try:
       self.verifyDetection(detectionData)
       self.outputReceived = True
@@ -73,6 +76,12 @@ class GeospatialIngestPublish(FunctionalTest):
       assert "translation" in object
       if self.outputLLA:
         assert "lat_long_alt" in object
+        if self.detectionValidator:
+          try:
+            self.detectionValidator(object)
+          except ValueError as e:
+            print(e)
+            raise AssertionError(f"Detection validation failed: {e}")
       else:
         assert "lat_long_alt" not in object
     return
@@ -182,9 +191,11 @@ class GeospatialIngestPublish(FunctionalTest):
     self.waitForUpdate(False)
     print("Enabling lat_long_alt output")
     self.rest.updateScene(self.sceneUID, {'output_lla': True})
+    self.detectionValidator = _verifyLLA
     self.waitForUpdate(True)
     print("Disabling lat_long_alt output")
     self.rest.updateScene(self.sceneUID, {'output_lla': False})
+    self.detectionValidator = None
     self.waitForUpdate(False)
     return
 
@@ -193,6 +204,7 @@ class GeospatialIngestPublish(FunctionalTest):
       self.recordXMLAttribute("name", self.testName)
 
     try:
+      self.check_geospatial_constants()
       self.prepareScene()
       self.verifyIngest()
       self.verifyPublish()
@@ -201,11 +213,37 @@ class GeospatialIngestPublish(FunctionalTest):
       self.recordTestResult()
     return
 
+  def check_geospatial_constants(self):
+    """! Verify geospatial constants."""
+    map_corners = [ [0, 0, 0],
+          [MAP_RESOLUTION[0] / MAP_SCALE, 0, 0],
+          [MAP_RESOLUTION[0] / MAP_SCALE, MAP_RESOLUTION[1] / MAP_SCALE, 0],
+          [0, MAP_RESOLUTION[1] / MAP_SCALE, 0] ]
+    trs = calculateTRSLocal2LLAFromSurfacePoints(map_corners, MAP_CORNERS_LLA)
+    lla = convertXYZToLLA(trs, DETECTION_XYZ)
+    if not np.allclose(lla, EXPECTED_DETECTION_LLA, rtol=1e-8):
+      raise ValueError(f"Constants verification failed! Expected LLA: {EXPECTED_DETECTION_LLA}, got: {lla}")
+
+def _verifyLLA(detected_object):
+  '''
+  Verify the LLA coordinates of the detected object, assuming that:
+  - The LLA coordinates of four map corners are:
+    [[ 37.38685435, -121.96408120, 8.0], [ 37.38693520, -121.96408120, 8.0],
+    [ 37.38693520, -121.96413896, 8.0], [ 37.38685435, -121.96413896, 8.0]]
+    (the coordinates are loaded from the test database)
+  - The scene dimensions are:
+    x=0.24, y=0.49
+  - The translation of the detected object is:
+    [3.8679791719486474, 2.7517397452609087, 1.1225254457301852e-19]
+  '''
+  if not np.allclose(detected_object['lat_long_alt'], EXPECTED_DETECTION_LLA, rtol=1e-8):
+    raise ValueError(f"LLA verification failed! Expected LLA: {EXPECTED_DETECTION_LLA}, got: {detected_object['lat_long_alt']}")
+
 def test_geospatial_ingest_publish(request, record_xml_attribute):
   test = GeospatialIngestPublish(TEST_NAME, request, record_xml_attribute)
   test.verifyFunction()
   assert test.exitCode == 0
-  return test.exitCode
+  return
 
 def main():
   return test_geospatial_ingest_publish(None, None)

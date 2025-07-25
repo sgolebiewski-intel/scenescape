@@ -1,7 +1,10 @@
-asyncapi: '2.6.0'
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+asyncapi: "2.6.0"
 info:
   title: Scenescape MQTT API - Auto Calibration Service
-  version: '1.0.0'
+  version: "1.0.0"
   description: |
     MQTT topics for the automatic camera calibration flow in Scenescape.
 

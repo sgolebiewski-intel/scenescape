@@ -1,23 +1,10 @@
-// ----------------- BEGIN LICENSE BLOCK ---------------------------------
-//
-// INTEL CONFIDENTIAL
-//
-// Copyright (c) 2017-2023 Intel Corporation
-//
-// This software and the related documents are Intel copyrighted materials, and
-// your use of them is governed by the express license under which they were
-// provided to you (License). Unless the License provides otherwise, you may not
-// use, modify, copy, publish, distribute, disclose or transmit this software or
-// the related documents without Intel's prior written permission.
-//
-// This software and the related documents are provided as is, with no express or
-// implied warranties, other than those that are expressly stated in the License.
-//
-// ----------------- END LICENSE BLOCK -----------------------------------
+// SPDX-FileCopyrightText: (C) 2017 - 2025 Intel Corporation
+// SPDX-License-Identifier: Apache-2.0
 
 #include "rv/Utils.hpp"
 #include "rv/tracking/TrackManager.hpp"
 #include <iostream>
+#include <omp.h>
 
 namespace rv {
 namespace tracking {
@@ -70,22 +57,41 @@ void TrackManager::reactivateTrack(const Id &id)
 
 void TrackManager::predict(const std::chrono::system_clock::time_point &timestamp)
 {
+  // Convert map to vector for parallel iteration
+  std::vector<std::reference_wrapper<MultiModelKalmanEstimator>> estimators;
+  estimators.reserve(mKalmanEstimators.size());
+
   for (auto &element : mKalmanEstimators)
   {
-    auto &estimator = element.second;
-    estimator.predict(timestamp);
+    estimators.push_back(std::ref(element.second));
   }
 
+  // Parallelize the prediction step
+  #pragma omp parallel for
+  for (size_t i = 0; i < estimators.size(); ++i)
+  {
+    estimators[i].get().predict(timestamp);
+  }
   mMeasurementMap.clear();
 }
 
 
 void TrackManager::predict(double deltaT)
 {
+  // Convert map to vector for parallel iteration
+  std::vector<std::reference_wrapper<MultiModelKalmanEstimator>> estimators;
+  estimators.reserve(mKalmanEstimators.size());
+
   for (auto &element : mKalmanEstimators)
   {
-    auto &estimator = element.second;
-    estimator.predict(deltaT);
+    estimators.push_back(std::ref(element.second));
+  }
+
+  // Parallelize the prediction step
+  #pragma omp parallel for
+  for (size_t i = 0; i < estimators.size(); ++i)
+  {
+    estimators[i].get().predict(deltaT);
   }
 
   mMeasurementMap.clear();
@@ -93,15 +99,35 @@ void TrackManager::predict(double deltaT)
 
 void TrackManager::correct()
 {
+  // Convert map to vector for parallel iteration
+  std::vector<std::pair<Id, std::reference_wrapper<MultiModelKalmanEstimator>>> estimators;
+  estimators.reserve(mKalmanEstimators.size());
+
+  for (auto &element : mKalmanEstimators)
+  {
+    estimators.push_back(std::make_pair(element.first, std::ref(element.second)));
+  }
+
+  // Parallelize the correction step
+  #pragma omp parallel for
+  for (size_t i = 0; i < estimators.size(); ++i)
+  {
+    auto const &id = estimators[i].first;
+    auto &estimator = estimators[i].second.get();
+
+    if (mMeasurementMap.count(id))
+    {
+      auto const measurement = mMeasurementMap.find(id);
+      estimator.correct(measurement->second);
+    }
+  }
+
+  // Update counters sequentially to avoid race conditions
   for (auto &element : mKalmanEstimators)
   {
     auto const &id = element.first;
     if (mMeasurementMap.count(id))
     {
-      auto &estimator = element.second;
-      auto const measurement = mMeasurementMap.find(id);
-      estimator.correct(measurement->second);
-
       // Reset non measurement frames counter, increment tracked frames
       mNonMeasurementFrames[id] = 0;
       mNumberOfTrackedFrames[id]++;

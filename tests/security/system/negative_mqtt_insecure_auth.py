@@ -1,15 +1,7 @@
 #!/usr/bin/env python3
 
-# Copyright (C) 2021-2024 Intel Corporation
-#
-# This software and the related documents are Intel copyrighted materials,
-# and your use of them is governed by the express license under which they
-# were provided to you ("License"). Unless the License provides otherwise,
-# you may not use, modify, copy, publish, distribute, disclose or transmit
-# this software or the related documents without Intel's prior written permission.
-#
-# This software and the related documents are provided as is, with no express
-# or implied warranties, other than those that are expressly stated in the License.
+# SPDX-FileCopyrightText: (C) 2021 - 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
 
 import os
 
@@ -111,7 +103,6 @@ def test_mqtt_insecure_auth(record_xml_attribute):
   common.record_test_result(TEST_NAME, result)
 
   assert result == 0
-  return result
 
 if __name__ == '__main__':
   exit(test_mqtt_insecure_auth() or 0)

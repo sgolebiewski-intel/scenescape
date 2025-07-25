@@ -1,19 +1,22 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 networks:
   scenescape-test:
 
 secrets:
   django:
-    file: ./secrets/django
+    file: ./manager/secrets/django
   controller.auth:
-    file: ./secrets/controller.auth
+    file: ./manager/secrets/controller.auth
   percebro.auth:
-    file: ./secrets/percebro.auth
+    file: ./manager/secrets/percebro.auth
   browser.auth:
-    file: ./secrets/browser.auth
+    file: ./manager/secrets/browser.auth
   calibration.auth:
-    file: ./secrets/calibration.auth
+    file: ./manager/secrets/calibration.auth
   scenescape-ca.pem:
-    file: ./secrets/certs/scenescape-ca.pem
+    file: ./manager/secrets/certs/scenescape-ca.pem
 
 services:
   pgserver:
@@ -22,24 +25,25 @@ services:
     networks:
       scenescape-test:
     environment:
-     - "SUPASS"
-     - "DBROOT"
-     - "EXAMPLEDB"
+      - "SUPASS"
+      - "DBROOT"
+      - "EXAMPLEDB"
     command: database --preloadexample
     cap_add:
-     - SYS_ADMIN
+      - SYS_ADMIN
     devices:
-     - /dev/fuse
+      - /dev/fuse
     security_opt:
-     - apparmor:unconfined
+      - apparmor:unconfined
     volumes:
-     - ./:/workspace
-     - ./sample_data:/home/scenescape/SceneScape/sample_data
+      - ./:/workspace
+      - ./sample_data:/home/scenescape/SceneScape/sample_data
+      - ./${DBROOT}/media:/workspace/media
     secrets:
-     - django
-     - controller.auth
-     - percebro.auth
-     - browser.auth
-     - calibration.auth
-     - scenescape-ca.pem
+      - django
+      - controller.auth
+      - percebro.auth
+      - browser.auth
+      - calibration.auth
+      - scenescape-ca.pem
     restart: on-failure

@@ -1,19 +1,9 @@
-// Copyright (C) 2023 Intel Corporation
-//
-// This software and the related documents are Intel copyrighted materials,
-// and your use of them is governed by the express license under which they
-// were provided to you ("License"). Unless the License provides otherwise,
-// you may not use, modify, copy, publish, distribute, disclose or transmit
-// this software or the related documents without Intel's prior written permission.
-//
-// This software and the related documents are provided as is, with no express
-// or implied warranties, other than those that are expressly stated in the License.
+// SPDX-FileCopyrightText: (C) 2023 - 2025 Intel Corporation
+// SPDX-License-Identifier: Apache-2.0
 
-import ThingControls from '/static/js/thing/controls/thingcontrols.js';
-import * as THREE from '/static/assets/three.module.js';
-import validateInputControls from '/static/js/thing/controls/validateinputcontrols.js';
-
-const MAX_HEIGHT = 5;
+import ThingControls from "/static/js/thing/controls/thingcontrols.js";
+import * as THREE from "/static/assets/three.module.js";
+import validateInputControls from "/static/js/thing/controls/validateinputcontrols.js";
 
 export default class SceneTripwire extends THREE.Object3D {
   constructor(params) {
@@ -32,19 +22,49 @@ export default class SceneTripwire extends THREE.Object3D {
     const tripwireGeometry = new THREE.BufferGeometry();
     tripwireGeometry.setFromPoints(this.points);
     this.shape = new THREE.Line(tripwireGeometry, this.material);
-    this.type = 'tripwire';
+    this.type = "tripwire";
   }
 
   setPoints() {
-    if (this.tripwire === null || typeof this.tripwire.points === 'undefined') {
+    if (this.tripwire === null || typeof this.tripwire.points === "undefined") {
       throw new Error("Tripwire is invalid");
     }
 
-    this.points.push(new THREE.Vector3(this.tripwire.points[0][0], this.tripwire.points[0][1], 0));
-    this.points.push(new THREE.Vector3(this.tripwire.points[1][0], this.tripwire.points[1][1], 0));
-    this.points.push(new THREE.Vector3(this.tripwire.points[1][0], this.tripwire.points[1][1], this.height));
-    this.points.push(new THREE.Vector3(this.tripwire.points[0][0], this.tripwire.points[0][1], this.height));
-    this.points.push(new THREE.Vector3(this.tripwire.points[0][0], this.tripwire.points[0][1], 0));
+    this.points.push(
+      new THREE.Vector3(
+        this.tripwire.points[0][0],
+        this.tripwire.points[0][1],
+        0,
+      ),
+    );
+    this.points.push(
+      new THREE.Vector3(
+        this.tripwire.points[1][0],
+        this.tripwire.points[1][1],
+        0,
+      ),
+    );
+    this.points.push(
+      new THREE.Vector3(
+        this.tripwire.points[1][0],
+        this.tripwire.points[1][1],
+        this.height,
+      ),
+    );
+    this.points.push(
+      new THREE.Vector3(
+        this.tripwire.points[0][0],
+        this.tripwire.points[0][1],
+        this.height,
+      ),
+    );
+    this.points.push(
+      new THREE.Vector3(
+        this.tripwire.points[0][0],
+        this.tripwire.points[0][1],
+        0,
+      ),
+    );
   }
 
   addObject(params) {
@@ -53,7 +73,6 @@ export default class SceneTripwire extends THREE.Object3D {
     this.scene = params.scene;
     this.height = params.height;
     this.tripwireFolder = params.tripwireFolder;
-    this.maxHeight = MAX_HEIGHT;
     this.visible = false;
     this.tripwireControls = new ThingControls(this);
     Object.assign(this, validateInputControls);
@@ -61,16 +80,15 @@ export default class SceneTripwire extends THREE.Object3D {
     this.textPos = {
       x: this.points[0].x,
       y: this.points[0].y,
-      z: this.height
+      z: this.height,
     };
-    this.drawObj.createTextObject(this.name, this.textPos)
-      .then((textMesh) => {
-        this.add(textMesh);
-      });
+    this.drawObj.createTextObject(this.name, this.textPos).then((textMesh) => {
+      this.add(textMesh);
+    });
     this.tripwireControls.addToScene();
     this.tripwireControls.addControlPanel(this.tripwireFolder);
     this.controlsFolder = this.tripwireControls.controlsFolder;
-    this.disableFields(['name']);
+    this.disableFields(["name"]);
 
     if (this.isStaff === null) {
       let fields = Object.keys(this.tripwireControls.panelSettings);

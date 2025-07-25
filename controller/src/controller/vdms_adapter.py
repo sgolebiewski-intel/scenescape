@@ -1,13 +1,5 @@
-# Copyright (C) 2024 Intel Corporation
-#
-# This software and the related documents are Intel copyrighted materials,
-# and your use of them is governed by the express license under which they
-# were provided to you ("License"). Unless the License provides otherwise,
-# you may not use, modify, copy, publish, distribute, disclose or transmit
-# this software or the related documents without Intel's prior written permission.
-#
-# This software and the related documents are provided as is, with no express
-# or implied warranties, other than those that are expressly stated in the License.
+# SPDX-FileCopyrightText: (C) 2024 - 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
 
 import os
 import socket
@@ -56,12 +48,12 @@ class VDMSDatabase(ReIDDatabase):
     response_blob = []
     with self.lock:
       if blob:
-        r = self.db.query(query, blob)
+        query_response = self.db.query(query, blob)
       else:
-        r = self.db.query(query)
-    if r and r != "NOT CONNECTED":
-      response_blob = r[1]
-      for (item, response) in zip(query, r[0]):
+        query_response = self.db.query(query)
+    if query_response and query_response != "NOT CONNECTED":
+      response_blob = query_response[1]
+      for (item, response) in zip(query, query_response[0]):
         query_type = next(iter(item))
         response_data = response.get(query_type, {})
         responses.append(response_data)

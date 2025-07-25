@@ -1,13 +1,5 @@
-# Copyright (C) 2022-2024 Intel Corporation
-#
-# This software and the related documents are Intel copyrighted materials,
-# and your use of them is governed by the express license under which they
-# were provided to you ("License"). Unless the License provides otherwise,
-# you may not use, modify, copy, publish, distribute, disclose or transmit
-# this software or the related documents without Intel's prior written permission.
-#
-# This software and the related documents are provided as is, with no express
-# or implied warranties, other than those that are expressly stated in the License.
+# SPDX-FileCopyrightText: (C) 2022 - 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
 
 from queue import Queue
 from threading import Thread
@@ -150,7 +142,9 @@ class Tracking(Thread):
     return
 
   @staticmethod
-  def createObject(sensorType, info, when, sensor):
+  def createObject(sensorType, info, when, sensor, persist_attributes=None):
+    if persist_attributes is None:
+      persist_attributes = {}
     tracking_radius = DEFAULT_TRACKING_RADIUS
     shift_type = TYPE_1
     project_to_map = False
@@ -164,10 +158,14 @@ class Tracking(Thread):
       mobj.size = [oclass.get('x_size', DEFAULT_EDGE_LENGTH),
                    oclass.get('y_size', DEFAULT_EDGE_LENGTH),
                    oclass.get('z_size', DEFAULT_EDGE_LENGTH)]
+      mobj.buffer_size = [oclass.get('x_buffer_size', 0.0),
+                          oclass.get('y_buffer_size', 0.0),
+                          oclass.get('z_buffer_size', 0.0)]
       tracking_radius = oclass.get('tracking_radius', tracking_radius)
       project_to_map = oclass.get('project_to_map', project_to_map)
       shift_type = oclass.get('shift_type', shift_type)
       rotation_from_velocity = oclass.get('rotation_from_velocity', rotation_from_velocity)
+      mobj.setPersistentAttributes(info, persist_attributes)
     else:
       mobj = MovingObject(info, when, sensor)
 

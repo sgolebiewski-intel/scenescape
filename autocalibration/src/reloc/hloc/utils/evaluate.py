@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 from .read_write_model import qvec2rotmat

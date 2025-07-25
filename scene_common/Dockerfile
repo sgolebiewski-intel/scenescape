@@ -1,13 +1,5 @@
-# Copyright (C) 2021-2025 Intel Corporation
-#
-# This software and the related documents are Intel copyrighted materials,
-# and your use of them is governed by the express license under which they
-# were provided to you ("License"). Unless the License provides otherwise,
-# you may not use, modify, copy, publish, distribute, disclose or transmit
-# this software or the related documents without Intel's prior written permission.
-#
-# This software and the related documents are provided as is, with no express
-# or implied warranties, other than those that are expressly stated in the License.
+# SPDX-FileCopyrightText: (C) 2021 - 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
 
 # -------------- Common Base Stage --------------
 FROM ubuntu:22.04 AS scenescape-common-base
@@ -40,12 +32,13 @@ RUN : \
     && rm -rf /var/lib/apt/lists/*
 
 # install common dependencies
-COPY ./scene_common/src /tmp/scene_common
+COPY ./scene_common /tmp/scene_common
 RUN : \
     && cd /tmp/scene_common \
+    && mv src scene_common \
     && pip3 install --no-cache-dir pybind11 \
     && pip3 install --no-cache-dir . \
-    && make -C fast_geometry -j $(nproc) all install \
+    && make -C scene_common/fast_geometry -j $(nproc) all install \
     && cd .. \
     && rm -rf scene_common
 

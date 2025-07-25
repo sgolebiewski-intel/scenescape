@@ -1,8 +1,6 @@
 ---
 # SPDX-FileCopyrightText: (C) 2025 Intel Corporation
-# SPDX-License-Identifier: LicenseRef-Intel-Edge-Software
-# This file is licensed under the Limited Edge Software Distribution License Agreement.
-# See the LICENSE file in the root of this repository for details.
+# SPDX-License-Identifier: Apache-2.0
 
 version: 2
 updates:
@@ -48,7 +46,7 @@ updates:
       - "/model_installer"
       - "/percebro"
       - "/scene_common"
-      - "/tests/interface"
+      - "/controller/src/robot_vision"
     schedule:
       interval: "monthly"
     commit-message:
@@ -69,7 +67,7 @@ updates:
       - "/tests/perf_tests/compose"
       - "/tests/security/libraries"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     commit-message:
       prefix: "Docker Compose"
     reviewers:
@@ -80,15 +78,15 @@ updates:
   # Enable version updates for Python pip
   - package-ecosystem: "pip"
     directories:
+      - "/.github/resources"
       - "/autocalibration"
       - "/autocalibration/src/reloc"
-      - "/broker"
       - "/controller"
-      - "/.github/resources"
+      - "/controller/src/robot_vision"
       - "/manager"
+      - "/manager/test"
       - "/model_installer"
       - "/percebro"
-      - "/tests/interface"
     schedule:
       interval: "monthly"
     commit-message:

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -21,8 +24,8 @@ import sphinx_rtd_theme
 import robot_vision
 
 project = 'robot_vision'
-copyright = '2023, Intel Corporation - Intel Confidential'
-author = 'Intel Corporation - Intel Confidential'
+copyright = '2025, Intel Corporation - Apache-2.0'
+author = 'Intel Corporation - Apache-2.0'
 
 # The full version, including alpha/beta/rc tags
 release = '1.1.0'

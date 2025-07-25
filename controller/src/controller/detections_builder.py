@@ -1,18 +1,10 @@
-# Copyright (C) 2024 Intel Corporation
-#
-# This software and the related documents are Intel copyrighted materials,
-# and your use of them is governed by the express license under which they
-# were provided to you ("License"). Unless the License provides otherwise,
-# you may not use, modify, copy, publish, distribute, disclose or transmit
-# this software or the related documents without Intel's prior written permission.
-#
-# This software and the related documents are provided as is, with no express
-# or implied warranties, other than those that are expressly stated in the License.
+# SPDX-FileCopyrightText: (C) 2024 - 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
 
 import numpy as np
 
 from controller.scene import TripwireEvent
-from scene_common.earth_lla import convertECEFToLLA
+from scene_common.earth_lla import convertXYZToLLA
 from scene_common.geometry import DEFAULTZ, Point, Size
 from scene_common.timestamp import get_iso_time
 
@@ -56,7 +48,7 @@ def prepareObjDict(scene, obj, update_visibility):
     obj_dict['rotation'] = aobj.rotation
 
   if scene and scene.output_lla:
-    lat_long_alt = convertECEFToLLA(aobj.sceneLoc)
+    lat_long_alt = convertXYZToLLA(scene.trs_xyz_to_lla, aobj.sceneLoc.asCartesianVector)
     obj_dict['lat_long_alt'] = lat_long_alt.tolist()
 
   reid = aobj.reidVector
@@ -96,6 +88,8 @@ def prepareObjDict(scene, obj, update_visibility):
     obj_dict['direction'] = obj.direction
   if hasattr(aobj, 'asset_scale'):
     obj_dict['asset_scale'] = aobj.asset_scale
+  if len(aobj.chain_data.persist):
+    obj_dict['persistent_data'] = aobj.chain_data.persist
   return obj_dict
 
 def computeCameraBounds(scene, aobj, obj_dict):
