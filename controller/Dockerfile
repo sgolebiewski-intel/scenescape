@@ -50,6 +50,8 @@ COPY ./tools/waitforbroker /tmp/tools/waitforbroker
 # -------------- Controller Builder Stage --------------
 FROM scenescape-common-base-24-04 AS scenescape-controller-builder
 
+# build stage
+# TRIVY::IGNORE:DS002
 USER root
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -104,6 +106,8 @@ ENV BUILD_ENV_DIR=/tmp/venv
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+# user root is used for initial setup
+# TRIVY::IGNORE:DS002
 USER root
 
 RUN : \

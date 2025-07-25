@@ -190,7 +190,7 @@ EOF
 EOCMD
 
 # Drop privileges to mosquitto user within broker-init
-# trivy:ignore:DS002 AVD-DS-0002
+# TRIVY::IGNORE:DS002
 USER root
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
