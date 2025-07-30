@@ -76,12 +76,6 @@ define common-recipe =
 	  ; echo END TEST $@
 endef
 
-define set-prefix
-    $(eval PREFIX = $(if $(DLS),dlstreamer/,))
-endef
-
-# For DLStreamer tests, run the target with DLS=1
-
 # Not sorted alphabetically on purpose
 tests: \
   basic-acceptance-tests \
@@ -132,7 +126,6 @@ randomly-failing-tests: \
 # Not sorted alphabetically on purpose
 basic-acceptance-tests: \
   deploy \
-  infra-tests \
   geometry-conformance \
   metric-tests \
   out-of-box \
@@ -205,10 +198,9 @@ _unit-tests: \
   transform-unit \
 
 include Makefile.sscape Makefile.functional Makefile.perf \
-        Makefile.external_models Makefile.reports Makefile.infra Makefile.user_interface Makefile.metric
+        Makefile.external_models Makefile.reports Makefile.user_interface Makefile.metric
 
 # Recipes below must be in alphabetical order
-
 malformed-json:
 	$(eval LOGFILE=$(TEST_DATA)/$@-$(shell date -u +"%F-%T").log)
 	@set -ex \
@@ -256,4 +248,4 @@ deploy: # NEX-T10422
 system-stability: # NEX-T10411
 	$(call set-prefix)
 	$(eval HOURS ?= 24)
-	$(call common-recipe, $(COMPOSE)/$(PREFIX)broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/$(PREFIX)retail_video.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/system/stability/tc_sscape_stability.py --hours=$(HOURS),'pgserver web scene',true)
+	$(call common-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/dlstreamer/retail_video.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/system/stability/tc_sscape_stability.py --hours=$(HOURS),'pgserver web scene',true)

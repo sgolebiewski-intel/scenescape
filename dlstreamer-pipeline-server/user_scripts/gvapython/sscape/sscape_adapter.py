@@ -103,7 +103,6 @@ def detectionPolicy(pobj, item, fw, fh):
 def reidPolicy(pobj, item, fw, fh):
   detectionPolicy(pobj, item, fw, fh)
   reid_vector = item['tensors'][1]['data']
-  # following code snippet is from percebro/modelchain.py
   v = struct.pack("256f",*reid_vector)
   pobj['reid'] = base64.b64encode(v).decode('utf-8')
   return
@@ -178,7 +177,6 @@ class PostInferenceDataPublish:
     return
 
   def annotateFPS(self, img, fpsval):
-    # code snippet is taken from annotateFPS method in percebro/videoframe.py
     fpsStr = f'FPS {fpsval:.1f}'
     scale = int((img.shape[0] + 479) / 480)
     cv2.putText(img, fpsStr, (0, 30 * scale), cv2.FONT_HERSHEY_SIMPLEX,
