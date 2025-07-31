@@ -20,6 +20,7 @@ performance_tests:
 	$(MAKE) -Otarget -j 1 _performance_tests SUPASS=$(SUPASS) -k
 
 _performance_tests: \
+  reid-model \
   inference-performance \
   scene-performance \
   geometry-conformance \
@@ -32,6 +33,11 @@ geometry-conformance: \
 
 inference-performance: # NEX-T10412
 	$(call perf-recipe, tc_inference_performance.sh)
+
+reid-model:
+	$(eval PERF_TESTS_PATH=tests/model_tests)
+	$(call perf-recipe, tc_reid_model.sh)
+	$(eval PERF_TESTS_PATH=tests/perf_tests)
 
 scene-performance: # NEX-T10414
 	$(call perf-recipe, tc_scene_performance.sh)
