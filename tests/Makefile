@@ -114,7 +114,6 @@ broken-tests: \
   manual-camera-calibration \
   camera-perspective \
   camera-status \
-  reid-performance-degradation \
   superuser-crud-operations \
   calibrate-camera-3d-ui-2d-ui \
   vdms-similarity-search \
