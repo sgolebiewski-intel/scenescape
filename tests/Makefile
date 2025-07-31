@@ -114,7 +114,6 @@ broken-tests: \
   manual-camera-calibration \
   camera-perspective \
   camera-status \
-  reid-unique-count \
   reid-performance-degradation \
   superuser-crud-operations \
   calibrate-camera-3d-ui-2d-ui \
@@ -153,6 +152,7 @@ _functional-tests: \
   mqtt-large-messages \
   out-of-box-no-ntp \
   rest-test \
+  reid-unique-count \
   scene-import \
 
 non-functional-tests:
