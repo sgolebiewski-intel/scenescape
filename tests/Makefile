@@ -95,7 +95,6 @@ broken-tests: \
   auto-calibration \
   3d-camera-control-panel \
   april-tag-setup \
-  rtsp-stream \
   views-unit \
   mqtt-sensor-roi \
   mqtt-slow-sensor-roi \
