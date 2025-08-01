@@ -94,7 +94,6 @@ release-tests: \
 broken-tests: \
   auto-calibration \
   april-tag-setup \
-  rtsp-stream \
   views-unit \
   mqtt-sensor-roi \
   mqtt-slow-sensor-roi \
