@@ -29,7 +29,10 @@ define selenium-recipe =
 endef
 
 3d-camera-control-panel: # NEX-T10475
+	$(eval OLDSECRETSDIR := $(SECRETSDIR))
+	$(eval SECRETSDIR := $(PWD)/manager/secrets)
 	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_camera_control_panel.py, 'pgserver')
+	$(eval SECRETSDIR := $(OLDSECRETSDIR))
 
 3d-scene-control-panel: # NEX-T10474
 	$(call selenium-recipe, $(COMPOSE)/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml, tests/ui/tc_scene_control_panel.py, 'pgserver')
@@ -46,9 +49,12 @@ additional-floor-plans: # NEX-T10405
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_additional_floor_plans.py, 'pgserver')
 
 april-tag-setup: # NEX-T10477
+	$(eval OLDSECRETSDIR := $(SECRETSDIR))
+	$(eval SECRETSDIR := $(PWD)/manager/secrets)
 	$(eval SERVICES := $(strip pgserver broker scene retail-video queuing-video camcalibration web))
 	$(eval COMPOSE_FILES := $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/camcalibration.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/dlstreamer/queuing_video.yml:$(COMPOSE)/dlstreamer/retail_video.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml)
 	$(call selenium-recipe, $(COMPOSE_FILES), tests/ui/tc_april_tag_setup.py, '$(SERVICES)',sample_data/exampledb.tar.bz2)
+	$(eval SECRETSDIR := $(OLDSECRETSDIR))
 
 bounding-box: # NEX-T10419
 	$(eval SERVICES := $(strip pgserver web retail-video scene))
@@ -56,7 +62,10 @@ bounding-box: # NEX-T10419
 	$(call common-recipe, $(COMPOSE_FILES), tests/ui/tc_bounding_box.py, '$(SERVICES)', true, /run/secrets/browser.auth)
 
 calibrate-all-sensor-types: # NEX-T10457
+	$(eval OLDSECRETSDIR := $(SECRETSDIR))
+	$(eval SECRETSDIR := $(PWD)/manager/secrets)
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_calibrate_all_sensor_types.py, 'pgserver')
+	$(eval SECRETSDIR := $(OLDSECRETSDIR))
 
 calibrate-camera-3d-ui-2d-ui: # NEX-T10562
 	$(eval SERVICES := $(strip pgserver broker scene ntpserv camcalibration web retail-video queuing-video))
@@ -73,15 +82,24 @@ camera-perspective: # NEX-T10410
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_camera_perspective.py, 'pgserver')
 
 camera-status: # NEX-T10416
+	$(eval OLDSECRETSDIR := $(SECRETSDIR))
+	$(eval SECRETSDIR := $(PWD)/manager/secrets)
 	$(eval SERVICES := $(strip pgserver web retail-video scene))
 	$(eval COMPOSE_FILES := $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/ntp.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/dlstreamer/retail_video.yml:$(COMPOSE)/scene.yml:$(COMPOSE)/web.yml)
 	$(call selenium-recipe, $(COMPOSE_FILES), tests/ui/tc_camera_status.py, '$(SERVICES)')
+	$(eval SECRETSDIR := $(OLDSECRETSDIR))
 
 delete-sensor-scene: # NEX-T10397
+	$(eval OLDSECRETSDIR := $(SECRETSDIR))
+	$(eval SECRETSDIR := $(PWD)/manager/secrets)
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_sensor_scene.py, 'pgserver')
+	$(eval SECRETSDIR := $(OLDSECRETSDIR))
 
 delete-sensors: # NEX-T10399
+	$(eval OLDSECRETSDIR := $(SECRETSDIR))
+	$(eval SECRETSDIR := $(PWD)/manager/secrets)
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_delete_sensors.py, 'pgserver')
+	$(eval SECRETSDIR := $(OLDSECRETSDIR))
 
 different-formats-maps: # NEX-T10392
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_different_formats_maps.py, 'pgserver')
@@ -92,7 +110,10 @@ live-view-button: # NEX-T10434
 	$(call common-recipe, $(COMPOSE_FILES), tests/ui/tc_live_button_works.py, '$(SERVICES)', true)
 
 manual-camera-calibration: # NEX-T10426
+	$(eval OLDSECRETSDIR := $(SECRETSDIR))
+	$(eval SECRETSDIR := $(PWD)/manager/secrets)
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_manual_camera_calibration.py, 'pgserver')
+	$(eval SECRETSDIR := $(OLDSECRETSDIR))
 
 object-crud: # NEX-T10429
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_object_crud.py, 'pgserver')
@@ -113,7 +134,10 @@ persistence: # NEX-T10393
 	  ; echo END TEST $@
 
 restricted-media-access: # NEX-T10494
+	$(eval OLDSECRETSDIR := $(SECRETSDIR))
+	$(eval SECRETSDIR := $(PWD)/manager/secrets)
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_restricted_media_access.py, 'pgserver')
+	$(eval SECRETSDIR := $(OLDSECRETSDIR))
 
 scene-details: # NEX-T10395
 	$(eval SERVICES := $(strip pgserver web retail-video scene))
@@ -133,10 +157,16 @@ scenes-summary: # NEX-T10394
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_scenes_summary.py, 'pgserver')
 
 sensor-area: # NEX-T10401
+	$(eval OLDSECRETSDIR := $(SECRETSDIR))
+	$(eval SECRETSDIR := $(PWD)/manager/secrets)
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_sensor_area.py, 'pgserver')
+	$(eval SECRETSDIR := $(OLDSECRETSDIR))
 
 sensor-location: # NEX-T10400
+	$(eval OLDSECRETSDIR := $(SECRETSDIR))
+	$(eval SECRETSDIR := $(PWD)/manager/secrets)
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_sensor_location.py, 'pgserver')
+	$(eval SECRETSDIR := $(OLDSECRETSDIR))
 
 sensor-scene: # NEX-T10396
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_sensor_scene.py, 'pgserver')
@@ -147,7 +177,10 @@ show-telemetry-button: # NEX-T10435
 	$(call common-recipe, $(COMPOSE_FILES), tests/ui/tc_show_telemetry_button.py, '$(SERVICES)', true, /run/secrets/controller.auth)
 
 superuser-crud-operations: # NEX-T10418
+	$(eval OLDSECRETSDIR := $(SECRETSDIR))
+	$(eval SECRETSDIR := $(PWD)/manager/secrets)
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_superuser_crud_operations.py, 'pgserver')
+	$(eval SECRETSDIR := $(OLDSECRETSDIR))
 
 upload-3d-glb-file: # NEX-T10425
 	$(call selenium-recipe, $(COMPOSE)/dlstreamer/broker.yml:$(COMPOSE)/pgserver.yml:$(COMPOSE)/web.yml, tests/ui/tc_upload_3d_glb_file.py, 'pgserver')
