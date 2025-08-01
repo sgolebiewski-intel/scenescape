@@ -109,7 +109,7 @@ mqttService:
 
 # Other parameters
 certdomain: ""
-supass: change_me
+supass: ""
 dbroot: ""
 debug: false
 chartdebug: false

@@ -28,8 +28,18 @@ Run from the project directory (e.g. ~/scenescape)
    `console
 $ make -C kubernetes
 `
-2. When the webUI is up, log in with `admin:change_me`, on `https://localhost`.\
-   Note that the default admin password is defined by the `supass` value in scenescape-chart/values.yaml.
+2. When the webUI is up, log in with `admin` and the password you set via the `supass` value (see below), on `https://localhost`.
+   The chart will fail to install if you do not set a password. You must provide a password using `--set supass=<your-strong-password>` or by editing `scenescape-chart/values.yaml` before installation.
+
+   **Example:**
+   ```sh
+   helm install <release-name> scenescape-chart/ --set supass=<your-strong-password>
+   ```
+   or edit `scenescape-chart/values.yaml`:
+   ```yaml
+   supass: <your-strong-password>
+   ```
+   **Do not use weak or default passwords in production.**
 3. To stop Intel® SceneScape, run:
    ```console
    $ make -C kubernetes uninstall
