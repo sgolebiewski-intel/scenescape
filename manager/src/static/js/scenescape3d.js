@@ -312,12 +312,6 @@ function main() {
             }
           }
 
-          client.subscribe(appName + CONSTANTS.SYS_PERCEBRO_STATUS);
-          console.log(
-            "Subscribed to " + appName + CONSTANTS.SYS_PERCEBRO_STATUS,
-          );
-          client.publish(appName + CONSTANTS.SYS_PERCEBRO_STATUS, "isAlive");
-
           autoCalibrationSetup();
         });
       }
@@ -443,15 +437,6 @@ function main() {
           appName + CONSTANTS.CMD_AUTOCALIB_SCENE + sceneID,
           "register",
         );
-      }
-    } else if (topic.includes(CONSTANTS.SYS_PERCEBRO_STATUS)) {
-      if (msg === "running") {
-        isPercebroRunning = true;
-        for (const key in cameraManager.sceneCameras) {
-          if (key !== "undefined") {
-            cameraManager.sceneCameras[key].setPercebroRunning(true);
-          }
-        }
       }
     } else if (topic.includes(CONSTANTS.CMD_AUTOCALIB_SCENE)) {
       if (msg !== "register") {
