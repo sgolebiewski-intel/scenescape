@@ -102,20 +102,10 @@ release-tests: \
 
 broken-tests: \
   auto-calibration \
-  3d-camera-control-panel \
   april-tag-setup \
   rtsp-stream \
   orphaned-sensor \
-  delete-roi-mqtt \
-  delete-tripwire-mqtt \
   geospatial-ingest-publish \
-  delete-sensor-mqtt \
-  delete-sensor-scene \
-  delete-sensors \
-  restricted-media-access \
-  sensor-area \
-  sensor-location \
-  calibrate-all-sensor-types \
   manual-camera-calibration \
   camera-perspective \
   camera-status \
@@ -186,15 +176,25 @@ _metric-tests: \
   msoce-metric \
 
 ui-tests:
-	$(MAKE) -Otarget _$@ SUPASS=$(SUPASS) -k
+	$(MAKE) -Otarget _$@ SECRETSDIR=$(PWD)/manager/secrets SUPASS=$(SUPASS) -k
 
 _ui-tests: \
+  3d-camera-control-panel \
   add-delete-3d-object \
   camera-intrinsics \
+  calibrate-all-sensor-types \
+  delete-roi-mqtt \
+  delete-sensor-mqtt \
+  delete-sensor-scene \
+  delete-sensors \
+  delete-tripwire-mqtt \
   object-crud \
   persistence \
+  restricted-media-access \
   scenes-summary \
+  sensor-area \
   sensor-scene \
+  sensor-location \
   upload-3d-glb-file \
   view-3d-glb-file \
 
