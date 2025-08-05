@@ -41,6 +41,7 @@ CERTDOMAIN ?= scenescape.intel.com
 # Demo variables
 DLSTREAMER_SAMPLE_VIDEOS := $(addprefix sample_data/,apriltag-cam1.ts apriltag-cam2.ts apriltag-cam3.ts qcam1.ts qcam2.ts)
 DLSTREAMER_DOCKER_COMPOSE_FILE := ./sample_data/docker-compose-dl-streamer-example.yml
+DLSTREAMER_DOCKER_COMPOSE_BENCHMARK_50_FILE := ./sample_data/docker-compose-dl-streamer-benchmark.yml
 
 # Test variables
 TESTS_FOLDER := tests
@@ -455,6 +456,9 @@ demo-k8s: init-sample-data
 .PHONY: docker-compose.yml
 docker-compose.yml:
 	cp $(DLSTREAMER_DOCKER_COMPOSE_FILE) $@;
+	@if [ "$${DLS}" = "1" ]; then \
+	    cp $(DLSTREAMER_DOCKER_COMPOSE_BENCHMARK_50_FILE) $@; \
+	fi
 
 $(DLSTREAMER_SAMPLE_VIDEOS): ./dlstreamer-pipeline-server/convert_video_to_ts.sh
 	@echo "==> Converting sample videos for DLStreamer..."
