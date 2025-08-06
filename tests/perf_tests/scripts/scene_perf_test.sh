@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: (C) 2021 - 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-INPDIR="./sample_data/"
+INPDIR="./sample_data"
 INPUT="apriltag-cam1.mp4"
 INPUT2="apriltag-cam2.mp4"
 INPUT3="apriltag-cam3.mp4"
@@ -13,7 +13,7 @@ JSONFILE2=$( echo $INPUT2 | sed -e 's/mp4/json/g' )
 JSONFILE3=$( echo $INPUT3 | sed -e 's/mp4/json/g' )
 
 VIDEO_FRAMES=1781
-PERF_CMD="controller/tools/analytics/trackrate --frame 1500"
+PERF_CMD="controller/src/controller/tools/analytics/trackrate --frame 1500"
 CONFIG="tests/perf_tests/config/config.json"
 PERF_STR="PERF"
 
