@@ -6,11 +6,15 @@
 import json
 import time
 import os
+import threading  # Add this import
 
 from scene_common.mqtt import PubSub
 from scene_common.timestamp import get_epoch_time
 from tests.mqtt_helper import TEST_MQTT_DEFAULT_ROOTCA, TEST_MQTT_DEFAULT_AUTH
 from argparse import ArgumentParser
+
+# Add a lock for protecting shared variables
+data_lock = threading.Lock()
 
 objects_detected = 0
 log_file = None
@@ -44,44 +48,46 @@ def test_on_message(mqttc, obj, msg):
 
   time_proc_est = jdata['debug_hmo_processing_time']
 
-  # This assumes the delay observed between TX at the detection generation
-  # and the delay between scene controller and this module
-  # are roughly the same (at least in average).
+  # Protect shared variable access with lock
+  with data_lock:
+    proc_time_avg = ((proc_time_avg*proc_time_count) + time_proc_est)/(proc_time_count+1)
+    proc_time_count += 1
+    objects_detected += 1
 
-  proc_time_avg = ((proc_time_avg*proc_time_count) + time_proc_est)/(proc_time_count+1)
-  proc_time_count += 1
+    if jdata['id'] not in sensors_seen:
+      number_sensors += 1
+      sensors_seen.append(jdata['id'])
 
+  # File writing can be outside lock if log_file is thread-safe
   if log_file is not None:
     json.dump( jdata, log_file )
     log_file.write("\n")
-  objects_detected += 1
 
-  if jdata['id'] not in sensors_seen:
-    number_sensors += 1
-    sensors_seen.append(jdata['id'])
   return
 
 def wait_to_start(test_wait, client):
-  global objects_detected
-  test_started = False
-  waited_for = 0
-  TEST_WAIT_START_TIME = 60
-  TEST_WAIT_SIGNAL_TIME = 30
-  TEST_WAIT_ABORT_TIME = 180
-
-  time.sleep(TEST_WAIT_START_TIME)
-
-  while test_started == False:
-    time.sleep(test_wait)
-    waited_for += test_wait
-    print("Waiting for test to start.. {}".format(waited_for))
-    if objects_detected != 0:
-      test_started = True
-    else:
-      if waited_for > TEST_WAIT_ABORT_TIME:
-        print("Failed waiting for test to start.")
-        return False
   return True
+#
+#  global objects_detected
+#  test_started = False
+#  waited_for = 0
+#  TEST_WAIT_START_TIME = 60
+#  TEST_WAIT_SIGNAL_TIME = 30
+#  TEST_WAIT_ABORT_TIME = 180
+#
+#  time.sleep(TEST_WAIT_START_TIME)
+#
+#  while test_started == False:
+#    time.sleep(test_wait)
+#    waited_for += test_wait
+#    print("Waiting for test to start.. {}".format(waited_for))
+#    if objects_detected != 0:
+#      test_started = True
+#    else:
+#      if waited_for > TEST_WAIT_ABORT_TIME:
+#        print("Failed waiting for test to start.")
+#        return False
+#  return True
 
 def test_mqtt_recorder():
   global objects_detected
@@ -110,43 +116,37 @@ def test_mqtt_recorder():
     log_file = open( args.output, 'w' )
 
   client.loopStart()
-  # Wait for test to start..
-
-  if wait_to_start(test_wait, client) == False:
-    client.loopStop()
-
-    if args.output is not None:
-      log_file.close()
-    return 1
 
   test_start_time = get_epoch_time()
   cur_det_objects = objects_detected
   old_det_objects = cur_det_objects
-  while test_loop_done == False:
+
+  print("Waiting for detections...")
+  while True:
+    with data_lock:
+      current_objects = objects_detected
+      current_proc_avg = proc_time_avg
+      current_proc_count = proc_time_count
+
+    if current_objects >= 1000:
+      break
+
     time.sleep(test_wait)
-    new_det_objects = objects_detected
+
+    with data_lock:
+      new_det_objects = objects_detected
 
     cycle_det_objects = new_det_objects - old_det_objects
+    if cycle_det_objects == 0:
+      test_empty_loops += 1
+      continue
+
     print( "New {} total {}".format( cycle_det_objects, new_det_objects) )
     cur_rate = cycle_det_objects / test_wait
 
-    if cycle_det_objects == 0:
-      test_empty_loops += 1
-
-      # If there is only one publisher, it is more likely we wont see objects for some period of time,
-      # so trying not to end too quickly.
-      if number_sensors == 1:
-        if test_empty_loops == test_max_empty_loops*2:
-          test_loop_done = True
-          print( "No messages detected! (1 sensor)" );
-      elif test_empty_loops == test_max_empty_loops:
-        test_loop_done = True
-        print( "No messages detected! ({} sensors)".format(number_sensors) );
-    else:
-      test_empty_loops = 0
-
-    print( "Current rate incoming {:.3f} messages/ss".format(cur_rate) )
-    print( "Current proc time {:.3f} ms, proc {:.3f} mps".format(proc_time_avg*1000.0, 1.0/proc_time_avg) )
+    if current_proc_avg > 0:
+      print( "Current rate incoming {:.3f} messages/ss".format(cur_rate) )
+      print( "Current proc time {:.3f} ms, proc {:.3f} mps".format(current_proc_avg*1000.0, 1.0/current_proc_avg) )
     old_det_objects = new_det_objects
 
   client.loopStop()
