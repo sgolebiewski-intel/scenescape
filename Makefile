@@ -333,7 +333,7 @@ run_basic_acceptance_tests: setup_tests
 .PHONY: run_basic_acceptance_tests_k8s
 run_basic_acceptance_tests_k8s: setup_tests
 	@echo "Running basic acceptance tests..."
-	$(MAKE) --trace -C tests basic-acceptance-tests-k8s -j 1 SUPASS=$(SUPASS) || (echo "Basic acceptance tests failed" && exit 1)
+	$(MAKE) --trace -C tests basic-acceptance-tests-k8s -j 1 SUPASS=$(SUPASS) KUBERNETES=1 || (echo "Basic acceptance tests failed" && exit 1)
 	@echo "DONE ==> Running basic acceptance tests"
 # ============================= Lint ==================================
 
