@@ -112,7 +112,7 @@ if [ "${SKIPYML}" != "1" ] ; then
 
     if [ "${SKIPYML}" != "1" ] ; then
         rm -f docker-compose.yml
-        make docker-compose.yml DLS=$DLS
+        make docker-compose.yml
     fi
 fi
 
@@ -191,10 +191,10 @@ fi
 if [ "${SKIP_BRINGUP}" != "1" ] ; then
     if [ "${KUBERNETES}" = "1" ] ; then
         echo "Using Kubernetes deployment"
-        make -C kubernetes DLS=$DLS SUPASS=$SUPASS
+        make demo-k8s SUPASS=$SUPASS
     else
         echo "Using Docker Compose deployment"
-        make demo DLS=$DLS SUPASS=$SUPASS
+        make demo SUPASS=$SUPASS
     fi
     echo
     echo "====================================================================="
