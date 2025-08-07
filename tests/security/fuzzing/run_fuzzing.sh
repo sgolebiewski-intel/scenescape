@@ -7,9 +7,6 @@ cd /workspace
 
 . .env
 
-cp scenescape-ca.pem /usr/local/share/ca-certificates
-update-ca-certificates
-
 https_proxy=$https_proxy apk add curl jq
 
 echo "$instance_ip web.scenescape.intel.com" >> /etc/hosts
