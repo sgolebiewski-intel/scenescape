@@ -78,8 +78,8 @@ help:
 	@echo "  list-dependencies           List all apt/pip dependencies for all microservices"
 	@echo "  build-sources-image         Build the image with 3rd party sources"
 	@echo "  install-models              Install custom OpenVINO Zoo models to models volume"
-	@echo "  check-db-upgrade            Check if the database needs to be upgraded"
-	@echo "  upgrade-database            Backup and upgrade database to a newer PostgreSQL version"
+	@echo "  check-upgrade               Check if upgrade is needed"
+	@echo "  upgrade-scenescape          Upgrade an existing Intel® SceneScape installation"
 	@echo "                              (automatically transfers data to Docker volumes)"
 	@echo ""
 	@echo "  rebuild                     Clean and build all images"
@@ -485,36 +485,33 @@ certificates:
 auth-secrets:
 	$(MAKE) -C ./tools/authsecrets SECRETSDIR=$(SECRETSDIR)
 
-# Database upgrade target
-.PHONY: check-db-upgrade upgrade-database
+# Existing install upgrade target
+.PHONY: check-upgrade upgrade-scenescape
 
-check-db-upgrade:
-	@if manager/tools/upgrade-database --check >/dev/null 2>&1; then \
-		echo "Database upgrade is required."; \
+check-upgrade:
+	@if manager/tools/upgrade-scenescape --check >/dev/null 2>&1; then \
+		echo "Upgrade is required."; \
 		exit 0; \
 	else \
-		echo "No database upgrade needed."; \
+		echo "No upgrade needed."; \
 		exit 1; \
 	fi
 
-upgrade-database:
-	@echo "Starting database upgrade process..."
-	@if ! manager/tools/upgrade-database --check >/dev/null 2>&1; then \
-		echo "No database upgrade needed."; \
+upgrade-scenescape:
+	@echo "Starting upgrade process..."
+	@if ! manager/tools/upgrade-scenescape --check >/dev/null 2>&1; then \
+		echo "No upgrade needed."; \
 		exit 0; \
 	fi
 	@UPGRADE_LOG=/tmp/upgrade.$(shell date +%s).log; \
-	echo "Upgrading database (log at $$UPGRADE_LOG)..."; \
-	manager/tools/upgrade-database 2>&1 | tee $$UPGRADE_LOG; \
-	NEW_DB=$$(grep -E 'Upgraded database .* has been created in Docker volumes' $$UPGRADE_LOG | sed -e 's/.*created in Docker volumes.*//'); \
+	echo "Upgrading installation (log at $$UPGRADE_LOG)..."; \
+	manager/tools/upgrade-scenescape 2>&1 | tee $$UPGRADE_LOG; \
 	if [ $$? -ne 0 ]; then \
 		echo ""; \
 		echo "ABORTING"; \
-		echo "Automatic upgrade of database failed"; \
+		echo "Automatic upgrade of installation failed"; \
 		exit 1; \
 	fi; \
 	echo ""; \
-	echo "Database upgrade completed successfully."; \
-	echo "Database is now stored in Docker volumes:"; \
-	echo "  - Database: scenescape_vol-db"; \
-	echo "  - Migrations: scenescape_vol-migrations"
+	. tools/yaml_parse.sh; \
+	echo "Upgrade completed successfully.";

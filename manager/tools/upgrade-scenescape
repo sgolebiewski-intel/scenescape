@@ -333,8 +333,54 @@ run_migration() {
     return 0
 }
 
+copy_models_to_volume() {
+    local temp_container="init_models"
+    local models_src="model_installer/models"
+
+    log_message "Initializing models volume..."
+    docker volume rm scenescape_vol-models 2>/dev/null || true
+    docker volume create scenescape_vol-models
+
+    docker run --name ${temp_container} \
+        -d \
+        -v ${PWD}/${models_src}:/source/models \
+        -v scenescape_vol-models:/dest/models \
+        alpine:latest sleep 10
+
+    log_message "Copying models to volume..."
+    docker exec ${temp_container} /bin/sh -c "cp -r /source/models/* /dest/models/"
+    docker stop ${temp_container} && docker rm ${temp_container}
+    log_message "Models copied to scenescape_vol-models volume"
+}
+
+copy_datasets_to_volume() {
+    local temp_container="init_datasets"
+    local datasets_src="datasets"
+
+    log_message "Initializing datasets volume..."
+    docker volume rm scenescape_vol-datasets 2>/dev/null || true
+    docker volume create scenescape_vol-datasets
+
+    docker run --name ${temp_container} \
+        -d \
+        -v ${PWD}/${datasets_src}:/source/datasets \
+        -v scenescape_vol-datasets:/dest/datasets \
+        alpine:latest sleep 10
+
+    log_message "Copying datasets to volume..."
+    docker exec ${temp_container} /bin/sh -c "cp -r /source/datasets/* /dest/datasets/"
+    docker stop ${temp_container} && docker rm ${temp_container}
+    log_message "Datasets copied to scenescape_vol-datasets volume"
+}
+
 # Main script execution
 main() {
+    log_message "Copy models to volume mount..."
+    copy_models_to_volume
+
+    log_message "Copy datasets to volume mount..."
+    copy_datasets_to_volume
+
     if [[ -f "$migration_file" ]] && grep -q 'sscape' "$migration_file"; then
         echo "'$migration_file' exists and contains 'sscape'. Renaming tables and sscape references in migration file..."
         run_table_rename

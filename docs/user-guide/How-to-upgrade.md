@@ -28,10 +28,10 @@ Before You Begin, ensure the following:
    make build-all
    ```
 
-3. **Run the upgrade-database script**:
+3. **Run the upgrade script**:
 
    ```bash
-   bash manager/tools/upgrade-database
+   bash manager/tools/upgrade-scenescape
    ```
 
 4. **Bring up services to verify upgrade**:
@@ -40,7 +40,24 @@ Before You Begin, ensure the following:
    make demo
    ```
 
-5. **Log in to the Web UI** and verify that data and configurations are intact.
+5. **Verify the volumes are created**:
+   ```bash
+   docker volume ls
+   ```
+
+   The results will look like:
+   ```console
+   local     scenescape_vol-datasets
+   local     scenescape_vol-db
+   local     scenescape_vol-dlstreamer-pipeline-server-pipeline-root
+   local     scenescape_vol-media
+   local     scenescape_vol-migrations
+   local     scenescape_vol-models
+   local     scenescape_vol-netvlad_models
+   local     scenescape_vol-sample-data
+   ```
+
+6. **Log in to the Web UI** and verify that data and configurations are intact.
 
 ## Model Management During Upgrade
 
@@ -49,16 +66,6 @@ Starting from 1.4.0 version, Intel® SceneScape stores models in Docker volumes 
 - **Automatic Preservation**: Models are automatically preserved during upgrades as Docker volumes persist across container recreations.
 - **No Manual Copy Required**: You no longer need to manually copy `model_installer/models/` during upgrades.
 - **Reduced Disk Usage**: Models are not duplicated between host filesystem and containers.
-
-### Managing Models
-
-- **To reinstall models**: `make install-models`
-- **To clean models**: `make clean-models` (this will remove the Docker volume)
-- **To check existing models in volume**: `docker volume ls | grep vol-models`
-
-### Legacy Installations
-
-If upgrading from a version that used host filesystem model storage (`model_installer/models/`), the models will be automatically reinstalled to the new Docker volume during the first deployment.
 
 ## Troubleshooting
 
