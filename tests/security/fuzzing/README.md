@@ -31,7 +31,7 @@ This directory contains the following:
     * `auth_password` is the superuser's password (usually whatever `SUPASS` was when you deployed).
     * `restler_mode` is the RESTler mode to run. Supported values are `fuzz`, `fuzz-lean`, and `test`. See RESTler documentation for more details.
     * `time_budget` is the length of time, in hours, that the `fuzz` mode will spend testing the API.
-4. From the fuzzing folder, execute the Docker command to launch a RESTler container and run our script:
+3. From the fuzzing folder, execute the Docker command to launch a RESTler container and run our script:
     * `cd tests/security/fuzzing`
     * `docker run --rm -v ./:/workspace restler /workspace/run_fuzzing.sh`
-5. When testing finishes (this takes a long time!), you will have results in the `Fuzz`, `FuzzLean`, or `Test` folders, depending on which RESTler mode you ran. See the RESTler documentation for more about how to interpret the results of a run, or talk to your security team!
+4. When testing finishes (this takes a long time!), you will have results in the `Fuzz`, `FuzzLean`, or `Test` folders, depending on which RESTler mode you ran. See the RESTler documentation for more about how to interpret the results of a run, or talk to your security team!
