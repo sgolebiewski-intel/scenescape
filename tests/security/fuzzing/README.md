@@ -23,7 +23,7 @@ This directory contains the following:
     * `cd restler-fuzzer`
     * `cp ../manager/secrets/certs/scenescape-ca.pem .`
     * `cp ../tests/security/fuzzing/Dockerfile .`
-    * `docker build -t restler .`
+    * `docker build --build-arg http_proxy=http://proxy-dmz.intel.com:912 --build-arg https_proxy=http://proxy-dmz.intel.com:912 -t restler .`
 2. Edit `.env` and set the following values:
     * `https_proxy` is the outbound web proxy, used to fetch package dependencies.
     * `instance_ip` is the IP address of the instance under test.
@@ -32,5 +32,6 @@ This directory contains the following:
     * `restler_mode` is the RESTler mode to run. Supported values are `fuzz`, `fuzz-lean`, and `test`. See RESTler documentation for more details.
     * `time_budget` is the length of time, in hours, that the `fuzz` mode will spend testing the API.
 4. From the fuzzing folder, execute the Docker command to launch a RESTler container and run our script:
-    * `docker run --rm -v ./:/workspace restler sh /workspace/run_fuzzing.sh`
+    * `cd tests/security/fuzzing`
+    * `docker run --rm -v ./:/workspace restler /workspace/run_fuzzing.sh`
 5. When testing finishes (this takes a long time!), you will have results in the `Fuzz`, `FuzzLean`, or `Test` folders, depending on which RESTler mode you ran. See the RESTler documentation for more about how to interpret the results of a run, or talk to your security team!

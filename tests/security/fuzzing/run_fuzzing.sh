@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 # SPDX-FileCopyrightText: (C) 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
@@ -6,8 +6,6 @@
 cd /workspace
 
 . .env
-
-https_proxy=$https_proxy apk add curl jq
 
 echo "$instance_ip web.scenescape.intel.com" >> /etc/hosts
 
