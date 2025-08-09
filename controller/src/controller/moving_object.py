@@ -82,6 +82,24 @@ class MovingObject:
     self.map_rotation = None
     self.rotation_from_velocity = False
 
+    # 3D detection surface projection configuration
+    self.project_3d_detections_to_surface_enabled = False
+    self.surface_plane_z = 0.0
+    self.excluded_categories = []
+    
+    # Edge case filtering parameters
+    self.min_camera_distance = 0.5
+    self.min_z_difference = 0.1
+    self.min_object_dimension = 0.05
+    self.max_object_dimension = 20.0
+    
+    # Projection limits parameters
+    self.min_projected_dimension = 0.01
+    self.max_projected_dimension = 100.0
+    self.min_scale_factor = 0.1
+    self.max_scale_factor = 10.0
+    self.max_projection_distance = 100.0
+
     self.first_seen = when
     self.last_seen = None
     self.camera = camera
@@ -215,7 +233,30 @@ class MovingObject:
                                       camera.pose.pose_mat[:3,:3],
                                       rotation_as_matrix)).as_quat())
           self.rotation = info['rotation']
-        self.orig_point = camera.pose.cameraPointToWorldPoint(Point(info['translation']))
+        # Apply 3D detection surface projection if enabled and applicable
+        if self.should_apply_surface_projection(info):
+          # First transform to world coordinates 
+          world_point = camera.pose.cameraPointToWorldPoint(Point(info['translation']))
+          # Project vertices to surface using world coordinates and rectify to proper rectangle
+          projected_translation, projected_rotation, projected_size = self.project_vertices_to_surface(
+            [world_point.x, world_point.y, world_point.z], 
+            info['rotation'],  # This is now in world coordinates 
+            info['size']
+          )
+          # Step 7: Update the bounding box on the object, overwriting the transformed value
+          # Use the projected rectangle's bottom center as orig_point for proper grounding
+          bottom_center_point = [projected_translation[0], projected_translation[1], self.surface_plane_z]
+          self.orig_point = Point(bottom_center_point)
+          # Update the rotation and size based on projection
+          info['translation'] = projected_translation
+          info['rotation'] = projected_rotation
+          info['size'] = projected_size
+          self.rotation = info['rotation']
+          self.size = info['size']
+        else:
+          # Use standard camera-to-world transformation when not using surface projection
+          self.orig_point = camera.pose.cameraPointToWorldPoint(Point(info['translation']))
+          self.size = info['size']
     else:
       if camera and hasattr(camera, 'pose'):
         self.orig_point = camera.pose.cameraPointToWorldPoint(self.camLoc)
@@ -355,6 +396,247 @@ class MovingObject:
         if not self.adjusted[1].is3D:
           self.adjusted[1] = Point(self.adjusted[1].x, self.adjusted[1].y, DEFAULTZ)
     return
+
+  def should_apply_surface_projection(self, info):
+    """Check if 3D detection surface projection should be applied"""
+    if not (self.project_3d_detections_to_surface_enabled and 
+            self.category not in self.excluded_categories and
+            info is not None and 
+            'translation' in info and 
+            'rotation' in info and 
+            'size' in info):
+      return False
+    
+    # Additional safety checks for edge cases
+    camera_pos = self.camera.pose.translation
+    object_pos = info['translation']
+    
+    # Check if object is too close to camera (avoid extreme projections)
+    distance_to_camera = ((object_pos[0] - camera_pos.x)**2 + 
+                         (object_pos[1] - camera_pos.y)**2 + 
+                         (object_pos[2] - camera_pos.z)**2)**0.5
+    if distance_to_camera < self.min_camera_distance:
+      return False
+    
+    # Check if object is at similar Z level as camera (avoid near-parallel projections)
+    z_diff = abs(object_pos[2] - camera_pos.z)
+    if z_diff < self.min_z_difference:
+      return False
+    
+    # Check if object size is reasonable (avoid projecting tiny or huge objects)
+    size = info['size']
+    max_dimension = max(size[0], size[1], size[2])
+    min_dimension = min(size[0], size[1], size[2])
+    if max_dimension > self.max_object_dimension or min_dimension < self.min_object_dimension:
+      return False
+    
+    return True
+
+  def calculate_bottom_corners_world(self, world_object_center, world_rotation_quat, size):
+    """Calculate the 4 bottom corners of the bounding box in world coordinates"""
+    # Handle both Point objects and lists/arrays for world_object_center
+    if hasattr(world_object_center, 'x'):
+      center_x, center_y, center_z = world_object_center.x, world_object_center.y, world_object_center.z
+    else:
+      center_x, center_y, center_z = world_object_center[0], world_object_center[1], world_object_center[2]
+    
+    # Half dimensions for the bounding box (Z-up coordinate system)
+    half_width = size[0] / 2.0   # x-axis (width)
+    half_depth = size[1] / 2.0   # y-axis (depth)
+    
+    # Define the 4 bottom corners relative to object center in object coordinates
+    # Z-up coordinate system: center is at (0,0,0), corners are at the same Z level as center
+    # The bottom face is a rectangle spanning the full X and Y dimensions
+    relative_corners = [
+      [-half_width, -half_depth, 0],  # bottom-left-back
+      [half_width, -half_depth, 0],   # bottom-right-back  
+      [half_width, half_depth, 0],    # bottom-right-front
+      [-half_width, half_depth, 0]    # bottom-left-front
+    ]
+    
+    # Apply rotation to relative corners
+    from scipy.spatial.transform import Rotation
+    rotation = Rotation.from_quat(world_rotation_quat)
+    
+    world_corners = []
+    for corner in relative_corners:
+      # Rotate the corner by the object's orientation
+      rotated_corner = rotation.apply(corner)
+      # Add to the world object center position
+      world_corner = [
+        center_x + rotated_corner[0],
+        center_y + rotated_corner[1], 
+        center_z + rotated_corner[2]
+      ]
+      world_corners.append(world_corner)
+    
+    return world_corners
+
+  def rectify_quadrilateral_to_rectangle(self, corners):
+    """Rectify a 4-point quadrilateral to the nearest rectangle"""
+    import numpy as np
+    
+    # Convert corners to numpy array for easier computation
+    points = np.array(corners)
+    
+    # Calculate the center of the quadrilateral
+    center = np.mean(points, axis=0)
+    
+    # Calculate vectors from center to each corner
+    vectors = points - center
+    
+    # Calculate the principal axes using PCA-like approach
+    # Find the two main directions of the quadrilateral
+    cov_matrix = np.cov(vectors[:, :2].T)  # Only use x,y coordinates for 2D analysis
+    eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)
+    
+    # Sort eigenvectors by eigenvalue magnitude (principal axes)
+    idx = np.argsort(eigenvalues)[::-1]
+    principal_axes = eigenvectors[:, idx]
+    
+    # Project corners onto the principal axes to find the rectangle dimensions
+    projections_axis1 = np.dot(vectors[:, :2], principal_axes[:, 0])
+    projections_axis2 = np.dot(vectors[:, :2], principal_axes[:, 1])
+    
+    # Calculate rectangle half-dimensions
+    half_axis1 = np.max(np.abs(projections_axis1))  # First principal axis (most variance)
+    half_axis2 = np.max(np.abs(projections_axis2))  # Second principal axis (least variance)
+    
+    # Generate the 4 corners of the rectified rectangle
+    rect_corners_2d = np.array([
+        [-half_axis1, -half_axis2],
+        [half_axis1, -half_axis2],
+        [half_axis1, half_axis2],
+        [-half_axis1, half_axis2]
+    ])
+    
+    # Rotate back to the principal axis orientation
+    rotated_corners_2d = np.dot(rect_corners_2d, principal_axes.T)
+    
+    # Add the center offset and z-coordinate
+    rectified_corners = []
+    for corner_2d in rotated_corners_2d:
+      rectified_corner = [
+        center[0] + corner_2d[0],
+        center[1] + corner_2d[1], 
+        self.surface_plane_z
+      ]
+      rectified_corners.append(rectified_corner)
+    
+    # Return dimensions: make sure we preserve the larger dimension as width
+    # The first principal axis has the largest eigenvalue (most variance)
+    rect_width = half_axis1 * 2   # First principal axis dimension
+    rect_depth = half_axis2 * 2   # Second principal axis dimension
+    
+    return rectified_corners, rect_width, rect_depth, principal_axes
+
+  def project_vertices_to_surface(self, world_translation, world_rotation_quat, size):
+    """Project the object's bottom corners to surface plane and reconstruct flat bounding box"""
+    import numpy as np
+    from scipy.spatial.transform import Rotation
+    
+    try:
+      # Step 1: Transform detection into world coordinates (already done by caller)
+      if hasattr(world_translation, 'x'):
+        center_x, center_y, center_z = world_translation.x, world_translation.y, world_translation.z
+      else:
+        center_x, center_y, center_z = world_translation[0], world_translation[1], world_translation[2]
+      
+      # Step 2: Determine the bottom four points of the detection bounding box in world coordinates
+      world_bottom_corners = self.calculate_bottom_corners_world(
+        [center_x, center_y, center_z], 
+        world_rotation_quat, 
+        size
+      )
+      
+      # Get camera position in world coordinates
+      camera_pos = self.camera.pose.translation
+      camera_world = [camera_pos.x, camera_pos.y, camera_pos.z]
+      
+      # Step 3: Project rays from camera through each bottom vertex to intersect configured z plane
+      projected_corners = []
+      for corner in world_bottom_corners:
+        # Ray direction from camera to corner
+        ray_direction = [
+          corner[0] - camera_world[0],
+          corner[1] - camera_world[1], 
+          corner[2] - camera_world[2]
+        ]
+        
+        # Ray-plane intersection: camera_pos + t * ray_direction intersects plane z = surface_plane_z
+        if abs(ray_direction[2]) < 1e-6:
+          # Ray is parallel to surface plane, use original X,Y but project Z
+          projected_corner = [corner[0], corner[1], self.surface_plane_z]
+        else:
+          t = (self.surface_plane_z - camera_world[2]) / ray_direction[2]
+          
+          # Check for reasonable projection distances
+          if t < 0 or t > self.max_projection_distance:
+            raise ValueError(f"Invalid projection parameter t={t}")
+          
+          projected_corner = [
+            camera_world[0] + t * ray_direction[0],
+            camera_world[1] + t * ray_direction[1],
+            self.surface_plane_z
+          ]
+        
+        projected_corners.append(projected_corner)
+      
+      # Step 4: Construct a rectangle based on those four points (preserve order and rotation)
+      projected_corners_array = np.array(projected_corners)
+      
+      # Step 5: Calculate the center and dimensions of the projected rectangle
+      projected_center = np.mean(projected_corners_array, axis=0)
+      
+      # Calculate the actual width and depth of the projected rectangle
+      edge1 = projected_corners_array[1] - projected_corners_array[0]  # right-back - left-back
+      edge2 = projected_corners_array[3] - projected_corners_array[0]  # left-front - left-back
+      projected_width = np.linalg.norm(edge1[:2])   # X-Y distance of first edge
+      projected_depth = np.linalg.norm(edge2[:2])   # X-Y distance of second edge
+      
+      # Check for reasonable projected dimensions
+      if (projected_width < self.min_projected_dimension or projected_depth < self.min_projected_dimension or 
+          projected_width > self.max_projected_dimension or projected_depth > self.max_projected_dimension):
+        raise ValueError(f"Invalid projected dimensions: {projected_width}x{projected_depth}")
+      
+      # Step 6: Calculate perspective scale factor from projected dimensions
+      # The projected width/depth already contains the perspective scaling information
+      original_width = size[0]
+      original_depth = size[1]
+      
+      # Use the average of width and depth scaling as the overall scale factor
+      width_scale = projected_width / original_width if original_width > 0 else 1.0
+      depth_scale = projected_depth / original_depth if original_depth > 0 else 1.0
+      scale_factor = (width_scale + depth_scale) / 2.0
+      
+      # Check for reasonable scale factors
+      if scale_factor < self.min_scale_factor or scale_factor > self.max_scale_factor:
+        raise ValueError(f"Invalid scale factor: {scale_factor}")
+      
+      scaled_height = size[2] * scale_factor
+      
+      # Step 7: Determine rotation to align with projected rectangle on surface plane
+      # Use the first edge of the projected rectangle to determine orientation
+      edge_vector = projected_corners_array[1] - projected_corners_array[0]  # bottom-right-back - bottom-left-back
+      angle = np.arctan2(edge_vector[1], edge_vector[0])
+      new_rotation = Rotation.from_euler('xyz', [0, 0, angle]).as_quat().tolist()
+      
+      # Step 8: Position object so bottom face center is at projected center, object center above surface
+      half_scaled_height = scaled_height / 2.0
+      new_object_center = [
+        projected_center[0],
+        projected_center[1], 
+        self.surface_plane_z + half_scaled_height
+      ]
+      
+      new_size = [projected_width, projected_depth, scaled_height]
+      
+      return new_object_center, new_rotation, new_size
+      
+    except Exception as e:
+      # If projection fails for any reason, fall back to original values
+      # This ensures the system is robust and doesn't crash on edge cases
+      return world_translation, world_rotation_quat, size
 
 class ATagObject(MovingObject):
   def __init__(self, info, when, sensor):

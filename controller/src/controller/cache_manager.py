@@ -47,6 +47,22 @@ class CacheManager:
                                       self.tracker_config_data["non_measurement_time_dynamic"],
                                       self.tracker_config_data["non_measurement_time_static"]]
         scene_data["persist_attributes"] = self.tracker_config_data.get("persist_attributes", {})
+        scene_data["project_3d_detections_to_surface_enabled"] = self.tracker_config_data.get("project_3d_detections_to_surface_enabled", False)
+        scene_data["surface_plane_z"] = self.tracker_config_data.get("surface_plane_z", 0.0)
+        scene_data["excluded_categories"] = self.tracker_config_data.get("excluded_categories", [])
+        
+        # Pass edge case filtering parameters
+        scene_data["min_camera_distance"] = self.tracker_config_data.get("min_camera_distance", 0.5)
+        scene_data["min_z_difference"] = self.tracker_config_data.get("min_z_difference", 0.1)
+        scene_data["min_object_dimension"] = self.tracker_config_data.get("min_object_dimension", 0.05)
+        scene_data["max_object_dimension"] = self.tracker_config_data.get("max_object_dimension", 20.0)
+        
+        # Pass projection limits parameters
+        scene_data["min_projected_dimension"] = self.tracker_config_data.get("min_projected_dimension", 0.01)
+        scene_data["max_projected_dimension"] = self.tracker_config_data.get("max_projected_dimension", 100.0)
+        scene_data["min_scale_factor"] = self.tracker_config_data.get("min_scale_factor", 0.1)
+        scene_data["max_scale_factor"] = self.tracker_config_data.get("max_scale_factor", 10.0)
+        scene_data["max_projection_distance"] = self.tracker_config_data.get("max_projection_distance", 100.0)
 
       uid = scene_data['uid']
       if uid not in self.cached_scenes_by_uid:
