@@ -1,0 +1,1135 @@
+NOTICE
+======
+
+License: (EPL-2.0 OR BSD-3-Clause)
+----------------------------------
+- paho-mqtt 2.1.0
+
+[License text for (EPL-2.0 OR BSD-3-Clause) would go here]
+
+
+License: (MPL-2.0 AND MIT)
+--------------------------
+- tqdm 4.67.1
+
+[License text for (MPL-2.0 AND MIT) would go here]
+
+
+License: Apache-2.0
+-------------------
+- coverage 7.10.3
+- kornia 0.8.1
+- kornia-rs 0.1.9
+- requests 2.32.4
+- retrying 1.4.2
+- rsa 4.9.1
+- tzdata 2025.2
+- websocket-client 1.8.0
+
+[License text for Apache-2.0 would go here]
+
+
+License: Apache-2.0 AND BSD-1-Clause AND LicenseRef-GPL AND GPL-3.0-only AND GPL-3.0-or-later AND MIT
+-----------------------------------------------------------------------------------------------------
+- libegl1 1.4.0-1
+- libgl1 1.4.0-1
+- libglvnd0 1.4.0-1
+- libglx0 1.4.0-1
+
+[License text for Apache-2.0 AND BSD-1-Clause AND LicenseRef-GPL AND GPL-3.0-only AND GPL-3.0-or-later AND MIT would go here]
+
+
+License: Apache-2.0 AND BSD-2-Clause AND LicenseRef-BSD-3-google AND LicenseRef-BSL AND LicenseRef-GPL AND GPL-1.0-only AND GPL-1.0-or-later AND GPL-2.0-only AND LicenseRef-Khronos AND MIT AND LicenseRef-MLAA AND LicenseRef-SGI
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- libegl-mesa0 23.2.1-1ubuntu3.1~22.04.3
+- libgbm1 23.2.1-1ubuntu3.1~22.04.3
+- libgl1-mesa-dri 23.2.1-1ubuntu3.1~22.04.3
+- libglapi-mesa 23.2.1-1ubuntu3.1~22.04.3
+- libglx-mesa0 23.2.1-1ubuntu3.1~22.04.3
+
+[License text for Apache-2.0 AND BSD-2-Clause AND LicenseRef-BSD-3-google AND LicenseRef-BSL AND LicenseRef-GPL AND GPL-1.0-only AND GPL-1.0-or-later AND GPL-2.0-only AND LicenseRef-Khronos AND MIT AND LicenseRef-MLAA AND LicenseRef-SGI would go here]
+
+
+License: Apache-2.0 AND BSD-3-Clause
+------------------------------------
+- python3-pkg-resources 59.6.0-1.2ubuntu0.22.04.3
+- python3-setuptools 59.6.0-1.2ubuntu0.22.04.3
+
+[License text for Apache-2.0 AND BSD-3-Clause would go here]
+
+
+License: Apache-2.0 AND BSD-3-Clause AND ISC AND LicenseRef-ISC-IBM AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-permissive-like-automake-output AND LicenseRef-same-as-rest-of-p11kit
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- libp11-kit0 0.24.0-6build1
+
+[License text for Apache-2.0 AND BSD-3-Clause AND ISC AND LicenseRef-ISC-IBM AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-permissive-like-automake-output AND LicenseRef-same-as-rest-of-p11kit would go here]
+
+
+License: Apache-2.0 AND BSD-3-Clause AND LicenseRef-CC0 AND LicenseRef-Expat AND GFDL-1.3-only AND LicenseRef-GPL AND GPL-3.0-only AND LicenseRef-GPLv3- AND LicenseRef-LGPL AND LGPL-3.0-only AND LicenseRef-LGPLv2.1- AND LicenseRef-LGPLv3--or-GPLv2- AND LicenseRef-The
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- libgnutls30 3.7.3-4ubuntu1.7
+
+[License text for Apache-2.0 AND BSD-3-Clause AND LicenseRef-CC0 AND LicenseRef-Expat AND GFDL-1.3-only AND LicenseRef-GPL AND GPL-3.0-only AND LicenseRef-GPLv3- AND LicenseRef-LGPL AND LGPL-3.0-only AND LicenseRef-LGPLv2.1- AND LicenseRef-LGPLv3--or-GPLv2- AND LicenseRef-The would go here]
+
+
+License: Apache-2.0 AND LicenseRef-Artistic AND GPL-1.0-only AND GPL-1.0-or-later
+---------------------------------------------------------------------------------
+- libssl3 3.0.2-0ubuntu1.19
+- openssl 3.0.2-0ubuntu1.19
+
+[License text for Apache-2.0 AND LicenseRef-Artistic AND GPL-1.0-only AND GPL-1.0-or-later would go here]
+
+
+License: Apache-2.0 AND LicenseRef-BSD-2 AND LicenseRef-BSD-3 AND LicenseRef-Expat AND ISC AND LGPL-2.1-only AND LGPL-2.1-or-later AND MPL-2.0 AND MPL-2.0 AND LicenseRef-Python
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- python3-pip 22.0.2+dfsg-1ubuntu0.6
+
+[License text for Apache-2.0 AND LicenseRef-BSD-2 AND LicenseRef-BSD-3 AND LicenseRef-Expat AND ISC AND LGPL-2.1-only AND LGPL-2.1-or-later AND MPL-2.0 AND MPL-2.0 AND LicenseRef-Python would go here]
+
+
+License: BSD-2-Clause
+---------------------
+- debconf 1.5.79ubuntu1
+- decorator 5.2.1
+- pyasn1 0.6.1
+- pygments 2.19.2
+
+[License text for BSD-2-Clause would go here]
+
+
+License: BSD-2-Clause AND BSD-2-Clause AND BSD-3-Clause AND LicenseRef-BSD-3-clause-Aaron-D-Gifford AND Beerware AND ISC AND LicenseRef-public-domain-md4 AND LicenseRef-public-domain-md5 AND LicenseRef-public-domain-sha1
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- libmd0 1.0.4-1build1
+
+[License text for BSD-2-Clause AND BSD-2-Clause AND BSD-3-Clause AND LicenseRef-BSD-3-clause-Aaron-D-Gifford AND Beerware AND ISC AND LicenseRef-public-domain-md4 AND LicenseRef-public-domain-md5 AND LicenseRef-public-domain-sha1 would go here]
+
+
+License: BSD-2-Clause AND BSD-2-Clause AND LicenseRef-BSD-2-clause-author AND LicenseRef-BSD-2-clause-verbatim AND BSD-3-Clause AND LicenseRef-BSD-3-clause-John-Birrell AND LicenseRef-BSD-3-clause-Regents AND LicenseRef-BSD-3-clause-author AND LicenseRef-BSD-4-clause-Christopher-G-Demetriou AND LicenseRef-BSD-4-clause-Niels-Provos AND LicenseRef-BSD-5-clause-Peter-Wemm AND Beerware AND LicenseRef-Expat AND ISC AND LicenseRef-ISC-Original AND LicenseRef-public-domain
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- libbsd0 0.11.5-1
+
+[License text for BSD-2-Clause AND BSD-2-Clause AND LicenseRef-BSD-2-clause-author AND LicenseRef-BSD-2-clause-verbatim AND BSD-3-Clause AND LicenseRef-BSD-3-clause-John-Birrell AND LicenseRef-BSD-3-clause-Regents AND LicenseRef-BSD-3-clause-author AND LicenseRef-BSD-4-clause-Christopher-G-Demetriou AND LicenseRef-BSD-4-clause-Niels-Provos AND LicenseRef-BSD-5-clause-Peter-Wemm AND Beerware AND LicenseRef-Expat AND ISC AND LicenseRef-ISC-Original AND LicenseRef-public-domain would go here]
+
+
+License: BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT AND LicenseRef-public-domain
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- bsdutils 1:2.37.2-4ubuntu3.4
+- libblkid1 2.37.2-4ubuntu3.4
+- libmount1 2.37.2-4ubuntu3.4
+- libsmartcols1 2.37.2-4ubuntu3.4
+- libuuid1 2.37.2-4ubuntu3.4
+- mount 2.37.2-4ubuntu3.4
+- util-linux 2.37.2-4ubuntu3.4
+
+[License text for BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT AND LicenseRef-public-domain would go here]
+
+
+License: BSD-2-Clause AND BSD-3-Clause AND ISC AND Zlib AND LicenseRef-other
+----------------------------------------------------------------------------
+- sudo 1.9.9-1ubuntu2.5
+
+[License text for BSD-2-Clause AND BSD-3-Clause AND ISC AND Zlib AND LicenseRef-other would go here]
+
+
+License: BSD-2-Clause AND GPL-2.0-only
+--------------------------------------
+- libxxhash0 0.8.1-1
+
+[License text for BSD-2-Clause AND GPL-2.0-only would go here]
+
+
+License: BSD-2-Clause AND GPL-2.0-only AND GPL-2.0-or-later
+-----------------------------------------------------------
+- liblz4-1 1.9.3-2build2
+
+[License text for BSD-2-Clause AND GPL-2.0-only AND GPL-2.0-or-later would go here]
+
+
+License: BSD-2-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-public-domain-md5 AND LicenseRef-public-domain-s-s-d
+-------------------------------------------------------------------------------------------------------------------------------
+- dpkg 1.21.1ubuntu2.3
+
+[License text for BSD-2-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-public-domain-md5 AND LicenseRef-public-domain-s-s-d would go here]
+
+
+License: BSD-3-Clause
+---------------------
+- @jupyter-widgets/jupyterlab-manager 5.0.15
+- click 8.2.1
+- comm 0.2.3
+- contourpy 1.3.2
+- cycler 0.12.1
+- flask 3.1.1
+- fsspec 2025.7.0
+- h5py 3.14.0
+- ipython 8.37.0
+- isodate 0.7.2
+- jupyter-core 5.8.1
+- jupyterlab-widgets 3.0.15
+- libedit2 3.1-20210910-1build1
+- lxml 6.0.0
+- markupsafe 3.0.2
+- matplotlib-inline 0.1.7
+- nbformat 5.10.4
+- numpy 1.26.4
+- oauthlib 3.3.1
+- psutil 7.0.0
+- scikit-learn 1.7.1
+- scipy 1.15.3
+- threadpoolctl 3.6.0
+- torch 2.7.1+cpu
+- traitlets 5.14.3
+
+[License text for BSD-3-Clause would go here]
+
+
+License: BSD-3-Clause AND BSD-3-Clause AND LicenseRef-Expat AND FSFUL AND FSFULLR AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-public-domain
+----------------------------------------------------------------------------------------------------------------------------------------------------
+- dash 0.5.11+git20210903+057cd650a4ed-3build1
+
+[License text for BSD-3-Clause AND BSD-3-Clause AND LicenseRef-Expat AND FSFUL AND FSFULLR AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-public-domain would go here]
+
+
+License: BSD-3-Clause AND CC0-1.0 AND LicenseRef-Expat AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND LicenseRef-RFC-Reference AND LicenseRef-TinySCHEME AND LicenseRef-permissive
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- gpgv 2.2.27-3ubuntu2.4
+
+[License text for BSD-3-Clause AND CC0-1.0 AND LicenseRef-Expat AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND LicenseRef-RFC-Reference AND LicenseRef-TinySCHEME AND LicenseRef-permissive would go here]
+
+
+License: BSD-3-Clause AND GPL-2.0-only
+--------------------------------------
+- lsb-base 11.1.0ubuntu4
+
+[License text for BSD-3-Clause AND GPL-2.0-only would go here]
+
+
+License: BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later
+-----------------------------------------------------------
+- init-system-helpers 1.62
+- libcap2 1:2.44-1ubuntu0.22.04.2
+
+[License text for BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later would go here]
+
+
+License: BSD-3-Clause AND GPL-2.0-only AND LGPL-2.1-only
+--------------------------------------------------------
+- libtirpc-common 1.3.2-2ubuntu0.1
+- libtirpc3 1.3.2-2ubuntu0.1
+
+[License text for BSD-3-Clause AND GPL-2.0-only AND LGPL-2.1-only would go here]
+
+
+License: BSD-3-Clause AND GPL-2.0-only AND LicenseRef-GPL-2--autoconf-exception AND LicenseRef-GPL-2--libtool-exception AND GPL-3.0-only AND LicenseRef-GPL-3--autoconf-exception AND LGPL-2.1-only AND LGPL-2.1-or-later AND MIT AND LicenseRef-permissive-autoconf-m4 AND LicenseRef-permissive-autoconf-m4-no-warranty AND LicenseRef-permissive-configure AND LicenseRef-permissive-fsf AND LicenseRef-permissive-makefile-in
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- libnsl2 1.3.0-2build2
+
+[License text for BSD-3-Clause AND GPL-2.0-only AND LicenseRef-GPL-2--autoconf-exception AND LicenseRef-GPL-2--libtool-exception AND GPL-3.0-only AND LicenseRef-GPL-3--autoconf-exception AND LGPL-2.1-only AND LGPL-2.1-or-later AND MIT AND LicenseRef-permissive-autoconf-m4 AND LicenseRef-permissive-autoconf-m4-no-warranty AND LicenseRef-permissive-configure AND LicenseRef-permissive-fsf AND LicenseRef-permissive-makefile-in would go here]
+
+
+License: BSD-3-Clause AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-g10-permissive
+---------------------------------------------------------------------------------------------------------------------------------
+- libgpg-error0 1.43-3
+
+[License text for BSD-3-Clause AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-g10-permissive would go here]
+
+
+License: BSD-3-Clause AND LicenseRef-Expat AND GPL-2.0-only AND Zlib
+--------------------------------------------------------------------
+- libzstd1 1.4.8+dfsg-3build1
+
+[License text for BSD-3-Clause AND LicenseRef-Expat AND GPL-2.0-only AND Zlib would go here]
+
+
+License: BSD-3-Clause AND LicenseRef-MIT-X11 AND X11
+----------------------------------------------------
+- libncurses6 6.3-2ubuntu0.1
+- libncursesw6 6.3-2ubuntu0.1
+- libtinfo6 6.3-2ubuntu0.1
+- ncurses-base 6.3-2ubuntu0.1
+- ncurses-bin 6.3-2ubuntu0.1
+
+[License text for BSD-3-Clause AND LicenseRef-MIT-X11 AND X11 would go here]
+
+
+License: CC0-1.0 AND LicenseRef-Expat AND GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-public-domain
+------------------------------------------------------------------------------------------------------------------------------------------------
+- libsystemd0 249.11-0ubuntu3.16
+- libudev1 249.11-0ubuntu3.16
+
+[License text for CC0-1.0 AND LicenseRef-Expat AND GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-public-domain would go here]
+
+
+License: GFDL-1.2-only AND GPL-3.0-only
+---------------------------------------
+- wget 1.21.2-2ubuntu1.1
+
+[License text for GFDL-1.2-only AND GPL-3.0-only would go here]
+
+
+License: GFDL-1.3-only AND GPL-2.0-only AND LGPL-2.1-only
+---------------------------------------------------------
+- libc-bin 2.35-0ubuntu3.10
+- libc6 2.35-0ubuntu3.10
+
+[License text for GFDL-1.3-only AND GPL-2.0-only AND LGPL-2.1-only would go here]
+
+
+License: GFDL-1.3-only AND GPL-3.0-only
+---------------------------------------
+- findutils 4.8.0-1ubuntu3
+
+[License text for GFDL-1.3-only AND GPL-3.0-only would go here]
+
+
+License: GFDL-1.3-only AND GPL-3.0-only AND LicenseRef-LGPL AND LGPL-2.1-only
+-----------------------------------------------------------------------------
+- libtasn1-6 4.18.0-4ubuntu0.1
+
+[License text for GFDL-1.3-only AND GPL-3.0-only AND LicenseRef-LGPL AND LGPL-2.1-only would go here]
+
+
+License: GPL-1.0-only AND GPL-2.0-only AND LGPL-2.1-only
+--------------------------------------------------------
+- libaudit-common 1:3.0.7-1build1
+- libaudit1 1:3.0.7-1build1
+
+[License text for GPL-1.0-only AND GPL-2.0-only AND LGPL-2.1-only would go here]
+
+
+License: GPL-2.0-only
+---------------------
+- adduser 3.118ubuntu5
+- bindfs 1.14.7-1
+- debianutils 5.5-1ubuntu2
+- hostname 3.23ubuntu2
+- libgssapi-krb5-2 1.19.2-2ubuntu0.7
+- libk5crypto3 1.19.2-2ubuntu0.7
+- libkrb5-3 1.19.2-2ubuntu0.7
+- libkrb5support0 1.19.2-2ubuntu0.7
+- login 1:4.8.1-2ubuntu2.2
+- mawk 1.3.4.20200120-3
+- passwd 1:4.8.1-2ubuntu2.2
+
+[License text for GPL-2.0-only would go here]
+
+
+License: GPL-2.0-only AND GPL-2.0-or-later
+------------------------------------------
+- sysvinit-utils 3.01-1ubuntu1
+
+[License text for GPL-2.0-only AND GPL-2.0-or-later would go here]
+
+
+License: GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND LicenseRef-Unicode
+-----------------------------------------------------------------------------------------------------------------------------------------------
+- libidn2-0 2.3.2-2build1
+
+[License text for GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND LicenseRef-Unicode would go here]
+
+
+License: GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only
+------------------------------------------------------------
+- fuse 2.9.9-5ubuntu3
+- libfuse2 2.9.9-5ubuntu3
+
+[License text for GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only would go here]
+
+
+License: GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later
+----------------------------------------------------------------------------------
+- libkeyutils1 1.6.1-2ubuntu3
+
+[License text for GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later would go here]
+
+
+License: GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later
+--------------------------------------------------------------------------------------------------------------------------
+- libprocps8 2:3.3.17-6ubuntu2.1
+- procps 2:3.3.17-6ubuntu2.1
+
+[License text for GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later would go here]
+
+
+License: GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only
+----------------------------------------------------------------------------------
+- libacl1 2.3.1-1
+- libattr1 1:2.5.1-1build1
+
+[License text for GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only would go here]
+
+
+License: GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-public-domain
+-----------------------------------------------------------------------
+- libsqlite3-0 3.37.2-2ubuntu0.5
+
+[License text for GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-public-domain would go here]
+
+
+License: GPL-2.0-only AND GPL-2.0-or-later AND MPL-2.0
+------------------------------------------------------
+- ca-certificates 20240203~22.04.1
+
+[License text for GPL-2.0-only AND GPL-2.0-or-later AND MPL-2.0 would go here]
+
+
+License: GPL-2.0-only AND GPL-3.0-only
+--------------------------------------
+- tar 1.34+dfsg-1ubuntu0.1.22.04.2
+
+[License text for GPL-2.0-only AND GPL-3.0-only would go here]
+
+
+License: GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only
+--------------------------------------------------------
+- libcap-ng0 0.7.9-2.2build3
+
+[License text for GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only would go here]
+
+
+License: GPL-2.0-only AND GPL-3.0-only AND LGPL-3.0-only
+--------------------------------------------------------
+- libelf1 0.186-1ubuntu0.1
+
+[License text for GPL-2.0-only AND GPL-3.0-only AND LGPL-3.0-only would go here]
+
+
+License: GPL-2.0-only AND LGPL-2.0-only
+---------------------------------------
+- e2fsprogs 1.46.5-2ubuntu1.2
+- libext2fs2 1.46.5-2ubuntu1.2
+- logsave 1.46.5-2ubuntu1.2
+
+[License text for GPL-2.0-only AND LGPL-2.0-only would go here]
+
+
+License: GPL-2.0-only AND LGPL-2.1-only
+---------------------------------------
+- libselinux1 3.3-1build2
+- libsensors-config 1:3.6.0-7ubuntu1
+- libsensors5 1:3.6.0-7ubuntu1
+
+[License text for GPL-2.0-only AND LGPL-2.1-only would go here]
+
+
+License: GPL-2.0-only AND LicenseRef-GPLv2-
+-------------------------------------------
+- apt 2.4.14
+- libapt-pkg6.0 2.4.14
+
+[License text for GPL-2.0-only AND LicenseRef-GPLv2- would go here]
+
+
+License: GPL-2.0-only AND LicenseRef-LGPL
+-----------------------------------------
+- libgcrypt20 1.9.4-3ubuntu3
+
+[License text for GPL-2.0-only AND LicenseRef-LGPL would go here]
+
+
+License: GPL-2.0-only AND LicenseRef-public-domain
+--------------------------------------------------
+- base-passwd 3.5.52build1
+
+[License text for GPL-2.0-only AND LicenseRef-public-domain would go here]
+
+
+License: GPL-3.0-only
+---------------------
+- bash 5.1-6ubuntu1.1
+- coreutils 8.32-4.1ubuntu1.2
+- sed 4.8-1ubuntu2
+
+[License text for GPL-3.0-only would go here]
+
+
+License: GPL-3.0-only AND GPL-3.0-or-later
+------------------------------------------
+- grep 3.7-1build1
+
+[License text for GPL-3.0-only AND GPL-3.0-or-later would go here]
+
+
+License: GPL-3.0-only AND MIT
+-----------------------------
+- libicu70 70.1-2
+
+[License text for GPL-3.0-only AND MIT would go here]
+
+
+License: ISC
+------------
+- requests-oauthlib 2.0.0
+
+[License text for ISC would go here]
+
+
+License: ISC AND LicenseRef-MIT-1
+---------------------------------
+- libxml2 2.9.13+dfsg-1ubuntu0.7
+
+[License text for ISC AND LicenseRef-MIT-1 would go here]
+
+
+License: LGPL-2.1-only
+----------------------
+- libseccomp2 2.5.3-2ubuntu3~22.04.1
+
+[License text for LGPL-2.1-only would go here]
+
+
+License: LicenseRef-18f9b048c679a534ccd8c62e75f670bbb91ea88ab8fc6c162512358e8cb83f7d
+------------------------------------------------------------------------------------
+- kiwisolver 1.4.9
+
+[License text for LicenseRef-18f9b048c679a534ccd8c62e75f670bbb91ea88ab8fc6c162512358e8cb83f7d would go here]
+
+
+License: LicenseRef-1efd6de77e03a0dc2652da8c425085e0284cc0e6eb17e64589643ed21ab0054f
+------------------------------------------------------------------------------------
+- pandas 2.3.1
+
+[License text for LicenseRef-1efd6de77e03a0dc2652da8c425085e0284cc0e6eb17e64589643ed21ab0054f would go here]
+
+
+License: LicenseRef-APACHE-2-LLVM-EXCEPTIONS AND Apache-2.0 AND BSD-3-Clause AND BSD-3-Clause AND MIT AND LicenseRef-Python AND LicenseRef-solar-public-domain
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+- libllvm15 1:15.0.7-0ubuntu0.22.04.3
+
+[License text for LicenseRef-APACHE-2-LLVM-EXCEPTIONS AND Apache-2.0 AND BSD-3-Clause AND BSD-3-Clause AND MIT AND LicenseRef-Python AND LicenseRef-solar-public-domain would go here]
+
+
+License: LicenseRef-All-permissive AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-configure AND LicenseRef-installsh
+--------------------------------------------------------------------------------------------------------------------------
+- sensible-utils 0.0.17
+
+[License text for LicenseRef-All-permissive AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-configure AND LicenseRef-installsh would go here]
+
+
+License: LicenseRef-Apache-2.0
+------------------------------
+- asttokens 3.0.0
+- google-auth 2.40.3
+- opencv-python-headless 4.11.0.86
+- requests-file 2.1.0
+- requests-toolbelt 1.0.0
+
+[License text for LicenseRef-Apache-2.0 would go here]
+
+
+License: LicenseRef-Apache-2.0-with-LLVM-exceptions
+---------------------------------------------------
+- umf 0.11.0
+
+[License text for LicenseRef-Apache-2.0-with-LLVM-exceptions would go here]
+
+
+License: LicenseRef-Apache-License-Version-2.0
+----------------------------------------------
+- kubernetes 33.1.0
+
+[License text for LicenseRef-Apache-License-Version-2.0 would go here]
+
+
+License: LicenseRef-Artistic AND Artistic-2.0 AND LicenseRef-Artistic-dist AND BSD-3-Clause AND LicenseRef-BSD-3-clause-GENERIC AND LicenseRef-BSD-3-clause-with-weird-numbering AND LicenseRef-BSD-4-clause-POWERDOG AND LicenseRef-BZIP AND LicenseRef-DONT-CHANGE-THE-GPL AND LicenseRef-Expat AND GPL-1.0-only AND GPL-1.0-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-GPL-3--WITH-BISON-EXCEPTION AND LicenseRef-HSIEH-BSD AND LicenseRef-HSIEH-DERIVATIVE AND LGPL-2.1-only AND LicenseRef-REGCOMP AND LicenseRef-REGCOMP- AND LicenseRef-RRA-KEEP-THIS-NOTICE AND LicenseRef-SDBM-PUBLIC-DOMAIN AND LicenseRef-TEXT-TABS AND LicenseRef-Unicode AND Zlib
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- perl-base 5.34.0-3ubuntu1.4
+
+[License text for LicenseRef-Artistic AND Artistic-2.0 AND LicenseRef-Artistic-dist AND BSD-3-Clause AND LicenseRef-BSD-3-clause-GENERIC AND LicenseRef-BSD-3-clause-with-weird-numbering AND LicenseRef-BSD-4-clause-POWERDOG AND LicenseRef-BZIP AND LicenseRef-DONT-CHANGE-THE-GPL AND LicenseRef-Expat AND GPL-1.0-only AND GPL-1.0-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-GPL-3--WITH-BISON-EXCEPTION AND LicenseRef-HSIEH-BSD AND LicenseRef-HSIEH-DERIVATIVE AND LGPL-2.1-only AND LicenseRef-REGCOMP AND LicenseRef-REGCOMP- AND LicenseRef-RRA-KEEP-THIS-NOTICE AND LicenseRef-SDBM-PUBLIC-DOMAIN AND LicenseRef-TEXT-TABS AND LicenseRef-Unicode AND Zlib would go here]
+
+
+License: LicenseRef-Artistic AND GFDL-1.2-only AND LicenseRef-GPL AND GPL-2.0-only AND GPL-3.0-only AND LicenseRef-LGPL
+-----------------------------------------------------------------------------------------------------------------------
+- gcc-12-base 12.3.0-1ubuntu1~22.04
+- libgcc-s1 12.3.0-1ubuntu1~22.04
+- libgomp1 12.3.0-1ubuntu1~22.04
+- libstdc++6 12.3.0-1ubuntu1~22.04
+
+[License text for LicenseRef-Artistic AND GFDL-1.2-only AND LicenseRef-GPL AND GPL-2.0-only AND GPL-3.0-only AND LicenseRef-LGPL would go here]
+
+
+License: LicenseRef-Autoconf AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-PD AND LicenseRef-PD-debian AND LicenseRef-config-h AND LicenseRef-noderivs AND LicenseRef-permissive-fsf AND LicenseRef-permissive-nowarranty AND LicenseRef-probably-PD
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- liblzma5 5.2.5-2ubuntu1
+
+[License text for LicenseRef-Autoconf AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-PD AND LicenseRef-PD-debian AND LicenseRef-config-h AND LicenseRef-noderivs AND LicenseRef-permissive-fsf AND LicenseRef-permissive-nowarranty AND LicenseRef-probably-PD would go here]
+
+
+License: LicenseRef-BSD
+-----------------------
+- fastjsonschema 2.21.1
+- mpmath 1.3.0
+- nest-asyncio 1.6.0
+- pyasn1-modules 0.4.2
+- pysocks 1.7.1
+- sympy 1.14.0
+- torchvision 0.22.1+cpu
+
+[License text for LicenseRef-BSD would go here]
+
+
+License: LicenseRef-BSD AND GPL-2.0-only AND GPL-2.0-or-later
+-------------------------------------------------------------
+- libmpdec3 2.5.1-2build2
+
+[License text for LicenseRef-BSD AND GPL-2.0-only AND GPL-2.0-or-later would go here]
+
+
+License: LicenseRef-BSD-3-Clause
+--------------------------------
+- joblib 1.5.1
+
+[License text for LicenseRef-BSD-3-Clause would go here]
+
+
+License: LicenseRef-BSD-3-Clause-License
+----------------------------------------
+- ipywidgets 8.1.7
+- widgetsnbextension 4.0.14
+
+[License text for LicenseRef-BSD-3-Clause-License would go here]
+
+
+License: LicenseRef-BSD-variant AND GPL-2.0-only
+------------------------------------------------
+- libbz2-1.0 1.0.8-5build1
+
+[License text for LicenseRef-BSD-variant AND GPL-2.0-only would go here]
+
+
+License: LicenseRef-By AND GPL-2.0-only AND LicenseRef-Permission AND LicenseRef-Redistribution AND LicenseRef-This
+-------------------------------------------------------------------------------------------------------------------
+- libpython3.10-minimal 3.10.12-1~22.04.10
+- libpython3.10-stdlib 3.10.12-1~22.04.10
+- python3.10 3.10.12-1~22.04.10
+- python3.10-minimal 3.10.12-1~22.04.10
+
+[License text for LicenseRef-By AND GPL-2.0-only AND LicenseRef-Permission AND LicenseRef-Redistribution AND LicenseRef-This would go here]
+
+
+License: LicenseRef-Chromium AND MIT
+------------------------------------
+- libpsl5 0.21.0-1.2build2
+
+[License text for LicenseRef-Chromium AND MIT would go here]
+
+
+License: LicenseRef-Dual-License
+--------------------------------
+- python-dateutil 2.9.0.post0
+
+[License text for LicenseRef-Dual-License would go here]
+
+
+License: LicenseRef-Expat AND GPL-2.0-or-later AND LicenseRef-LGPL
+------------------------------------------------------------------
+- libglib2.0-0 2.72.4-0ubuntu2.5
+
+[License text for LicenseRef-Expat AND GPL-2.0-or-later AND LicenseRef-LGPL would go here]
+
+
+License: LicenseRef-Expat AND GPL-3.0-only
+------------------------------------------
+- python3-wheel 0.37.1-2ubuntu0.22.04.1
+
+[License text for LicenseRef-Expat AND GPL-3.0-only would go here]
+
+
+License: LicenseRef-Expat AND LicenseRef-GAP AND LicenseRef-GPL AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-3.0-or-later AND LicenseRef-public-domain
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- libhogweed6 3.7.3-1build2
+- libnettle8 3.7.3-1build2
+
+[License text for LicenseRef-Expat AND LicenseRef-GAP AND LicenseRef-GPL AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-3.0-or-later AND LicenseRef-public-domain would go here]
+
+
+License: LicenseRef-FSF-manpages AND LicenseRef-GFDL-1.3--no-invariant AND LicenseRef-GFDL-3 AND GPL-3.0-only AND GPL-3.0-or-later
+----------------------------------------------------------------------------------------------------------------------------------
+- gzip 1.10-4ubuntu4.1
+
+[License text for LicenseRef-FSF-manpages AND LicenseRef-GFDL-1.3--no-invariant AND LicenseRef-GFDL-3 AND GPL-3.0-only AND GPL-3.0-or-later would go here]
+
+
+License: LicenseRef-FreeSoftware AND GFDL-1.2-only AND GFDL-1.2-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- libunistring2 1.0-1
+
+[License text for LicenseRef-FreeSoftware AND GFDL-1.2-only AND GFDL-1.2-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT would go here]
+
+
+License: LicenseRef-GFDL AND GPL-3.0-only
+-----------------------------------------
+- libreadline8 8.1.2-1
+- readline-common 8.1.2-1
+
+[License text for LicenseRef-GFDL AND GPL-3.0-only would go here]
+
+
+License: LicenseRef-GFDL AND LicenseRef-GPL
+-------------------------------------------
+- diffutils 1:3.8-0ubuntu2
+
+[License text for LicenseRef-GFDL AND LicenseRef-GPL would go here]
+
+
+License: LicenseRef-GPL
+-----------------------
+- base-files 12ubuntu4.7
+- libffi8 3.4.2-4
+- libpam-modules 1.4.0-11ubuntu2.6
+- libpam-modules-bin 1.4.0-11ubuntu2.6
+- libpam-runtime 1.4.0-11ubuntu2.6
+- libpam0g 1.4.0-11ubuntu2.6
+- libpciaccess0 0.16-3
+- ubuntu-keyring 2021.03.26
+
+[License text for LicenseRef-GPL would go here]
+
+
+License: LicenseRef-GPL AND GPL-2.0-only
+----------------------------------------
+- usrmerge 25ubuntu2
+
+[License text for LicenseRef-GPL AND GPL-2.0-only would go here]
+
+
+License: LicenseRef-GPL AND GPL-2.0-only AND GPL-3.0-only AND LGPL-3.0-only
+---------------------------------------------------------------------------
+- libgmp10 2:6.2.1+dfsg-3ubuntu1
+
+[License text for LicenseRef-GPL AND GPL-2.0-only AND GPL-3.0-only AND LGPL-3.0-only would go here]
+
+
+License: LicenseRef-GPL AND LicenseRef-LGPL
+-------------------------------------------
+- libsemanage-common 3.3-1build2
+- libsemanage2 3.3-1build2
+- libsepol2 3.3-1build1
+
+[License text for LicenseRef-GPL AND LicenseRef-LGPL would go here]
+
+
+License: LicenseRef-ISC-license
+-------------------------------
+- pexpect 4.9.0
+
+[License text for LicenseRef-ISC-license would go here]
+
+
+License: LicenseRef-Intel-End-User-License-Agreement-for-Developer-Tools
+------------------------------------------------------------------------
+- intel-cmplr-lib-ur 2025.2.0
+- intel-openmp 2025.2.0
+
+[License text for LicenseRef-Intel-End-User-License-Agreement-for-Developer-Tools would go here]
+
+
+License: LicenseRef-Intel-Simplified-Software-License
+-----------------------------------------------------
+- tcmlib 1.4.0
+
+[License text for LicenseRef-Intel-Simplified-Software-License would go here]
+
+
+License: LicenseRef-MIT-License
+-------------------------------
+- beautifulsoup4 4.13.4
+
+[License text for LicenseRef-MIT-License would go here]
+
+
+License: LicenseRef-UNKNOWN
+---------------------------
+- addict 2.4.0
+- dt-apriltags 3.1.7
+- hloc 1.3
+- ptyprocess 0.7.0
+- setuptools 59.6.0
+- third-party 1.0.0
+
+[License text for LicenseRef-UNKNOWN would go here]
+
+
+License: LicenseRef-ad-hoc
+--------------------------
+- media-types 7.0.0
+
+[License text for LicenseRef-ad-hoc would go here]
+
+
+License: LicenseRef-cd062fca27f575a726b633cc431dfa2e97f29899a6f811ab0662c6840ff19231
+------------------------------------------------------------------------------------
+- matplotlib 3.10.5
+
+[License text for LicenseRef-cd062fca27f575a726b633cc431dfa2e97f29899a6f811ab0662c6840ff19231 would go here]
+
+
+License: LicenseRef-https---www.apache.org-licenses-LICENSE-2.0
+---------------------------------------------------------------
+- intel-extension-for-pytorch 2.7.0
+
+[License text for LicenseRef-https---www.apache.org-licenses-LICENSE-2.0 would go here]
+
+
+License: MIT
+------------
+- @plotly/dash-jupyterlab 0.4.3
+- attrs 25.3.0
+- cachetools 5.5.2
+- charset-normalizer 3.4.3
+- configargparse 1.7.1
+- dash 3.2.0
+- durationpy 0.10
+- executing 2.2.0
+- fonttools 4.59.0
+- gdown 5.2.0
+- iniconfig 2.1.0
+- jedi 0.19.2
+- jsonschema 4.25.0
+- jsonschema-specifications 2025.4.1
+- jupyterlab-plotly 6.0.1
+- jupyterlab-plotly 6.0.1
+- libexpat1 2.4.7-1ubuntu0.6
+- onvif-zeep 0.2.12
+- open3d 0.19.0
+- open3d 0.19.0
+- open3d-cpu 0.19.0
+- parso 0.8.4
+- pip 22.0.2
+- platformdirs 4.3.8
+- plotly 6.2.0
+- pluggy 1.6.0
+- pure-eval 0.2.3
+- pyquaternion 0.9.9
+- pytest 8.4.1
+- pytz 2025.2
+- pyyaml 6.0.2
+- referencing 0.36.2
+- rpds-py 0.27.0
+- six 1.17.0
+- soupsieve 2.7
+- stack-data 0.6.3
+- trimesh 4.7.3
+- urllib3 2.5.0
+- wcwidth 0.2.13
+- wheel 0.37.1
+- zeep 4.3.1
+- zipp 3.23.0
+
+[License text for MIT would go here]
+
+
+License: MIT-CMU
+----------------
+- pillow 11.3.0
+
+[License text for MIT-CMU would go here]
+
+
+License: MPL-2.0
+----------------
+- certifi 2025.8.3
+
+[License text for MPL-2.0 would go here]
+
+
+License: NOASSERTION
+--------------------
+- blinker 1.9.0
+- exceptiongroup 1.3.0
+- idna 3.10
+- importlib-metadata 8.7.0
+- itsdangerous 2.2.0
+- jinja2 3.1.6
+- libcom-err2 1.46.5-2ubuntu1.2
+- libcrypt1 1:4.4.27-1
+- libdb5.3 5.3.28+dfsg1-0.8ubuntu3
+- libdebconfclient0 0.261ubuntu1
+- libdrm-amdgpu1 2.4.113-2~ubuntu0.22.04.1
+- libdrm-common 2.4.113-2~ubuntu0.22.04.1
+- libdrm-intel1 2.4.113-2~ubuntu0.22.04.1
+- libdrm-nouveau2 2.4.113-2~ubuntu0.22.04.1
+- libdrm-radeon1 2.4.113-2~ubuntu0.22.04.1
+- libdrm2 2.4.113-2~ubuntu0.22.04.1
+- libpcre2-8-0 10.39-3ubuntu0.1
+- libpcre3 2:8.39-13ubuntu0.22.04.1
+- libpython3-stdlib 3.10.6-1~22.04.1
+- libss2 1.46.5-2ubuntu1.2
+- libx11-6 2:1.7.5-1ubuntu0.3
+- libx11-data 2:1.7.5-1ubuntu0.3
+- libx11-xcb1 2:1.7.5-1ubuntu0.3
+- libxau6 1:1.0.9-1build5
+- libxcb-dri2-0 1.14-3ubuntu3
+- libxcb-dri3-0 1.14-3ubuntu3
+- libxcb-glx0 1.14-3ubuntu3
+- libxcb-present0 1.14-3ubuntu3
+- libxcb-randr0 1.14-3ubuntu3
+- libxcb-shm0 1.14-3ubuntu3
+- libxcb-sync1 1.14-3ubuntu3
+- libxcb-xfixes0 1.14-3ubuntu3
+- libxcb1 1.14-3ubuntu3
+- libxdmcp6 1:1.1.3-0ubuntu5
+- libxext6 2:1.3.4-1build1
+- libxfixes3 1:6.0.0-1
+- libxshmfence1 1.3-1build4
+- libxxf86vm1 1:1.1.4-1build3
+- narwhals 2.1.0
+- networkx 3.4.2
+- packaging 25.0
+- prompt-toolkit 3.0.51
+- pycolmap 0.4.0
+- pyparsing 3.2.3
+- python3 3.10.6-1~22.04.1
+- python3-distutils 3.10.8-1~22.04
+- python3-lib2to3 3.10.8-1~22.04
+- python3-minimal 3.10.6-1~22.04.1
+- sbom 
+- tomli 2.2.1
+- werkzeug 3.1.3
+
+[License text for NOASSERTION would go here]
+
+
+License: PSF-2.0
+----------------
+- typing-extensions 4.14.1
+
+[License text for PSF-2.0 would go here]
+
+
+License: Unlicense
+------------------
+- filelock 3.18.0
+
+[License text for Unlicense would go here]
+
+
+License: X11
+------------
+- libwayland-client0 1.20.0-1ubuntu0.1
+- libwayland-server0 1.20.0-1ubuntu0.1
+
+[License text for X11 would go here]
+
+
+License: Zlib
+-------------
+- zlib1g 1:1.2.11.dfsg-2ubuntu9.2
+
+[License text for Zlib would go here]
+
+
+PACKAGES SUBJECT TO GPL LICENSES (with licenses expression)
+--------------------------------
+- adduser 3.118ubuntu5  (GPL-2.0-only)
+- apt 2.4.14  (GPL-2.0-only AND LicenseRef-GPLv2-)
+- base-passwd 3.5.52build1  (GPL-2.0-only AND LicenseRef-public-domain)
+- bash 5.1-6ubuntu1.1  (GPL-3.0-only)
+- bindfs 1.14.7-1  (GPL-2.0-only)
+- bsdutils 1:2.37.2-4ubuntu3.4  (BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT AND LicenseRef-public-domain)
+- ca-certificates 20240203~22.04.1  (GPL-2.0-only AND GPL-2.0-or-later AND MPL-2.0)
+- coreutils 8.32-4.1ubuntu1.2  (GPL-3.0-only)
+- dash 0.5.11+git20210903+057cd650a4ed-3build1  (BSD-3-Clause AND BSD-3-Clause AND LicenseRef-Expat AND FSFUL AND FSFULLR AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-public-domain)
+- debianutils 5.5-1ubuntu2  (GPL-2.0-only)
+- dpkg 1.21.1ubuntu2.3  (BSD-2-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-public-domain-md5 AND LicenseRef-public-domain-s-s-d)
+- e2fsprogs 1.46.5-2ubuntu1.2  (GPL-2.0-only AND LGPL-2.0-only)
+- findutils 4.8.0-1ubuntu3  (GFDL-1.3-only AND GPL-3.0-only)
+- fuse 2.9.9-5ubuntu3  (GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only)
+- gcc-12-base 12.3.0-1ubuntu1~22.04  (LicenseRef-Artistic AND GFDL-1.2-only AND LicenseRef-GPL AND GPL-2.0-only AND GPL-3.0-only AND LicenseRef-LGPL)
+- gpgv 2.2.27-3ubuntu2.4  (BSD-3-Clause AND CC0-1.0 AND LicenseRef-Expat AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND LicenseRef-RFC-Reference AND LicenseRef-TinySCHEME AND LicenseRef-permissive)
+- grep 3.7-1build1  (GPL-3.0-only AND GPL-3.0-or-later)
+- gzip 1.10-4ubuntu4.1  (LicenseRef-FSF-manpages AND LicenseRef-GFDL-1.3--no-invariant AND LicenseRef-GFDL-3 AND GPL-3.0-only AND GPL-3.0-or-later)
+- hostname 3.23ubuntu2  (GPL-2.0-only)
+- init-system-helpers 1.62  (BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later)
+- libacl1 2.3.1-1  (GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only)
+- libapt-pkg6.0 2.4.14  (GPL-2.0-only AND LicenseRef-GPLv2-)
+- libattr1 1:2.5.1-1build1  (GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only)
+- libaudit-common 1:3.0.7-1build1  (GPL-1.0-only AND GPL-2.0-only AND LGPL-2.1-only)
+- libaudit1 1:3.0.7-1build1  (GPL-1.0-only AND GPL-2.0-only AND LGPL-2.1-only)
+- libblkid1 2.37.2-4ubuntu3.4  (BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT AND LicenseRef-public-domain)
+- libbz2-1.0 1.0.8-5build1  (LicenseRef-BSD-variant AND GPL-2.0-only)
+- libc-bin 2.35-0ubuntu3.10  (GFDL-1.3-only AND GPL-2.0-only AND LGPL-2.1-only)
+- libc6 2.35-0ubuntu3.10  (GFDL-1.3-only AND GPL-2.0-only AND LGPL-2.1-only)
+- libcap-ng0 0.7.9-2.2build3  (GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only)
+- libcap2 1:2.44-1ubuntu0.22.04.2  (BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later)
+- libegl-mesa0 23.2.1-1ubuntu3.1~22.04.3  (Apache-2.0 AND BSD-2-Clause AND LicenseRef-BSD-3-google AND LicenseRef-BSL AND LicenseRef-GPL AND GPL-1.0-only AND GPL-1.0-or-later AND GPL-2.0-only AND LicenseRef-Khronos AND MIT AND LicenseRef-MLAA AND LicenseRef-SGI)
+- libegl1 1.4.0-1  (Apache-2.0 AND BSD-1-Clause AND LicenseRef-GPL AND GPL-3.0-only AND GPL-3.0-or-later AND MIT)
+- libelf1 0.186-1ubuntu0.1  (GPL-2.0-only AND GPL-3.0-only AND LGPL-3.0-only)
+- libext2fs2 1.46.5-2ubuntu1.2  (GPL-2.0-only AND LGPL-2.0-only)
+- libfuse2 2.9.9-5ubuntu3  (GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only)
+- libgbm1 23.2.1-1ubuntu3.1~22.04.3  (Apache-2.0 AND BSD-2-Clause AND LicenseRef-BSD-3-google AND LicenseRef-BSL AND LicenseRef-GPL AND GPL-1.0-only AND GPL-1.0-or-later AND GPL-2.0-only AND LicenseRef-Khronos AND MIT AND LicenseRef-MLAA AND LicenseRef-SGI)
+- libgcc-s1 12.3.0-1ubuntu1~22.04  (LicenseRef-Artistic AND GFDL-1.2-only AND LicenseRef-GPL AND GPL-2.0-only AND GPL-3.0-only AND LicenseRef-LGPL)
+- libgcrypt20 1.9.4-3ubuntu3  (GPL-2.0-only AND LicenseRef-LGPL)
+- libgl1 1.4.0-1  (Apache-2.0 AND BSD-1-Clause AND LicenseRef-GPL AND GPL-3.0-only AND GPL-3.0-or-later AND MIT)
+- libgl1-mesa-dri 23.2.1-1ubuntu3.1~22.04.3  (Apache-2.0 AND BSD-2-Clause AND LicenseRef-BSD-3-google AND LicenseRef-BSL AND LicenseRef-GPL AND GPL-1.0-only AND GPL-1.0-or-later AND GPL-2.0-only AND LicenseRef-Khronos AND MIT AND LicenseRef-MLAA AND LicenseRef-SGI)
+- libglapi-mesa 23.2.1-1ubuntu3.1~22.04.3  (Apache-2.0 AND BSD-2-Clause AND LicenseRef-BSD-3-google AND LicenseRef-BSL AND LicenseRef-GPL AND GPL-1.0-only AND GPL-1.0-or-later AND GPL-2.0-only AND LicenseRef-Khronos AND MIT AND LicenseRef-MLAA AND LicenseRef-SGI)
+- libglib2.0-0 2.72.4-0ubuntu2.5  (LicenseRef-Expat AND GPL-2.0-or-later AND LicenseRef-LGPL)
+- libglvnd0 1.4.0-1  (Apache-2.0 AND BSD-1-Clause AND LicenseRef-GPL AND GPL-3.0-only AND GPL-3.0-or-later AND MIT)
+- libglx-mesa0 23.2.1-1ubuntu3.1~22.04.3  (Apache-2.0 AND BSD-2-Clause AND LicenseRef-BSD-3-google AND LicenseRef-BSL AND LicenseRef-GPL AND GPL-1.0-only AND GPL-1.0-or-later AND GPL-2.0-only AND LicenseRef-Khronos AND MIT AND LicenseRef-MLAA AND LicenseRef-SGI)
+- libglx0 1.4.0-1  (Apache-2.0 AND BSD-1-Clause AND LicenseRef-GPL AND GPL-3.0-only AND GPL-3.0-or-later AND MIT)
+- libgmp10 2:6.2.1+dfsg-3ubuntu1  (LicenseRef-GPL AND GPL-2.0-only AND GPL-3.0-only AND LGPL-3.0-only)
+- libgnutls30 3.7.3-4ubuntu1.7  (Apache-2.0 AND BSD-3-Clause AND LicenseRef-CC0 AND LicenseRef-Expat AND GFDL-1.3-only AND LicenseRef-GPL AND GPL-3.0-only AND LicenseRef-GPLv3- AND LicenseRef-LGPL AND LGPL-3.0-only AND LicenseRef-LGPLv2.1- AND LicenseRef-LGPLv3--or-GPLv2- AND LicenseRef-The)
+- libgomp1 12.3.0-1ubuntu1~22.04  (LicenseRef-Artistic AND GFDL-1.2-only AND LicenseRef-GPL AND GPL-2.0-only AND GPL-3.0-only AND LicenseRef-LGPL)
+- libgpg-error0 1.43-3  (BSD-3-Clause AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-g10-permissive)
+- libgssapi-krb5-2 1.19.2-2ubuntu0.7  (GPL-2.0-only)
+- libhogweed6 3.7.3-1build2  (LicenseRef-Expat AND LicenseRef-GAP AND LicenseRef-GPL AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-3.0-or-later AND LicenseRef-public-domain)
+- libicu70 70.1-2  (GPL-3.0-only AND MIT)
+- libidn2-0 2.3.2-2build1  (GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND LicenseRef-Unicode)
+- libk5crypto3 1.19.2-2ubuntu0.7  (GPL-2.0-only)
+- libkeyutils1 1.6.1-2ubuntu3  (GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later)
+- libkrb5-3 1.19.2-2ubuntu0.7  (GPL-2.0-only)
+- libkrb5support0 1.19.2-2ubuntu0.7  (GPL-2.0-only)
+- liblz4-1 1.9.3-2build2  (BSD-2-Clause AND GPL-2.0-only AND GPL-2.0-or-later)
+- liblzma5 5.2.5-2ubuntu1  (LicenseRef-Autoconf AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-PD AND LicenseRef-PD-debian AND LicenseRef-config-h AND LicenseRef-noderivs AND LicenseRef-permissive-fsf AND LicenseRef-permissive-nowarranty AND LicenseRef-probably-PD)
+- libmount1 2.37.2-4ubuntu3.4  (BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT AND LicenseRef-public-domain)
+- libmpdec3 2.5.1-2build2  (LicenseRef-BSD AND GPL-2.0-only AND GPL-2.0-or-later)
+- libnettle8 3.7.3-1build2  (LicenseRef-Expat AND LicenseRef-GAP AND LicenseRef-GPL AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-3.0-or-later AND LicenseRef-public-domain)
+- libnsl2 1.3.0-2build2  (BSD-3-Clause AND GPL-2.0-only AND LicenseRef-GPL-2--autoconf-exception AND LicenseRef-GPL-2--libtool-exception AND GPL-3.0-only AND LicenseRef-GPL-3--autoconf-exception AND LGPL-2.1-only AND LGPL-2.1-or-later AND MIT AND LicenseRef-permissive-autoconf-m4 AND LicenseRef-permissive-autoconf-m4-no-warranty AND LicenseRef-permissive-configure AND LicenseRef-permissive-fsf AND LicenseRef-permissive-makefile-in)
+- libprocps8 2:3.3.17-6ubuntu2.1  (GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later)
+- libpython3.10-minimal 3.10.12-1~22.04.10  (LicenseRef-By AND GPL-2.0-only AND LicenseRef-Permission AND LicenseRef-Redistribution AND LicenseRef-This)
+- libpython3.10-stdlib 3.10.12-1~22.04.10  (LicenseRef-By AND GPL-2.0-only AND LicenseRef-Permission AND LicenseRef-Redistribution AND LicenseRef-This)
+- libreadline8 8.1.2-1  (LicenseRef-GFDL AND GPL-3.0-only)
+- libselinux1 3.3-1build2  (GPL-2.0-only AND LGPL-2.1-only)
+- libsensors-config 1:3.6.0-7ubuntu1  (GPL-2.0-only AND LGPL-2.1-only)
+- libsensors5 1:3.6.0-7ubuntu1  (GPL-2.0-only AND LGPL-2.1-only)
+- libsmartcols1 2.37.2-4ubuntu3.4  (BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT AND LicenseRef-public-domain)
+- libsqlite3-0 3.37.2-2ubuntu0.5  (GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-public-domain)
+- libssl3 3.0.2-0ubuntu1.19  (Apache-2.0 AND LicenseRef-Artistic AND GPL-1.0-only AND GPL-1.0-or-later)
+- libstdc++6 12.3.0-1ubuntu1~22.04  (LicenseRef-Artistic AND GFDL-1.2-only AND LicenseRef-GPL AND GPL-2.0-only AND GPL-3.0-only AND LicenseRef-LGPL)
+- libsystemd0 249.11-0ubuntu3.16  (CC0-1.0 AND LicenseRef-Expat AND GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-public-domain)
+- libtasn1-6 4.18.0-4ubuntu0.1  (GFDL-1.3-only AND GPL-3.0-only AND LicenseRef-LGPL AND LGPL-2.1-only)
+- libtirpc-common 1.3.2-2ubuntu0.1  (BSD-3-Clause AND GPL-2.0-only AND LGPL-2.1-only)
+- libtirpc3 1.3.2-2ubuntu0.1  (BSD-3-Clause AND GPL-2.0-only AND LGPL-2.1-only)
+- libudev1 249.11-0ubuntu3.16  (CC0-1.0 AND LicenseRef-Expat AND GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-public-domain)
+- libunistring2 1.0-1  (LicenseRef-FreeSoftware AND GFDL-1.2-only AND GFDL-1.2-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT)
+- libuuid1 2.37.2-4ubuntu3.4  (BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT AND LicenseRef-public-domain)
+- libxxhash0 0.8.1-1  (BSD-2-Clause AND GPL-2.0-only)
+- libzstd1 1.4.8+dfsg-3build1  (BSD-3-Clause AND LicenseRef-Expat AND GPL-2.0-only AND Zlib)
+- login 1:4.8.1-2ubuntu2.2  (GPL-2.0-only)
+- logsave 1.46.5-2ubuntu1.2  (GPL-2.0-only AND LGPL-2.0-only)
+- lsb-base 11.1.0ubuntu4  (BSD-3-Clause AND GPL-2.0-only)
+- mawk 1.3.4.20200120-3  (GPL-2.0-only)
+- mount 2.37.2-4ubuntu3.4  (BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT AND LicenseRef-public-domain)
+- openssl 3.0.2-0ubuntu1.19  (Apache-2.0 AND LicenseRef-Artistic AND GPL-1.0-only AND GPL-1.0-or-later)
+- passwd 1:4.8.1-2ubuntu2.2  (GPL-2.0-only)
+- perl-base 5.34.0-3ubuntu1.4  (LicenseRef-Artistic AND Artistic-2.0 AND LicenseRef-Artistic-dist AND BSD-3-Clause AND LicenseRef-BSD-3-clause-GENERIC AND LicenseRef-BSD-3-clause-with-weird-numbering AND LicenseRef-BSD-4-clause-POWERDOG AND LicenseRef-BZIP AND LicenseRef-DONT-CHANGE-THE-GPL AND LicenseRef-Expat AND GPL-1.0-only AND GPL-1.0-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-GPL-3--WITH-BISON-EXCEPTION AND LicenseRef-HSIEH-BSD AND LicenseRef-HSIEH-DERIVATIVE AND LGPL-2.1-only AND LicenseRef-REGCOMP AND LicenseRef-REGCOMP- AND LicenseRef-RRA-KEEP-THIS-NOTICE AND LicenseRef-SDBM-PUBLIC-DOMAIN AND LicenseRef-TEXT-TABS AND LicenseRef-Unicode AND Zlib)
+- procps 2:3.3.17-6ubuntu2.1  (GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later)
+- python3-wheel 0.37.1-2ubuntu0.22.04.1  (LicenseRef-Expat AND GPL-3.0-only)
+- python3.10 3.10.12-1~22.04.10  (LicenseRef-By AND GPL-2.0-only AND LicenseRef-Permission AND LicenseRef-Redistribution AND LicenseRef-This)
+- python3.10-minimal 3.10.12-1~22.04.10  (LicenseRef-By AND GPL-2.0-only AND LicenseRef-Permission AND LicenseRef-Redistribution AND LicenseRef-This)
+- readline-common 8.1.2-1  (LicenseRef-GFDL AND GPL-3.0-only)
+- sed 4.8-1ubuntu2  (GPL-3.0-only)
+- sensible-utils 0.0.17  (LicenseRef-All-permissive AND GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-configure AND LicenseRef-installsh)
+- sysvinit-utils 3.01-1ubuntu1  (GPL-2.0-only AND GPL-2.0-or-later)
+- tar 1.34+dfsg-1ubuntu0.1.22.04.2  (GPL-2.0-only AND GPL-3.0-only)
+- usrmerge 25ubuntu2  (LicenseRef-GPL AND GPL-2.0-only)
+- util-linux 2.37.2-4ubuntu3.4  (BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LicenseRef-LGPL AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT AND LicenseRef-public-domain)
+- wget 1.21.2-2ubuntu1.1  (GFDL-1.2-only AND GPL-3.0-only)
+
+
+PACKAGES SUBJECT TO GPL LICENSES (w/o licenses expression)
+--------------------------------
+adduser 3.118ubuntu5
+apt 2.4.14
+base-passwd 3.5.52build1
+bash 5.1-6ubuntu1.1
+bindfs 1.14.7-1
+bsdutils 1:2.37.2-4ubuntu3.4
+ca-certificates 20240203~22.04.1
+coreutils 8.32-4.1ubuntu1.2
+dash 0.5.11+git20210903+057cd650a4ed-3build1
+debianutils 5.5-1ubuntu2
+dpkg 1.21.1ubuntu2.3
+e2fsprogs 1.46.5-2ubuntu1.2
+findutils 4.8.0-1ubuntu3
+fuse 2.9.9-5ubuntu3
+gcc-12-base 12.3.0-1ubuntu1~22.04
+gpgv 2.2.27-3ubuntu2.4
+grep 3.7-1build1
+gzip 1.10-4ubuntu4.1
+hostname 3.23ubuntu2
+init-system-helpers 1.62
+libacl1 2.3.1-1
+libapt-pkg6.0 2.4.14
+libattr1 1:2.5.1-1build1
+libaudit-common 1:3.0.7-1build1
+libaudit1 1:3.0.7-1build1
+libblkid1 2.37.2-4ubuntu3.4
+libbz2-1.0 1.0.8-5build1
+libc-bin 2.35-0ubuntu3.10
+libc6 2.35-0ubuntu3.10
+libcap-ng0 0.7.9-2.2build3
+libcap2 1:2.44-1ubuntu0.22.04.2
+libegl-mesa0 23.2.1-1ubuntu3.1~22.04.3
+libegl1 1.4.0-1
+libelf1 0.186-1ubuntu0.1
+libext2fs2 1.46.5-2ubuntu1.2
+libfuse2 2.9.9-5ubuntu3
+libgbm1 23.2.1-1ubuntu3.1~22.04.3
+libgcc-s1 12.3.0-1ubuntu1~22.04
+libgcrypt20 1.9.4-3ubuntu3
+libgl1 1.4.0-1
+libgl1-mesa-dri 23.2.1-1ubuntu3.1~22.04.3
+libglapi-mesa 23.2.1-1ubuntu3.1~22.04.3
+libglib2.0-0 2.72.4-0ubuntu2.5
+libglvnd0 1.4.0-1
+libglx-mesa0 23.2.1-1ubuntu3.1~22.04.3
+libglx0 1.4.0-1
+libgmp10 2:6.2.1+dfsg-3ubuntu1
+libgnutls30 3.7.3-4ubuntu1.7
+libgomp1 12.3.0-1ubuntu1~22.04
+libgpg-error0 1.43-3
+libgssapi-krb5-2 1.19.2-2ubuntu0.7
+libhogweed6 3.7.3-1build2
+libicu70 70.1-2
+libidn2-0 2.3.2-2build1
+libk5crypto3 1.19.2-2ubuntu0.7
+libkeyutils1 1.6.1-2ubuntu3
+libkrb5-3 1.19.2-2ubuntu0.7
+libkrb5support0 1.19.2-2ubuntu0.7
+liblz4-1 1.9.3-2build2
+liblzma5 5.2.5-2ubuntu1
+libmount1 2.37.2-4ubuntu3.4
+libmpdec3 2.5.1-2build2
+libnettle8 3.7.3-1build2
+libnsl2 1.3.0-2build2
+libprocps8 2:3.3.17-6ubuntu2.1
+libpython3.10-minimal 3.10.12-1~22.04.10
+libpython3.10-stdlib 3.10.12-1~22.04.10
+libreadline8 8.1.2-1
+libselinux1 3.3-1build2
+libsensors-config 1:3.6.0-7ubuntu1
+libsensors5 1:3.6.0-7ubuntu1
+libsmartcols1 2.37.2-4ubuntu3.4
+libsqlite3-0 3.37.2-2ubuntu0.5
+libssl3 3.0.2-0ubuntu1.19
+libstdc++6 12.3.0-1ubuntu1~22.04
+libsystemd0 249.11-0ubuntu3.16
+libtasn1-6 4.18.0-4ubuntu0.1
+libtirpc-common 1.3.2-2ubuntu0.1
+libtirpc3 1.3.2-2ubuntu0.1
+libudev1 249.11-0ubuntu3.16
+libunistring2 1.0-1
+libuuid1 2.37.2-4ubuntu3.4
+libxxhash0 0.8.1-1
+libzstd1 1.4.8+dfsg-3build1
+login 1:4.8.1-2ubuntu2.2
+logsave 1.46.5-2ubuntu1.2
+lsb-base 11.1.0ubuntu4
+mawk 1.3.4.20200120-3
+mount 2.37.2-4ubuntu3.4
+openssl 3.0.2-0ubuntu1.19
+passwd 1:4.8.1-2ubuntu2.2
+perl-base 5.34.0-3ubuntu1.4
+procps 2:3.3.17-6ubuntu2.1
+python3-wheel 0.37.1-2ubuntu0.22.04.1
+python3.10 3.10.12-1~22.04.10
+python3.10-minimal 3.10.12-1~22.04.10
+readline-common 8.1.2-1
+sed 4.8-1ubuntu2
+sensible-utils 0.0.17
+sysvinit-utils 3.01-1ubuntu1
+tar 1.34+dfsg-1ubuntu0.1.22.04.2
+usrmerge 25ubuntu2
+util-linux 2.37.2-4ubuntu3.4
+wget 1.21.2-2ubuntu1.1

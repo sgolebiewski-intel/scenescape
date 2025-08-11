@@ -1,0 +1,17 @@
+NOTICE
+======
+
+License: NOASSERTION
+--------------------
+- busybox 1.37.0
+- sbom 
+
+[License text for NOASSERTION would go here]
+
+
+PACKAGES SUBJECT TO GPL LICENSES (with licenses expression)
+--------------------------------
+
+
+PACKAGES SUBJECT TO GPL LICENSES (w/o licenses expression)
+--------------------------------

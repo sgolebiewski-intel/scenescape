@@ -1,0 +1,2791 @@
+{
+  "_type": "https://in-toto.io/Statement/v0.1",
+  "predicateType": "https://spdx.dev/Document",
+  "subject": [
+    {
+      "name": "bin/[",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/[[",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/acpid",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/add-shell",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/addgroup",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/adduser",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/adjtimex",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ar",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/arch",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/arp",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/arping",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ascii",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ash",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/awk",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/base32",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/base64",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/basename",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/bc",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/beep",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/blkdiscard",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/blkid",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/blockdev",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/bootchartd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/brctl",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/bunzip2",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/busybox",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/bzcat",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/bzip2",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/cal",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/cat",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/chat",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/chattr",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/chgrp",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/chmod",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/chown",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/chpasswd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/chpst",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/chroot",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/chrt",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/chvt",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/cksum",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/clear",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/cmp",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/comm",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/conspy",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/cp",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/cpio",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/crc32",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/crond",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/crontab",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/cryptpw",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/cttyhack",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/cut",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/date",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/dc",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/dd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/deallocvt",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/delgroup",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/deluser",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/depmod",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/devmem",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/df",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/dhcprelay",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/diff",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/dirname",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/dmesg",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/dnsd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/dnsdomainname",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/dos2unix",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/dpkg",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/dpkg-deb",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/du",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/dumpkmap",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/dumpleases",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/echo",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ed",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/egrep",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/eject",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/env",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/envdir",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/envuidgid",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ether-wake",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/expand",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/expr",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/factor",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fakeidentd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fallocate",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/false",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fatattr",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fbset",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fbsplash",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fdflush",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fdformat",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fdisk",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fgconsole",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fgrep",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/find",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/findfs",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/flock",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fold",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/free",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/freeramdisk",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fsck",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fsck.minix",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fsfreeze",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fstrim",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fsync",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ftpd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ftpget",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ftpput",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/fuser",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/getconf",
+      "digest": {
+        "sha256": "235eee2bf950116aec567c8c08ba14cab8685d6909234cae9fe3456f3266e8a3"
+      }
+    },
+    {
+      "name": "bin/getfattr",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/getopt",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/getty",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/grep",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/groups",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/gunzip",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/gzip",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/halt",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/hd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/hdparm",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/head",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/hexdump",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/hexedit",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/hostid",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/hostname",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/httpd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/hush",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/hwclock",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/i2cdetect",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/i2cdump",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/i2cget",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/i2cset",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/i2ctransfer",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/id",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ifconfig",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ifdown",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ifenslave",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ifplugd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ifup",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/inetd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/init",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/insmod",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/install",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ionice",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/iostat",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ip",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ipaddr",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ipcalc",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ipcrm",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ipcs",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/iplink",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ipneigh",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/iproute",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/iprule",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/iptunnel",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/kbd_mode",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/kill",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/killall",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/killall5",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/klogd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/last",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/less",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/link",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/linux32",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/linux64",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/linuxrc",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ln",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/loadfont",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/loadkmap",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/logger",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/login",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/logname",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/logread",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/losetup",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/lpd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/lpq",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/lpr",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ls",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/lsattr",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/lsmod",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/lsof",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/lspci",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/lsscsi",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/lsusb",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/lzcat",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/lzma",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/lzop",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/makedevs",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/makemime",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/man",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/md5sum",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mdev",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mesg",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/microcom",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mim",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mkdir",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mkdosfs",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mke2fs",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mkfifo",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mkfs.ext2",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mkfs.minix",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mkfs.vfat",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mknod",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mkpasswd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mkswap",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mktemp",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/modinfo",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/modprobe",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/more",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mount",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mountpoint",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mpstat",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mt",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/mv",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/nameif",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/nanddump",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/nandwrite",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/nbd-client",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/nc",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/netstat",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/nice",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/nl",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/nmeter",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/nohup",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/nologin",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/nproc",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/nsenter",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/nslookup",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ntpd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/od",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/openvt",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/partprobe",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/passwd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/paste",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/patch",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/pgrep",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/pidof",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ping",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ping6",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/pipe_progress",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/pivot_root",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/pkill",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/pmap",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/popmaildir",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/poweroff",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/powertop",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/printenv",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/printf",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ps",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/pscan",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/pstree",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/pwd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/pwdx",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/raidautorun",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/rdate",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/rdev",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/readahead",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/readlink",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/readprofile",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/realpath",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/reboot",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/reformime",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/remove-shell",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/renice",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/reset",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/resize",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/resume",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/rev",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/rm",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/rmdir",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/rmmod",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/route",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/rpm",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/rpm2cpio",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/rtcwake",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/run-init",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/run-parts",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/runlevel",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/runsv",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/runsvdir",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/rx",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/script",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/scriptreplay",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/sed",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/seedrng",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/sendmail",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/seq",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/setarch",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/setconsole",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/setfattr",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/setfont",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/setkeycodes",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/setlogcons",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/setpriv",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/setserial",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/setsid",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/setuidgid",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/sh",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/sha1sum",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/sha256sum",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/sha3sum",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/sha512sum",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/showkey",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/shred",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/shuf",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/slattach",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/sleep",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/smemcap",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/softlimit",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/sort",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/split",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ssl_client",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/start-stop-daemon",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/stat",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/strings",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/stty",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/su",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/sulogin",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/sum",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/sv",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/svc",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/svlogd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/svok",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/swapoff",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/swapon",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/switch_root",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/sync",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/sysctl",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/syslogd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/tac",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/tail",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/tar",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/taskset",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/tc",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/tcpsvd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/tee",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/telnet",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/telnetd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/test",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/tftp",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/tftpd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/time",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/timeout",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/top",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/touch",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/tr",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/traceroute",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/traceroute6",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/tree",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/true",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/truncate",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ts",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/tsort",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/tty",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ttysize",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/tunctl",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ubiattach",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ubidetach",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ubimkvol",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ubirename",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ubirmvol",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ubirsvol",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/ubiupdatevol",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/udhcpc",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/udhcpc6",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/udhcpd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/udpsvd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/uevent",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/umount",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/uname",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/unexpand",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/uniq",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/unix2dos",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/unlink",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/unlzma",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/unshare",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/unxz",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/unzip",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/uptime",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/users",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/usleep",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/uudecode",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/uuencode",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/vconfig",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/vi",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/vlock",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/volname",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/w",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/wall",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/watch",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/watchdog",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/wc",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/wget",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/which",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/who",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/whoami",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/whois",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/xargs",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/xxd",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/xz",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/xzcat",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/yes",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/zcat",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "bin/zcip",
+      "digest": {
+        "sha256": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+      }
+    },
+    {
+      "name": "etc/group",
+      "digest": {
+        "sha256": "f55824ead3d8f552bc22020211a8b181af4506e4fbba20389114e46c1cefcd9c"
+      }
+    },
+    {
+      "name": "etc/localtime",
+      "digest": {
+        "sha256": "8b85846791ab2c8a5463c83a5be3c043e2570d7448434d41398969ed47e3e6f2"
+      }
+    },
+    {
+      "name": "etc/nsswitch.conf",
+      "digest": {
+        "sha256": "eec30745bade42a3f3f792e4d4192e57d2bcfe8e472433b1de426fe39a39cddb"
+      }
+    },
+    {
+      "name": "etc/passwd",
+      "digest": {
+        "sha256": "466afb852e38d454b87ab903abd189ea4541bd79bdf15449ccce7460af94d711"
+      }
+    },
+    {
+      "name": "etc/shadow",
+      "digest": {
+        "sha256": "b2d68324f72d53c42b64121df172ff36c568a391db7236132a749cecddbe45cd"
+      }
+    },
+    {
+      "name": "lib/ld-linux-x86-64.so.2",
+      "digest": {
+        "sha256": "582f2d3d4edab86d601c54b37f04bd18fa2cda28be30e9f8c87df73c1c581354"
+      }
+    },
+    {
+      "name": "lib/libc.so.6",
+      "digest": {
+        "sha256": "1d25fd63234b59e4c581564c7a6d8f5c6cf36eee757e3d26f4b0808dd36a4896"
+      }
+    },
+    {
+      "name": "lib/libm.so.6",
+      "digest": {
+        "sha256": "067650d84b8f554cedf0b9ff26137bdd10cd03d4bbcdba1029a543c59d1798e5"
+      }
+    },
+    {
+      "name": "lib/libnss_compat.so.2",
+      "digest": {
+        "sha256": "4f81d86d325108475d7e3f2c9522cd1d7860ed1f682735f290c5ca3a600705c9"
+      }
+    },
+    {
+      "name": "lib/libnss_dns.so.2",
+      "digest": {
+        "sha256": "eca6da0aa670a85eeb4a046b719d94d051b4d7082621c38e55ba7ae50796c7ca"
+      }
+    },
+    {
+      "name": "lib/libnss_files.so.2",
+      "digest": {
+        "sha256": "55a9ae9a9cbf2dfc9b276976d1d972d8ad55af55bd2f1d5f2864c2d5eac72d2f"
+      }
+    },
+    {
+      "name": "lib/libnss_hesiod.so.2",
+      "digest": {
+        "sha256": "bdfd8d179e617cc43bf2a0303175868f53d711a7d11abcf27ee3395393004453"
+      }
+    },
+    {
+      "name": "lib/libpthread.so.0",
+      "digest": {
+        "sha256": "df8e371a04bcf4ea2d455277ecc9cd47fc9b4c58ed27a7f4e6c8343122a4d270"
+      }
+    },
+    {
+      "name": "lib/libresolv.so.2",
+      "digest": {
+        "sha256": "d2df0bd45f72cd9beba6195b0acc43b8d14d44c37d18ffdf4684ee62b0a8eb71"
+      }
+    },
+    {
+      "name": "root/controller/tracker-config.json",
+      "digest": {
+        "sha256": "067c1ecbb28f1f54a23975f2ac301dd22b1114cec834efe0f8f43592e363b8d8"
+      }
+    },
+    {
+      "name": "root/models/intel/human-pose-estimation-0001/FP32/human-pose-estimation-0001.bin",
+      "digest": {
+        "sha256": "696cae77f2c6c964ecb5464ef7c50dd29e5caf0dbfd8e4d940fad87b1343e7a8"
+      }
+    },
+    {
+      "name": "root/models/intel/human-pose-estimation-0001/FP32/human-pose-estimation-0001.xml",
+      "digest": {
+        "sha256": "eb5699623eb25c36165d542fa4efa0621f949ee908dff77c908674f152dac200"
+      }
+    },
+    {
+      "name": "root/models/intel/person-detection-retail-0013/FP32/person-detection-retail-0013.bin",
+      "digest": {
+        "sha256": "f3731a76de6a26ef7f380a08831bc13d74fc1e6ae774fd9ea30267a487084f2c"
+      }
+    },
+    {
+      "name": "root/models/intel/person-detection-retail-0013/FP32/person-detection-retail-0013.xml",
+      "digest": {
+        "sha256": "33acc96a73898256a127a53af71b6bfb169df83bd514984b01beacbcf7b2cc04"
+      }
+    },
+    {
+      "name": "root/models/intel/person-reidentification-retail-0277/FP32/person-reidentification-retail-0277.bin",
+      "digest": {
+        "sha256": "1968d1f91878813b632441c65c9d9147010d225828ae6acdbda364a2e3337315"
+      }
+    },
+    {
+      "name": "root/models/intel/person-reidentification-retail-0277/FP32/person-reidentification-retail-0277.xml",
+      "digest": {
+        "sha256": "5adcc4ff114737479ee16c1a7f525a7e8e1487d86c7ee7a1b50fcd68ee71f596"
+      }
+    },
+    {
+      "name": "root/models/ovms/human-pose-estimation-0001/1/human-pose-estimation-0001.bin",
+      "digest": {
+        "sha256": "696cae77f2c6c964ecb5464ef7c50dd29e5caf0dbfd8e4d940fad87b1343e7a8"
+      }
+    },
+    {
+      "name": "root/models/ovms/human-pose-estimation-0001/1/human-pose-estimation-0001.xml",
+      "digest": {
+        "sha256": "eb5699623eb25c36165d542fa4efa0621f949ee908dff77c908674f152dac200"
+      }
+    },
+    {
+      "name": "root/models/ovms/person-detection-retail-0013/1/person-detection-retail-0013.bin",
+      "digest": {
+        "sha256": "f3731a76de6a26ef7f380a08831bc13d74fc1e6ae774fd9ea30267a487084f2c"
+      }
+    },
+    {
+      "name": "root/models/ovms/person-detection-retail-0013/1/person-detection-retail-0013.xml",
+      "digest": {
+        "sha256": "33acc96a73898256a127a53af71b6bfb169df83bd514984b01beacbcf7b2cc04"
+      }
+    },
+    {
+      "name": "root/models/ovms/person-reidentification-retail-0277/1/person-reidentification-retail-0277.bin",
+      "digest": {
+        "sha256": "1968d1f91878813b632441c65c9d9147010d225828ae6acdbda364a2e3337315"
+      }
+    },
+    {
+      "name": "root/models/ovms/person-reidentification-retail-0277/1/person-reidentification-retail-0277.xml",
+      "digest": {
+        "sha256": "5adcc4ff114737479ee16c1a7f525a7e8e1487d86c7ee7a1b50fcd68ee71f596"
+      }
+    },
+    {
+      "name": "root/models/ovms-config.json",
+      "digest": {
+        "sha256": "04862c87cf99d41ec5753b12ecb7421082512a7b17438da31a5f386e1a3559d5"
+      }
+    },
+    {
+      "name": "root/sample_data/Demo.png",
+      "digest": {
+        "sha256": "f4a42cee48967fd546e43af0c8352e0f5412ff8d703f1ff16b494bc7b21418b2"
+      }
+    },
+    {
+      "name": "root/sample_data/HazardZoneScene.png",
+      "digest": {
+        "sha256": "62eafc122ab3466f282ce6a4ea985a64ad7388f6424e9c6df1b26ccbb9c823c9"
+      }
+    },
+    {
+      "name": "root/sample_data/HazardZoneSceneLarge.png",
+      "digest": {
+        "sha256": "170cbafe1c2f25380e990c53054ba8607f656c39bfd5ce5ea27b85e7ad0e5f79"
+      }
+    },
+    {
+      "name": "root/sample_data/LabMap.png",
+      "digest": {
+        "sha256": "9f14d38fc281baab1b230ff7b3b000d839aa22c1564d3055bd165a1c4865147d"
+      }
+    },
+    {
+      "name": "root/sample_data/LotMap.png",
+      "digest": {
+        "sha256": "527cbd7b5ef9106f8e60bce841dbde18909f5517663f61febd66155c76b11644"
+      }
+    },
+    {
+      "name": "root/sample_data/apriltag-cam1.mp4",
+      "digest": {
+        "sha256": "ef89ff7f28513b65d25aabec787d44b1cfb0b5372cb5d38bd0aa466229de36b5"
+      }
+    },
+    {
+      "name": "root/sample_data/apriltag-cam2.mp4",
+      "digest": {
+        "sha256": "e9a9e21374bd655a84f85522416f076573c587f4e8f289f30daf3f21a9b9469b"
+      }
+    },
+    {
+      "name": "root/sample_data/apriltag-cam3.mp4",
+      "digest": {
+        "sha256": "de0bfd032f838aa55a3b4f84561b4ea0444689417e34addbe009eb580e5cebd7"
+      }
+    },
+    {
+      "name": "root/sample_data/atag-calib-demo-map.png",
+      "digest": {
+        "sha256": "cad229c272c2449c63d89337791fae56a1b3576da14f6ecb2635c2ac1b79317e"
+      }
+    },
+    {
+      "name": "root/sample_data/docker-compose-dl-streamer-example.yml",
+      "digest": {
+        "sha256": "9e62aec9ac642f240e9f9fe9d670c0ad69b300b962a33748c47ebf194756ce38"
+      }
+    },
+    {
+      "name": "root/sample_data/docker-compose-dls-perf.yml",
+      "digest": {
+        "sha256": "63a5115bc96519e16b674da44798f8b242a3595ef955f276fee08c061e5dedd2"
+      }
+    },
+    {
+      "name": "root/sample_data/exampledb.tar.bz2",
+      "digest": {
+        "sha256": "90c6eccdd0362018d24c210acd399e073177e9b0b7126c77cd32a51ccc25ecd9"
+      }
+    },
+    {
+      "name": "root/sample_data/qcam1.mp4",
+      "digest": {
+        "sha256": "66ae96ac90c6232d09834b6627b51c6dc2d28531dfa4d0cc0fd0a2c0876d9158"
+      }
+    },
+    {
+      "name": "root/sample_data/qcam2.mp4",
+      "digest": {
+        "sha256": "c0c6931dcb96c577127f12cb84ac2fcab12ea7f3d7cd04abfce6aa9654721998"
+      }
+    },
+    {
+      "name": "root/sample_data/scene.png",
+      "digest": {
+        "sha256": "99c541c68578db58012a030be410219a35fcb91f99311d9b265de48fcd385b20"
+      }
+    }
+  ],
+  "predicate": {
+    "SPDXID": "SPDXRef-DOCUMENT",
+    "creationInfo": {
+      "created": "2025-08-11T21:21:27Z",
+      "creators": [
+        "Organization: Anchore, Inc",
+        "Tool: syft-v1.29.0"
+      ],
+      "licenseListVersion": "3.25"
+    },
+    "dataLicense": "CC0-1.0",
+    "documentNamespace": "https://anchore.com/syft/dir/sbom-334814f3-fa3d-4774-9770-6fca0f939236",
+    "files": [
+      {
+        "SPDXID": "SPDXRef-File-bin-busybox-1ac501c94e2f9f81",
+        "checksums": [
+          {
+            "algorithm": "SHA256",
+            "checksumValue": "2c5cf0e277bb94b025bc6972d5d1b7f34f6308e4621e6320dc3d1599d3ab4503"
+          }
+        ],
+        "copyrightText": "NOASSERTION",
+        "fileName": "bin/busybox",
+        "fileTypes": [
+          "APPLICATION",
+          "BINARY"
+        ],
+        "licenseConcluded": "NOASSERTION",
+        "licenseInfoInFiles": [
+          "NOASSERTION"
+        ]
+      }
+    ],
+    "name": "sbom",
+    "packages": [
+      {
+        "SPDXID": "SPDXRef-Package-binary-busybox-e3afadc545b2ba55",
+        "copyrightText": "NOASSERTION",
+        "downloadLocation": "NOASSERTION",
+        "externalRefs": [
+          {
+            "referenceCategory": "SECURITY",
+            "referenceLocator": "cpe:2.3:a:busybox:busybox:1.37.0:*:*:*:*:*:*:*",
+            "referenceType": "cpe23Type"
+          },
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceLocator": "pkg:generic/busybox@1.37.0",
+            "referenceType": "purl"
+          }
+        ],
+        "filesAnalyzed": false,
+        "licenseConcluded": "NOASSERTION",
+        "licenseDeclared": "NOASSERTION",
+        "name": "busybox",
+        "sourceInfo": "acquired package info from the following paths: /bin/busybox",
+        "supplier": "NOASSERTION",
+        "versionInfo": "1.37.0"
+      },
+      {
+        "SPDXID": "SPDXRef-DocumentRoot-Directory-sbom",
+        "copyrightText": "NOASSERTION",
+        "downloadLocation": "NOASSERTION",
+        "filesAnalyzed": false,
+        "licenseConcluded": "NOASSERTION",
+        "licenseDeclared": "NOASSERTION",
+        "name": "sbom",
+        "primaryPackagePurpose": "FILE",
+        "supplier": "NOASSERTION"
+      }
+    ],
+    "relationships": [
+      {
+        "comment": "evident-by: indicates the package's existence is evident by the given file",
+        "relatedSpdxElement": "SPDXRef-File-bin-busybox-1ac501c94e2f9f81",
+        "relationshipType": "OTHER",
+        "spdxElementId": "SPDXRef-Package-binary-busybox-e3afadc545b2ba55"
+      },
+      {
+        "relatedSpdxElement": "SPDXRef-Package-binary-busybox-e3afadc545b2ba55",
+        "relationshipType": "CONTAINS",
+        "spdxElementId": "SPDXRef-DocumentRoot-Directory-sbom"
+      },
+      {
+        "relatedSpdxElement": "SPDXRef-DocumentRoot-Directory-sbom",
+        "relationshipType": "DESCRIBES",
+        "spdxElementId": "SPDXRef-DOCUMENT"
+      }
+    ],
+    "spdxVersion": "SPDX-2.3"
+  }
+}

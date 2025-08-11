@@ -2,6 +2,51 @@
 
 # SPDX-FileCopyrightText: (C) 2021 - 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: (C) 2021 - 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+# -------------- Common Base Stage --------------
+FROM ubuntu:22.04 AS scenescape-common-base
+
+# We use root for runtime init. The command in ENTRYPOINT will drop to an unprivileged user.
+# hadolint ignore=DL3002
+USER root
+ENV DEBIAN_FRONTEND=noninteractive
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# install common build dependencies
+RUN : \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        # Keep package list in alphabetical order
+        cmake \
+        curl \
+        g++ \
+        git \
+        libeigen3-dev \
+        libgtest-dev \
+        make \
+        # needed by fast_geometry
+        pkg-config \
+        pybind11-dev \
+        python3-pip \
+        # needed by fast_geometry
+        python3-scipy \
+        python-is-python3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# install common dependencies
+COPY ./scene_common /tmp/scene_common
+RUN : \
+    && cd /tmp/scene_common \
+    && mv src scene_common \
+    && pip3 install --no-cache-dir pybind11 \
+    && pip3 install --no-cache-dir . \
+    && make -C scene_common/fast_geometry -j $(nproc) all install \
+    && cd .. \
+    && rm -rf scene_common
+
+COPY ./tools/waitforbroker /tmp/tools/waitforbroker
 
 FROM scenescape-common-base AS scenescape-manager-builder
 
@@ -164,42 +209,3 @@ COPY ./manager/config/webserver-init \
 
 ENTRYPOINT ["/usr/local/bin/scenescape-init"]
 
-# ---------- Manager Test Stage ------------------
-# This stage is meant to be used for test execution (not for final runtime)
-FROM scenescape-manager-runtime AS scenescape-manager-test
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN : \
-    ; apt-get update \
-    ; install -d -m 0755 /etc/apt/keyrings \
-    ; apt-get install -y --no-install-recommends \
-        wget \
-        libpci-dev \
-        libnss3-tools \
-        software-properties-common \
-        unzip \
-        xserver-xephyr \
-        xvfb \
-    ; wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null \
-    ; echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null \
-    ; echo -e ' \n\
-Package: * \n\
-Pin: origin packages.mozilla.org \n\
-Pin-Priority: 1000 \n\
-' | tee /etc/apt/preferences.d/mozilla \
-    ; apt-get update && apt-get install -y --no-install-recommends firefox \
-    ; rm -rf /var/lib/apt/lists/*
-
-# Install Python test dependencies
-COPY ./manager/test/requirements-test.txt /tmp
-RUN pip3 install --upgrade --no-cache-dir -r /tmp/requirements-test.txt
-
-ADD ./manager/test/geckodriver.tar.gz /usr/local/bin/
-
-COPY ./manager/test/firefox-profile.tar /home/scenescape/.mozilla/
-
-RUN : \
-    ; eval WSHOME=~$WSUSER \
-    ; chown -R "$WSUSER.$WSUSER" "$WSHOME/.mozilla" \
-    ;

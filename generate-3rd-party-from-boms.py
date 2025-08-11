@@ -34,7 +34,6 @@ def extract_packages(spdx_data):
                 "license": license_id,
                 "license_text": license_text
             })
-    print(packages)
     return packages
 
 def consolidate(spdx_files):
