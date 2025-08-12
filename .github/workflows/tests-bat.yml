@@ -135,10 +135,6 @@ jobs:
 
       - name: "Run Basic Acceptance Tests (BAT) - k8s"
         run: |
-          kind delete cluster
-          docker ps -aq | xargs docker rm -f
-          docker network prune -f
-          
           make clean-all
           git clean -fdx
           REQUIRED_FPS=0 ./deploy.sh
@@ -174,6 +170,8 @@ jobs:
         if: always()
         run: |
           docker ps -aq | xargs docker rm -f  || true
+          kind delete cluster || true
+          docker network prune -f || true
 
       - name: "Clean runner"
         if: always()
