@@ -89,6 +89,9 @@ class Scene(SceneModel):
       self.regulated_rate = scene_data['regulated_rate']
     if 'external_update_rate' in scene_data:
       self.external_update_rate = scene_data['external_update_rate']
+    # Set min_size_ratio and max_size_ratio from scene_data (required for MovingObject creation)
+    self.min_size_ratio = scene_data.get('min_size_ratio', 0.5)
+    self.max_size_ratio = scene_data.get('max_size_ratio', 2.0)
     self._invalidate_trs_xyz_to_lla()
     # Access the property to trigger initialization
     _ = self.trs_xyz_to_lla
@@ -113,7 +116,10 @@ class Scene(SceneModel):
     scene_map_rotation = self.mesh_rotation
 
     for info in detections:
-      mobj = self.tracker.createObject(detectionType, info, when, camera, self.persist_attributes.get(detectionType, {}))
+      mobj = self.tracker.createObject(
+        detectionType, info, when, camera, self.persist_attributes.get(detectionType, {}),
+        min_size_ratio=self.min_size_ratio, max_size_ratio=self.max_size_ratio
+      )
       mobj.map_triangle_mesh = scene_map_triangle_mesh
       mobj.map_translation = scene_map_translation
       mobj.map_rotation = scene_map_rotation
@@ -121,19 +127,6 @@ class Scene(SceneModel):
       mobj.project_3d_detections_to_surface_enabled = self.project_3d_detections_to_surface_enabled
       mobj.surface_plane_z = self.surface_plane_z
       mobj.excluded_categories = self.excluded_categories
-      
-      # Add edge case filtering parameters
-      mobj.min_camera_distance = getattr(self, 'min_camera_distance', 0.5)
-      mobj.min_z_difference = getattr(self, 'min_z_difference', 0.1)
-      mobj.min_object_dimension = getattr(self, 'min_object_dimension', 0.05)
-      mobj.max_object_dimension = getattr(self, 'max_object_dimension', 20.0)
-      
-      # Add projection limits parameters
-      mobj.min_projected_dimension = getattr(self, 'min_projected_dimension', 0.01)
-      mobj.max_projected_dimension = getattr(self, 'max_projected_dimension', 100.0)
-      mobj.min_scale_factor = getattr(self, 'min_scale_factor', 0.1)
-      mobj.max_scale_factor = getattr(self, 'max_scale_factor', 10.0)
-      mobj.max_projection_distance = getattr(self, 'max_projection_distance', 100.0)
       objects.append(mobj)
     return objects
 
@@ -409,19 +402,9 @@ class Scene(SceneModel):
     scene.project_3d_detections_to_surface_enabled = data.get('project_3d_detections_to_surface_enabled', False)
     scene.surface_plane_z = data.get('surface_plane_z', 0.0)
     scene.excluded_categories = data.get('excluded_categories', [])
-    
-    # Load edge case filtering parameters
-    scene.min_camera_distance = data.get('min_camera_distance', 0.5)
-    scene.min_z_difference = data.get('min_z_difference', 0.1)
-    scene.min_object_dimension = data.get('min_object_dimension', 0.05)
-    scene.max_object_dimension = data.get('max_object_dimension', 20.0)
-    
-    # Load projection limits parameters
-    scene.min_projected_dimension = data.get('min_projected_dimension', 0.01)
-    scene.max_projected_dimension = data.get('max_projected_dimension', 100.0)
-    scene.min_scale_factor = data.get('min_scale_factor', 0.1)
-    scene.max_scale_factor = data.get('max_scale_factor', 10.0)
-    scene.max_projection_distance = data.get('max_projection_distance', 100.0)
+    # Only load ratio-based filtering config
+    scene.min_size_ratio = data.get('min_size_ratio', 0.5)
+    scene.max_size_ratio = data.get('max_size_ratio', 2.0)
     if 'cameras' in data:
       scene.updateCameras(data['cameras'])
     if 'regions' in data:

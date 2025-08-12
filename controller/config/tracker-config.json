@@ -3,22 +3,8 @@
   "non_measurement_frames_dynamic": 8,
   "non_measurement_frames_static": 16,
   "baseline_frame_rate": 30,
-  "project_3d_detections_to_surface": {
-    "enabled": true,
-    "surface_plane_z": 0.0,
-    "excluded_categories": ["bird", "drone", "airplane", "helicopter"],
-    "edge_case_filtering": {
-      "min_camera_distance": 0.5,
-      "min_z_difference": 0.1,
-      "min_object_dimension": 0.05,
-      "max_object_dimension": 20.0
-    },
-    "projection_limits": {
-      "min_projected_dimension": 0.01,
-      "max_projected_dimension": 100.0,
-      "min_scale_factor": 0.1,
-      "max_scale_factor": 10.0,
-      "max_projection_distance": 100.0
-    }
+  "3d_size_ratio_filtering": {
+    "min_size_ratio": 0.2,
+    "max_size_ratio": 4.0
   }
 }

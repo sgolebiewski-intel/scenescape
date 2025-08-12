@@ -142,7 +142,7 @@ class Tracking(Thread):
     return
 
   @staticmethod
-  def createObject(sensorType, info, when, sensor, persist_attributes=None):
+  def createObject(sensorType, info, when, sensor, persist_attributes=None, min_size_ratio=None, max_size_ratio=None):
     if persist_attributes is None:
       persist_attributes = {}
     tracking_radius = DEFAULT_TRACKING_RADIUS
@@ -152,7 +152,7 @@ class Tracking(Thread):
 
     if sensorType in object_classes:
       oclass = object_classes[sensorType]
-      mobj = oclass['class'](info, when, sensor)
+      mobj = oclass['class'](info, when, sensor, min_size_ratio=min_size_ratio, max_size_ratio=max_size_ratio)
       if 'model_3d' in oclass:
         mobj.asset_scale = oclass['scale']
       mobj.size = [oclass.get('x_size', DEFAULT_EDGE_LENGTH),
@@ -167,7 +167,7 @@ class Tracking(Thread):
       rotation_from_velocity = oclass.get('rotation_from_velocity', rotation_from_velocity)
       mobj.setPersistentAttributes(info, persist_attributes)
     else:
-      mobj = MovingObject(info, when, sensor)
+      mobj = MovingObject(info, when, sensor, min_size_ratio=min_size_ratio, max_size_ratio=max_size_ratio)
 
     mobj.project_to_map = project_to_map
     mobj.rotation_from_velocity = rotation_from_velocity
