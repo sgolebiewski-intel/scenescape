@@ -115,6 +115,7 @@ class MovingObject:
     reid = self.info.get('reid', None)
     if reid is not None:
       self._decodeReIDVector(reid)
+    return
 
   def _decodeReIDVector(self, reid):
     try:
@@ -124,6 +125,7 @@ class MovingObject:
     except TypeError:
       if type(reid) == list:
         self.reidVector = reid
+    return
 
   def setPersistentAttributes(self, info, persist_attributes):
     if self.chain_data is None:
@@ -139,12 +141,14 @@ class MovingObject:
               self.chain_data.persist[attr][sub_attr] = result[sub_attr]
         else:
           self.chain_data.persist[attr] = result
+    return
 
   def setGID(self, gid):
     if self.chain_data is None:
       self.chain_data = ChainData(regions={}, publishedLocations=[], sensors={}, persist={})
     self.gid = gid
     self.first_seen = self.when
+    return
 
   def setPrevious(self, otherObj):
     # log.debug("MATCHED", self.__class__.__name__,
@@ -168,6 +172,8 @@ class MovingObject:
     self.frameCount = otherObj.frameCount + 1
 
     del self.chain_data.publishedLocations[LOCATION_LIMIT:]
+    
+    return
 
   def inferRotationFromVelocity(self):
     if self.rotation_from_velocity and self.velocity:
@@ -236,6 +242,7 @@ class MovingObject:
     self.vectors = [Vector(camera, self.orig_point, when)]
     if hasattr(self, 'buffer_size') and self.buffer_size is not None:
       self.size = [x + y for x, y in zip(self.size, self.buffer_size)]
+    return
 
   @property
   def sceneLoc(self):
