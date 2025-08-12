@@ -73,27 +73,6 @@ class SceneController:
           log.error("Invalid persist_attributes format in tracker config file")
           self.tracker_config_data["persist_attributes"] = {}
       
-      # Load 3D detection surface projection configuration
-      if "project_3d_detections_to_surface" in tracker_config:
-        surface_config = tracker_config["project_3d_detections_to_surface"]
-        self.tracker_config_data["project_3d_detections_to_surface_enabled"] = surface_config.get("enabled", False)
-        self.tracker_config_data["surface_plane_z"] = surface_config.get("surface_plane_z", 0.0)
-        self.tracker_config_data["excluded_categories"] = surface_config.get("excluded_categories", [])
-        
-        # Load edge case filtering parameters
-        edge_case_config = surface_config.get("edge_case_filtering", {})
-        self.tracker_config_data["min_camera_distance"] = edge_case_config.get("min_camera_distance", 0.5)
-        self.tracker_config_data["min_z_difference"] = edge_case_config.get("min_z_difference", 0.1)
-        self.tracker_config_data["min_object_dimension"] = edge_case_config.get("min_object_dimension", 0.05)
-        self.tracker_config_data["max_object_dimension"] = edge_case_config.get("max_object_dimension", 20.0)
-        
-        # Load projection limits parameters
-        projection_limits_config = surface_config.get("projection_limits", {})
-        self.tracker_config_data["min_projected_dimension"] = projection_limits_config.get("min_projected_dimension", 0.01)
-        self.tracker_config_data["max_projected_dimension"] = projection_limits_config.get("max_projected_dimension", 100.0)
-        self.tracker_config_data["min_scale_factor"] = projection_limits_config.get("min_scale_factor", 0.1)
-        self.tracker_config_data["max_scale_factor"] = projection_limits_config.get("max_scale_factor", 10.0)
-        self.tracker_config_data["max_projection_distance"] = projection_limits_config.get("max_projection_distance", 100.0)
     return
 
   def loopForever(self):

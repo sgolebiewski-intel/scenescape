@@ -50,9 +50,6 @@ class CacheManager:
         ]
         scene_data["persist_attributes"] = self.tracker_config_data.get("persist_attributes", {})
         # Pass only minimal surface projection config if still needed
-        scene_data["project_3d_detections_to_surface_enabled"] = self.tracker_config_data.get("project_3d_detections_to_surface_enabled", False)
-        scene_data["surface_plane_z"] = self.tracker_config_data.get("surface_plane_z", 0.0)
-        scene_data["excluded_categories"] = self.tracker_config_data.get("excluded_categories", [])
         # Pass 3D size ratio filtering config
         ratio_cfg = self.tracker_config_data.get("3d_size_ratio_filtering", {})
         scene_data["min_size_ratio"] = ratio_cfg.get("min_size_ratio", 0.2)

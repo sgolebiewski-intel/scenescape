@@ -214,7 +214,7 @@ class MovingObject:
             info['rotation'],
             info['size']
           )
-          bottom_center_point = [projected_translation[0], projected_translation[1], self.surface_plane_z]
+          bottom_center_point = [projected_translation[0], projected_translation[1], 0.0]
           self.orig_point = Point(bottom_center_point)
           info['translation'] = projected_translation
           info['rotation'] = projected_rotation
@@ -394,30 +394,6 @@ class MovingObject:
       ]
       world_corners.append(world_corner)
     return world_corners
-
-
-  def find_largest_inscribed_rectangle(self, projected_corners):
-    """
-    Use OpenCV's minAreaRect to find the minimum-area bounding rectangle for the projected quadrilateral.
-    Returns (center, width, depth, rotation_angle) where angle is in radians.
-    """
-    import numpy as np
-    import cv2
-    # Only use X,Y for rectangle fitting
-    points_2d = projected_corners[:, :2].astype(np.float32)
-    rect = cv2.minAreaRect(points_2d)
-    (cx, cy), (w, h), angle_deg = rect
-    # OpenCV angle is in degrees, and is the angle between the rectangle width and the x-axis
-    # Convert to radians
-    angle_rad = np.deg2rad(angle_deg)
-    # OpenCV may swap width/height and angle, so ensure w >= h for consistency
-    if w < h:
-      w, h = h, w
-      angle_rad += np.pi/2
-    # Use the Z coordinate from the first projected corner (all should be on the surface plane)
-    center_z = projected_corners[0, 2]
-    inscribed_center = np.array([cx, cy, center_z])
-    return inscribed_center, w, h, angle_rad
 
   def project_vertices_to_surface(self, world_translation, world_rotation_quat, size):
     """Project the object's actual bottom corners to the ground plane and fit the bounding rectangle to those points only. Scale height using the average of projected width/depth ratios."""

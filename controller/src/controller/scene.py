@@ -124,9 +124,6 @@ class Scene(SceneModel):
       mobj.map_translation = scene_map_translation
       mobj.map_rotation = scene_map_rotation
       # Add surface projection configuration
-      mobj.project_3d_detections_to_surface_enabled = self.project_3d_detections_to_surface_enabled
-      mobj.surface_plane_z = self.surface_plane_z
-      mobj.excluded_categories = self.excluded_categories
       objects.append(mobj)
     return objects
 
@@ -399,9 +396,6 @@ class Scene(SceneModel):
     scene.regulated_rate = data.get('regulated_rate', None)
     scene.external_update_rate = data.get('external_update_rate', None)
     scene.persist_attributes = data.get('persist_attributes', {})
-    scene.project_3d_detections_to_surface_enabled = data.get('project_3d_detections_to_surface_enabled', False)
-    scene.surface_plane_z = data.get('surface_plane_z', 0.0)
-    scene.excluded_categories = data.get('excluded_categories', [])
     # Only load ratio-based filtering config
     scene.min_size_ratio = data.get('min_size_ratio', 0.5)
     scene.max_size_ratio = data.get('max_size_ratio', 2.0)
