@@ -140,7 +140,7 @@ jobs:
           make -C kubernetes VALIDATION=1
           make run_basic_acceptance_tests_k8s SUPASS=change_me
           make -C kubernetes clean-all
-          
+
       # SKIP_BRINGUP=1 REQUIRED_FPS=0 ./deploy.sh
 
       # - name: Rename logs to remove colons
