@@ -120,10 +120,10 @@ basic-acceptance-tests: \
 # Temp K8s BAT target
 # Not sorted alphabetically on purpose
 basic-acceptance-tests-k8s: \
-  out-of-box \
   mqtt-roi \
   mqtt-tripwire  \
   distance-msoce \
+  out-of-box \
 
 # FIXME: run functional tests in parallel
 standard-tests: \
