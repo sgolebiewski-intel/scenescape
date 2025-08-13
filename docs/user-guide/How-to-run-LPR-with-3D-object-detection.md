@@ -2,13 +2,13 @@
 
 This guide explains how to:
 
-1. Set up and run the License Plate Recognition pipeline using DeepScenario model for 3D Object Detection.
+1. Set up and run the License Plate Recognition pipeline using a 3D Object Detection model.
 2. Configure SceneScape to ingest the pipeline metadata and enable running spatial analytics on the Scene.
 
 ## Prerequisites
 
 - Successful deployment of a SceneScape instance using [Getting Started Guide](Getting-Started-Guide.md)
-- Access to the DeepScenario 3D Object Detection package
+- Access to the 3D Object Detection model package
 
 ## Setup Steps
 
@@ -24,7 +24,7 @@ cd scenescape/dlstreamer-pipeline-server/user_scripts/
 cp /path/to/your/model.enc .
 cp /path/to/your/password.txt .
 cp /path/to/your/categories.json .
-cp /path/to/your/utils ./deepscenario_utils.py
+cp /path/to/your/utils ./utils.py
 ```
 
 ### 2. Download Required Models
@@ -33,9 +33,9 @@ Download the required models for License Plate Detection and Optical Character R
 
 ### 3. Build the extended Docker container based on the DL Streamer Pipeline Server docker image
 
-Running the `DeepScenario` script requires additional Python modules installed on top of the base DL Streamer Pipeline Server docker image.
+Running the 3D object detection pipeline requires additional Python modules installed on top of the base DL Streamer Pipeline Server docker image.
 
-Create a Dockerfile named `Dockerfile.dls-deepscenario` and copy the following into it:
+Create a Dockerfile named `Dockerfile.dls-3D-object-detection` and copy the following into it:
 
 ```Dockerfile
 FROM docker.io/intel/dlstreamer-pipeline-server:3.1.0-extended-ubuntu24
@@ -52,12 +52,12 @@ USER intelmicroserviceuser
 And then build the image with:
 
 ```bash
-docker build Dockerfile.dls-deepscenario -t dls-ps-deepscenario
+docker build Dockerfile.dls-3D-object-detection -t dls-ps-3D-object-detection
 ```
 
 ### 4. Configure Video Analytics Pipeline
 
-Create a file named `deepscenario-lpr-config.json` in `scenescape/dlstreamer-pipeline-server/` and copy the following content to the newly created file:
+Create a file named `vehicle-3d-lpr-config.json` in `scenescape/dlstreamer-pipeline-server/` and copy the following content to the newly created file:
 
 ```
 {
@@ -68,9 +68,9 @@ Create a file named `deepscenario-lpr-config.json` in `scenescape/dlstreamer-pip
     },
     "pipelines": [
       {
-        "name": "deepscenario-cam1",
+        "name": "cam1",
         "source": "gstreamer",
-        "pipeline": "multifilesrc loop=TRUE location=/home/pipeline-server/videos/input-video.ts name=source ! decodebin ! videoconvert ! video/x-raw,format=BGR ! gvapython class=PostDecodeTimestampCapture function=processFrame module=/home/pipeline-server/user_scripts/gvapython/sscape/sscape_adapter.py name=timesync ! gvapython class=DeepScenario module=/home/pipeline-server/user_scripts/DeepScenario.py function=process_frame name=deepscenario ! queue ! gvadeskew intrinsics-file=/home/pipeline-server/user_scripts/intrinsics.json ! queue ! gvadetect inference-region=1 model=/home/pipeline-server/models/yolov8_license_plate_detector/yolov8_license_plate_detector.xml ! queue ! gvaclassify model=/home/pipeline-server/models/ch_PP-OCRv4_rec_infer/ch_PP-OCRv4_rec_infer.xml ! gvametaconvert add-tensor-data=true name=metaconvert ! gvapython class=PostInferenceDataPublish function=processFrame module=/home/pipeline-server/user_scripts/gvapython/sscape/sscape_adapter.py name=datapublisher ! gvametapublish name=destination ! appsink sync=true",
+        "pipeline": "multifilesrc loop=TRUE location=/home/pipeline-server/videos/input-video.ts name=source ! decodebin ! videoconvert ! video/x-raw,format=BGR ! gvapython class=PostDecodeTimestampCapture function=processFrame module=/home/pipeline-server/user_scripts/gvapython/sscape/sscape_adapter.py name=timesync ! gvapython class=ObjectDetection3D module=/home/pipeline-server/user_scripts/DeepScenario.py function=process_frame name=vehicle3D ! queue ! gvadeskew intrinsics-file=/home/pipeline-server/user_scripts/intrinsics.json ! queue ! gvadetect inference-region=1 model=/home/pipeline-server/models/yolov8_license_plate_detector/yolov8_license_plate_detector.xml ! queue ! gvaclassify model=/home/pipeline-server/models/ch_PP-OCRv4_rec_infer/ch_PP-OCRv4_rec_infer.xml ! gvametaconvert add-tensor-data=true name=metaconvert ! gvapython class=PostInferenceDataPublish function=processFrame module=/home/pipeline-server/user_scripts/gvapython/sscape/sscape_adapter.py name=datapublisher ! gvametapublish name=destination ! appsink sync=true",
         "auto_start": true,
         "parameters": {
           "type": "object",
@@ -88,9 +88,9 @@ Create a file named `deepscenario-lpr-config.json` in `scenescape/dlstreamer-pip
                 }
               }
             },
-            "deepscenario_config": {
+            "3d_model_config": {
               "element": {
-                "name": "deepscenario",
+                "name": "vehicle3D",
                 "property": "kwarg",
                 "format": "json"
               },
@@ -147,7 +147,7 @@ Create a file named `deepscenario-lpr-config.json` in `scenescape/dlstreamer-pip
             "ntp_config": {
               "ntpServer": "ntpserv"
             },
-            "deepscenario_config": {
+            "3d_model_config": {
               "intrinsics_path": "/home/pipeline-server/user_scripts/intrinsics.json",
               "max_distance": 28.0
             },
@@ -165,7 +165,7 @@ Create a file named `deepscenario-lpr-config.json` in `scenescape/dlstreamer-pip
 
 #### Customizing the video analytics pipeline
 
-The `deepscenario-config.json` file can be edited using [DLStreamer Pipeline Server documentation](https://github.com/open-edge-platform/edge-ai-libraries/tree/main/microservices/dlstreamer-pipeline-server/docs/user-guide) to customize:
+The `vehicle-3d-lpr-config.json` file can be edited using [DLStreamer Pipeline Server documentation](https://github.com/open-edge-platform/edge-ai-libraries/tree/main/microservices/dlstreamer-pipeline-server/docs/user-guide) to customize:
 
 - Input sources (video files, USB, RTSP streams)
 - Processing parameters
@@ -175,11 +175,11 @@ The `deepscenario-config.json` file can be edited using [DLStreamer Pipeline Ser
 
 #### About the `max_distance` Parameter
 
-The `max_distance` parameter in the DeepScenario model is used for depth-based filtering of objects detected in the frame. It acts as a threshold, ensuring that objects beyond the specified distance from the camera are not considered for detection. The value of `max_distance` can be adjusted in the `deepscenario_config` section of the pipeline configuration to suit specific use cases.
+The `max_distance` parameter in the 3D model is used for depth-based filtering of objects detected in the frame. It acts as a threshold, ensuring that objects beyond the specified distance from the camera are not considered for detection. The value of `max_distance` can be adjusted in the `3d_model_config` section of the pipeline configuration to suit specific use cases.
 
 ### 5. Configure Camera Intrinsics
 
-The DeepScenario model requires accurate camera intrinsics to perform 3D object detection.
+The 3D model requires accurate camera intrinsics to perform 3D object detection.
 
 Create a file intrinsics.json in `scenescape/dlstreamer-pipeline-server/user_scripts` and configure it with actual values for fx, fy, cx, cy and k1 in the following format:
 
@@ -196,22 +196,22 @@ Create a file intrinsics.json in `scenescape/dlstreamer-pipeline-server/user_scr
 
 A good starting point for these values are camera vendor provided specs. However, if they are unavailable or are giving inaccurate results, refer to the [How-to-manually-calibrate-cameras](How-to-manually-calibrate-cameras.md) guide for details on how to provide sufficient point correspondences for computing fx, fy and k1. cx and cy are always half the resolution of the frame in x and y.
 
-Each pipeline can have a separate `intrinsics.json` file. The DeepScenario script accepts the path to the `intrinsics.json` file as `intrinsics_path` argument.
+Each pipeline can have a separate `intrinsics.json` file. The ObjectDetection3D script accepts the path to the `intrinsics.json` file as `intrinsics_path` argument.
 
 ### 6. Modify Docker Compose Configuration
 
-Edit the `sample_data/docker-compose-dl-streamer-example.yml` file to disable the `retail` and `queuing` video services and enable the `deepscenario` service:
+Edit the `sample_data/docker-compose-dl-streamer-example.yml` file to disable the `retail` and `queuing` video services and enable the `vehicle-3d-lpr` service:
 
 **Remove the following sections:**
 
 - `retail-video` service
 - `queuing-video` service
 
-**Add the `deepscenario` section:**
+**Add the `vehicle-3d-lpr` section:**
 
 ```yaml
-deepscenario:
-  image: dls-ps-deepscenario
+vehicle-3d-lpr:
+  image: dls-ps-3D-object-detection
   privileged: true
   networks:
     scenescape:
@@ -241,7 +241,7 @@ deepscenario:
     - MQTT_HOST=broker.scenescape.intel.com
     - MQTT_PORT=1883
   volumes:
-    - ./dlstreamer-pipeline-server/deepscenario-lpr-config.json:/home/pipeline-server/config.json
+    - ./dlstreamer-pipeline-server/vehicle-3d-lpr-config.json:/home/pipeline-server/config.json
     - ./dlstreamer-pipeline-server/user_scripts:/home/pipeline-server/user_scripts
     - vol-dlstreamer-pipeline-server-pipeline-root:/var/cache/pipeline_root:uid=1999,gid=1999
     - ./sample_data:/home/pipeline-server/videos
@@ -268,13 +268,13 @@ Ensure your directory structure looks like this:
 scenescape/
 ├── dlstreamer-pipeline-server/
 │   ├── user_scripts/
-│   │   ├── DeepScenario.py
-│   │   ├── deepscenario_utils.py
+│   │   ├── ObjectDetection3D.py
+│   │   ├── utils.py
 │   │   ├── model.enc
 │   │   ├── password.txt
 │   │   ├── categories.json
 │   │   └── intrinsics.json
-│   └── deepscenario-lpr-config.json
+│   └── vehicle-3d-lpr-config.json
 ├── model_installer/
 │   └── models/
 │       └── public/

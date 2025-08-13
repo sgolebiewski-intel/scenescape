@@ -12,7 +12,7 @@ import openvino as ov
 from gstgva import VideoFrame
 from scipy.spatial.transform import Rotation
 
-from deepscenario_utils import preprocess, postprocess, decrypt
+from utils import preprocess, postprocess, decrypt
 
 MODEL_PATH="/home/pipeline-server/user_scripts/model.enc"
 DEFAULT_INTRINSICS_PATH = "/home/pipeline-server/user_scripts/intrinsics.json"
@@ -124,7 +124,7 @@ def infer_from_img(img, model, intrinsics, categories):
 
   return anns
 
-class DeepScenario:
+class ObjectDetection3D:
   def __init__(self, intrinsics_path=DEFAULT_INTRINSICS_PATH, max_distance=None):
     self.intrinsics = load_json(intrinsics_path)['intrinsic_matrix']
     self.intrinsics = np.dot(np.array(self.intrinsics), np.eye(4)[:3, :])
