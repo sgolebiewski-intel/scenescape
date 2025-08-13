@@ -55,11 +55,11 @@ class SceneModel:
   def getExtensionFromURL(self, url, response):
     ext = os.path.splitext(url)[1]
     if ext:
-        return ext
+      return ext
     content_type = response.headers.get('Content-Type', '')
     ext = mimetypes.guess_extension(content_type)
     if ext:
-        return ext
+      return ext
     return '.tmp'
 
   def extractMapTriangleMesh(self, mapFile, scale):

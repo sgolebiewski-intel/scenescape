@@ -46,8 +46,8 @@ class TokenAuthMiddleware(MiddlewareMixin):
     if auth_header.startswith('Token '):
       token_key = auth_header.split(' ')[1]
       try:
-          token = Token.objects.select_related('user').get(key=token_key)
-          request.user = token.user
+        token = Token.objects.select_related('user').get(key=token_key)
+        request.user = token.user
       except Token.DoesNotExist:
-            request.user = AnonymousUser()
+        request.user = AnonymousUser()
     return
