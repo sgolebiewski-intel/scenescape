@@ -90,8 +90,8 @@ class Scene(SceneModel):
     if 'external_update_rate' in scene_data:
       self.external_update_rate = scene_data['external_update_rate']
     # Set min_size_ratio and max_size_ratio from scene_data (required for MovingObject creation)
-    self.min_size_ratio = scene_data.get('min_size_ratio', 0.5)
-    self.max_size_ratio = scene_data.get('max_size_ratio', 2.0)
+    self.min_size_ratio = scene_data['min_size_ratio']
+    self.max_size_ratio = scene_data['max_size_ratio']
     self._invalidate_trs_xyz_to_lla()
     # Access the property to trigger initialization
     _ = self.trs_xyz_to_lla
@@ -397,8 +397,8 @@ class Scene(SceneModel):
     scene.external_update_rate = data.get('external_update_rate', None)
     scene.persist_attributes = data.get('persist_attributes', {})
     # Only load ratio-based filtering config
-    scene.min_size_ratio = data.get('min_size_ratio', 0.5)
-    scene.max_size_ratio = data.get('max_size_ratio', 2.0)
+    scene.min_size_ratio = data['min_size_ratio']
+    scene.max_size_ratio = data['max_size_ratio']
     if 'cameras' in data:
       scene.updateCameras(data['cameras'])
     if 'regions' in data:
