@@ -20,6 +20,27 @@ from scene_common.schema import SchemaValidation
 from scene_common.timestamp import adjust_time, get_epoch_time, get_iso_time
 from scene_common.transform import applyChildTransform
 
+
+
+from opentelemetry.sdk.resources import SERVICE_NAME, Resource
+
+from opentelemetry import trace
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+
+# Service name is required for most backends
+resource = Resource.create(attributes={
+    SERVICE_NAME: "controller"
+})
+
+tracerProvider = TracerProvider(resource=resource)
+processor = BatchSpanProcessor(OTLPSpanExporter(endpoint="jaeger:4317", insecure=True))
+tracerProvider.add_span_processor(processor)
+trace.set_tracer_provider(tracerProvider)
+
+tracer = trace.get_tracer(__name__)
+
 AVG_FRAMES = 100
 
 class SceneController:
@@ -311,9 +332,12 @@ class SceneController:
     self.publishEvents(scene, jdata['timestamp'])
     return
 
+  @tracer.start_as_current_span("handleMovingObjectMessage")
   def handleMovingObjectMessage(self, client, userdata, message):
-    topic = PubSub.parseTopic(message.topic)
-    jdata = orjson.loads(message.payload.decode('utf-8'))
+    with tracer.start_as_current_span("PubSub.parseTopic"):
+      topic = PubSub.parseTopic(message.topic)
+    with tracer.start_as_current_span("orjson.loads"):
+      jdata = orjson.loads(message.payload.decode('utf-8'))
     if 'camera_id' in topic and not self.schema_val.validateMessage("detector", jdata):
       return
 

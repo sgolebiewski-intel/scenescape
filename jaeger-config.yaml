@@ -1,0 +1,15 @@
+# Jaeger all-in-one custom configuration for OpenTelemetry
+# See: https://www.jaegertracing.io/docs/latest/cli/
+
+# Example: Enable OTLP gRPC and HTTP receivers, set sampling, and storage
+collector:
+  otlp:
+    enabled: true
+    grpc:
+      endpoint: 0.0.0.0:4317
+
+query:
+  base_path: /
+
+storage:
+  type: memory

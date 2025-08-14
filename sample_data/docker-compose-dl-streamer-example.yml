@@ -32,6 +32,21 @@ secrets:
     file: ${SECRETSDIR}/calibration.auth
 
 services:
+  # https://opentelemetry.io/docs/languages/python/exporters/#jaeger
+  jaeger:
+    image: jaegertracing/all-in-one:1.57
+    networks:
+      scenescape:
+    ports:
+      - "16686:16686"   # Jaeger UI
+#      - "4317:4317"     # OTLP gRPC
+#      - "4318:4318"     # OTLP HTTP
+#      - "14268:14268"   # Jaeger collector HTTP
+#      - "6831:6831/udp" # Jaeger agent UDP
+    volumes:
+      - ../jaeger-config.yaml:/etc/jaeger/jaeger-config.yaml:ro
+    restart: always
+
   ntpserv:
     image: dockurr/chrony
     networks:
@@ -151,6 +166,10 @@ services:
         target: certs/scenescape-vdms-c.crt
       - django
       - controller.auth
+    environment:
+      - http_proxy=$http_proxy
+      - https_proxy=$https_proxy
+      - no_proxy=$no_proxy,jaeger
     restart: always
 
   # vdms:
