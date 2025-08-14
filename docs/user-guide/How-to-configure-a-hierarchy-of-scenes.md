@@ -53,10 +53,6 @@ _Figure 2: Local Child scene on scene detail page._
 
 **On Child System**:
 
-- Edit `docker-compose.yml` to uncomment MQTT broker port.
-
-![Child MQTT broker Config](images/child_broker_conf.png)
-
 - Disable NTP server service in `docker-compose.yml`.
 - Replace `ntpserv` with parent IP in dependent services.
 
@@ -66,11 +62,7 @@ _Figure 3: ntpserver config for scene controller service in `docker-compose.yml`
 
 ![Child Config 2](images/child_ntp_conf_2.png)
 
-_Figure 4: comment ntpserver for DL Streamer pipeline server in `docker-compose.yml`._
-
-![Child Config 3](images/child_ntp_conf_3.png)
-
-_Figure 5: ntpserver config for DL Streamer pipeline in `pipeline-config.json`._
+_Figure 4: ntpserver config for DL Streamer pipeline in `pipeline-config.json`._
 
 > **Note**: Use [sample_data/docker-compose-dl-streamer-example.yml](https://github.com/open-edge-platform/scenescape/blob/main/sample_data/docker-compose-dl-streamer-example.yml) if `docker-compose.yml` doesn’t exist.
 
@@ -81,23 +73,20 @@ _Figure 5: ntpserver config for DL Streamer pipeline in `pipeline-config.json`._
 ```bash
 ./deploy.sh
 docker compose down --remove-orphans
-rm manager/secrets/ca/* manager/secrets/certs/*
-make -C tools/certificates/ deploy-certificates CERTPASS=<random-string>
+rm secrets/ca/* secrets/certs/*
+make -C certificates deploy-certificates
 ```
 
 **On Child system**:
 
-> **Note**: Ensure that there are no scenes with the same UUID present on both the parent and child systems.
-
 ```bash
 ./deploy.sh
 docker compose down --remove-orphans
-rm manager/secrets/ca/* manager/secrets/certs/*
+rm secrets/ca/* secrets/certs/*
 # Copy parent secrets:
-scp parent:/path-to-scenescape-repo/manager/secrets/ca/scenescape-ca.key ./manager/secrets/ca/
-scp parent:/path-to-scenescape-repo/manager/secrets/certs/scenescape-ca.pem ./manager/secrets/certs/
-# Use the same CERTPASS from parent
- make -C tools/certificates/ deploy-certificates IP_SAN=<child_ip> CERTPASS=<random-string-used-in-parent>
+scp parent:/path/secrets/ca/scenescape-ca.key ./secrets/ca/
+scp parent:/path/secrets/certs/scenescape-ca.pem ./secrets/certs/
+make -C certificates deploy-certificates IP_SAN=<child_ip>
 ```
 
 Then restart Intel® SceneScape:
