@@ -4,8 +4,8 @@
 SHELL=/bin/bash
 .SHELLFLAGS=-o pipefail -c
 IMAGE=scenescape
-BASE_IMAGE=$(IMAGE)-manager-test
-VERSION:=$(shell cat ../version.txt)
+BASE_IMAGE := $(IMAGE)-manager-test
+VERSION := $(shell cat ../version.txt)
 
 TEST_DATA=test_data
 TESTS_DIRECTORY=tests
@@ -95,14 +95,13 @@ release-tests: \
 #  3d-ui-calibration-points
 
 broken-tests: \
+  3d-ui-calibration-points \
   april-tag-setup \
   rtsp-stream \
-  geospatial-ingest-publish \
   camera-status \
   calibrate-camera-3d-ui-2d-ui \
   mqtt-large-messages \
   out-of-box-no-ntp \
-  child-scenes \
 
 randomly-failing-tests: \
   3d-scene-control-panel \
@@ -141,6 +140,8 @@ _functional-tests: \
   add-orphaned-cameras \
   api-large-strings \
   auto-calibration \
+  child-scenes \
+  geospatial-ingest-publish \
   mqtt-auth \
   mqtt-cert \
   mqtt-sensor-roi \
@@ -151,11 +152,6 @@ _functional-tests: \
   scene-import \
   sensors-send-events \
   vdms-similarity-search \
-
-# Moved to broken tests:
-#   mqtt-large-messages
-#   out-of-box-no-ntp
-#   child-scenes
 
 non-functional-tests:
 	$(MAKE) -Otarget _$@ SUPASS=$(SUPASS) -k
@@ -177,7 +173,6 @@ ui-tests:
 
 _ui-tests: \
   3d-camera-control-panel \
-  3d-ui-calibration-points \
   add-delete-3d-object \
   bounding-box \
   camera-intrinsics \

@@ -38,7 +38,7 @@ Running the `DeepScenario` script requires additional Python modules installed o
 Create a Dockerfile named `Dockerfile.dls-deepscenario` and copy the following into it:
 
 ```Dockerfile
-FROM dls-ps-3.1.0-extended # TODO reference publicly available image
+FROM docker.io/intel/dlstreamer-pipeline-server:3.1.0-extended-ubuntu24
 
 USER root
 
@@ -114,13 +114,6 @@ Create a file named `deepscenario-lpr-config.json` in `scenescape/dlstreamer-pip
               },
               "type": "object",
               "properties": {
-                "intrinsics": {
-                  "type": "array",
-                  "items": {
-                    "type": "number",
-                    "description": "Camera intrinsics as [diagonal_fov] or [horizontal_fov, vertical_fov] or [fx,fy,cx,cy] "
-                  }
-                },
                 "cameraid": {
                   "type": "string"
                 },

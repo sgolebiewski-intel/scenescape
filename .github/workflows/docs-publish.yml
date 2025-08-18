@@ -2,8 +2,8 @@
 # SPDX-FileCopyrightText: (C) 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-name: "[CI/CD] Post-Merge Docs Build"
-run-name: "[CI/CD] Post-Merge Docs Build"
+name: "[CI/CD] Publish Docs"
+run-name: "[CI/CD] Publish Docs"
 
 on: # yamllint disable-line rule:truthy
   push:
@@ -42,33 +42,37 @@ jobs:
   build_toplevel:
     name: "Build Toplevel Documentation"
     needs: filter
-    if: ${{ needs.filter.outputs.toplevel_changed == 'true' }}
-    uses: open-edge-platform/orch-ci/.github/workflows/publish-documentation.yml@718f61c48ac5f2bfce1bc30c2b3a6e4bac4f2b63
+    if: ${{ github.event_name == 'push' && needs.filter.outputs.toplevel_changed == 'true' }}
+    uses: open-edge-platform/orch-ci/.github/workflows/publish-documentation.yml@e2d6d9a8c38f021fcef3e3094f930486146a4612
     secrets:
       SYS_ORCH_GITHUB: ${{ secrets.SYS_ORCH_GITHUB }}
       DOC_AWS_ACCESS_KEY_ID: ${{ secrets.DOC_AWS_ACCESS_KEY_ID }}
       DOC_AWS_SECRET_ACCESS_KEY: ${{ secrets.DOC_AWS_SECRET_ACCESS_KEY }}
+    with:
+      switch_main_to_dev: true
 
   build_autocalibration:
     name: "Build Autocalibration Documentation"
     needs: [filter, build_toplevel]
-    if: ${{ (needs.filter.outputs.autocalibration_changed == 'true') || (needs.filter.outputs.toplevel_changed == 'true') }}
-    uses: open-edge-platform/orch-ci/.github/workflows/publish-documentation.yml@718f61c48ac5f2bfce1bc30c2b3a6e4bac4f2b63
+    if: ${{ github.event_name == 'push' &&  ((needs.filter.outputs.autocalibration_changed == 'true') || (needs.filter.outputs.toplevel_changed == 'true')) }}
+    uses: open-edge-platform/orch-ci/.github/workflows/publish-documentation.yml@e2d6d9a8c38f021fcef3e3094f930486146a4612
     secrets:
       SYS_ORCH_GITHUB: ${{ secrets.SYS_ORCH_GITHUB }}
       DOC_AWS_ACCESS_KEY_ID: ${{ secrets.DOC_AWS_ACCESS_KEY_ID }}
       DOC_AWS_SECRET_ACCESS_KEY: ${{ secrets.DOC_AWS_SECRET_ACCESS_KEY }}
     with:
       docs_directory: autocalibration
+      switch_main_to_dev: true
 
   build_controller:
     name: "Build Controller Documentation"
     needs: [filter, build_toplevel]
-    if: ${{ (needs.filter.outputs.controller_changed == 'true') || (needs.filter.outputs.toplevel_changed == 'true') }}
-    uses: open-edge-platform/orch-ci/.github/workflows/publish-documentation.yml@718f61c48ac5f2bfce1bc30c2b3a6e4bac4f2b63
+    if: ${{ github.event_name == 'push' &&  ((needs.filter.outputs.controller_changed == 'true') || (needs.filter.outputs.toplevel_changed == 'true')) }}
+    uses: open-edge-platform/orch-ci/.github/workflows/publish-documentation.yml@e2d6d9a8c38f021fcef3e3094f930486146a4612
     secrets:
       SYS_ORCH_GITHUB: ${{ secrets.SYS_ORCH_GITHUB }}
       DOC_AWS_ACCESS_KEY_ID: ${{ secrets.DOC_AWS_ACCESS_KEY_ID }}
       DOC_AWS_SECRET_ACCESS_KEY: ${{ secrets.DOC_AWS_SECRET_ACCESS_KEY }}
     with:
       docs_directory: controller
+      switch_main_to_dev: true
