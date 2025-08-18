@@ -1,0 +1,789 @@
+﻿Dockerfile,Component,Origin,License,Distributed by you?,Comments
+Dockerfile-controller,libdbus-1-3:amd64:1.14.10-4ubuntu4.1,Ubuntu,AFL-2.1 License,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,python3-pip:22.0.2+dfsg-1ubuntu0.6,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,python3-wheel:0.37.1-2ubuntu0.22.04.1,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,gosu:1.14-1ubuntu0.1,Ubuntu,Apache-2.0,Y,Used at initialization
+Dockerfile-camcalibration,openssl:3.0.2-0ubuntu1.19,Ubuntu,Apache-2.0,Y,used
+Dockerfile-controller,gosu:1.14-1ubuntu0.1,Ubuntu,Apache-2.0,Y,Used at initialization
+Dockerfile-controller,libarmadillo12:1:12.6.7+dfsg-1build2,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-controller,libllvm19:amd64:1:19.1.1-1ubuntu1~24.04.2,Ubuntu,Apache-2.0,Y,used by openvino
+Dockerfile-controller,libopencv-calib3d406t64:amd64:4.6.0+dfsg-13.1ubuntu1,Ubuntu,Apache-2.0,Y,imported and linked
+Dockerfile-controller,libopencv-contrib406t64:amd64:4.6.0+dfsg-13.1ubuntu1,Ubuntu,Apache-2.0,Y,imported and linked
+Dockerfile-controller,libopencv-core406t64:amd64:4.6.0+dfsg-13.1ubuntu1,Ubuntu,Apache-2.0,Y,imported and linked
+Dockerfile-controller,libopencv-dnn406t64:amd64:4.6.0+dfsg-13.1ubuntu1,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-controller,libopencv-features2d406t64:amd64:4.6.0+dfsg-13.1ubuntu1,Ubuntu,Apache-2.0,Y,imported and linked
+Dockerfile-controller,libopencv-flann406t64:amd64:4.6.0+dfsg-13.1ubuntu1,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-controller,libopencv-highgui406t64:amd64:4.6.0+dfsg-13.1ubuntu1,Ubuntu,Apache-2.0,Y,imported and linked
+Dockerfile-controller,libopencv-imgcodecs406t64:amd64:4.6.0+dfsg-13.1ubuntu1,Ubuntu,Apache-2.0,Y,imported and linked
+Dockerfile-controller,libopencv-imgproc406t64:amd64:4.6.0+dfsg-13.1ubuntu1,Ubuntu,Apache-2.0,Y,imported and linked
+Dockerfile-controller,libopencv-ml406t64:amd64:4.6.0+dfsg-13.1ubuntu1,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-controller,libopencv-objdetect406t64:amd64:4.6.0+dfsg-13.1ubuntu1,Ubuntu,Apache-2.0,Y,imported and linked
+Dockerfile-controller,libopencv-video406t64:amd64:4.6.0+dfsg-13.1ubuntu1,Ubuntu,Apache-2.0,Y,imported and linked
+Dockerfile-controller,libsharpyuv0:amd64:1.3.2-0.4build3,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-controller,openssl:3.0.13-0ubuntu3.5,Ubuntu,Apache-2.0,Y,used
+Dockerfile-manager,apache2:2.4.52-1ubuntu4.15,Ubuntu,Apache-2.0,Y,used for web server
+Dockerfile-manager,apache2-bin:2.4.52-1ubuntu4.15,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,apache2-data:2.4.52-1ubuntu4.15,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,apache2-utils:2.4.52-1ubuntu4.15,Ubuntu,Apache-2.0,Y,used for web server
+Dockerfile-manager,libapache2-mod-qos:11.63-1build1,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,libapache2-mod-wsgi-py3:4.9.0-1ubuntu0.1,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,libapr1:amd64:1.7.0-8ubuntu0.22.04.2,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,libaprutil1:amd64:1.6.1-5ubuntu4.22.04.2,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,libaprutil1-dbd-sqlite3:amd64:1.6.1-5ubuntu4.22.04.2,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,libaprutil1-ldap:amd64:1.6.1-5ubuntu4.22.04.2,Ubuntu,Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,libllvm15:amd64:1:15.0.7-0ubuntu0.22.04.3,Ubuntu,Apache-2.0,Y,used by openvino
+Dockerfile-manager,openssl:3.0.2-0ubuntu1.19,Ubuntu,Apache-2.0,Y,used
+Dockerfile-manager,opencv.js,https://docs.opencv.org/4.10.0/opencv.js,Apache-2.0,Y,imported
+Dockerfile-manager,snap-svg,https://raw.githubusercontent.com/adobe-webplatform/Snap.svg/master/dist/snap.svg-min.js,Apache-2.0,Y,imported
+Dockerfile-secrets,kind,https://github.com/kubernetes-sigs/kind,Apache-2.0,N,used
+Dockerfile-secrets,kubectl,https://github.com/kubernetes/kubectl,Apache-2.0,N,used
+Dockerfile-secrets,k9s,https://github.com/derailed/k9s,Apache-2.0,N,used
+Dockerfile-secrets,helm,https://github.com/helm/helm,Apache-2.0,N,used
+Dockerfile-secrets,openssl:3.0.2-0ubuntu1.19,Ubuntu,Apache-2.0,N,used
+Dockerfile-camcalibration,asttokens==3.0.0,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,cachetools==5.5.2,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,google-auth==2.40.3,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,hloc @ file:///tmp/hloc-1.3-py3-none-any.whl,scenescape+https://github.com/cvg/Hierarchical-Localization,Apache-2.0,Y,imported
+Dockerfile-camcalibration,importlib_metadata==8.7.0,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,kornia==0.8.1,pypi,Apache-2.0,Y,imported
+Dockerfile-camcalibration,kornia_rs==0.1.9,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,kubernetes==33.1.0,pypi,Apache-2.0,Y,unused
+Dockerfile-camcalibration,packaging==25.0,pypi,Apache-2.0,Y,imported
+Dockerfile-camcalibration,requests==2.32.4,pypi,Apache-2.0,Y,imported
+Dockerfile-camcalibration,requests-toolbelt==1.0.0,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,retrying==1.4.2,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,rsa==4.9.1,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,umf==0.11.0,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-controller,asttokens==3.0.0,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-controller,importlib_metadata==8.7.0,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-controller,packaging==25.0,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-controller,requests==2.32.4,pypi,Apache-2.0,Y,imported
+Dockerfile-controller,retrying==1.4.2,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-manager,asttokens==3.0.0,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-manager,cachetools==5.5.2,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-manager,google-auth==2.40.3,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-manager,importlib_metadata==8.7.0,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-manager,kubernetes==33.1.0,pypi,Apache-2.0,Y,imported
+Dockerfile-manager,packaging==25.0,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-manager,requests==2.32.4,pypi,Apache-2.0,Y,imported
+Dockerfile-manager,requests-toolbelt==1.0.0,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-manager,retrying==1.4.2,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-manager,rsa==4.9.1,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-manager,websocket-client==1.8.0,pypi,Apache-2.0,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,libllvm15:amd64:1:15.0.7-0ubuntu0.22.04.3,Ubuntu,Apache-2.0 and BSD-3-Clause and MIT,Y,used by openvino
+Dockerfile-manager,libjson-perl:4.04000-1,Ubuntu,Artistic License 1.0,Y,indirect dependency automatically installed
+Dockerfile-manager,libperl5.34:amd64:5.34.0-3ubuntu1.5,Ubuntu,Artistic License or GPL-1.0,Y,indirect dependency automatically installed
+Dockerfile-manager,perl:5.34.0-3ubuntu1.5,Ubuntu,Artistic License or GPL-1.0,Y,indirect dependency automatically installed
+Dockerfile-manager,perl-base:5.34.0-3ubuntu1.5,Ubuntu,Artistic License or GPL-1.0,Y,indirect dependency automatically installed
+Dockerfile-manager,perl-modules-5.34:5.34.0-3ubuntu1.5,Ubuntu,Artistic License or GPL-1.0,Y,indirect dependency automatically installed
+Dockerfile-controller,fonts-dejavu-core:2.37-8,Ubuntu,Bitstream Vera License,Y,indirect dependency automatically installed
+Dockerfile-controller,fonts-dejavu-mono:2.37-8,Ubuntu,Bitstream Vera License,Y,indirect dependency automatically installed
+Dockerfile-manager,bzip2:1.0.8-5build1,Ubuntu,BSD License,Y,used during initialization to unzip sample database
+Dockerfile-manager,libbsd0:amd64:0.11.5-1,Ubuntu,BSD License,Y,indirect dependency automatically installed
+Dockerfile-manager,libedit2:amd64:3.1-20210910-1build1,Ubuntu,BSD License,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,kiwisolver==1.4.8,pypi,BSD License,Y,indirect dependency. auto installed
+Dockerfile-controller,kiwisolver==1.4.8,pypi,BSD License,Y,indirect dependency. auto installed
+Dockerfile-manager,kiwisolver==1.4.8,pypi,BSD License,Y,indirect dependency. auto installed
+Dockerfile-controller,libaec0:amd64:1.1.2-1build1,Ubuntu,BSD-2-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libaom3:amd64:3.8.2-2ubuntu0.1,Ubuntu,BSD-2-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libarchive13t64:amd64:3.7.2-2ubuntu0.5,Ubuntu,BSD-2-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libopenjp2-7:amd64:2.5.0-2ubuntu0.3,Ubuntu,BSD-2-Clause,Y,indirect dependency automatically installed
+Dockerfile-manager,libmpdec3:amd64:2.5.1-2build2,Ubuntu,BSD-2-Clause,Y,indirect dependency automatically installed
+Dockerfile-secrets,libmpdec3:2.5.1-2build2,Ubuntu,BSD-2-Clause,N,indirect dependency automatically installed
+Dockerfile-camcalibration,decorator==5.2.1,pypi,BSD-2-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,pyasn1==0.6.1,pypi,BSD-2-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,pyasn1_modules==0.4.2,pypi,BSD-2-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,decorator==5.2.1,pypi,BSD-2-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,decorator==5.2.1,pypi,BSD-2-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,pyasn1==0.6.1,pypi,BSD-2-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,pyasn1_modules==0.4.2,pypi,BSD-2-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,libmpdec3:amd64:2.5.1-2build2,Ubuntu,BSD-2-Clause and GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libbsd0:amd64:0.11.5-1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libedit2:amd64:3.1-20210910-1build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libmd0:amd64:1.0.4-1build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libarpack2t64:amd64:3.9.1-1.1build2,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libblas3:amd64:3.12.0-3build1.1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libblosc1:amd64:1.21.5+ds-1build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libbsd0:amd64:0.12.1-1build1.1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libcharls2:amd64:2.4.2-2build2,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libcurl3t64-gnutls:amd64:8.5.0-2ubuntu10.6,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libcurl4t64:amd64:8.5.0-2ubuntu10.6,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libdouble-conversion3:amd64:3.3.0-1build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libedit2:amd64:3.1-20230828-1build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libgdcm3.0t64:amd64:3.0.22-2.1ubuntu1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libhdf4-0-alt:amd64:4.2.16-4build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libhdf5-103-1t64:amd64:1.10.10+repack-3.1ubuntu4,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libhdf5-hl-100t64:amd64:1.10.10+repack-3.1ubuntu4,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libhwloc15:amd64:2.10.0-1build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libimath-3-1-29t64:amd64:3.1.9-3.1ubuntu2,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libjpeg-turbo8:amd64:2.1.5-2ubuntu2,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libkeyutils1:amd64:1.6.3-3build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libkmlbase1t64:amd64:1.3.0-12build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libkmldom1t64:amd64:1.3.0-12build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libkmlengine1t64:amd64:1.3.0-12build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,liblapack3:amd64:3.12.0-3build1.1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,liblcms2-2:amd64:2.14-2build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,liblept5:amd64:1.82.0-3build4,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libltdl7:amd64:2.4.7-7build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libnss3:amd64:2:3.98-1build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libopenexr-3-1-30:amd64:3.1.5-5.1build3,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libopengl0:amd64:1.7.0-1build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libpcre2-16-0:amd64:10.42-4ubuntu2.1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libpng16-16t64:amd64:1.6.43-5build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libproj25:amd64:9.4.0-1build2,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libsnappy1v5:amd64:1.1.10-1build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libsuperlu6:amd64:6.0.1+dfsg1-1build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libsz2:amd64:1.1.2-1build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libtbb12:amd64:2021.11.0-2ubuntu2,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libtbbbind-2-5:amd64:2021.11.0-2ubuntu2,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libtbbmalloc2:amd64:2021.11.0-2ubuntu2,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libtesseract5:amd64:5.3.4-1build5,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libtirpc3t64:amd64:1.3.4+ds-1.1build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libwacom-common:2.10.0-2,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,libwacom9:amd64:2.10.0-2,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,mesa-libgallium:amd64:24.2.8-1ubuntu1~24.04.1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,proj-data:9.4.0-1build2,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-controller,shared-mime-info:2.4-4,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-manager,libcurl4:amd64:7.81.0-1ubuntu1.20,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-manager,libipc-run-perl:20200505.0-1,,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-manager,libmd0:amd64:1.0.4-1build1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-manager,libsasl2-2:amd64:2.1.27+dfsg2-3ubuntu1.2,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-manager,libsasl2-modules-db:amd64:2.1.27+dfsg2-3ubuntu1.2,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-manager,netcat:1.218-4ubuntu1,Ubuntu,BSD-3-Clause,Y,used
+Dockerfile-manager,netcat-openbsd:1.218-4ubuntu1,Ubuntu,BSD-3-Clause,Y,indirect dependency automatically installed
+Dockerfile-secrets,libcurl4:7.81.0-1ubuntu1.20,Ubuntu,BSD-3-Clause,N,indirect dependency automatically installed
+Dockerfile-secrets,libsasl2-2:2.1.27+dfsg2-3ubuntu1.2,Ubuntu,BSD-3-Clause,N,indirect dependency automatically installed
+Dockerfile-secrets,libsasl2-modules:2.1.27+dfsg2-3ubuntu1.2,Ubuntu,BSD-3-Clause,N,indirect dependency automatically installed
+Dockerfile-secrets,libsasl2-modules-db:2.1.27+dfsg2-3ubuntu1.2,Ubuntu,BSD-3-Clause,N,indirect dependency automatically installed
+Dockerfile-camcalibration,click==8.2.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,comm==0.2.3,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,cycler==0.12.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,Flask==3.1.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,fsspec==2025.7.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,h5py==3.14.0,pypi,BSD-3-Clause,Y,imported
+Dockerfile-camcalibration,idna==3.10,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,intel_extension_for_pytorch==2.7.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,ipython==8.37.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,ipywidgets==8.1.7,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,isodate==0.7.2,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,itsdangerous==2.2.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,Jinja2==3.1.6,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,joblib==1.5.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,jupyter_core==5.8.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,jupyterlab_widgets==3.0.15,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,lxml==6.0.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,MarkupSafe==3.0.2,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,mpmath==1.3.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,nbformat==5.10.4,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,nest-asyncio==1.6.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,networkx==3.4.2,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,numpy==1.26.4,pypi,BSD-3-Clause,Y,imported
+Dockerfile-camcalibration,oauthlib==3.3.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,pandas==2.3.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,prompt_toolkit==3.0.51,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,psutil==7.0.0,pypi,BSD-3-Clause,Y,used by tests
+Dockerfile-camcalibration,pycolmap==0.4.0,pypi,BSD-3-Clause,Y,imported
+Dockerfile-camcalibration,Pygments==2.19.2,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,PySocks==1.7.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,python-dateutil==2.9.0.post0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,scikit-learn==1.7.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,scipy==1.15.3,pypi,BSD-3-Clause,Y,imported
+Dockerfile-camcalibration,sympy==1.14.0,pypi,BSD-3-Clause,Y,imported
+Dockerfile-camcalibration,threadpoolctl==3.6.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,torch==2.7.1+cpu,pypi,BSD-3-Clause,Y,imported
+Dockerfile-camcalibration,torchvision==0.22.1+cpu,pypi,BSD-3-Clause,Y,imported
+Dockerfile-camcalibration,traitlets==5.14.3,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,websocket-client==1.8.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,Werkzeug==3.1.3,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,widgetsnbextension==4.0.14,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,click==8.2.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,comm==0.2.3,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,cycler==0.12.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,Flask==3.1.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,idna==3.10,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,ipython==9.4.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,ipython_pygments_lexers==1.1.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,ipywidgets==8.1.7,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,itsdangerous==2.2.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,Jinja2==3.1.6,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,joblib==1.5.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,jupyter_core==5.8.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,jupyterlab_widgets==3.0.15,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,MarkupSafe==3.0.2,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,nbformat==5.10.4,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,nest-asyncio==1.6.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,numpy==1.26.4,pypi,BSD-3-Clause,Y,imported
+Dockerfile-controller,pandas==2.3.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,prompt_toolkit==3.0.51,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,protobuf==4.24.2,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,Pygments==2.19.2,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,python-dateutil==2.9.0.post0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,scikit-learn==1.7.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,scipy==1.16.1,pypi,BSD-3-Clause,Y,imported
+Dockerfile-controller,shapely==2.1.1,pypi,BSD-3-Clause,Y,imported
+Dockerfile-controller,threadpoolctl==3.6.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,traitlets==5.14.3,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,Werkzeug==3.1.3,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-controller,widgetsnbextension==4.0.14,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,asgiref==3.9.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,click==8.2.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,comm==0.2.3,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,cycler==0.12.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,Django==5.2.4,pypi,BSD-3-Clause,Y,imported
+Dockerfile-manager,django-debug-toolbar==6.0.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,django-session-timeout==0.1.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,Flask==3.1.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,idna==3.10,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,ipython==8.37.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,ipywidgets==8.1.7,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,isodate==0.7.2,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,itsdangerous==2.2.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,Jinja2==3.1.6,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,joblib==1.5.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,jupyter_core==5.8.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,jupyterlab_widgets==3.0.15,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,lxml==6.0.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,MarkupSafe==3.0.2,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,nbformat==5.10.4,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,nest-asyncio==1.6.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,numpy==1.26.4,pypi,BSD-3-Clause,Y,imported
+Dockerfile-manager,oauthlib==3.3.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,pandas==2.3.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,prompt_toolkit==3.0.51,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,Pygments==2.19.2,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,python-dateutil==2.9.0.post0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,scikit-learn==1.7.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,scipy==1.15.3,pypi,BSD-3-Clause,Y,imported
+Dockerfile-manager,sqlparse==0.5.3,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,threadpoolctl==3.6.0,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,traitlets==5.14.3,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,websockets==15.0.1,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,Werkzeug==3.1.3,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-manager,widgetsnbextension==4.0.14,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
+Dockerfile-model-installer,mpmath==1.3.0,pypi,BSD-3-Clause,N,used
+Dockerfile-camcalibration,python3-pkg-resources:59.6.0-1.2ubuntu0.22.04.3,Ubuntu,BSD-3-Clause and Apache-2.0,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,python3-setuptools:59.6.0-1.2ubuntu0.22.04.3,Ubuntu,BSD-3-Clause and Apache-2.1,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,Ubuntu:22,DockerHub,collection of licenses,N,base image
+Dockerfile-controller,Ubuntu:24,Ubuntu,collection of licenses,N,base image
+Dockerfile-manager,Ubuntu:22,Ubuntu,collection of licenses,N,base image
+Dockerfile-models,busybox:1.37,DockerHub,collection of licenses,N,base image
+Dockerfile-secrets,Ubuntu:22,DockerHub,collection of licenses,N,base image
+Dockerfile-tests,busybox,DockerHub,collection of licenses,N,base image
+Dockerfile-manager,libmosquitto1:amd64:2.0.11-1ubuntu1.2,Ubuntu,"Eclipse Public License 2.0 OR
+Eclipse Distribution License 1.0",Y,indirect dependency automatically installed
+Dockerfile-manager,mosquitto-clients:2.0.11-1ubuntu1.2,Ubuntu,"Eclipse Public License 2.0 OR
+Eclipse Distribution License 1.0",Y,used at initialization
+Dockerfile-camcalibration,paho-mqtt==2.1.0,pypi,EPL-1.0,Y,imported
+Dockerfile-controller,paho-mqtt==2.1.0,pypi,EPL-1.0,Y,imported
+Dockerfile-manager,paho-mqtt==2.1.0,pypi,EPL-2.0 OR BSD-3-Clause,Y,imported
+Dockerfile-controller,libfreetype6:amd64:2.13.2+dfsg-1build3,Ubuntu,FTL,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,bindfs:1.14.7-1,Ubuntu,GPL-2.0,Y,Used at initialization
+Dockerfile-camcalibration,fuse:2.9.9-5ubuntu3,Ubuntu,GPL-2.0,Y,used
+Dockerfile-camcalibration,libfuse2:amd64:2.9.9-5ubuntu3,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libsensors-config:1:3.6.0-7ubuntu1,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libsensors5:amd64:1:3.6.0-7ubuntu1,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,media-types:7.0.0,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-controller,libmysqlclient21:amd64:8.0.42-0ubuntu0.24.04.2,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-controller,librttopo1:amd64:1.1.0-3build2,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-controller,media-types:10.1.0,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-controller,netbase:6.4,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,bindfs:1.14.7-1,Ubuntu,GPL-2.0,Y,used at initialization
+Dockerfile-manager,fuse:2.9.9-5ubuntu3,Ubuntu,GPL-2.0,Y,used
+Dockerfile-manager,libfuse2:amd64:2.9.9-5ubuntu3,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,libsensors-config:1:3.6.0-7ubuntu1,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,libsensors5:amd64:1:3.6.0-7ubuntu1,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,media-types:7.0.0,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,netbase:6.3,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,ssl-cert:1.1.2,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,ucf:3.0043,Ubuntu,GPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-secrets,media-types:7.0.0,Ubuntu,GPL-2.0,N,indirect dependency automatically installed
+Dockerfile-controller,libcfitsio10t64:amd64:4.3.1-1.1build2,Ubuntu,GPL-2.0 and LGPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libgomp1:amd64:12.3.0-1ubuntu1~22.04,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libreadline8:amd64:8.1.2-1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,readline-common:8.1.2-1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,wget:1.21.2-2ubuntu1.1,Ubuntu,GPL-3.0,Y,used
+Dockerfile-controller,libgfortran5:amd64:14.2.0-4ubuntu2~24.04,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-controller,libgomp1:amd64:14.2.0-4ubuntu2~24.04,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-controller,libqt5core5t64:amd64:5.15.13+dfsg-1ubuntu1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed by opencv-contrib
+Dockerfile-controller,libqt5dbus5t64:amd64:5.15.13+dfsg-1ubuntu1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed by opencv-contrib
+Dockerfile-controller,libqt5gui5t64:amd64:5.15.13+dfsg-1ubuntu1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed by opencv-contrib
+Dockerfile-controller,libqt5network5t64:amd64:5.15.13+dfsg-1ubuntu1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed by opencv-contrib
+Dockerfile-controller,libqt5opengl5t64:amd64:5.15.13+dfsg-1ubuntu1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed by opencv-contrib
+Dockerfile-controller,libqt5test5t64:amd64:5.15.13+dfsg-1ubuntu1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed by opencv-contrib
+Dockerfile-controller,libqt5widgets5t64:amd64:5.15.13+dfsg-1ubuntu1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed by opencv-contrib
+Dockerfile-controller,libreadline8t64:amd64:8.2-4build1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-controller,readline-common:8.2-4build1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-manager,libgdbm-compat4:amd64:1.23-1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-manager,libgdbm6:amd64:1.23-1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-manager,libgomp1:amd64:12.3.0-1ubuntu1~22.04,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-manager,libreadline8:amd64:8.1.2-1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-manager,python-is-python3:3.9.2-2,Ubuntu,GPL-3.0,Y,used
+Dockerfile-manager,readline-common:8.1.2-1,Ubuntu,GPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-secrets,libreadline8:8.1.2-1,Ubuntu,GPL-3.0,N,indirect dependency automatically installed
+Dockerfile-secrets,make:4.3-4.1build1,Ubuntu,GPL-3.0,N,used for build
+Dockerfile-secrets,readline-common:8.1.2-1,Ubuntu,GPL-3.0,N,indirect dependency automatically installed
+Dockerfile-camcalibration,pillow==11.3.0,pypi,HPND,Y,imported
+Dockerfile-manager,pillow==11.3.0,pypi,HPND,Y,imported
+Dockerfile-controller,libicu74:amd64:74.2-1ubuntu3.1,Ubuntu,ICU License,Y,indirect dependency automatically installed
+Dockerfile-controller,tzdata:2025b-0ubuntu0.24.04.1,Ubuntu,ICU License,Y,indirect dependency automatically installed
+Dockerfile-manager,libicu70:amd64:70.1-2,Ubuntu,ICU License,Y,indirect dependency automatically installed
+Dockerfile-manager,tzdata:2025b-0ubuntu0.22.04.1,Ubuntu,ICU License,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,intel-openmp==2025.2.0,pypi,Intel End User License,Y,dependency
+Dockerfile-camcalibration,intel-cmplr-lib-ur==2025.2.0,pypi,Intel End User License Agreement for Developer Tools,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,tcmlib==1.4.0,pypi,Intel Simplified Software License,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,pexpect==4.9.0,pypi,ISC,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,ptyprocess==0.7.0,pypi,ISC,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,requests-file==2.1.0,pypi,ISC,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,requests-oauthlib==2.0.0,pypi,ISC,Y,indirect dependency. auto installed
+Dockerfile-controller,mapbox_earcut==1.0.3,pypi,ISC,Y,imported
+Dockerfile-controller,pexpect==4.9.0,pypi,ISC,Y,indirect dependency. auto installed
+Dockerfile-controller,ptyprocess==0.7.0,pypi,ISC,Y,indirect dependency. auto installed
+Dockerfile-manager,pexpect==4.9.0,pypi,ISC,Y,indirect dependency. auto installed
+Dockerfile-manager,ptyprocess==0.7.0,pypi,ISC,Y,indirect dependency. auto installed
+Dockerfile-manager,requests-file==2.1.0,pypi,ISC,Y,indirect dependency. auto installed
+Dockerfile-manager,requests-oauthlib==2.0.0,pypi,ISC,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,sudo:1.9.9-1ubuntu2.5,Ubuntu,ISC License,Y,used
+Dockerfile-controller,sudo:1.9.15p5-3ubuntu5.24.04.1,Ubuntu,ISC License,Y,used
+Dockerfile-manager,sudo:1.9.9-1ubuntu2.5,Ubuntu,ISC License,Y,used
+Dockerfile-controller,libjbig0:amd64:2.1-6.1ubuntu2,Ubuntu,JBIG License,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libpciaccess0:amd64:0.16-3,Ubuntu,LGPL,Y,indirect dependency automatically installed
+Dockerfile-controller,libjson-c5:amd64:0.17-1build1,Ubuntu,LGPL-2.0,Y,indirect dependency automatically installed
+Dockerfile-manager,locales:2.35-0ubuntu3.10,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libglib2.0-0:amd64:2.72.4-0ubuntu2.5,Ubuntu,LGPL-2.1,Y,linked
+Dockerfile-controller,libapparmor1:amd64:4.0.1really4.0.1-0ubuntu0.24.04.4,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libde265-0:amd64:1.0.15-1build3,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libfyba0t64:amd64:4.1.1-11build1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libgeos-c1t64:amd64:3.12.1-3build1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libgeos3.12.1t64:amd64:3.12.1-3build1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libglib2.0-0t64:amd64:2.80.0-6ubuntu3.4,Ubuntu,LGPL-2.1,Y,linked
+Dockerfile-controller,libgudev-1.0-0:amd64:1:238-5ubuntu1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libheif-plugin-aomdec:amd64:1.17.6-1ubuntu4.1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libheif-plugin-libde265:amd64:1.17.6-1ubuntu4.1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libheif1:amd64:1.17.6-1ubuntu4.1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libinput-bin:1.25.0-1ubuntu3.1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libinput10:amd64:1.25.0-1ubuntu3.1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libodbc2:amd64:2.3.12-1ubuntu0.24.04.1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libodbcinst2:amd64:2.3.12-1ubuntu0.24.04.1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libogdi4.1:amd64:4.1.1+ds-3build1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libpoppler134:amd64:24.02.0-1ubuntu9.5,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,librtmp1:amd64:2.4+20151223.gitfa8646d.1-2build7,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libsensors-config:1:3.6.0-9build1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libsensors5:amd64:1:3.6.0-9build1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libsocket++1:amd64:1.12.13+git20131030.5d039ba-1build1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libssh-4:amd64:0.10.6-2ubuntu0.1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libtirpc-common:1.3.4+ds-1.1build1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libvulkan1:amd64:1.3.275.0-1build1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libwebp7:amd64:1.3.2-0.4build3,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,libwebpmux3:amd64:1.3.2-0.4build3,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,mysql-common:5.8+1.1.0build1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-controller,unixodbc-common:2.3.12-1ubuntu0.24.04.1,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-manager,libglib2.0-0:amd64:2.72.4-0ubuntu2.5,Ubuntu,LGPL-2.1,Y,linked
+Dockerfile-manager,libio-pty-perl:1:1.15-2build2,,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-manager,librtmp1:amd64:2.4+20151223.gitfa8646d.1-2build4,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-secrets,librtmp1:2.4+20151223.gitfa8646d.1-2build4,Ubuntu,LGPL-2.1,N,indirect dependency automatically installed
+Dockerfile-secrets,libssh-4:0.9.6-2ubuntu0.22.04.3,Ubuntu,LGPL-2.1,N,indirect dependency automatically installed
+Dockerfile-camcalibration,libelf1:amd64:0.186-1ubuntu0.1,Ubuntu,LGPL-3.0,Y,imported
+Dockerfile-controller,libelf1t64:amd64:0.190-1.1ubuntu0.1,Ubuntu,LGPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-manager,libelf1:amd64:0.186-1ubuntu0.1,Ubuntu,LGPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-manager,psycopg2-binary==2.9.10,pypi,LGPL-3.0,Y,imported
+Dockerfile-manager,libpng16-16:amd64:1.6.37-3build5,Ubuntu,libpng License,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libdrm-amdgpu1:amd64:2.4.113-2~ubuntu0.22.04.1,Ubuntu,MIT,Y,linked
+Dockerfile-camcalibration,libdrm-common:2.4.113-2~ubuntu0.22.04.1,Ubuntu,MIT,Y,linked
+Dockerfile-camcalibration,libdrm-intel1:amd64:2.4.113-2~ubuntu0.22.04.1,Ubuntu,MIT,Y,linked
+Dockerfile-camcalibration,libdrm-nouveau2:amd64:2.4.113-2~ubuntu0.22.04.1,Ubuntu,MIT,Y,linked
+Dockerfile-camcalibration,libdrm-radeon1:amd64:2.4.113-2~ubuntu0.22.04.1,Ubuntu,MIT,Y,linked
+Dockerfile-camcalibration,libdrm2:amd64:2.4.113-2~ubuntu0.22.04.1,Ubuntu,MIT,Y,linked
+Dockerfile-camcalibration,libegl-mesa0:amd64:23.2.1-1ubuntu3.1~22.04.3,Ubuntu,MIT,Y,used by open3d
+Dockerfile-camcalibration,libegl1:amd64:1.4.0-1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libexpat1:amd64:2.4.7-1ubuntu0.6,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libgbm1:amd64:23.2.1-1ubuntu3.1~22.04.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libgl1:amd64:1.4.0-1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libgl1-mesa-dri:amd64:23.2.1-1ubuntu3.1~22.04.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libglapi-mesa:amd64:23.2.1-1ubuntu3.1~22.04.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libglvnd0:amd64:1.4.0-1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libglx-mesa0:amd64:23.2.1-1ubuntu3.1~22.04.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libglx0:amd64:1.4.0-1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libpsl5:amd64:0.21.0-1.2build2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libx11-6:amd64:2:1.7.5-1ubuntu0.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libx11-data:2:1.7.5-1ubuntu0.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libx11-xcb1:amd64:2:1.7.5-1ubuntu0.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxau6:amd64:1:1.0.9-1build5,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxcb-dri2-0:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxcb-dri3-0:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxcb-glx0:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxcb-present0:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxcb-randr0:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxcb-shm0:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxcb-sync1:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxcb-xfixes0:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxcb1:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxdmcp6:amd64:1:1.1.3-0ubuntu5,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxext6:amd64:2:1.3.4-1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxfixes3:amd64:1:6.0.0-1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxml2:amd64:2.9.13+dfsg-1ubuntu0.7,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxshmfence1:amd64:1.3-1build4,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libxxf86vm1:amd64:1:1.1.4-1build3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,fontconfig:2.15.0-1.1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,fontconfig-config:2.15.0-1.1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,gdal-data:3.8.4+dfsg-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,gdal-plugins:amd64:3.8.4+dfsg-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libbrotli1:amd64:1.1.0-2build2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libdeflate0:amd64:1.19-1build1.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libdrm-amdgpu1:amd64:2.4.122-1~ubuntu0.24.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libdrm-common:2.4.122-1~ubuntu0.24.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libdrm-intel1:amd64:2.4.122-1~ubuntu0.24.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libdrm-radeon1:amd64:2.4.122-1~ubuntu0.24.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libdrm2:amd64:2.4.122-1~ubuntu0.24.04.1,Ubuntu,MIT,Y,linked
+Dockerfile-controller,libegl-mesa0:amd64:24.2.8-1ubuntu1~24.04.1,Ubuntu,MIT,Y,used by open3d
+Dockerfile-controller,libegl1:amd64:1.7.0-1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libevdev2:amd64:1.13.1+dfsg-1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libexpat1:amd64:2.6.1-2ubuntu0.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libfontconfig1:amd64:2.15.0-1.1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libfreexl1:amd64:2.0.0-1build2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libgbm1:amd64:24.2.8-1ubuntu1~24.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libgdal34t64:amd64:3.8.4+dfsg-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libgeotiff5:amd64:1.7.1-5build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libgif7:amd64:5.2.2-1ubuntu1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libgl1:amd64:1.7.0-1build1,Ubuntu,MIT,Y,used by opencv
+Dockerfile-controller,libgl1-mesa-dri:amd64:24.2.8-1ubuntu1~24.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libglapi-mesa:amd64:24.2.8-1ubuntu1~24.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libglvnd0:amd64:1.7.0-1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libglx-mesa0:amd64:24.2.8-1ubuntu1~24.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libglx0:amd64:1.7.0-1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libgssapi-krb5-2:amd64:1.20.1-6ubuntu2.6,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libharfbuzz0b:amd64:8.3.0-2build2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libice6:amd64:2:1.0.10-1build3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libjpeg8:amd64:8c-2ubuntu11,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libk5crypto3:amd64:1.20.1-6ubuntu2.6,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libkrb5-3:amd64:1.20.1-6ubuntu2.6,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libkrb5support0:amd64:1.20.1-6ubuntu2.6,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,liblerc4:amd64:4.0.0+ds-4ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libmd4c0:amd64:0.4.8-1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libminizip1t64:amd64:1:1.3.dfsg-3.1ubuntu2.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libmtdev1t64:amd64:1.1.6-1.1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libnetcdf19t64:amd64:1:4.9.2-5ubuntu4,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libnghttp2-14:amd64:1.59.0-1ubuntu0.2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libnspr4:amd64:2:4.35-1.1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libpciaccess0:amd64:0.17-3ubuntu0.24.04.2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libprotobuf32t64:amd64:3.21.12-8.2ubuntu0.2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libpsl5t64:amd64:0.21.2-1.1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libsasl2-2:amd64:2.1.28+dfsg1-5ubuntu3.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libsasl2-modules-db:amd64:2.1.28+dfsg1-5ubuntu3.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libsm6:amd64:2:1.2.3-1build3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libtiff6:amd64:4.5.1+git230720-4ubuntu2.2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,liburiparser1:amd64:0.9.7+dfsg-2build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libwayland-client0:amd64:1.22.0-2.1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libwayland-server0:amd64:1.22.0-2.1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libx11-6:amd64:2:1.8.7-1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libx11-data:2:1.8.7-1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libx11-xcb1:amd64:2:1.8.7-1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxau6:amd64:1:1.0.9-1build6,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-dri2-0:amd64:1.15-1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-dri3-0:amd64:1.15-1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-glx0:amd64:1.15-1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-icccm4:amd64:0.4.1-1.1build3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-image0:amd64:0.4.0-2build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-keysyms1:amd64:0.4.0-1build4,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-present0:amd64:1.15-1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-randr0:amd64:1.15-1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-render-util0:amd64:0.3.9-1build4,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-render0:amd64:1.15-1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-shape0:amd64:1.15-1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-shm0:amd64:1.15-1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-sync1:amd64:1.15-1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-util1:amd64:0.4.0-1build3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-xfixes0:amd64:1.15-1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-xinerama0:amd64:1.15-1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-xinput0:amd64:1.15-1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb-xkb1:amd64:1.15-1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxcb1:amd64:1.15-1ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxdmcp6:amd64:1:1.1.3-0ubuntu6,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxerces-c3.2t64:amd64:3.2.4+debian-1.2ubuntu2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxext6:amd64:2:1.3.4-1build2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxfixes3:amd64:1:6.0.0-2build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxkbcommon-x11-0:amd64:1.6.0-1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxkbcommon0:amd64:1.6.0-1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxml2:amd64:2.9.14+dfsg-1.3ubuntu3.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxrender1:amd64:1:0.9.10-1.1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxshmfence1:amd64:1.3-1build5,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,libxxf86vm1:amd64:1:1.1.4-1build4,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-controller,x11-common:1:7.7+23ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,curl:7.81.0-1ubuntu1.20,Ubuntu,MIT,Y,used
+Dockerfile-manager,libbrotli1:amd64:1.0.9-2build6,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libcjson1:amd64:1.7.15-1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libdrm-amdgpu1:amd64:2.4.113-2~ubuntu0.22.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libdrm-common:2.4.113-2~ubuntu0.22.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libdrm-intel1:amd64:2.4.113-2~ubuntu0.22.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libdrm-nouveau2:amd64:2.4.113-2~ubuntu0.22.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libdrm-radeon1:amd64:2.4.113-2~ubuntu0.22.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libdrm2:amd64:2.4.113-2~ubuntu0.22.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libegl-mesa0:amd64:23.2.1-1ubuntu3.1~22.04.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libegl1:amd64:1.4.0-1,Ubuntu,MIT,Y,used by open3d
+Dockerfile-manager,libexpat1:amd64:2.4.7-1ubuntu0.6,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libgbm1:amd64:23.2.1-1ubuntu3.1~22.04.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libgl1:amd64:1.4.0-1,Ubuntu,MIT,Y,used by opencv
+Dockerfile-manager,libgl1-mesa-dri:amd64:23.2.1-1ubuntu3.1~22.04.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libglapi-mesa:amd64:23.2.1-1ubuntu3.1~22.04.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libglvnd0:amd64:1.4.0-1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libglx-mesa0:amd64:23.2.1-1ubuntu3.1~22.04.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libglx0:amd64:1.4.0-1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libjansson4:amd64:2.13.1-1.1build3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,liblua5.3-0:amd64:5.3.6-1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libnghttp2-14:amd64:1.43.0-1ubuntu0.2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libpciaccess0:amd64:0.16-3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libpsl5:amd64:0.21.0-1.2build2,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libsqlite3-0:amd64:3.37.2-2ubuntu0.5,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libwayland-client0:amd64:1.20.0-1ubuntu0.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libwayland-server0:amd64:1.20.0-1ubuntu0.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libx11-6:amd64:2:1.7.5-1ubuntu0.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libx11-data:2:1.7.5-1ubuntu0.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libx11-xcb1:amd64:2:1.7.5-1ubuntu0.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxau6:amd64:1:1.0.9-1build5,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxcb-dri2-0:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxcb-dri3-0:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxcb-glx0:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxcb-present0:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxcb-randr0:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxcb-shm0:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxcb-sync1:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxcb-xfixes0:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxcb1:amd64:1.14-3ubuntu3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxdmcp6:amd64:1:1.1.3-0ubuntu5,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxext6:amd64:2:1.3.4-1build1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxfixes3:amd64:1:6.0.0-1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxml2:amd64:2.9.13+dfsg-1ubuntu0.7,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxshmfence1:amd64:1.3-1build4,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxslt1.1:amd64:1.1.34-4ubuntu0.22.04.4,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,libxxf86vm1:amd64:1:1.1.4-1build3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,python3-pkg-resources:59.6.0-1.2ubuntu0.22.04.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,python3-setuptools:59.6.0-1.2ubuntu0.22.04.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,python3-wheel:0.37.1-2ubuntu0.22.04.1,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-manager,axios,https://cdn.jsdelivr.net/npm/axios,MIT,Y,imported
+Dockerfile-manager,bootstrap,https://github.com/twbs/bootstrap,MIT,Y,imported
+Dockerfile-manager,Doxygen Awesome,https://raw.githubusercontent.com/jothepro/doxygen-awesome-css,MIT,Y,imported
+Dockerfile-manager,glfx,https://cdn.jsdelivr.net/npm/glfx@0.0.4/glfx.min.js,MIT,Y,imported
+Dockerfile-manager,jquery,https://code.jquery.com/,MIT,Y,imported
+Dockerfile-manager,JSZip,https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1,MIT,Y,imported
+Dockerfile-manager,mqttjs,https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.5/mqtt.min.js,MIT,Y,imported
+Dockerfile-manager,tether,https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.7/js,MIT,Y,imported
+Dockerfile-manager,threejs,https://cdn.jsdelivr.net/npm/three@0.168.0,MIT,Y,imported
+Dockerfile-manager,threejs projected material,https://unpkg.com/three-projected-material/build/ProjectedMaterial.module.js,MIT,Y,imported
+Dockerfile-secrets,curl:7.81.0-1ubuntu1.20,Ubuntu,MIT,N,indirect dependency automatically installed
+Dockerfile-secrets,libbrotli1:1.0.9-2build6,Ubuntu,MIT,N,indirect dependency automatically installed
+Dockerfile-secrets,libexpat1:2.4.7-1ubuntu0.6,Ubuntu,MIT,N,indirect dependency automatically installed
+Dockerfile-secrets,libnghttp2-14:1.43.0-1ubuntu0.2,Ubuntu,MIT,N,indirect dependency automatically installed
+Dockerfile-secrets,libpsl5:0.21.0-1.2build2,Ubuntu,MIT,N,indirect dependency automatically installed
+Dockerfile-camcalibration,addict==2.4.0,pypi,MIT,Y,imported
+Dockerfile-camcalibration,attrs==25.3.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,beautifulsoup4==4.13.4,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,blinker==1.9.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,charset-normalizer==3.4.2,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,ConfigArgParse==1.7.1,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,contourpy==1.3.2,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,dash==3.2.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,durationpy==0.10,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,exceptiongroup==1.3.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,executing==2.2.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,fastjsonschema==2.21.1,pypi,MIT,Y,imported
+Dockerfile-camcalibration,fonttools==4.59.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,gdown==5.2.0,pypi,MIT,Y,imported
+Dockerfile-camcalibration,jedi==0.19.2,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,jsonschema==4.25.0,pypi,MIT,Y,imported
+Dockerfile-camcalibration,jsonschema-specifications==2025.4.1,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,matplotlib-inline==0.1.7,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,narwhals==2.0.1,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,onvif-zeep==0.2.12,pypi,MIT,Y,imported in a utiliity script
+Dockerfile-camcalibration,open3d-cpu==0.19.0,pypi,MIT,Y,imported
+Dockerfile-camcalibration,opencv-python-headless==4.11.0.86,pypi,MIT,Y,imported
+Dockerfile-camcalibration,parso==0.8.4,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,pip==22.0.2,pypi,MIT,Y,used
+Dockerfile-camcalibration,platformdirs==4.3.8,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,plotly==6.2.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,pure_eval==0.2.3,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,pyparsing==3.2.3,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,pyquaternion==0.9.9,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,pytz==2025.2,pypi,MIT,Y,imported
+Dockerfile-camcalibration,PyYAML==6.0.2,pypi,MIT,Y,imported
+Dockerfile-camcalibration,referencing==0.36.2,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,rpds-py==0.26.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,setuptools==59.6.0,pypi,MIT,Y,imported
+Dockerfile-camcalibration,six==1.17.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,soupsieve==2.7,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,stack-data==0.6.3,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,trimesh==4.7.1,pypi,MIT,Y,imported
+Dockerfile-camcalibration,tzdata==2025.2,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,urllib3==2.5.0,pypi,MIT,Y,imported
+Dockerfile-camcalibration,wcwidth==0.2.13,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,wheel==0.37.1,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,zeep==4.3.1,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,zipp==3.23.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,addict==2.4.0,pypi,MIT,Y,imported
+Dockerfile-controller,attrs==25.3.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,blinker==1.9.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,charset-normalizer==3.4.2,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,ConfigArgParse==1.7.1,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,contourpy==1.3.3,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,dash==3.2.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,executing==2.2.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,fastjsonschema==2.21.1,pypi,MIT,Y,imported
+Dockerfile-controller,fonttools==4.59.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,jedi==0.19.2,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,jsonschema==4.25.0,pypi,MIT,Y,imported
+Dockerfile-controller,jsonschema-specifications==2025.4.1,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,matplotlib-inline==0.1.7,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,narwhals==2.0.1,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,ntplib==0.4.0,pypi,MIT,Y,imported
+Dockerfile-controller,open3d-cpu==0.19.0,pypi,MIT,Y,imported
+Dockerfile-controller,opencv-python-headless==4.11.0.86,pypi,MIT,Y,imported
+Dockerfile-controller,orjson==3.11.1,pypi,MIT,Y,imported
+Dockerfile-controller,parso==0.8.4,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,pip==24.0,pypi,MIT,Y,used
+Dockerfile-controller,platformdirs==4.3.8,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,plotly==6.2.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,pure_eval==0.2.3,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,pyparsing==3.2.3,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,pyquaternion==0.9.9,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,pytz==2025.2,pypi,MIT,Y,imported
+Dockerfile-controller,PyYAML==6.0.2,pypi,MIT,Y,imported
+Dockerfile-controller,referencing==0.36.2,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,rpds-py==0.26.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,setuptools==68.1.2,pypi,MIT,Y,imported
+Dockerfile-controller,six==1.17.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,stack-data==0.6.3,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,trimesh==4.7.1,pypi,MIT,Y,imported
+Dockerfile-controller,tzdata==2025.2,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,urllib3==2.5.0,pypi,MIT,Y,imported
+Dockerfile-controller,vdms==0.0.21,pypi,MIT,Y,imported
+Dockerfile-controller,wcwidth==0.2.13,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,wheel==0.42.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-controller,zipp==3.23.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,addict==2.4.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,attrs==25.3.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,blinker==1.9.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,charset-normalizer==3.4.2,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,ConfigArgParse==1.7.1,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,contourpy==1.3.2,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,dash==3.2.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,django-axes==8.0.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,djangorestframework==3.16.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,durationpy==0.10,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,exceptiongroup==1.3.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,executing==2.2.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,fastjsonschema==2.21.1,pypi,MIT,Y,imported
+Dockerfile-manager,fonttools==4.59.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,jedi==0.19.2,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,jsonschema==4.25.0,pypi,MIT,Y,imported
+Dockerfile-manager,jsonschema-specifications==2025.4.1,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,matplotlib-inline==0.1.7,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,narwhals==2.0.1,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,onvif-zeep==0.2.12,pypi,MIT,Y,imported in a utiliity script
+Dockerfile-manager,open3d-cpu==0.19.0,pypi,MIT,Y,imported
+Dockerfile-manager,opencv-python-headless==4.11.0.86,pypi,MIT,Y,imported
+Dockerfile-manager,parso==0.8.4,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,pip==22.0.2,pypi,MIT,Y,used
+Dockerfile-manager,platformdirs==4.3.8,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,plotly==6.2.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,pure_eval==0.2.3,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,pyparsing==3.2.3,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,pyquaternion==0.9.9,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,pytz==2025.2,pypi,MIT,Y,imported
+Dockerfile-manager,PyYAML==6.0.2,pypi,MIT,Y,imported
+Dockerfile-manager,referencing==0.36.2,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,rpds-py==0.26.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,setuptools==59.6.0,pypi,MIT,Y,imported
+Dockerfile-manager,six==1.17.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,stack-data==0.6.3,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,trimesh==4.7.1,pypi,MIT,Y,imported
+Dockerfile-manager,tzdata==2025.2,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,urllib3==2.5.0,pypi,MIT,Y,imported
+Dockerfile-manager,wcwidth==0.2.13,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,wheel==0.37.1,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,zeep==4.3.1,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-manager,zipp==3.23.0,pypi,MIT,Y,indirect dependency. auto installed
+Dockerfile-model-installer,pip==23.0.1,pypi,MIT,N,used
+Dockerfile-model-installer,setuptools==66.1.1,pypi,MIT,N,indirect dependency. auto installed
+Dockerfile-model-installer,wheel==0.38.4,pypi,MIT,N,indirect dependency. auto installed
+Dockerfile-camcalibration,libicu70:amd64:70.1-2,Ubuntu,MIT and GPL-3.0,Y,indirect dependency automatically installed
+Dockerfile-controller,libspatialite8t64:amd64:5.1.0-3build1,Ubuntu,MPL-1.1,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,ca-certificates:20240203~22.04.1,Ubuntu,MPL-2.0,Y,used during initialization
+Dockerfile-controller,ca-certificates:20240203,Ubuntu,MPL-2.0,Y,used during initialization
+Dockerfile-manager,ca-certificates:20240203~22.04.1,Ubuntu,MPL-2.0,Y,used during initialization
+Dockerfile-manager,gecko driver,https://github.com/mozilla/geckodriver/releases,MPL-2.0,Y,imported
+Dockerfile-secrets,ca-certificates:20240203~22.04.1,Ubuntu,MPL-2.0,N,used during initialization
+Dockerfile-secrets,publicsuffix:20211207.1025-1,Ubuntu,MPL-2.0,N,indirect dependency automatically installed
+Dockerfile-camcalibration,certifi==2025.8.3,pypi,MPL-2.0,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,tqdm==4.67.1,pypi,MPL-2.0,Y,imported
+Dockerfile-controller,certifi==2025.8.3,pypi,MPL-2.0,Y,indirect dependency. auto installed
+Dockerfile-controller,tqdm==4.67.1,pypi,MPL-2.0,Y,indirect dependency. auto installed
+Dockerfile-manager,certifi==2025.8.3,pypi,MPL-2.0,Y,indirect dependency. auto installed
+Dockerfile-manager,tqdm==4.67.1,pypi,MPL-2.0,Y,indirect dependency. auto installed
+Dockerfile-controller,libldap2:amd64:2.6.7+dfsg-1~exp1ubuntu8.2,Ubuntu,OpenLDAP Public License,Y,indirect dependency automatically installed
+Dockerfile-manager,libldap-2.5-0:amd64:2.5.19+dfsg-0ubuntu0.22.04.1,Ubuntu,OpenLDAP Public License,Y,indirect dependency automatically installed
+Dockerfile-secrets,libldap-2.5-0:2.5.18+dfsg-0ubuntu0.22.04.3,Ubuntu,OpenLDAP Public License,N,indirect dependency automatically installed
+Dockerfile-secrets,libldap-common:2.5.18+dfsg-0ubuntu0.22.04.3,Ubuntu,OpenLDAP Public License,N,indirect dependency automatically installed
+Dockerfile-controller,pillow==11.3.0,pypi,PIL,Y,indirect dependency. auto installed
+Dockerfile-controller,libpq5:amd64:16.9-0ubuntu0.24.04.1,Ubuntu,PostgreSQL,Y,indirect dependency automatically installed
+Dockerfile-manager,libpq5:amd64:17.5-1.pgdg22.04+1,Ubuntu,PostgreSQL,Y,indirect dependency automatically installed
+Dockerfile-manager,postgresql-15:15.13-1.pgdg22.04+1,Ubuntu,PostgreSQL,Y,Used for database
+Dockerfile-manager,postgresql-client-15:15.13-1.pgdg22.04+1,Ubuntu,PostgreSQL,Y,indirect dependency automatically installed
+Dockerfile-manager,postgresql-client-common:281.pgdg22.04+1,Ubuntu,PostgreSQL,Y,indirect dependency automatically installed
+Dockerfile-manager,postgresql-common:281.pgdg22.04+1,Ubuntu,PostgreSQL,Y,indirect dependency automatically installed
+Dockerfile-manager,postgresql-common-dev:281.pgdg22.04+1,Ubuntu,PostgreSQL,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,matplotlib==3.10.5,pypi,PSF,Y,imported
+Dockerfile-camcalibration,typing_extensions==4.14.1,pypi,PSF,Y,indirect dependency. auto installed
+Dockerfile-controller,matplotlib==3.10.5,pypi,PSF,Y,indirect dependency. auto installed
+Dockerfile-controller,typing_extensions==4.14.1,pypi,PSF,Y,indirect dependency. auto installed
+Dockerfile-manager,matplotlib==3.10.5,pypi,PSF,Y,indirect dependency. auto installed
+Dockerfile-manager,typing_extensions==4.14.1,pypi,PSF,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,libpython3-stdlib:amd64:3.10.6-1~22.04.1,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libpython3.10-minimal:amd64:3.10.12-1~22.04.10,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libpython3.10-stdlib:amd64:3.10.12-1~22.04.10,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,python3:3.10.6-1~22.04.1,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,python3-distutils:3.10.8-1~22.04,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,python3-lib2to3:3.10.8-1~22.04,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,python3-minimal:3.10.6-1~22.04.1,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,python3.10:3.10.12-1~22.04.10,Ubuntu,PSF,Y,python runtime
+Dockerfile-camcalibration,python3.10-minimal:3.10.12-1~22.04.10,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-controller,libpython3-stdlib:amd64:3.12.3-0ubuntu2,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-controller,libpython3.12-minimal:amd64:3.12.3-1ubuntu0.7,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-controller,libpython3.12-stdlib:amd64:3.12.3-1ubuntu0.7,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-controller,libpython3.12t64:amd64:3.12.3-1ubuntu0.7,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-controller,python3:3.12.3-0ubuntu2,Ubuntu,PSF,Y,python runtime
+Dockerfile-controller,python3-minimal:3.12.3-0ubuntu2,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-controller,python3-pip:24.0+dfsg-1ubuntu1.2,Ubuntu,PSF,Y,used
+Dockerfile-controller,python3-pkg-resources:68.1.2-2ubuntu1.2,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-controller,python3-setuptools:68.1.2-2ubuntu1.2,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-controller,python3-wheel:0.42.0-2,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-controller,python3.12:3.12.3-1ubuntu0.7,Ubuntu,PSF,Y,python runtime
+Dockerfile-controller,python3.12-minimal:3.12.3-1ubuntu0.7,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-manager,libpython3-stdlib:amd64:3.10.6-1~22.04.1,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-manager,libpython3.10:amd64:3.10.12-1~22.04.10,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-manager,libpython3.10-minimal:amd64:3.10.12-1~22.04.10,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-manager,libpython3.10-stdlib:amd64:3.10.12-1~22.04.10,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-manager,python3:3.10.6-1~22.04.1,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-manager,python3-distutils:3.10.8-1~22.04,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-manager,python3-lib2to3:3.10.8-1~22.04,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-manager,python3-minimal:3.10.6-1~22.04.1,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-manager,python3-pip:22.0.2+dfsg-1ubuntu0.6,Ubuntu,PSF,Y,python runtime
+Dockerfile-manager,python3.10:3.10.12-1~22.04.10,Ubuntu,PSF,Y,python runtime
+Dockerfile-manager,python3.10-minimal:3.10.12-1~22.04.10,Ubuntu,PSF,Y,indirect dependency automatically installed
+Dockerfile-secrets,libpython3.10-minimal:3.10.12-1~22.04.9,Ubuntu,PSF,N,indirect dependency automatically installed
+Dockerfile-secrets,libpython3.10-stdlib:3.10.12-1~22.04.9,Ubuntu,PSF,N,indirect dependency automatically installed
+Dockerfile-secrets,libpython3-stdlib:3.10.6-1~22.04.1,Ubuntu,PSF,N,indirect dependency automatically installed
+Dockerfile-secrets,python3.10:3.10.12-1~22.04.9,Ubuntu,PSF,N,python runtime
+Dockerfile-secrets,python3.10-minimal:3.10.12-1~22.04.9,Ubuntu,PSF,N,indirect dependency automatically installed
+Dockerfile-secrets,python3:3.10.6-1~22.04.1,Ubuntu,PSF,N,indirect dependency automatically installed
+Dockerfile-secrets,python3-minimal:3.10.6-1~22.04.1,Ubuntu,PSF,N,indirect dependency automatically installed
+Dockerfile-camcalibration,libsqlite3-0:amd64:3.37.2-2ubuntu0.5,Ubuntu,Public Domain,Y,indirect dependency automatically installed
+Dockerfile-controller,libsqlite3-0:amd64:3.45.1-1ubuntu2.4,Ubuntu,Public Domain,Y,indirect dependency automatically installed
+Dockerfile-manager,libssh-4:amd64:0.9.6-2ubuntu0.22.04.4,Ubuntu,Public Domain,Y,indirect dependency automatically installed
+Dockerfile-manager,mailcap:3.70+nmu1ubuntu1,Ubuntu,Public Domain,Y,indirect dependency automatically installed
+Dockerfile-manager,mime-support:3.66,Ubuntu,Public Domain,Y,indirect dependency automatically installed
+Dockerfile-secrets,libsqlite3-0:3.37.2-2ubuntu0.3,Ubuntu,Public Domain,N,indirect dependency automatically installed
+Dockerfile-controller,libqhull-r8.0:amd64:2020.2-6build1,Ubuntu,Qhull License,Y,indirect dependency automatically installed
+Dockerfile-controller,libgraphite2-3:amd64:1.3.14-2build1,Ubuntu,SIL Open Font License,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,dt-apriltags @ file:///tmp/dt_apriltags-3.1.7-py3-none-any.whl,https://github.com/duckietown/lib-dt-apriltags,The Regents of The University of Michigan,Y,imported
+Dockerfile-camcalibration,filelock==3.18.0,pypi,Unlicense,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,libwayland-client0:amd64:1.20.0-1ubuntu0.1,Ubuntu,X11,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libwayland-server0:amd64:1.20.0-1ubuntu0.1,Ubuntu,X11,Y,indirect dependency automatically installed
+Dockerfile-controller,xkb-data:2.41-2ubuntu1.1,Ubuntu,Xkcense,Y,indirect dependency automatically installed
