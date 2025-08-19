@@ -261,18 +261,16 @@ Dockerfile-manager,websockets==15.0.1,pypi,BSD-3-Clause,Y,indirect dependency. a
 Dockerfile-manager,Werkzeug==3.1.3,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
 Dockerfile-manager,widgetsnbextension==4.0.14,pypi,BSD-3-Clause,Y,indirect dependency. auto installed
 Dockerfile-model-installer,mpmath==1.3.0,pypi,BSD-3-Clause,N,used
-Dockerfile-camcalibration,python3-pkg-resources:59.6.0-1.2ubuntu0.22.04.3,Ubuntu,BSD-3-Clause and Apache-2.0,Y,indirect dependency automatically installed
-Dockerfile-camcalibration,python3-setuptools:59.6.0-1.2ubuntu0.22.04.3,Ubuntu,BSD-3-Clause and Apache-2.1,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,python3-pkg-resources:59.6.0-1.2ubuntu0.22.04.3,Ubuntu,MIT,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,python3-setuptools:59.6.0-1.2ubuntu0.22.04.3,Ubuntu,MIT,Y,indirect dependency automatically installed
 Dockerfile-camcalibration,Ubuntu:22,DockerHub,collection of licenses,N,base image
 Dockerfile-controller,Ubuntu:24,Ubuntu,collection of licenses,N,base image
 Dockerfile-manager,Ubuntu:22,Ubuntu,collection of licenses,N,base image
-Dockerfile-models,busybox:1.37,DockerHub,collection of licenses,N,base image
+Dockerfile-models,busybox:1.37,DockerHub,GPL-2.0,N,base image
 Dockerfile-secrets,Ubuntu:22,DockerHub,collection of licenses,N,base image
-Dockerfile-tests,busybox,DockerHub,collection of licenses,N,base image
-Dockerfile-manager,libmosquitto1:amd64:2.0.11-1ubuntu1.2,Ubuntu,"Eclipse Public License 2.0 OR
-Eclipse Distribution License 1.0",Y,indirect dependency automatically installed
-Dockerfile-manager,mosquitto-clients:2.0.11-1ubuntu1.2,Ubuntu,"Eclipse Public License 2.0 OR
-Eclipse Distribution License 1.0",Y,used at initialization
+Dockerfile-tests,busybox,DockerHub,GPL-2.0,N,base image
+Dockerfile-manager,libmosquitto1:amd64:2.0.11-1ubuntu1.2,Ubuntu,"EPL-2.0",Y,indirect dependency automatically installed
+Dockerfile-manager,mosquitto-clients:2.0.11-1ubuntu1.2,Ubuntu,"EPL-2.0",Y,used at initialization
 Dockerfile-camcalibration,paho-mqtt==2.1.0,pypi,EPL-1.0,Y,imported
 Dockerfile-controller,paho-mqtt==2.1.0,pypi,EPL-1.0,Y,imported
 Dockerfile-manager,paho-mqtt==2.1.0,pypi,EPL-2.0 OR BSD-3-Clause,Y,imported
@@ -329,7 +327,7 @@ Dockerfile-controller,tzdata:2025b-0ubuntu0.24.04.1,Ubuntu,ICU License,Y,indirec
 Dockerfile-manager,libicu70:amd64:70.1-2,Ubuntu,ICU License,Y,indirect dependency automatically installed
 Dockerfile-manager,tzdata:2025b-0ubuntu0.22.04.1,Ubuntu,ICU License,Y,indirect dependency automatically installed
 Dockerfile-camcalibration,intel-openmp==2025.2.0,pypi,Intel End User License,Y,dependency
-Dockerfile-camcalibration,intel-cmplr-lib-ur==2025.2.0,pypi,Intel End User License Agreement for Developer Tools,Y,indirect dependency. auto installed
+Dockerfile-camcalibration,intel-cmplr-lib-ur==2025.2.0,pypi,Intel End User License,Y,indirect dependency. auto installed
 Dockerfile-camcalibration,tcmlib==1.4.0,pypi,Intel Simplified Software License,Y,indirect dependency. auto installed
 Dockerfile-camcalibration,pexpect==4.9.0,pypi,ISC,Y,indirect dependency. auto installed
 Dockerfile-camcalibration,ptyprocess==0.7.0,pypi,ISC,Y,indirect dependency. auto installed
@@ -345,8 +343,8 @@ Dockerfile-manager,requests-oauthlib==2.0.0,pypi,ISC,Y,indirect dependency. auto
 Dockerfile-camcalibration,sudo:1.9.9-1ubuntu2.5,Ubuntu,ISC License,Y,used
 Dockerfile-controller,sudo:1.9.15p5-3ubuntu5.24.04.1,Ubuntu,ISC License,Y,used
 Dockerfile-manager,sudo:1.9.9-1ubuntu2.5,Ubuntu,ISC License,Y,used
-Dockerfile-controller,libjbig0:amd64:2.1-6.1ubuntu2,Ubuntu,JBIG License,Y,indirect dependency automatically installed
-Dockerfile-camcalibration,libpciaccess0:amd64:0.16-3,Ubuntu,LGPL,Y,indirect dependency automatically installed
+Dockerfile-controller,libjbig0:amd64:2.1-6.1ubuntu2,Ubuntu,GPL-2.0-or-later,Y,indirect dependency automatically installed
+Dockerfile-camcalibration,libpciaccess0:amd64:0.16-3,Ubuntu,MIT,Y,indirect dependency automatically installed
 Dockerfile-controller,libjson-c5:amd64:0.17-1build1,Ubuntu,LGPL-2.0,Y,indirect dependency automatically installed
 Dockerfile-manager,locales:2.35-0ubuntu3.10,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
 Dockerfile-camcalibration,libglib2.0-0:amd64:2.72.4-0ubuntu2.5,Ubuntu,LGPL-2.1,Y,linked
@@ -776,9 +774,9 @@ Dockerfile-secrets,python3:3.10.6-1~22.04.1,Ubuntu,PSF,N,indirect dependency aut
 Dockerfile-secrets,python3-minimal:3.10.6-1~22.04.1,Ubuntu,PSF,N,indirect dependency automatically installed
 Dockerfile-camcalibration,libsqlite3-0:amd64:3.37.2-2ubuntu0.5,Ubuntu,Public Domain,Y,indirect dependency automatically installed
 Dockerfile-controller,libsqlite3-0:amd64:3.45.1-1ubuntu2.4,Ubuntu,Public Domain,Y,indirect dependency automatically installed
-Dockerfile-manager,libssh-4:amd64:0.9.6-2ubuntu0.22.04.4,Ubuntu,Public Domain,Y,indirect dependency automatically installed
-Dockerfile-manager,mailcap:3.70+nmu1ubuntu1,Ubuntu,Public Domain,Y,indirect dependency automatically installed
-Dockerfile-manager,mime-support:3.66,Ubuntu,Public Domain,Y,indirect dependency automatically installed
+Dockerfile-manager,libssh-4:amd64:0.9.6-2ubuntu0.22.04.4,Ubuntu,LGPL-2.1,Y,indirect dependency automatically installed
+Dockerfile-manager,mailcap:3.70+nmu1ubuntu1,Ubuntu,ad-hoc,Y,indirect dependency automatically installed
+Dockerfile-manager,mime-support:3.66,Ubuntu,ad-hoc,Y,indirect dependency automatically installed
 Dockerfile-secrets,libsqlite3-0:3.37.2-2ubuntu0.3,Ubuntu,Public Domain,N,indirect dependency automatically installed
 Dockerfile-controller,libqhull-r8.0:amd64:2020.2-6build1,Ubuntu,Qhull License,Y,indirect dependency automatically installed
 Dockerfile-controller,libgraphite2-3:amd64:1.3.14-2build1,Ubuntu,SIL Open Font License,Y,indirect dependency automatically installed
@@ -786,4 +784,4 @@ Dockerfile-camcalibration,dt-apriltags @ file:///tmp/dt_apriltags-3.1.7-py3-none
 Dockerfile-camcalibration,filelock==3.18.0,pypi,Unlicense,Y,indirect dependency. auto installed
 Dockerfile-camcalibration,libwayland-client0:amd64:1.20.0-1ubuntu0.1,Ubuntu,X11,Y,indirect dependency automatically installed
 Dockerfile-camcalibration,libwayland-server0:amd64:1.20.0-1ubuntu0.1,Ubuntu,X11,Y,indirect dependency automatically installed
-Dockerfile-controller,xkb-data:2.41-2ubuntu1.1,Ubuntu,Xkcense,Y,indirect dependency automatically installed
+Dockerfile-controller,xkb-data:2.41-2ubuntu1.1,Ubuntu,MIT,Y,indirect dependency automatically installed
