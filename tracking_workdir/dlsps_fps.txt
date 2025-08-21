@@ -1,0 +1,2 @@
+container: scenescape-queuing-video-1 FPS:  avg=9,67222, stddev=0,469411
+container: scenescape-retail-video-1 FPS:  avg=9,43267, stddev=0,496114
