@@ -43,6 +43,7 @@ export class ConvergedCameraCalibration {
     this.client = null;
     this.isUpdatedInVAService = false;
     this.projectionEnabled = false;
+    this.isResolutionUpdated = false;
 
     // Used for storing undistorted image for projection
     this.projectionImage = new Image();
@@ -401,6 +402,10 @@ export class ConvergedCameraCalibration {
   setupSaveCameraButton() {
     $("#calibration_form").on("submit", (event) => {
       event.preventDefault();
+      if (this.isResolutionUpdated) {
+        document.getElementById("id_intrinsics_cx").disabled = false;
+        document.getElementById("id_intrinsics_cy").disabled = false;
+      }
       const camPoints = this.camCanvas.getCalibrationPoints();
       const scenePoints = this.viewport.getCalibrationPoints();
       if (this.isValidCalibration(camPoints, scenePoints)) {
@@ -467,7 +472,9 @@ export class ConvergedCameraCalibration {
     const objectPoints = this.viewport.getCalibrationPoints();
     if (
       this.isValidCalibration(camPoints, objectPoints) &&
-      (this.camCanvas.calibrationUpdated || this.viewport.calibrationUpdated)
+      (this.camCanvas.calibrationUpdated ||
+        this.viewport.calibrationUpdated ||
+        this.isResolutionUpdated)
     ) {
       let rvec = new cv.Mat();
       let tvec = new cv.Mat();
@@ -613,8 +620,29 @@ export class ConvergedCameraCalibration {
     this.viewport.projectImage(image, cameraMatrix);
   }
 
+  updateCameraOpticalCenter(resolution, cameraMatrix) {
+    const [width, height] = resolution;
+    const EPSILON = 1e-6;
+    if (
+      Math.abs(parseFloat($("#id_intrinsics_cx").val()) - width / 2.0) > EPSILON
+    ) {
+      $("#id_intrinsics_cx").val(width / 2.0);
+      cameraMatrix[0][2] = width / 2.0;
+      this.isResolutionUpdated = true;
+    }
+    if (
+      Math.abs(parseFloat($("#id_intrinsics_cy").val()) - height / 2.0) >
+      EPSILON
+    ) {
+      $("#id_intrinsics_cy").val(height / 2.0);
+      cameraMatrix[1][2] = height / 2.0;
+      this.isResolutionUpdated = true;
+    }
+  }
+
   updateCalibrationViews(image, cameraMatrix, distCoeffs) {
     this.camCanvas.updateImageSrc(image);
+    this.updateCameraOpticalCenter(this.camCanvas.getImageSize(), cameraMatrix);
     this.getCameraPositionAndRotation(cameraMatrix, distCoeffs);
     if (distCoeffs.some((coeff) => coeff !== 0)) {
       this.undistortAndProjectImage(image, cameraMatrix, distCoeffs);

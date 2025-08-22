@@ -6,7 +6,7 @@ This guide provides step-by-step instructions to manually calibrate cameras in I
 - Use 2D UI tools to align views with map data.
 - Understand advanced calibration options such as focal length estimation.
 
-This task is essential for accurate spatial positioning and analytics in Intel® SceneScape. If you’re new to Intel® SceneScape, see [Intel® SceneScape README](https://github.com/open-edge-platform/scenescape/blob/main/README.md).
+This task is essential for accurate spatial positioning and analytics in Intel® SceneScape. If you’re new to Intel® SceneScape, see [Intel® SceneScape README](https://github.com/open-edge-platform/scenescape/blob/release-1.4.0/README.md).
 
 ## Prerequisites
 
@@ -61,15 +61,26 @@ When eight or more point pairs exist:
 
 ![Computed Camera Intrinsics](images/ui/camera-intrinsics.png)
 
+_Figure 1: Computed Camera Intrinsics_
+
 ### 3. Calibration Best Practices
 
 When calibrating cameras in Intel® SceneScape, follow these best practices for optimal results:
 
 - **Distribute Points Evenly**: Place calibration points across the entire field of view, not just in one area.
   ![Evenly Distributed Calibration Points](images/ui/goodcalibpoints.png)
+
+  _Figure 2: Evenly Distributed Calibration Points_
+
   ![Poorly Distributed Calibration Points](images/ui/poorlydistributed.png)
+
+  _Figure 3: Poorly Distributed Calibration Points_
+
 - **Avoid Collinear Points**: Avoid having any 3 points being collinear, as it creates an under-constrained problem and lead to inaccurate calibration results.
   ![Collinear Calibration Points](images/ui/collinearpoints.png)
+
+  _Figure 4: Collinear Calibration Points_
+
 - **Aim for 8+ Point Pairs**: More point pairs generally produce better calibration results.
 - **Re-calibrate After Camera Movement**: Any physical camera adjustments require recalibration.
 
@@ -78,4 +89,4 @@ For challenging scenes, consider using physical calibration targets in the envir
 ## Supporting Resources
 
 - [Step-by-step guide to 3D camera calibration](How-to-use-3D-UI.md#step-3-calibrate-the-camera)
-- [Intel® SceneScape README](https://github.com/open-edge-platform/scenescape/blob/main/README.md)
+- [Intel® SceneScape README](https://github.com/open-edge-platform/scenescape/blob/release-1.4.0/README.md)

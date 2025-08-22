@@ -532,6 +532,8 @@ By default, Regions of Interest trigger events when the center point of each obj
 }
 ```
 
+When an object crosses over to the side with the center line, value of `direction` is 1 and when it crosses in the opposite direction it is -1.
+
 ![Configure and Verify Tripwire](images/create-tripwire.gif)
 Figure 2: Tripwire creation flow
 
@@ -550,4 +552,4 @@ Figure 2: Tripwire creation flow
 ## Supporting Resources
 
 - [How to visualize regions](How-to-visualize-regions.md)
-- [Intel® SceneScape README](https://github.com/open-edge-platform/scenescape/blob/main/README.md)
+- [Intel® SceneScape README](https://github.com/open-edge-platform/scenescape/blob/release-1.4.0/README.md)
