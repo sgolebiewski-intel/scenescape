@@ -9,7 +9,7 @@ import os
 from http import HTTPStatus
 from scene_common.mqtt import PubSub
 from scene_common.timestamp import get_iso_time, get_epoch_time
-from tests.functional.tc_roi_mqtt import ROIMqtt
+from tests.functional.common_scene_obj import SceneObjectMqtt
 
 TEST_NAME = "NEX-T10460"
 SENSOR_DELAY = 0.5
@@ -43,7 +43,7 @@ class SensorMqttRoi(ROIMqtt):
     assert res.statusCode == HTTPStatus.CREATED, (res.statusCode, res.errors)
     return
 
-  def runROIMqttPrepareExtra(self):
+  def runSceneObjMqttPrepareExtra(self):
     topic = PubSub.formatTopic(PubSub.DATA_SENSOR, sensor_id=self.roiName)
     self.pubsub.addCallback(topic, self.sensorDataReceived)
 
@@ -60,7 +60,7 @@ class SensorMqttRoi(ROIMqtt):
 
     return
 
-  def runROIMqttVerifyPassedExtra(self):
+  def runSceneObjMqttVerifyPassedExtra(self):
     print("Verifying test parameters")
     assert not self.errorInSensor
     assert self.enteredDetected
@@ -252,6 +252,20 @@ class SensorMqttRoi(ROIMqtt):
       end_idx += 1
     return start_idx, end_idx
 
+  def runROIMqtt(self):
+    self.exitCode = 1
+    self.runSceneObjMqttInitialize()
+    try:
+      self.runSceneObjMqttPrepare()
+      self.runSceneObjMqttPrepareExtra()
+      self.runROIMqttExecute()
+      passed = self.runROIMqttVerifyPassed()
+      passed_extra = self.runSceneObjMqttVerifyPassedExtra()
+      if (passed and passed_extra):
+        self.exitCode = 0
+    finally:
+      self.runROIMqttFinally()
+    return
 
 def test_sensor_roi_mqtt(request, record_xml_attribute):
   test = SensorMqttRoi(TEST_NAME, request, SENSOR_DELAY, record_xml_attribute)
