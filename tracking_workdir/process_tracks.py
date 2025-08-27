@@ -20,15 +20,21 @@ def generate_metrics(track):
     # track: list of (time_elapsed_sec, translation, velocity, visibility_count)
     metrics = []
     prev_time = None
-    prev_vel = None
-    for t, _, vel, _ in track:
+    prev_translation = None
+    prev_velocity = None
+    for t, translation, _, _ in track:
         if prev_time is not None:
             dt = t - prev_time
             if dt > 0:
-                acc = [(v - pv) / dt for v, pv in zip(vel, prev_vel)]
-                metrics.append((t, acc))
+                # Calculate velocity from translation
+                velocity = [(tr - ptr) / dt for tr, ptr in zip(translation, prev_translation)]
+                if prev_velocity is not None:
+                    # Calculate acceleration from velocity difference
+                    acc = [(v - pv) / dt for v, pv in zip(velocity, prev_velocity)]
+                    metrics.append((t, acc))
+                prev_velocity = velocity
         prev_time = t
-        prev_vel = vel
+        prev_translation = translation
     return metrics
 
 def dump_track_csv(track, csv_path):
@@ -108,19 +114,37 @@ def main(input_file):
         dump_metrics_csv(mlist, metrics_path)
 
     # Plotting
-    plt.figure(figsize=(10, 6))
+    fig, axs = plt.subplots(2, 1, figsize=(10, 12))
+
+    # Acceleration norm plot
     for key, mlist in metrics.items():
         if not mlist:
             continue
         times = [t for t, _ in mlist]
         acc_norms = [vector_norm(acc) for _, acc in mlist]
         label = f"{key[0]}:{key[1][:6]}"
-        plt.plot(times, acc_norms, label=label)
-    plt.xlabel("Time elapsed (s)")
-    plt.ylabel("Acceleration norm")
-    plt.title("Acceleration Norm Over Time per Track")
-    plt.legend()
-    plt.ylim(0, 300)  # Set fixed y-axis scale
+        axs[0].plot(times, acc_norms, label=label)
+    axs[0].set_xlabel("Time elapsed (s)")
+    axs[0].set_ylabel("Acceleration norm")
+    axs[0].set_title("Acceleration Norm Over Time per Track")
+    axs[0].legend()
+    # axs[0].set_ylim(0, 300)  # Uncomment to set fixed y-axis scale
+    axs[0].grid(True)
+
+    # XY position plot
+    for key, track in tracks.items():
+        if not track:
+            continue
+        xs = [tr[0] for _, tr, _, _ in track]
+        ys = [tr[1] for _, tr, _, _ in track]
+        label = f"{key[0]}:{key[1][:6]}"
+        axs[1].plot(xs, ys, label=label)
+    axs[1].set_xlabel("X position")
+    axs[1].set_ylabel("Y position")
+    axs[1].set_title("Tracked Object Position (XY Plane)")
+    axs[1].legend()
+    axs[1].grid(True)
+
     plt.tight_layout()
     plot_filename = f"{base_name}_acceleration_plot.png"
     plot_path = os.path.join(tracks_dir, plot_filename)
