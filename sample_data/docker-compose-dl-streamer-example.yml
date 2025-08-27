@@ -32,6 +32,26 @@ secrets:
     file: ${SECRETSDIR}/calibration.auth
 
 services:
+
+  mediaserver:
+    image: bluenviron/mediamtx
+    networks:
+      scenescape:
+        aliases:
+          - mediaserver.scenescape.intel.com
+    ports:
+      - "8554:8554"
+
+  queuing-cams:
+    image: linuxserver/ffmpeg:version-8.0-cli
+    command: -re -stream_loop -1 -i /workspace/media/qcam1.mp4 -re -stream_loop -1 -i /workspace/media/qcam2.mp4 -map 0:v -c copy -f rtsp rtsp://mediaserver.scenescape.intel.com:8554/queuing-cam1 -map 1:v -c copy -f rtsp rtsp://mediaserver.scenescape.intel.com:8554/queuing-cam2
+    volumes:
+      - vol-sample-data:/workspace/media
+    networks:
+      scenescape:
+    depends_on:
+      - mediaserver
+
   ntpserv:
     image: dockurr/chrony
     networks:
@@ -243,6 +263,8 @@ services:
     devices:
       - "/dev/dri:/dev/dri"
     depends_on:
+      queuing-cams:
+        condition: service_started
       broker:
         condition: service_started
       ntpserv:
