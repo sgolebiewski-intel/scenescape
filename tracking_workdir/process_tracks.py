@@ -113,37 +113,40 @@ def main(input_file):
         metrics_path = os.path.join(tracks_dir, metrics_filename)
         dump_metrics_csv(mlist, metrics_path)
 
-    # Plotting
-    fig, axs = plt.subplots(2, 1, figsize=(10, 12))
+    # --- Create subplots for each unique name ---
+    unique_names = sorted(set(name for _, name, _, _, _, _ in data))
+    n_names = len(unique_names)
+    fig, axs = plt.subplots(n_names, 2, figsize=(12, 6 * n_names), squeeze=False)
 
-    # Acceleration norm plot
-    for key, mlist in metrics.items():
-        if not mlist:
-            continue
-        times = [t for t, _ in mlist]
-        acc_norms = [vector_norm(acc) for _, acc in mlist]
-        label = f"{key[0]}:{key[1][:6]}"
-        axs[0].plot(times, acc_norms, label=label)
-    axs[0].set_xlabel("Time elapsed (s)")
-    axs[0].set_ylabel("Acceleration norm")
-    axs[0].set_title("Acceleration Norm Over Time per Track")
-    axs[0].legend()
-    # axs[0].set_ylim(0, 300)  # Uncomment to set fixed y-axis scale
-    axs[0].grid(True)
+    for i, name in enumerate(unique_names):
+        # Acceleration norm plot for this name
+        for key, mlist in metrics.items():
+            if key[0] != name or not mlist:
+                continue
+            times = [t for t, _ in mlist]
+            acc_norms = [vector_norm(acc) for _, acc in mlist]
+            label = f"{key[0]}:{key[1][:6]}"
+            axs[i, 0].plot(times, acc_norms, label=label)
+        axs[i, 0].set_xlabel("Time elapsed (s)")
+        axs[i, 0].set_ylabel("Acceleration norm")
+        axs[i, 0].set_title(f"Acceleration Norm Over Time ({name})")
+        axs[i, 0].legend()
+        # axs[i, 0].set_ylim(0, 300)  # Uncomment to set fixed y-axis scale
+        axs[i, 0].grid(True)
 
-    # XY position plot
-    for key, track in tracks.items():
-        if not track:
-            continue
-        xs = [tr[0] for _, tr, _, _ in track]
-        ys = [tr[1] for _, tr, _, _ in track]
-        label = f"{key[0]}:{key[1][:6]}"
-        axs[1].plot(xs, ys, label=label)
-    axs[1].set_xlabel("X position")
-    axs[1].set_ylabel("Y position")
-    axs[1].set_title("Tracked Object Position (XY Plane)")
-    axs[1].legend()
-    axs[1].grid(True)
+        # XY position plot for this name
+        for key, track in tracks.items():
+            if key[0] != name or not track:
+                continue
+            xs = [tr[0] for _, tr, _, _ in track]
+            ys = [tr[1] for _, tr, _, _ in track]
+            label = f"{key[0]}:{key[1][:6]}"
+            axs[i, 1].plot(xs, ys, label=label)
+        axs[i, 1].set_xlabel("X position")
+        axs[i, 1].set_ylabel("Y position")
+        axs[i, 1].set_title(f"Tracked Object Position (XY Plane) ({name})")
+        axs[i, 1].legend()
+        axs[i, 1].grid(True)
 
     plt.tight_layout()
     plot_filename = f"{base_name}_acceleration_plot.png"
