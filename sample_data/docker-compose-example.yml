@@ -50,7 +50,7 @@ services:
 
   queuing-cams:
     image: linuxserver/ffmpeg:version-8.0-cli
-    command: -re -stream_loop -1 -i /workspace/media/qcam1.mp4 -re -stream_loop -1 -i /workspace/media/qcam2.mp4 -map 0:v -c copy -f rtsp rtsp://mediaserver.scenescape.intel.com:8554/queuing-cam1 -map 1:v -c copy -f rtsp rtsp://mediaserver.scenescape.intel.com:8554/queuing-cam2
+    command: -nostdin -re -stream_loop -1 -i /workspace/media/qcam1.mp4 -re -stream_loop -1 -i /workspace/media/qcam2.mp4 -map 0:v -c copy -f rtsp rtsp://mediaserver.scenescape.intel.com:8554/queuing-cam1 -map 1:v -c copy -f rtsp rtsp://mediaserver.scenescape.intel.com:8554/queuing-cam2
     volumes:
       - vol-sample-data:/workspace/media
     networks:
