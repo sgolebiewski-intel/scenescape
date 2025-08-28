@@ -124,7 +124,7 @@ def test_mqtt_recorder():
   cur_det_objects = objects_detected
   old_det_objects = cur_det_objects
 
-  print("Waiting for detections...")
+  print(f"Waiting {test_duration} seconds for detections...")
   while True:
     with data_lock:
       current_objects = objects_detected
@@ -157,6 +157,7 @@ def test_mqtt_recorder():
 
   total_time = test_end_time - test_start_time
   total_rate = objects_detected / total_time
+  print(f"Total time: {total_time} s")
 
   if proc_time_count > 0:
     print( "Final rate incoming {:.3f} messages/ss".format(total_rate) )
