@@ -335,6 +335,22 @@ services:
   #    - vol-models:/models/
   #   restart: always
 
+  mqtt_recorder:
+    image: scenescape-manager:${VERSION:-latest}
+    init: true
+    environment:
+      - "SUPASS"
+    networks:
+      scenescape:
+    command: bash -c "SUPASS=${SUPASS} PYTHONPATH=/workspace tests/perf_tests/scene_perf/scene_mqtt_recorder.py --output /workspace/scene_mqtt_recorder.log --interval 1 --duration 60"
+    privileged: true
+    volumes:
+      - ./:/workspace
+    secrets:
+      - source: root-cert
+        target: certs/scenescape-ca.pem
+    tty: true
+
 configs:
   # uncomment this section when using eclipe mosquitto broker
   # mosquitto-secure:

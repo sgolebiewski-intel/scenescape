@@ -27,6 +27,8 @@ def build_argparser():
   parser = ArgumentParser()
   parser.add_argument("--interval", type=int, default=5,
                       help="Number of seconds to wait for message each interval")
+  parser.add_argument("--duration", type=int, default=60,
+                      help="Duration of recording")
   parser.add_argument("--output",
                       help="Location to save captured mqtt messages")
   return parser
@@ -111,6 +113,7 @@ def test_mqtt_recorder():
   test_empty_loops = 0
   test_max_empty_loops = 5
   test_wait = args.interval
+  test_duration = args.duration
 
   if args.output is not None:
     log_file = open( args.output, 'w' )
@@ -128,7 +131,7 @@ def test_mqtt_recorder():
       current_proc_avg = proc_time_avg
       current_proc_count = proc_time_count
 
-    if current_objects >= 1000:
+    if get_epoch_time() - test_start_time >= test_duration:
       break
 
     time.sleep(test_wait)
