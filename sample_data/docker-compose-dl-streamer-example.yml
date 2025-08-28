@@ -52,6 +52,16 @@ services:
     depends_on:
       - mediaserver
 
+  retail-cams:
+    image: linuxserver/ffmpeg:version-8.0-cli
+    command: -nostdin -re -stream_loop -1 -i /workspace/media/apriltag-cam1.mp4 -re -stream_loop -1 -i /workspace/media/apriltag-cam2.mp4 -map 0:v -c copy -f rtsp rtsp://mediaserver.scenescape.intel.com:8554/retail-cam1 -map 1:v -c copy -f rtsp rtsp://mediaserver.scenescape.intel.com:8554/retail-cam2
+    volumes:
+      - vol-sample-data:/workspace/media
+    networks:
+      scenescape:
+    depends_on:
+      - mediaserver
+
   ntpserv:
     image: dockurr/chrony
     networks:
@@ -210,6 +220,8 @@ services:
         condition: service_started
       ntpserv:
         condition: service_started
+      retail-cams:
+        condition: service_started
     healthcheck:
       test:
         [
@@ -237,7 +249,7 @@ services:
       - MQTT_HOST=broker.scenescape.intel.com
       - MQTT_PORT=1883
     configs:
-      - source: retail-config
+      - source: retail-config-rtsp
         target: /home/pipeline-server/config.json
       - source: person-detection-retail-config
         target: /home/pipeline-server/models/object_detection/person/person-detection-retail-0013.json
@@ -364,6 +376,8 @@ configs:
     file: ./controller/config/tracker-config.json
   retail-config:
     file: ./dlstreamer-pipeline-server/retail-config.json
+  retail-config-rtsp:
+    file: ./dlstreamer-pipeline-server/retail-config-rtsp.json
   person-detection-retail-config:
     file: ./dlstreamer-pipeline-server/model-proc-files/person-detection-retail-0013.json
   queuing-config:
