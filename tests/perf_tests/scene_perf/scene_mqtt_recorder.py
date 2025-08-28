@@ -167,6 +167,7 @@ def test_mqtt_recorder():
     print( "Unknown processing time" )
 
   if log_file is not None:
+    log_file.flush()
     log_file.close()
 
   return result

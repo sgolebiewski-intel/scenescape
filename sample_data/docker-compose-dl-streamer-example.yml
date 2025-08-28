@@ -360,7 +360,7 @@ services:
       - "SUPASS"
     networks:
       scenescape:
-    command: bash -c "SUPASS=${SUPASS} PYTHONPATH=/workspace tests/perf_tests/scene_perf/scene_mqtt_recorder.py --output /workspace/scene_mqtt_recorder.log --interval 1 --duration 60"
+    command: bash -c "SUPASS=${SUPASS} PYTHONPATH=/workspace tests/perf_tests/scene_perf/scene_mqtt_recorder.py --output /workspace/scene_mqtt_recorder.log --interval 1 --duration 90"
     privileged: true
     volumes:
       - ./:/workspace
