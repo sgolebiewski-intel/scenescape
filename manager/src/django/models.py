@@ -124,6 +124,11 @@ class Scene(models.Model):
                                         "Required only if 'Output geospatial coordinates' is set to `Yes`.\n"
                                         "Expected order: starting from the bottom-left corner counterclockwise.\nExpected JSON format: "
                                         "'[ [lat1, lon1, alt1], [lat2, lon2, alt2], [lat3, lon3, alt3], [lat4, lon4, alt4] ]'"))
+  trs_matrix = models.JSONField(
+    "Transformation matrix (TRS)",
+    default=None, null=True, blank=True, editable=False,
+    help_text="4x4 transformation matrix (translation-rotation-scale) stored as JSON [[...], [...], [...], [...]]"
+  )
   camera_calibration = models.CharField("Calibration Type", max_length=20, choices=CALIBRATION_CHOICES, default=MANUAL)
   polycam_data = models.FileField(blank=True, null=True, validators=[FileExtensionValidator(["zip"])])
   dataset_dir = models.CharField(blank=True, max_length=200, editable=False)
@@ -314,6 +319,14 @@ class Scene(models.Model):
       jdata.append(rdict)
     return json.dumps(jdata)
 
+  def getTrsMatrix(self, mScene):
+    if self.map_corners_lla and self.output_lla:
+      if self.map:
+        mScene.extractMapTriangleMesh(self.map.path, self.scale)
+        self.trs_matrix = mScene.trs_xyz_to_lla.tolist()
+        self.save(update_fields=['trs_matrix'])
+    return
+
   @property
   def scenescapeScene(self):
     mScene = SceneLoader.sceneWithName(self.name)
@@ -321,6 +334,8 @@ class Scene(models.Model):
       mScene = ScenescapeScene(self.name, self.map.path if self.map else None, self.scale)
       mScene.output_lla = self.output_lla
       mScene.map_corners_lla = self.map_corners_lla
+      self.getTrsMatrix(mScene)
+
       mScene.mesh_translation = [self.translation_x, self.translation_y, self.translation_z]
       mScene.mesh_rotation = [self.rotation_x, self.rotation_y, self.rotation_z]
       try:

@@ -540,6 +540,7 @@ class SceneSerializer(NonNullSerializer):
   mesh_scale = serializers.SerializerMethodField('get_scale')
   children = serializers.SerializerMethodField('get_children')
   map_processed = serializers.DateTimeField(format=f"{DATETIME_FORMAT}Z")
+  trs_matrix = serializers.SerializerMethodField('get_trs_matrix')
 
   def validate_name(self, value):
     qs = Scene.objects.filter(name=value)
@@ -550,6 +551,17 @@ class SceneSerializer(NonNullSerializer):
     if qs.exists():
       raise serializers.ValidationError(f"A scene with the name '{value}' already exists.")
     return value
+
+  def get_trs_matrix(self, obj):
+    if obj.trs_matrix:
+        return obj.trs_matrix
+    return None
+
+  def to_representation(self, instance):
+    ret = super().to_representation(instance)
+    if ret.get('trs_matrix') is None:
+        ret.pop('trs_matrix', None)
+    return ret
 
   def get_uid(self, obj):
     return obj.id
@@ -666,12 +678,15 @@ class SceneSerializer(NonNullSerializer):
       instance.scenescapeScene.map_corners_lla = map_corners_lla
 
     if map_path:
-      map_path = '/media/' + map_path.name
-      ext = os.path.splitext(map_path)[1].lower()
+      instance.map = map_path
+      instance.save()
+
+      ext = os.path.splitext(instance.map.name)[1].lower()
       if ext == ".glb":
         instance.autoAlignSceneMap()
         instance.saveThumbnail()
         instance.save()
+    instance.getTrsMatrix(instance.scenescapeScene)
 
     if parent_uid:
       self.link_parent(parent_uid, instance)
@@ -725,7 +740,7 @@ class SceneSerializer(NonNullSerializer):
 
   class Meta:
     model = Scene
-    fields = ['uid', 'name', 'output_lla', 'map_corners_lla', 'map', 'thumbnail', 'cameras', 'sensors', 'regions',
+    fields = ['uid', 'name', 'output_lla', 'trs_matrix', 'map_corners_lla', 'map', 'thumbnail', 'cameras', 'sensors', 'regions',
               'tripwires', 'parent', 'transform', 'mesh_translation', 'mesh_rotation',
               'mesh_scale', 'scale', 'children', 'regulated_rate', 'external_update_rate',
               'camera_calibration', 'apriltag_size', 'map_processed', 'polycam_data',
