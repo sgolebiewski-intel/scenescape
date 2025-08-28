@@ -6,9 +6,10 @@ from mpl_toolkits.mplot3d import Axes3D
 
 # --- Function to detrend trajectory (remove local trend per axis) ---
 def detrend(signal, window=11, poly=2):
+    if len(signal) < window:
+        window = len(signal)
     trend = savgol_filter(signal, window_length=window, polyorder=poly)
     return signal - trend
-
 
 # --- Compute metrics for a 3D trajectory ---
 def compute_metrics(traj):
