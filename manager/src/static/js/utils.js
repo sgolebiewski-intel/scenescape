@@ -304,8 +304,7 @@ async function importScene(
     const blob = await response.blob();
     const blobType = blob.type.split("/")[1];
 
-    const validExtensions = ["png", "jpeg", "gltf-binary"];
-    if (!validExtensions.includes(blobType)) {
+    if (blobType !== "png" && blobType !== "gltf-binary") {
       errors.scene = { scene: ["Invalid resource type"] };
       return errors;
     }
@@ -336,7 +335,6 @@ async function importScene(
       minimum_number_of_matches: jsonData.minimum_number_of_matches,
       inlier_threshold: jsonData.inlier_threshold,
       output_lla: jsonData.output_lla,
-      map_corners_lla: jsonData.map_corners_lla
     };
 
     if (child) {
@@ -363,9 +361,7 @@ async function importScene(
       (jsonData.cameras || []).map((cam) => {
         let camData = {
           name: cam.name,
-          sensor_id: cam.uid,
           scale: cam.scale,
-          intrinsics: cam.intrinsics,
         };
 
         if (Object.hasOwn(cam, "transform_type")) {
