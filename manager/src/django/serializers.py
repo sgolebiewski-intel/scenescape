@@ -7,6 +7,8 @@ import os
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+from django.db import transaction
+
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from scipy.spatial.transform import Rotation
@@ -558,7 +560,7 @@ class SceneSerializer(NonNullSerializer):
 
   def to_representation(self, instance):
     ret = super().to_representation(instance)
-    if ret.get('trs_matrix') is None:
+    if ret.get('trs_matrix') is None or ret.get('output_lla') is False:
         ret.pop('trs_matrix', None)
     return ret
 
@@ -685,7 +687,8 @@ class SceneSerializer(NonNullSerializer):
         instance.autoAlignSceneMap()
         instance.saveThumbnail()
         instance.save()
-    instance.getTrsMatrix(instance.scenescapeScene)
+
+    transaction.on_commit(lambda: instance.getTrsMatrix(instance.scenescapeScene))
 
     if parent_uid:
       self.link_parent(parent_uid, instance)

@@ -110,7 +110,6 @@ class SceneModel:
     if self._trs_xyz_to_lla is None and self.output_lla and self.map_corners_lla is not None:
       mesh_corners_xyz = getMeshAxisAlignedProjectionToXY(self.map_triangle_mesh)
       self._trs_xyz_to_lla = calculateTRSLocal2LLAFromSurfacePoints(mesh_corners_xyz, self.map_corners_lla)
-      print("TRS: ", self._trs_xyz_to_lla)
     return self._trs_xyz_to_lla
 
   def _invalidate_trs_xyz_to_lla(self):

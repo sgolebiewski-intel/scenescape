@@ -242,6 +242,7 @@ class Scene(models.Model):
     updated_scene = self.id
     self.dataset_dir = f"{os.getcwd()}/datasets/{self.name}"
     self.output_dir = f"{os.getcwd()}/datasets/{self.name}/output_dir"
+    self.getTrsMatrix(self.scenescapeScene)
     try:
       glb_from_zip = None
       # use glb from zip uploaded in map and copy zip to polycam data
@@ -322,9 +323,10 @@ class Scene(models.Model):
   def getTrsMatrix(self, mScene):
     if self.map_corners_lla and self.output_lla:
       if self.map:
+        mScene.output_lla = self.output_lla
+        mScene.map_corners_lla = self.map_corners_lla
         mScene.extractMapTriangleMesh(self.map.path, self.scale)
         self.trs_matrix = mScene.trs_xyz_to_lla.tolist()
-        self.save(update_fields=['trs_matrix'])
     return
 
   @property
