@@ -249,7 +249,6 @@ class SingletonSerializer(NonNullSerializer):
 
 class CamSerializer(NonNullSerializer):
   name = serializers.CharField(max_length=150)
-  sensor_id = serializers.CharField(write_only=True, required=False)
   uid = serializers.CharField(source="sensor_id", read_only=True)
   intrinsics = serializers.SerializerMethodField('get_intrinsics')
   distortion = serializers.SerializerMethodField('get_distortion')
@@ -294,7 +293,7 @@ class CamSerializer(NonNullSerializer):
       if sensor_id is None:
         sensor_id = self.initial_data.get('name')
         if sensor_id is not None:
-          sensor_id = sensor_id.replace(" ", "_")
+          sensor_id.replace(" ", "_")
         validated_data['sensor_id'] = sensor_id
       instance = super().create(validated_data)
     else:
@@ -464,7 +463,7 @@ class CamSerializer(NonNullSerializer):
 
   class Meta:
     model = Cam
-    fields = ['uid', 'name', 'sensor_id', 'intrinsics', 'transform_type', 'transforms', 'distortion', 'translation', 'rotation', 'scale',
+    fields = ['uid', 'name', 'intrinsics', 'transform_type', 'transforms', 'distortion', 'translation', 'rotation', 'scale',
               'resolution', 'scene', 'command', 'camerachain', 'threshold', 'aspect', 'cv_subsystem']
 
 class RegionSerializer(NonNullSerializer):
