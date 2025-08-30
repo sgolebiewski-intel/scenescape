@@ -555,13 +555,13 @@ class SceneSerializer(NonNullSerializer):
 
   def get_trs_matrix(self, obj):
     if obj.trs_matrix:
-        return obj.trs_matrix
+      return obj.trs_matrix
     return None
 
   def to_representation(self, instance):
     ret = super().to_representation(instance)
     if ret.get('trs_matrix') is None or ret.get('output_lla') is False:
-        ret.pop('trs_matrix', None)
+      ret.pop('trs_matrix', None)
     return ret
 
   def get_uid(self, obj):
