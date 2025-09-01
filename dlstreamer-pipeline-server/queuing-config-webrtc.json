@@ -1,0 +1,77 @@
+{
+  "config": {
+    "logging": {
+      "C_LOG_LEVEL": "INFO",
+      "PY_LOG_LEVEL": "INFO"
+    },
+    "pipelines": [
+      {
+        "name": "qcam2",
+        "source": "gstreamer",
+        "pipeline": "multifilesrc loop=TRUE location=/home/pipeline-server/videos/qcam2.ts name=source ! decodebin ! videoconvert ! video/x-raw,format=BGR ! gvapython class=PostDecodeTimestampCapture function=processFrame module=/home/pipeline-server/user_scripts/gvapython/sscape/sscape_adapter.py name=timesync ! gvadetect model=/home/pipeline-server/models/intel/person-detection-retail-0013/FP32/person-detection-retail-0013.xml model-proc=/home/pipeline-server/models/object_detection/person/person-detection-retail-0013.json ! gvametaconvert add-tensor-data=true name=metaconvert ! gvametapublish name=destination ! appsink sync=true",
+        "auto_start": true,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "ntp_config": {
+              "element": {
+                "name": "timesync",
+                "property": "kwarg",
+                "format": "json"
+              },
+              "type": "object",
+              "properties": {
+                "ntpServer": {
+                  "type": "string"
+                }
+              }
+            },
+            "camera_config": {
+              "element": {
+                "name": "datapublisher",
+                "property": "kwarg",
+                "format": "json"
+              },
+              "type": "object",
+              "properties": {
+                "cameraid": {
+                  "type": "string"
+                },
+                "metadatagenpolicy": {
+                  "type": "string",
+                  "description": "Meta data generation policy, one of detectionPolicy(default),reidPolicy,classificationPolicy"
+                },
+                "publish_frame": {
+                  "type": "boolean",
+                  "description": "Publish frame to mqtt"
+                }
+              }
+            }
+          }
+        },
+        "payload": {
+          "destination": {
+            "metadata": {
+              "type": "file",
+              "path": "/tmp/results.jsonl",
+              "format": "json-lines"
+            },
+            "frame": {
+              "type": "webrtc",
+              "peer-id": "cam"
+            }
+          },
+          "parameters": {
+            "ntp_config": {
+              "ntpServer": "ntpserv"
+            },
+            "camera_config": {
+              "cameraid": "atag-qcam2",
+              "metadatagenpolicy": "detectionPolicy"
+            }
+          }
+        }
+      }
+    ]
+  }
+}
