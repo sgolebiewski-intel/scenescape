@@ -7,6 +7,7 @@ name: scenescape
 networks:
   scenescape:
 
+
 secrets:
   root-cert:
     file: ${SECRETSDIR}/certs/scenescape-ca.pem
@@ -36,8 +37,8 @@ services:
     image: dockurr/chrony
     networks:
       scenescape:
-    # ports:
-    #   - 123:123/udp
+        # ports:
+        #   - 123:123/udp
     restart: on-failure
     pids_limit: 1000
 
@@ -56,6 +57,24 @@ services:
           - broker.scenescape.intel.com
     user: "${UID:-1000}:${GID:-1000}"
     pids_limit: 1000
+
+  mediamtx:
+    image: bluenviron/mediamtx:1.11.3
+    container_name: mediamtx-server
+    environment:
+      - MTX_LOGLEVEL=info
+      - MTX_RTSP=no
+      - MTX_RTMP=no
+      - MTX_SRT=no
+      - MTX_RTMP=no
+      - MTX_HLS=no
+      - MTX_SRT=no
+      - MTX_WEBRTCTRACKGATHERTIMEOUT=60s
+      - MTX_WEBRTCADDRESS=:8889
+    networks:
+      scenescape:
+    ports:
+      - "8889:8889"
 
   pgserver:
     image: scenescape-manager:${VERSION:-latest}
@@ -185,7 +204,7 @@ services:
     networks:
       scenescape:
     tty: true
-    entrypoint: ["./run.sh"]
+    entrypoint: [ "./run.sh" ]
     ports:
       - "8080:8080"
     devices:
@@ -204,7 +223,7 @@ services:
       ntpserv:
         condition: service_started
     healthcheck:
-      test: ["CMD", "curl", "-I", "-s", "http://localhost:8080/pipelines"]
+      test: [ "CMD", "curl", "-I", "-s", "http://localhost:8080/pipelines" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -240,7 +259,7 @@ services:
     networks:
       scenescape:
     tty: true
-    entrypoint: ["./run.sh"]
+    entrypoint: [ "./run.sh" ]
     ports:
       - "8081:8080"
     devices:
@@ -259,7 +278,7 @@ services:
       ntpserv:
         condition: service_started
     healthcheck:
-      test: ["CMD", "curl", "-I", "-s", "http://localhost:8080/pipelines"]
+      test: [ "CMD", "curl", "-I", "-s", "http://localhost:8080/pipelines" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -274,6 +293,7 @@ services:
       - APPEND_PIPELINE_NAME_TO_PUBLISHER_TOPIC=false
       - MQTT_HOST=broker.scenescape.intel.com
       - MQTT_PORT=1883
+      - WEBRTC_SIGNALING_SERVER=http://localhost:8889
       - REST_SERVER_PORT=8080
     configs:
       - source: queuing-config
