@@ -101,6 +101,7 @@ async function checkBrokerConnections() {
   $("#connect").on("click", function () {
     console.log("Attempting to connect to " + broker.value);
     var client = mqtt.connect(broker.value);
+    var webRTCClient = null
     sessionStorage.setItem("connectToMqtt", true);
 
     client.on("connect", function () {
@@ -259,7 +260,7 @@ async function checkBrokerConnections() {
             .stop()
             .show()
             .css("opacity", 1)
-            .animate({ opacity: 0.6 }, 5000, function () {})
+            .animate({ opacity: 0.6 }, 5000, function () { })
             .prevAll(".cam-offline")
             .hide();
         }
