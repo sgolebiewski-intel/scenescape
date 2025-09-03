@@ -14,11 +14,11 @@ SHELL ["/bin/bash", "-e", "-o", "pipefail", "-c"]
 RUN : \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-    libboost-python-dev \
-    libegl1 \
-    libgl1 \
-    libglib2.0 \
-    python3-dev \
+        libboost-python-dev \
+        libegl1 \
+        libgl1 \
+        libglib2.0 \
+        python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # ---------- Manager Runtime Stage ------------------
@@ -42,38 +42,38 @@ ENV SCENESCAPE_HOME=/home/$WSUSER/SceneScape
 ARG FORCE_VAAPI
 
 RUN : \
-    && apt-get update \
+&& apt-get update \
     && apt-get install -y --no-install-recommends \
-    curl \
-    ca-certificates \
+        curl \
+        ca-certificates \
     && install -d /usr/share/postgresql-common/pgdg \
     && curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc \
     && echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt jammy-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-    apache2 \
-    bindfs \
-    bzip2 \
-    libegl1 \
-    libgl1 \
-    libapache2-mod-wsgi-py3 \
-    libapache2-mod-qos \
-    libglib2.0-0 \
-    libgomp1 \
-    mosquitto-clients \
-    netcat \
-    postgresql-15 \
-    python-is-python3 \
-    python3-pip \
-    sudo \
+        apache2 \
+        bindfs \
+        bzip2 \
+        libegl1 \
+        libgl1 \
+        libapache2-mod-wsgi-py3 \
+        libapache2-mod-qos \
+        libglib2.0-0 \
+        libgomp1 \
+        mosquitto-clients \
+        netcat \
+        postgresql-15 \
+        python-is-python3 \
+        python3-pip \
+        sudo \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Runtime dependencies
 COPY ./manager/requirements-runtime.txt /tmp
 RUN pip3 install --upgrade --no-cache-dir \
-    --extra-index-url https://download.pytorch.org/whl/cpu \
-    -r /tmp/requirements-runtime.txt
+        --extra-index-url https://download.pytorch.org/whl/cpu \
+        -r /tmp/requirements-runtime.txt
 
 RUN : \
     ; PSQLVER=$(ls /etc/postgresql) \
@@ -83,19 +83,19 @@ RUN : \
 
 RUN : \
     ; a2dismod -f \
-    auth_basic \
-    authn_core \
-    authn_file \
-    authz_host \
-    authz_user \
-    autoindex \
-    status \
+          auth_basic \
+          authn_core \
+          authn_file \
+          authz_host \
+          authz_user \
+          autoindex \
+          status \
     ; a2enmod \
-    allowmethods \
-    headers \
-    proxy \
-    proxy_wstunnel \
-    ssl \
+        allowmethods \
+        headers \
+        proxy \
+        proxy_wstunnel \
+        ssl \
     ; a2ensite default-ssl \
     ;
 
@@ -161,9 +161,9 @@ RUN READER_SHA=$(openssl dgst -sha256 -binary "$SCENESCAPE_HOME/manager/static/a
 COPY ./manager/config/user_access_config.json $SCENESCAPE_HOME
 
 COPY ./manager/config/webserver-init \
-    ./manager/config/database-init \
-    ./manager/config/scenescape-init \
-    /usr/local/bin/
+     ./manager/config/database-init \
+     ./manager/config/scenescape-init \
+     /usr/local/bin/
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
     CMD pgrep postgres || exit 1
@@ -179,20 +179,20 @@ RUN : \
     ; apt-get update \
     ; install -d -m 0755 /etc/apt/keyrings \
     ; apt-get install -y --no-install-recommends \
-    wget \
-    libpci-dev \
-    libnss3-tools \
-    software-properties-common \
-    unzip \
-    xserver-xephyr \
-    xvfb \
+        wget \
+        libpci-dev \
+        libnss3-tools \
+        software-properties-common \
+        unzip \
+        xserver-xephyr \
+        xvfb \
     ; wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null \
     ; echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null \
     ; echo -e ' \n\
-    Package: * \n\
-    Pin: origin packages.mozilla.org \n\
-    Pin-Priority: 1000 \n\
-    ' | tee /etc/apt/preferences.d/mozilla \
+Package: * \n\
+Pin: origin packages.mozilla.org \n\
+Pin-Priority: 1000 \n\
+' | tee /etc/apt/preferences.d/mozilla \
     ; apt-get update && apt-get install -y --no-install-recommends firefox \
     ; rm -rf /var/lib/apt/lists/*
 
