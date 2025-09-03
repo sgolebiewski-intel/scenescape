@@ -210,15 +210,14 @@ SPDX-License-Identifier: Apache-2.0
         </div>
         {% endif %}
         {% endfor %}
-        <iframe style="width: 400;" src="http://10.123.233.203:8889/cam" scrolling="no"></iframe>
-        <img style="width: 400;" src="http://10.123.233.203:8889/cam/" alt="Camera Stream" />
-        <iframe src="http://10.123.233.203:8889/webrtc/player/cam" width="640" height="480"
+        <iframe style="width: 400;" src="http://mediamtx.scenescape.intel.com:8889/cam" scrolling="no"></iframe>
+        <iframe src="http://mediamtx.scenescape.intel.com:8889/webrtc/player/cam" width="640" height="480"
           allow="camera; microphone; autoplay" frameborder="0"></iframe>
         <video id="whepVideo" autoplay playsinline></video>
         <script src="https://cdn.jsdelivr.net/npm/@structurelabs/whep-client/dist/whep-client.min.js"></script>
         <script>
           const video = document.getElementById('whepVideo');
-          const whepUrl = 'http://10.123.233.203:8889/whep/cam'; // Replace with your stream name
+          const whepUrl = 'http://mediamtx.scenescape.intel.com:8889/cam/whep'; // Replace with your stream name
 
           WHEPClient.create({ url: whepUrl })
             .then(client => {

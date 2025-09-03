@@ -73,7 +73,7 @@ services:
       - MTX_WEBRTCTRACKGATHERTIMEOUT=10s
       - MTX_WEBRTCADDRESS=:8889
       - MTX_WEBRTCLOCALTCPADDRESS=:8189
-      - MTX_WEBRTCICESERVERS2_0_URL=turn:10.123.233.203:3478
+      - MTX_WEBRTCICESERVERS2_0_URL=turn:coturn.scenescape.intel.com:3478
       - MTX_WEBRTCICESERVERS2_0_USERNAME=user
       - MTX_WEBRTCICESERVERS2_0_PASSWORD=password
       - MTX_webrtcAdditionalHosts="10.123.233.203,mediamtx.scenescape.intel.com"
