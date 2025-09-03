@@ -20,6 +20,11 @@ class Command(BaseCommand):
   def handle(self, *args, **options):
     while True:
       try:
+        print("dbname='" + settings.DATABASES['default']['NAME']
+                                + "' user='" + settings.DATABASES['default']['USER']
+                                + "' host='" + settings.DATABASES['default']['HOST']
+                                + "' password='" + settings.DATABASES['default']['PASSWORD']
+                                + "'")
         conn = psycopg2.connect("dbname='" + settings.DATABASES['default']['NAME']
                                 + "' user='" + settings.DATABASES['default']['USER']
                                 + "' host='" + settings.DATABASES['default']['HOST']
