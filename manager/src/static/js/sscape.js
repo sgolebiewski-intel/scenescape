@@ -33,9 +33,6 @@ import {
   updateCalibrationView,
   handleAutoCalibrationPose,
 } from "/static/js/calibration.js";
-import {
-  playVideo
-} from "/static/js/video.js";
 
 var svgCanvas = Snap("#svgout");
 import RESTClient from "/static/js/restclient.js";

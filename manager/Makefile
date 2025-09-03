@@ -92,6 +92,7 @@ jslibraries: \
   $(JSLIBDIR)/assets/axios.min.js.map                        \
   $(JSLIBDIR)/assets/doxygen-awesome.css                     \
   $(JSLIBDIR)/assets/jszip.min.js                            \
+	$(JSLIBDIR)/assets/reader.js                               \
 
 $(JSLIBDIR)/assets/jquery-3.6.0.min.js:
 	URL=https://code.jquery.com && PKG=$$(basename $@) \
@@ -134,6 +135,11 @@ $(JSLIBDIR)/assets/glfx.min.js:
 	URL=https://cdn.jsdelivr.net/npm/glfx@0.0.4 && PKG=$$(basename $@) \
 	  && echo "$${URL}/$${PKG}" >> $(BUILD_DIR)/$(IMAGE)-downloaded-deps.txt \
 	  && curl -f $(CURL_FLAGS) --location --create-dirs --output $@ $${URL}/$${PKG}
+
+$(JSLIBDIR)/assets/reader.js:
+	URL=https://raw.githubusercontent.com/bluenviron/mediamtx/refs/tags/v1.14.0/internal/servers/webrtc/reader.js  \
+	  && echo https://raw.githubusercontent.com/bluenviron/mediamtx/refs/tags/v1.14.0/internal/servers/webrtc/reader.js >> $(BUILD_DIR)/$(IMAGE)-downloaded-deps.txt \
+	  && curl -f $(CURL_FLAGS) --location --create-dirs --output $@ https://raw.githubusercontent.com/bluenviron/mediamtx/refs/tags/v1.14.0/internal/servers/webrtc/reader.js
 
 $(JSLIBDIR)/bootstrap-4.6.1-dist.zip:
 	VERSION=$$(echo $@ | sed -E -e 's/.*bootstrap-([0-9]+[.][0-9]+[.][0-9]+)-.*/\1/') \

@@ -8,7 +8,8 @@
 
 "use strict";
 
-playVideo() {
+
+function playVideo() {
   const video = document.getElementById('whepVideo');
   let defaultControls = false;
   let reader = null;

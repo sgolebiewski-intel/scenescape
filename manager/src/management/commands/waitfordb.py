@@ -58,8 +58,8 @@ class Command(BaseCommand):
         log.info("Database ready")
         break
 
-      except psycopg2.OperationalError:
-        log.error("Server not online")
+      except psycopg2.OperationalError as er:
+        log.error("Server not online", er)
         time.sleep(2)
 
       except Exception as ex:
