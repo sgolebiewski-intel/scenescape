@@ -210,22 +210,44 @@ SPDX-License-Identifier: Apache-2.0
         </div>
         {% endif %}
         {% endfor %}
-        <iframe style="width: 400;" src="http://mediamtx.scenescape.intel.com:8889/cam" scrolling="no"></iframe>
-        <iframe src="http://mediamtx.scenescape.intel.com:8889/webrtc/player/cam" width="640" height="480"
+        <iframe style="width: 400;" src="http://10.123.233.203:8889/cam" scrolling="no"></iframe>
+        <iframe src="http://10.123.233.203:8889/webrtc/player/cam" width="640" height="480"
           allow="camera; microphone; autoplay" frameborder="0"></iframe>
-        <video id="whepVideo" autoplay playsinline></video>
-        <script src="https://cdn.jsdelivr.net/npm/@structurelabs/whep-client/dist/whep-client.min.js"></script>
+        <video style="width: 400;" id="whepVideo" autoplay playsinline></video>
         <script>
-          const video = document.getElementById('whepVideo');
-          const whepUrl = 'http://mediamtx.scenescape.intel.com:8889/cam/whep'; // Replace with your stream name
 
-          WHEPClient.create({ url: whepUrl })
-            .then(client => {
-              client.attach(video);
-            })
-            .catch(err => {
-              console.error('WHEP error:', err);
+          const video = document.getElementById('whepVideo');
+          let defaultControls = false;
+          let reader = null;
+
+          const loadAttributesFromQuery = () => {
+            video.controls = false;
+            video.muted = true;
+            video.autoplay = true;
+            video.playsInline = true;
+            video.disablepictureinpicture = true;
+          };
+
+          window.addEventListener('load', () => {
+            loadAttributesFromQuery();
+
+            reader = new MediaMTXWebRTCReader({
+              url: new URL('whep', 'http://10.123.233.203:8889/cam'),
+              onError: (err) => {
+                console.log(err)
+              },
+              onTrack: (evt) => {
+                video.srcObject = evt.streams[0];
+              },
             });
+          });
+
+          window.addEventListener('beforeunload', () => {
+            if (reader !== null) {
+              reader.close();
+            }
+          });
+
         </script>
         {% endif %}
       </div>
