@@ -210,9 +210,9 @@ SPDX-License-Identifier: Apache-2.0
         </div>
         {% endif %}
         {% endfor %}
-        <iframe style="width: 400;" src="http://10.123.233.203:8889/cam" scrolling="no"></iframe>
+        <!-- <iframe style="width: 400;" src="http://10.123.233.203:8889/cam" scrolling="no"></iframe>
         <iframe src="http://10.123.233.203:8889/webrtc/player/cam" width="640" height="480"
-          allow="camera; microphone; autoplay" frameborder="0"></iframe>
+          allow="camera; microphone; autoplay" frameborder="0"></iframe> -->
         <video style="width: 400;" id="whepVideo" autoplay playsinline></video>
         <script>
 
@@ -232,7 +232,7 @@ SPDX-License-Identifier: Apache-2.0
             loadAttributesFromQuery();
 
             reader = new MediaMTXWebRTCReader({
-              url: new URL('whep', 'http://10.123.233.203:8889/cam'),
+              url: new URL('whep', 'https://mediamtx.scenescape.intel.com:8889/cam'),
               onError: (err) => {
                 console.log(err)
               },

@@ -18,9 +18,9 @@ default: deploy-certificates
 #.SECONDARY prevents make from deleting files created by intermediate targets
 .SECONDARY:
 
-deploy-certificates: ca broker-cert web-cert vdms-c-cert vdms-s-cert
+deploy-certificates: ca broker-cert web-cert vdms-c-cert vdms-s-cert mediamtx-cert
 
-deploy-csr: broker-csr web-csr vdms-c-csr vdms-s-csr
+deploy-csr: broker-csr web-csr vdms-c-csr vdms-s-csr mediamtx-csr
 
 broker-cert: HOST=broker
 broker-cert: KEY_USAGE=serverAuth
@@ -46,6 +46,12 @@ vdms-s-cert: \
 	$(SECRETSDIR)/certs/scenescape-vdms-s.key \
 	$(SECRETSDIR)/certs/scenescape-vdms-s.crt \
 
+vdms-s-cert: HOST=mediamtx
+vdms-s-cert: KEY_USAGE=serverAuth
+vdms-s-cert: \
+	$(SECRETSDIR)/certs/scenescape-mediamtx.key \
+	$(SECRETSDIR)/certs/scenescape-mediamtx.crt \
+
 broker-csr: HOST=broker
 broker-csr: KEY_USAGE=serverAuth
 broker-csr: \
@@ -69,6 +75,12 @@ vdms-s-csr: KEY_USAGE=serverAuth
 vdms-s-csr: \
 	$(SECRETSDIR)/certs/scenescape-vdms-s.key \
 	$(SECRETSDIR)/certs/scenescape-vdms-s.csr \
+
+mediamtx-csr: HOST=mediamtx
+mediamtx-csr: KEY_USAGE=serverAuth
+mediamtx-csr: \
+	$(SECRETSDIR)/certs/scenescape-mediamtx.key \
+	$(SECRETSDIR)/certs/scenescape-mediamtx.csr \
 
 ca: $(CASECRETSDIR)/certs/scenescape-ca.pem
 

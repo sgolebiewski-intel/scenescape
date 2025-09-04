@@ -23,6 +23,10 @@ secrets:
     file: ${SECRETSDIR}/certs/scenescape-vdms-s.crt
   vdms-server-key:
     file: ${SECRETSDIR}/certs/scenescape-vdms-s.key
+  mediamtx-server-key:
+    file: ${SECRETSDIR}/certs/scenescape-mediamtx.key
+  mediamtx-server-cert:
+    file: ${SECRETSDIR}/certs/scenescape-mediamtx.crt
   django:
     file: ${SECRETSDIR}/django
   controller.auth:
@@ -77,10 +81,18 @@ services:
       - MTX_WEBRTCICESERVERS2_0_USERNAME=user
       - MTX_WEBRTCICESERVERS2_0_PASSWORD=password
       - MTX_WEBRTCADDITIONALHOSTS="10.123.233.203,mediamtx.scenescape.intel.com"
+      - MTX_WEBRTCENCRYPTION=yes
+      - MTX_WEBRTCSERVERKEY=/run/secrets/certs/scenescape-mediamtx.key
+      - MTX_WEBRTCSERVERCERT=/run/secrets/certs/scenescape-mediamtx.crt
     ports:
       - "8889:8889"
       - "8889:8889/udp"
       - "8189:8189"
+    secrets:
+      - source: mediamtx-cert
+        target: certs/scenescape-mediamtx.crt
+      - source: mediamtx-key
+        target: certs/scenescape-mediamtx.key
     networks:
       scenescape:
         aliases:
