@@ -43,7 +43,6 @@ else:
       """Prepare list of floats for DB storage."""
       if value is None:
         return []
-      # Unwrap double-encoded strings
       while isinstance(value, str):
         try:
           value = json.loads(value)
