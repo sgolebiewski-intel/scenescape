@@ -33,24 +33,17 @@ LABEL org.opencontainers.image.documentation="https://github.com/open-edge-platf
 
 USER root
 SHELL ["/bin/bash", "-e", "-o", "pipefail", "-c"]
-ARG USER_ID
-ARG CERTDOMAIN=scenescape.intel.com
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV WSUSER=scenescape
 ENV SCENESCAPE_HOME=/home/$WSUSER/SceneScape
-ARG FORCE_VAAPI
+ARG CERTDOMAIN=scenescape.intel.com
 
-RUN : \
-&& apt-get update \
-    && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
         curl \
         ca-certificates \
-    && install -d /usr/share/postgresql-common/pgdg \
-    && curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc \
-    && echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt jammy-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
+        default-libmysqlclient-dev \
         apache2 \
         bindfs \
         bzip2 \
@@ -62,9 +55,10 @@ RUN : \
         libgomp1 \
         mosquitto-clients \
         netcat \
-        postgresql-15 \
+        pkg-config \
         python-is-python3 \
         python3-pip \
+        python3-dev \
         sudo \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -74,12 +68,6 @@ COPY ./manager/requirements-runtime.txt /tmp
 RUN pip3 install --upgrade --no-cache-dir \
         --extra-index-url https://download.pytorch.org/whl/cpu \
         -r /tmp/requirements-runtime.txt
-
-RUN : \
-    ; PSQLVER=$(ls /etc/postgresql) \
-    ; echo "host all  all    0.0.0.0/0  md5" >> "/etc/postgresql/${PSQLVER}/main/pg_hba.conf" \
-    ; echo "listen_addresses='*'" >> "/etc/postgresql/${PSQLVER}/main/postgresql.conf" \
-    ;
 
 RUN : \
     ; a2dismod -f \
