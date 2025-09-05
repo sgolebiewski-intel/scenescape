@@ -210,45 +210,57 @@ SPDX-License-Identifier: Apache-2.0
         </div>
         {% endif %}
         {% endfor %}
-        <!-- <iframe style="width: 400;" src="http://10.123.233.203:8889/cam" scrolling="no"></iframe>
-        <iframe src="http://10.123.233.203:8889/webrtc/player/cam" width="640" height="480"
-          allow="camera; microphone; autoplay" frameborder="0"></iframe> -->
-        <video style="width: 400;" id="whepVideo" autoplay playsinline></video>
-        <script>
 
-          const video = document.getElementById('whepVideo');
-          let defaultControls = false;
-          let reader = null;
-
-          const loadAttributesFromQuery = () => {
-            video.controls = false;
-            video.muted = true;
-            video.autoplay = true;
-            video.playsInline = true;
-            video.disablepictureinpicture = true;
-          };
-
-          window.addEventListener('load', () => {
-            loadAttributesFromQuery();
-
-            reader = new MediaMTXWebRTCReader({
-              url: new URL('whep', 'https://mediamtx.scenescape.intel.com:8889/cam'),
-              onError: (err) => {
-                console.log(err)
-              },
-              onTrack: (evt) => {
-                video.srcObject = evt.streams[0];
-              },
-            });
-          });
-
-          window.addEventListener('beforeunload', () => {
-            if (reader !== null) {
-              reader.close();
-            }
-          });
-
-        </script>
+        <!-- WebRTC stream -->
+        {% for s in scene.sensor_set.all|dictsort:"name" %}
+        {% if s.type == "camera" %}
+        <div class="card count-item camera-card">
+          <h6 class="card-header">
+            <span class="float-right rate" id="rate-{{ s.sensor_id }}">--</span>
+            {{ s.name }}-WebRTC
+          </h6>
+          <div class="card-image">
+            {% if user.is_superuser %}
+            <a class="snapshot-image" topic="scenescape/cmd/camera/{{ s.sensor_id }}"
+              href="{% url 'cam_calibrate' s.id %}" id="cam_calibrate_{{ s.id }}">
+              <video width=329 height=184 id="video" topic="{{ s.sensor_id }}" autoplay playsinline></video>
+            </a>
+            {% else %}
+            <a class="snapshot-image" topic="scenescape/cmd/camera/{{ s.sensor_id }}" id="cam_calibrate_{{ s.id }}">
+              <video width=329 height=184 id="video" topic="{{ s.sensor_id }}" autoplay playsinline></video>
+            </a>
+            {% endif %}
+          </div>
+          <div class="card-body hide-live">
+            <table class="table table-sm">
+              <tr>
+                <th>ID</th>
+                <td class="small sensor-id">{{ s.sensor_id }}</td>
+              </tr>
+              <!-- Disabled for performance reasons
+              <tr>
+                <th>Updated</th>
+                <td class="small" id="updated-{{ s.sensor_id }}">--</td>
+              </tr>
+              -->
+            </table>
+            {% if user.is_superuser %}
+            <div class="text-right">
+              <a class="btn btn-secondary btn-sm" href="{% url 'cam_calibrate' s.id %}" title="Manage {{ s.name }}"><i
+                  class="bi bi-wrench"></i></a>
+              <a class="btn btn-secondary btn-sm" href="{% url 'cam_delete' s.id %}" title="Delete {{ s.name }}"><i
+                  class="bi bi-trash"></i></a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <!-- End WebRTC stream -->
+        <!-- <video width=329 height=184 id="whepVideo" topic="cam" autoplay playsinline></video>
+        <video width=329 height=184 id="video" topic="cam" autoplay playsinline></video> -->
+        <!-- <div id="message"></div> -->
+        {% else %}
         {% endif %}
       </div>
     </div>

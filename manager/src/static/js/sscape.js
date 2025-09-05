@@ -259,7 +259,7 @@ async function checkBrokerConnections() {
             .stop()
             .show()
             .css("opacity", 1)
-            .animate({ opacity: 0.6 }, 5000, function () {})
+            .animate({ opacity: 0.6 }, 5000, function () { })
             .prevAll(".cam-offline")
             .hide();
         }
@@ -339,6 +339,41 @@ async function checkBrokerConnections() {
       $("#snapshot").trigger("click");
     }
   }
+}
+
+function openWebRTCStream() {
+  const videos = document.querySelectorAll('video[topic]');
+  const readers = [];
+
+  const loadAttributes = (video) => {
+    video.controls = false;
+    video.muted = true;
+    video.autoplay = true;
+    video.playsInline = true;
+    video.disablepictureinpicture = true;
+  };
+
+  window.addEventListener('load', () => {
+    videos.forEach((video) => {
+      loadAttributes(video);
+      const topic = video.getAttribute('topic');
+      const reader = new MediaMTXWebRTCReader({
+        url: new URL('whep', 'https://10.123.233.203:8443/' + topic + '/'),
+        onTrack: (evt) => {
+          video.srcObject = evt.streams[0];
+        },
+      });
+      readers.push(reader);
+    });
+  });
+
+  window.addEventListener('beforeunload', () => {
+    readers.forEach((reader) => {
+      if (reader !== null) {
+        reader.close();
+      }
+    });
+  });
 }
 
 function plotSingleton(m) {
@@ -1868,6 +1903,8 @@ $(document).ready(function () {
 
     setColorForAllROIs();
   });
+
+  openWebRTCStream();
 
   // MQTT management (see https://github.com/mqttjs/MQTT.js)
   if ($("#broker").length != 0) {

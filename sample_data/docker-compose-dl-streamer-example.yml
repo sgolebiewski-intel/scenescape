@@ -23,9 +23,9 @@ secrets:
     file: ${SECRETSDIR}/certs/scenescape-vdms-s.crt
   vdms-server-key:
     file: ${SECRETSDIR}/certs/scenescape-vdms-s.key
-  mediamtx-server-key:
+  mediamtx-key:
     file: ${SECRETSDIR}/certs/scenescape-mediamtx.key
-  mediamtx-server-cert:
+  mediamtx-cert:
     file: ${SECRETSDIR}/certs/scenescape-mediamtx.crt
   django:
     file: ${SECRETSDIR}/django
@@ -67,7 +67,7 @@ services:
     container_name: mediamtx-server
     environment:
       - MTX_LOGLEVEL=info
-      - MTX_RTSP=no
+      - MTX_RTSP=yes
       - MTX_RTMP=no
       - MTX_SRT=no
       - MTX_RTMP=no
@@ -80,15 +80,17 @@ services:
       - MTX_WEBRTCICESERVERS2_0_URL=turn:10.123.233.203:3478
       - MTX_WEBRTCICESERVERS2_0_USERNAME=user
       - MTX_WEBRTCICESERVERS2_0_PASSWORD=password
-      - MTX_WEBRTCADDITIONALHOSTS="10.123.233.203,mediamtx.scenescape.intel.com"
-      - MTX_WEBRTCENCRYPTION=yes
-      - MTX_WEBRTCSERVERKEY=/run/secrets/certs/scenescape-mediamtx.key
-      - MTX_WEBRTCSERVERCERT=/run/secrets/certs/scenescape-mediamtx.crt
+      - MTX_WEBRTCADDITIONALHOSTS="10.123.233.203,mediamtx.scenescape.intel.com,mediamtx-proxy.scenescape.intel.com"
+      # - MTX_WEBRTCENCRYPTION=yes
+      # - MTX_WEBRTCSERVERKEY=/run/secrets/certs/scenescape-mediamtx.key
+      # - MTX_WEBRTCSERVERCERT=/run/secrets/certs/scenescape-mediamtx.crt
     ports:
       - "8889:8889"
       - "8889:8889/udp"
       - "8189:8189"
     secrets:
+      - source: root-cert
+        target: /usr/local/share/ca-certificates/scenescape-ca.pem
       - source: mediamtx-cert
         target: certs/scenescape-mediamtx.crt
       - source: mediamtx-key
@@ -97,6 +99,28 @@ services:
       scenescape:
         aliases:
           - mediamtx.scenescape.intel.com
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-mediamtx
+    ports:
+      - "8443:443"
+    configs:
+      - source: nginx-config
+        target: /etc/nginx/nginx.conf
+    depends_on:
+      - mediamtx
+    networks:
+      scenescape:
+        aliases:
+          - mediamtx-proxy.scenescape.intel.com
+    secrets:
+      - source: root-cert
+        target: /usr/local/share/ca-certificates/scenescape-ca.pem
+      - source: mediamtx-cert
+        target: /etc/nginx/certs/cert.crt
+      - source: mediamtx-key
+        target: /etc/nginx/certs/cert.key
 
   coturn:
     image: coturn/coturn:latest
@@ -113,6 +137,9 @@ services:
       scenescape:
         aliases:
           - coturn.scenescape.intel.com
+    secrets:
+      - source: root-cert
+        target: certs/scenescape-ca.pem
 
   pgserver:
     image: scenescape-manager:${VERSION:-latest}
@@ -352,6 +379,7 @@ services:
     networks:
       scenescape:
     tty: true
+    user: root
     entrypoint: [ "./run.sh" ]
     ports:
       - "8082:8080"
@@ -455,6 +483,8 @@ configs:
     file: ./dlstreamer-pipeline-server/queuing-config-webrtc.json
   person-detection-queing-config:
     file: ./dlstreamer-pipeline-server/model-proc-files/person-detection-retail-0013.json
+  nginx-config:
+    file: ./sample_data/nginx.conf
 
 volumes:
   vol-db:

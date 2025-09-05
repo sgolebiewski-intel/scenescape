@@ -12,8 +12,8 @@ default: deploy-certificates
 
 #.PHONY targets won't be skipped if files with these names happen to exist
 .PHONY: default ca deploy-certificates deploy-csr
-.PHONY: broker-cert web-cert vdms-c-cert vdms-s-cert
-.PHONY: broker-csr web-csr vdms-c-csr vdms-s-csr
+.PHONY: broker-cert web-cert vdms-c-cert vdms-s-cert mediamtx-cert
+.PHONY: broker-csr web-csr vdms-c-csr vdms-s-csr mediamtx-csr
 
 #.SECONDARY prevents make from deleting files created by intermediate targets
 .SECONDARY:
@@ -46,9 +46,9 @@ vdms-s-cert: \
 	$(SECRETSDIR)/certs/scenescape-vdms-s.key \
 	$(SECRETSDIR)/certs/scenescape-vdms-s.crt \
 
-vdms-s-cert: HOST=mediamtx
-vdms-s-cert: KEY_USAGE=serverAuth
-vdms-s-cert: \
+mediamtx-cert: HOST=mediamtx
+mediamtx-cert: KEY_USAGE=serverAuth
+mediamtx-cert: \
 	$(SECRETSDIR)/certs/scenescape-mediamtx.key \
 	$(SECRETSDIR)/certs/scenescape-mediamtx.crt \
 
@@ -97,7 +97,8 @@ $(CASECRETSDIR)/certs/scenescape-ca.pem: $(CASECRETSDIR)/ca/scenescape-ca.key
 	@if [ -n "$(CERTPASS)" ] ; then PASSFLAGS="-passin pass:$(CERTPASS)" ; fi ; \
 	openssl req $${PASSFLAGS} -x509 -new -key $< -days 1825 -out $@ \
 	  -subj "/CN=ca.$(CERTDOMAIN)"
-	@chmod 0644 $@
+	openssl x509 -outform der -in $@ -out $(CASECRETSDIR)/certs/scenescape-ca.crt
+	@chmod 0644 $@ $(CASECRETSDIR)/certs/scenescape-ca.crt
 
 $(SECRETSDIR)/certs/%.key:
 	@echo Generating $*.key
