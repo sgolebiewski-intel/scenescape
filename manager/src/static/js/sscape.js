@@ -1447,7 +1447,7 @@ $(document).ready(function () {
         warningContainer.style.display = "none";
         if (Array.isArray(messages)) {
           messages.forEach((msg) =>
-            errorList.insertAdjacentHTML("beforeend", `<li>${msg}</li>`),
+            errorList.insertAdjacentHTML("beforeend", `<li>${msg}</li>`)
           );
         } else {
           errorList.insertAdjacentHTML("beforeend", `<li>${messages}</li>`);
@@ -1457,13 +1457,10 @@ $(document).ready(function () {
 
       const showWarnings = async (warnings, restClient) => {
         warningList.innerHTML = "";
-        console.log(warnings);
-
         for (const key in warnings) {
           if (Array.isArray(warnings[key])) {
             for (const msg of warnings[key]) {
               const messageText = msg[0];
-
               if (
                 messageText.includes("orphaned camera") ||
                 messageText.includes("orphaned sensor")
@@ -1471,7 +1468,7 @@ $(document).ready(function () {
                 const isCamera = messageText.includes("camera");
 
                 const userConfirmed = confirm(
-                  `Do you want to orphan "${msg[1].name}" to the imported scene?`,
+                  `Do you want to orphan "${msg[1].name}" to the imported scene?`
                 );
                 if (userConfirmed) {
                   try {
@@ -1479,13 +1476,10 @@ $(document).ready(function () {
                     if (isCamera) {
                       updateResponse = await restClient.updateCamera(
                         msg[1].name,
-                        { scene: msg[1].scene },
+                        { scene: msg[1].scene }
                       );
                     } else {
-                      let sensorData = {
-                        scene: msg[1].scene,
-                        center: msg[1].center,
-                      };
+                      let sensorData = { scene: msg[1].scene, center: msg[1].center };
                       if (msg[1].area === "circle") {
                         sensorData.radius = msg[1].radius;
                         sensorData.area = msg[1].area;
@@ -1496,27 +1490,27 @@ $(document).ready(function () {
                       }
                       updateResponse = await restClient.updateSensor(
                         msg[1].name,
-                        sensorData,
+                        sensorData
                       );
                     }
                     console.log("Update successful:", updateResponse);
                   } catch (err) {
                     warningList.insertAdjacentHTML(
                       "beforeend",
-                      `<li>Failed to orphan: ${messageText}</li>`,
+                      `<li>Failed to orphan: ${messageText}</li>`
                     );
                   }
                 } else {
                   warningList.insertAdjacentHTML(
                     "beforeend",
-                    `<li>${messageText}</li>`,
+                    `<li>${messageText}</li>`
                   );
                   warningContainer.style.display = "block";
                 }
               } else {
                 warningList.insertAdjacentHTML(
                   "beforeend",
-                  `<li>${messageText}</li>`,
+                  `<li>${messageText}</li>`
                 );
                 warningContainer.style.display = "block";
               }
@@ -1525,60 +1519,56 @@ $(document).ready(function () {
         }
       };
 
-      if (!zipFileInput.value) {
+      if (!zipFileInput.files.length) {
         showError("ZipFile field cannot be empty");
         return;
       }
 
       try {
         importSpinner.style.display = "block";
-        const response = await fetch("", {
+
+        // Directly upload the ZIP to import-scene endpoint
+        const response = await fetch("/api/v1/import-scene/", {
           method: "POST",
-          body: formData,
+          headers: { Authorization: authToken },
+          body: new FormData(inputElement.form),
         });
 
+        importSpinner.style.display = "none";
+
         if (!response.ok) {
-          importSpinner.style.display = "none";
-          showError("Network response was not OK");
+          const text = await response.text();
+          showError(`Failed to import scene: ${response.status} ${text}`);
           return;
         }
 
-        const zipFile = zipFileInput.value.split("\\").pop();
-        const basename = zipFile.replace(/\.[^/.]+$/, "");
-        const zipFileURL =
-          "https://" + window.location.hostname + "/media/" + basename + "/";
-        const errors = await importScene(
-          zipFileURL,
-          restclient,
-          basename,
-          window,
-          authToken,
-        );
+        const result = await response.json();
 
-        if (errors.scene) {
-          importSpinner.style.display = "none";
-          const sceneErrors = Object.values(errors.scene).map((e) => e[0]);
-          showError(sceneErrors);
+        if (result.scene && result.scene.detail) {
+          showError(result.scene.detail);
           return;
         }
 
         if (
-          errors.cameras ||
-          errors.tripwires ||
-          errors.regions ||
-          errors.sensors
+          result.cameras ||
+          result.tripwires ||
+          result.regions ||
+          result.sensors
         ) {
-          importSpinner.style.display = "none";
-          await showWarnings(errors, restclient);
+          await showWarnings(result, restclient);
           await new Promise((resolve) => setTimeout(resolve, 2000));
         }
-        importSpinner.style.display = "none";
+
+        // Redirect or refresh after successful import
         window.location.href = window.location.origin;
+
       } catch (error) {
+        importSpinner.style.display = "none";
         showError(error);
       }
     };
   }
+
 
   if (exportScene) {
     exportScene.onclick = async function () {

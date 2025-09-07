@@ -33,17 +33,21 @@ LABEL org.opencontainers.image.documentation="https://github.com/open-edge-platf
 
 USER root
 SHELL ["/bin/bash", "-e", "-o", "pipefail", "-c"]
+ARG USER_ID
+ARG CERTDOMAIN=scenescape.intel.com
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV WSUSER=scenescape
 ENV SCENESCAPE_HOME=/home/$WSUSER/SceneScape
-ARG CERTDOMAIN=scenescape.intel.com
+ARG FORCE_VAAPI
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        build-essential \
+RUN : \
+&& apt-get update \
+    && apt-get install -y --no-install-recommends \
         curl \
         ca-certificates \
-        default-libmysqlclient-dev \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
         apache2 \
         bindfs \
         bzip2 \
@@ -55,10 +59,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libgomp1 \
         mosquitto-clients \
         netcat \
-        pkg-config \
         python-is-python3 \
         python3-pip \
-        python3-dev \
         sudo \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -150,8 +152,6 @@ COPY ./manager/config/webserver-init \
      ./manager/config/scenescape-init \
      /usr/local/bin/
 
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-    CMD pgrep postgres || exit 1
 ENTRYPOINT ["/usr/local/bin/scenescape-init"]
 
 # ---------- Manager Test Stage ------------------

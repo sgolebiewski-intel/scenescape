@@ -9,6 +9,7 @@ import time
 from collections import namedtuple
 from uuid import UUID
 import zipfile
+import asyncio
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import user_passes_test
@@ -27,6 +28,7 @@ from django.urls import reverse_lazy
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.core.files.storage import default_storage
 
 from manager.models import Scene, ChildScene, \
   Cam, Asset3D, \
@@ -39,10 +41,12 @@ from manager.forms import CamCalibrateForm, ROIForm, SingletonForm, SingletonDet
 from scene_common.options import *
 from scene_common.scene_model import SceneModel
 from scene_common.transform import applyChildTransform
+from scene_common.scene_import import ImportScene
 from manager.validators import add_form_error, validate_uuid
 from scene_common import log
 from manager.models import PubSubACL
 from django.contrib.auth.models import User
+
 
 # Imports for REST API
 import threading
@@ -355,24 +359,28 @@ class SceneImportView(SuperUserCheck, CreateView):
     zip_file = zip_instance.zipFile
     zip_path = zip_file.path
 
-    extract_dir = os.path.splitext(zip_path)[0]
-    os.makedirs(extract_dir, exist_ok=True)
-
-    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-      for member in zip_ref.namelist():
-        filename = os.path.basename(member)
-        if not filename:
-          continue  # skip directories
-
-        source = zip_ref.open(member)
-        target_path = os.path.join(extract_dir, filename)
-
-        with open(target_path, "wb") as target:
-          with source as source_file:
-            target.write(source_file.read())
-
-    print(f"ZIP extracted to: {extract_dir}")
+    scene = ImportScene(zip_path)
     return response
+
+class SceneImportAPIView(APIView):
+  def post(self, request, *args, **kwargs):
+    if "zipFile" not in request.FILES:
+      return Response({"error": "zipFile is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    zip_file = request.FILES["zipFile"]
+    scene_import_instance = SceneImport.objects.create(zipFile=zip_file)
+
+    zip_path = scene_import_instance.zipFile.path
+
+    if not os.path.exists(zip_path):
+      return Response({"error": f"Uploaded file not found at {zip_path}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    scene = ImportScene(zip_path)
+    coroutine = scene.loadScene()
+    errors = asyncio.run(coroutine)
+
+    print(errors)
+    return Response(errors, status=status.HTTP_201_CREATED)
 
 #Singleton Sensor CRUD
 class SingletonSensorCreateView(SuperUserCheck, CreateView):

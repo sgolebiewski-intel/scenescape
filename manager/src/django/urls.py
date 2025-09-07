@@ -36,6 +36,7 @@ from manager.views import ChildDeleteView
 from manager.views import ChildUpdateView
 from manager.views import ChildCreateView
 from manager.views import ModelListView
+from manager.views import SceneImportAPIView
 
 # Imports for REST API
 from django.urls import re_path
@@ -139,7 +140,8 @@ urlpatterns += [
   path('api/v1/auth', views.CustomAuthToken.as_view(), name='api_token_auth'),
   path('api/v1/database-ready', views.DatabaseReady.as_view()),
   path('api/v1/calculateintrinsics', CalculateCameraIntrinsics.as_view()),
-  path('api/v1/aclcheck', views.ACLCheck.as_view())
+  path('api/v1/aclcheck', views.ACLCheck.as_view()),
+  path("api/v1/import-scene/", SceneImportAPIView.as_view())
 ]
 
 if settings.KUBERNETES_SERVICE_HOST:
