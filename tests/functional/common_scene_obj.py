@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# SPDX-FileCopyrightText: (C) 2022 - 2025 Intel Corporation
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
 from tests.functional import FunctionalTest
@@ -46,7 +46,7 @@ class SceneObjectMqtt(FunctionalTest):
 
     if getattr(self, "roi_deleted", False):
       self.message_received_after_delete = True
-      print("No event received")
+      print("Event received after ROI deletion (unexpected)")
       return
 
     for regionObj in regionData['objects']:
@@ -96,7 +96,7 @@ class SceneObjectMqtt(FunctionalTest):
                                region_id=self.roi_uid, region_type=REGION)
     self.pubsub.addCallback(topic, self.eventReceived)
 
-    
+
     assert res['points']
     return res['points']
 
