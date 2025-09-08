@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+services:
+  scene:
+    # https://github.com/microsoft/debugpy
+    entrypoint: ["python3", "-m", "debugpy", "--listen", "0.0.0.0:5678", "--wait-for-client", "/home/scenescape/SceneScape/controller-cmd"]
+    ports:
+      - "5678:5678"
