@@ -13,7 +13,7 @@
                 "host": "localhost",
                 "port": 5678
             },
-            "justMyCode": true,
+            "justMyCode": false,
             "pathMappings": [
                 {
                     "localRoot": "${workspaceFolder}/controller/src/controller",
