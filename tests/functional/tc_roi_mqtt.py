@@ -8,26 +8,26 @@ from tests.functional.common_scene_obj import SceneObjectMqtt
 TEST_NAME = "NEX-T10404"
 
 def runROIMqttCreate(self):
-    self.exitCode = 1
-    self.runSceneObjMqttInitialize()
-    try:
-        self.runSceneObjMqttPrepare()
-        self.runROIMqttExecute()
-        passed = self.runROIMqttVerifyPassed()
-        if passed:
-            self.exitCode = 0
-    finally:
-        self.runSceneObjMqttFinally()
-    return
+  self.exitCode = 1
+  self.runSceneObjMqttInitialize()
+  try:
+    self.runSceneObjMqttPrepare()
+    self.runROIMqttExecute()
+    passed = self.runROIMqttVerifyPassed()
+    if passed:
+      self.exitCode = 0
+  finally:
+    self.runSceneObjMqttFinally()
+  return
 
 def test_roi_create(request, record_xml_attribute):
-    test = SceneObjectMqtt(TEST_NAME, request, record_xml_attribute)
-    runROIMqttCreate(test)
-    assert test.exitCode == 0
-    return
+  test = SceneObjectMqtt(TEST_NAME, request, record_xml_attribute)
+  runROIMqttCreate(test)
+  assert test.exitCode == 0
+  return
 
 def main():
-    return test_roi_create(None, None)
+  return test_roi_create(None, None)
 
 if __name__ == '__main__':
-    os._exit(main() or 0)
+  os._exit(main() or 0)
