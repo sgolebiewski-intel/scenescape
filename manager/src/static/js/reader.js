@@ -404,8 +404,6 @@ class MediaMTXWebRTCReader {
   }
 
   #requestICEServers() {
-    console.log(this.conf)
-    console.log(this.conf.url)
     return fetch(this.conf.url, {
       method: 'OPTIONS',
     })
