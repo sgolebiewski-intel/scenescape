@@ -34,8 +34,6 @@ class Command(BaseCommand):
           data = json.load(json_file)
         user = data.get('user')
         pw = data.get('password')
-        print(user)
-        print(pw)
       else:
         sep = auth.find(':')
         if sep < 0:
@@ -43,8 +41,6 @@ class Command(BaseCommand):
           continue
         user = auth[:sep]
         pw = auth[sep+1:]
-        print(user)
-        print(pw)
 
       if User.objects.filter(username=user).exists():
         if not options['skip_existing']:
