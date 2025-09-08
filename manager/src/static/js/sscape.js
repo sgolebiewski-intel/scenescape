@@ -345,6 +345,8 @@ function openWebRTCStream() {
   const videos = document.querySelectorAll('video[topic]');
   const readers = [];
 
+  console.log("Setting WebRTC connections...");
+
   const loadAttributes = (video) => {
     video.controls = false;
     video.muted = true;
@@ -358,7 +360,7 @@ function openWebRTCStream() {
       loadAttributes(video);
       const topic = video.getAttribute('topic');
       const reader = new MediaMTXWebRTCReader({
-        url: new URL('whep', 'https://10.123.233.203:8443/' + topic + '/'),
+        url: new URL('whep', 'https://' + window.location.host + ':8443/' + topic + '/'),
         onTrack: (evt) => {
           video.srcObject = evt.streams[0];
         },
