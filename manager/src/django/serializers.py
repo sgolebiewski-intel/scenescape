@@ -175,6 +175,10 @@ class SingletonSerializer(NonNullSerializer):
     area = data.get('area')
     name = data.get('name')
     qs = SingletonSensor.objects.filter(name=name)
+
+    if self.instance:
+      qs = qs.exclude(pk=self.instance.pk)
+
     if qs.exists():
       sensor = qs.first()
       if hasattr(sensor, 'scene') and sensor.scene is not None:
@@ -245,6 +249,7 @@ class SingletonSerializer(NonNullSerializer):
 
 class CamSerializer(NonNullSerializer):
   name = serializers.CharField(max_length=150)
+  sensor_id = serializers.CharField(write_only=True, required=False)
   uid = serializers.CharField(source="sensor_id", read_only=True)
   intrinsics = serializers.SerializerMethodField('get_intrinsics')
   distortion = serializers.SerializerMethodField('get_distortion')
@@ -259,6 +264,10 @@ class CamSerializer(NonNullSerializer):
   def validate_name(self, value):
     if not self.instance:
       qs = Cam.objects.filter(name=value)
+
+      if self.instance:
+        qs = qs.exclude(pk=self.instance.pk)
+
       if qs.exists():
         cam = qs.first()
         if hasattr(cam, 'scene') and cam.scene is not None:
@@ -285,7 +294,7 @@ class CamSerializer(NonNullSerializer):
       if sensor_id is None:
         sensor_id = self.initial_data.get('name')
         if sensor_id is not None:
-          sensor_id.replace(" ", "_")
+          sensor_id = sensor_id.replace(" ", "_")
         validated_data['sensor_id'] = sensor_id
       instance = super().create(validated_data)
     else:
@@ -455,7 +464,7 @@ class CamSerializer(NonNullSerializer):
 
   class Meta:
     model = Cam
-    fields = ['uid', 'name', 'intrinsics', 'transform_type', 'transforms', 'distortion', 'translation', 'rotation', 'scale',
+    fields = ['uid', 'name', 'sensor_id', 'intrinsics', 'transform_type', 'transforms', 'distortion', 'translation', 'rotation', 'scale',
               'resolution', 'scene', 'command', 'camerachain', 'threshold', 'aspect', 'cv_subsystem']
 
 class RegionSerializer(NonNullSerializer):
@@ -534,6 +543,10 @@ class SceneSerializer(NonNullSerializer):
 
   def validate_name(self, value):
     qs = Scene.objects.filter(name=value)
+
+    if self.instance:
+      qs = qs.exclude(pk=self.instance.pk)
+
     if qs.exists():
       raise serializers.ValidationError(f"A scene with the name '{value}' already exists.")
     return value
@@ -635,11 +648,6 @@ class SceneSerializer(NonNullSerializer):
     output_lla = validated_data.get('output_lla', None)
     map_path = validated_data.get('map', None)
 
-    if output_lla:
-      instance.scenescapeScene.output_lla = output_lla
-    map_corners_lla = validated_data.get('map_corners_lla', None)
-    if map_corners_lla:
-      instance.scenescapeScene.map_corners_lla = map_corners_lla
     self.handleMeshTransform(self.initial_data, validated_data)
     child_data = validated_data.pop('parent', None)
     if child_data:
@@ -650,6 +658,12 @@ class SceneSerializer(NonNullSerializer):
 
     if not is_update:
       instance = super().create(validated_data)
+
+    if output_lla:
+      instance.scenescapeScene.output_lla = output_lla
+    map_corners_lla = validated_data.get('map_corners_lla', None)
+    if map_corners_lla:
+      instance.scenescapeScene.map_corners_lla = map_corners_lla
 
     if map_path:
       map_path = '/media/' + map_path.name
@@ -678,12 +692,35 @@ class SceneSerializer(NonNullSerializer):
 
   def handleMeshTransform(self, data, validated_data):
     axes = {'x': 0, 'y': 1, 'z': 2}
-    types = ['translation', 'rotation', 'scale']
-    for trans_type in types:
-      popped_data = data.pop('mesh_' + trans_type, None)
-      if popped_data:
-        for axis, index in axes.items():
-          validated_data[trans_type + '_' + axis] = popped_data[index]
+    transform_types = ['translation', 'rotation', 'scale']
+
+    for trans_type in transform_types:
+      key = f'mesh_{trans_type}'
+      popped_data = data.pop(key, None)
+
+      # Skip if not provided
+      if popped_data is None:
+        continue
+
+      # Must be a list or tuple of exactly 3 elements
+      if not isinstance(popped_data, (list, tuple)) or len(popped_data) != 3:
+        raise serializers.ValidationError({
+          key: 'Must be a list of exactly 3 numeric values [x, y, z].'
+        })
+      if len(popped_data) != 3:
+        raise serializers.ValidationError({
+          key: f'Must have exactly 3 values, got {len(popped_data)}.'
+        })
+
+      for axis, index in axes.items():
+        value = popped_data[index]
+
+        # Must be int or float
+        if not isinstance(value, (int, float)):
+          raise serializers.ValidationError({
+            key: f'Axis "{axis}" must be a number, got {type(value).__name__}.'
+          })
+        validated_data[f'{trans_type}_{axis}'] = float(value)
     return
 
   class Meta:

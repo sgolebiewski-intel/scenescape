@@ -94,26 +94,16 @@ const waitUntil = (condition, checkInterval, maxWaitTime) => {
 };
 
 function initializeOpencv() {
-  let cvLoaded = cv.getBuildInformation?.() !== undefined;
-
-  cv.onRuntimeInitialized = () => {
-    cvLoaded = true;
-  };
-
-  const waitUntil = (condition, checkInterval = 1000) => {
-    return new Promise((resolve) => {
-      let interval = setInterval(() => {
-        if (
-          navigator.userAgent.includes("Firefox") ? condition() : !condition()
-        )
-          return;
-        clearInterval(interval);
-        console.log("OpenCV loaded");
-        resolve();
-      }, checkInterval);
-    });
-  };
-  return { waitUntil, cvLoaded };
+  return new Promise((resolve) => {
+    if (cv.getBuildInformation?.() !== undefined) {
+      // Already loaded
+      resolve(true);
+    } else {
+      cv.onRuntimeInitialized = () => {
+        resolve(true);
+      };
+    }
+  });
 }
 
 // Responsive canvas implementation (handle browser window resizing)
@@ -314,7 +304,8 @@ async function importScene(
     const blob = await response.blob();
     const blobType = blob.type.split("/")[1];
 
-    if (blobType !== "png" && blobType !== "gltf-binary") {
+    const validExtensions = ["png", "jpeg", "gltf-binary"];
+    if (!validExtensions.includes(blobType)) {
       errors.scene = { scene: ["Invalid resource type"] };
       return errors;
     }
@@ -345,6 +336,7 @@ async function importScene(
       minimum_number_of_matches: jsonData.minimum_number_of_matches,
       inlier_threshold: jsonData.inlier_threshold,
       output_lla: jsonData.output_lla,
+      map_corners_lla: jsonData.map_corners_lla,
     };
 
     if (child) {
@@ -371,7 +363,9 @@ async function importScene(
       (jsonData.cameras || []).map((cam) => {
         let camData = {
           name: cam.name,
+          sensor_id: cam.uid,
           scale: cam.scale,
+          intrinsics: cam.intrinsics,
         };
 
         if (Object.hasOwn(cam, "transform_type")) {
