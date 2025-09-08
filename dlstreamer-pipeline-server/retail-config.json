@@ -50,6 +50,13 @@
           }
         },
         "payload": {
+          "destination": {
+            "frame": {
+              "type": "webrtc",
+              "peer-id": "camera1",
+              "bitrate": 10000
+            }
+          },
           "parameters": {
             "ntp_config": {
               "ntpServer": "ntpserv"
@@ -106,6 +113,13 @@
           }
         },
         "payload": {
+          "destination": {
+            "frame": {
+              "type": "webrtc",
+              "peer-id": "camera2",
+              "bitrate": 10000
+            }
+          },
           "parameters": {
             "ntp_config": {
               "ntpServer": "ntpserv"

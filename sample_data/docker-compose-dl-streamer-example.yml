@@ -62,7 +62,7 @@ services:
     user: "${UID:-1000}:${GID:-1000}"
     pids_limit: 1000
 
-  mediamtx:
+  mediaserver:
     image: bluenviron/mediamtx:1.11.3
     container_name: mediamtx-server
     environment:
@@ -99,6 +99,7 @@ services:
       scenescape:
         aliases:
           - mediamtx.scenescape.intel.com
+          - mediaserver
     pids_limit: 1000
 
   nginx:
@@ -110,7 +111,7 @@ services:
       - source: nginx-config
         target: /etc/nginx/nginx.conf
     depends_on:
-      - mediamtx
+      - mediaserver
     networks:
       scenescape:
         aliases:
@@ -139,67 +140,6 @@ services:
       scenescape:
         aliases:
           - coturn.scenescape.intel.com
-    secrets:
-      - source: root-cert
-        target: certs/scenescape-ca.pem
-    pids_limit: 1000
-
-  queuing-video-webrtc:
-    image: docker.io/intel/dlstreamer-pipeline-server:3.1.0-ubuntu24
-    networks:
-      scenescape:
-    tty: true
-    user: root
-    entrypoint: [ "./run.sh" ]
-    ports:
-      - "8082:8080"
-    devices:
-      - "/dev/dri:/dev/dri"
-    group_add:
-      - "109"
-      - "110"
-      - "992"
-    device_cgroup_rules:
-      - "c 189:* rmw"
-      - "c 209:* rmw"
-      - "a 189:* rwm"
-    depends_on:
-      broker:
-        condition: service_started
-      ntpserv:
-        condition: service_started
-    healthcheck:
-      test: [ "CMD", "curl", "-I", "-s", "http://localhost:8080/pipelines" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-    environment:
-      - RUN_MODE=EVA
-      - DETECTION_DEVICE=CPU
-      - CLASSIFICATION_DEVICE=CPU
-      - GENICAM=Balluff
-      - GST_DEBUG="1,gencamsrc:2"
-      - ADD_UTCTIME_TO_METADATA=true
-      - APPEND_PIPELINE_NAME_TO_PUBLISHER_TOPIC=false
-      - MQTT_HOST=broker.scenescape.intel.com
-      - MQTT_PORT=1883
-      - ENABLE_WEBRTC=true
-      - WEBRTC_SIGNALING_SERVER=http://mediamtx.scenescape.intel.com:8889
-      - LOG_LEVEL=info
-      - HTTPS=false # Make it "true" to enable SSL/TLS secure mode, mount the generated certificates
-      - MTLS_VERIFICATION=false
-      - REST_SERVER_PORT=8080
-    configs:
-      - source: queuing-config-webrtc
-        target: /home/pipeline-server/config.json
-      - source: person-detection-queing-config
-        target: /home/pipeline-server/models/object_detection/person/person-detection-retail-0013.json
-    volumes:
-      - ./dlstreamer-pipeline-server/user_scripts:/home/pipeline-server/user_scripts
-      - vol-dlstreamer-pipeline-server-pipeline-root:/var/cache/pipeline_root:uid=1999,gid=1999
-      - vol-sample-data:/home/pipeline-server/videos
-      - vol-models:/home/pipeline-server/models
     secrets:
       - source: root-cert
         target: certs/scenescape-ca.pem
@@ -327,18 +267,6 @@ services:
   #       target: certs/scenescape-vdms-s.key
   #   restart: always
   #   pids_limit: 1000
-
-  mediaserver:
-    image: bluenviron/mediamtx:1.14.0
-    networks:
-      scenescape:
-        aliases:
-          - mediaserver
-    #  ports:
-    #    - "8554:8554"
-    restart: always
-    pids_limit: 1000
-
   queuing-cams:
     image: linuxserver/ffmpeg:version-8.0-cli
     command: -nostdin -re -stream_loop -1 -i /workspace/media/qcam1.ts -re -stream_loop -1 -i /workspace/media/qcam2.ts -map 0:v -c copy -f rtsp -rtsp_transport tcp rtsp://mediaserver:8554/queuing-cam1 -map 1:v -c copy -f rtsp -rtsp_transport tcp rtsp://mediaserver:8554/queuing-cam2
@@ -405,6 +333,8 @@ services:
       - MQTT_HOST=broker.scenescape.intel.com
       - MQTT_PORT=1883
       - REST_SERVER_PORT=8080
+      - ENABLE_WEBRTC=true
+      - WEBRTC_SIGNALING_SERVER=http://mediamtx.scenescape.intel.com:8889
     configs:
       - source: retail-config
         target: /home/pipeline-server/config.json
@@ -462,6 +392,8 @@ services:
       - MQTT_HOST=broker.scenescape.intel.com
       - MQTT_PORT=1883
       - REST_SERVER_PORT=8080
+      - ENABLE_WEBRTC=true
+      - WEBRTC_SIGNALING_SERVER=http://mediamtx.scenescape.intel.com:8889
     configs:
       - source: queuing-config
         target: /home/pipeline-server/config.json
@@ -521,8 +453,6 @@ configs:
     file: ./dlstreamer-pipeline-server/model-proc-files/person-detection-retail-0013.json
   queuing-config:
     file: ./dlstreamer-pipeline-server/queuing-config.json
-  queuing-config-webrtc:
-    file: ./dlstreamer-pipeline-server/queuing-config-webrtc.json
   person-detection-queing-config:
     file: ./dlstreamer-pipeline-server/model-proc-files/person-detection-retail-0013.json
   nginx-config:
