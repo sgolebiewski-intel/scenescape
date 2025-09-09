@@ -148,7 +148,6 @@ RUN OPENCV_SHA=$(openssl dgst -sha256 -binary "$SCENESCAPE_HOME/manager/static/a
 COPY ./manager/config/user_access_config.json $SCENESCAPE_HOME
 
 COPY ./manager/config/webserver-init \
-     ./manager/config/database-init \
      ./manager/config/scenescape-init \
      /usr/local/bin/
 
