@@ -175,13 +175,11 @@ SPDX-License-Identifier: Apache-2.0
             {% if user.is_superuser %}
             <a class="snapshot-image" topic="scenescape/cmd/camera/{{ s.sensor_id }}"
               href="{% url 'cam_calibrate' s.id %}" id="cam_calibrate_{{ s.id }}">
-              <div class="cam-offline">Camera Offline</div>
-              <img id="{{ s.sensor_id }}" class="display-none" alt="{{ s.name }} View" />
+              <video width=329 height=184 id="video" topic="{{ s.sensor_id }}" autoplay playsinline></video>
             </a>
             {% else %}
             <a class="snapshot-image" topic="scenescape/cmd/camera/{{ s.sensor_id }}" id="cam_calibrate_{{ s.id }}">
-              <div class="cam-offline">Camera Offline</div>
-              <img id="{{ s.sensor_id }}" class="display-none" alt="{{ s.name }} View" />
+              <video width=329 height=184 id="video" topic="{{ s.sensor_id }}" autoplay playsinline></video>
             </a>
             {% endif %}
           </div>
@@ -223,9 +221,6 @@ SPDX-License-Identifier: Apache-2.0
             {% if user.is_superuser %}
             <a class="snapshot-image" href="{% url 'cam_calibrate' s.id %}" id="cam_calibrate_{{ s.id }}">
               <video width=329 height=184 id="video" topic="{{ s.sensor_id }}" autoplay playsinline></video>
-              <!-- <iframe width=329 height=184
-                src="https://10.123.233.203:8443/{{ s.sensor_id }}?controls=false&muted=true&autoplay=true&playsInline=false"
-                scrolling="no"></iframe> -->
             </a>
             {% else %}
             <a class="snapshot-image" topic="scenescape/cmd/camera/{{ s.sensor_id }}" id="cam_calibrate_{{ s.id }}">
