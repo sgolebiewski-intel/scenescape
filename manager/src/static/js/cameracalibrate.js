@@ -439,7 +439,7 @@ export class ConvergedCameraCalibration {
               ) {
                 alert(
                   'Camera updated. Ensure "--override-saved-intrinsics" is not set for ' +
-                    "this camera in docker-compose.yml to have these changes persist.",
+                  "this camera in docker-compose.yml to have these changes persist.",
                 );
               } else {
                 alert("Camera updated");
@@ -449,8 +449,8 @@ export class ConvergedCameraCalibration {
             .catch((error) => {
               alert(
                 "Failed to update camera intrinsics in Video Analytics Service. Please try again.\n\n" +
-                  "If you keep getting this error, please check the documentation for " +
-                  "known issues.",
+                "If you keep getting this error, please check the documentation for " +
+                "known issues.",
               );
             });
         } else {
@@ -459,9 +459,9 @@ export class ConvergedCameraCalibration {
       } else {
         alert(
           "Saving the calibration requires an equal number of calibration points in each " +
-            "view (minimum 4).\n\n" +
-            `There are currently ${Object.keys(camPoints).length} points in the camera ` +
-            `view and ${Object.keys(scenePoints).length} points in the scene view.`,
+          "view (minimum 4).\n\n" +
+          `There are currently ${Object.keys(camPoints).length} points in the camera ` +
+          `view and ${Object.keys(scenePoints).length} points in the scene view.`,
         );
       }
     });

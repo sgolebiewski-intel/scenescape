@@ -75,11 +75,6 @@ SPDX-License-Identifier: Apache-2.0
 <div class="hide-fullscreen hide-print" id="scene-controls">
   <div class="center">
     <div class="custom-control custom-switch switch">
-      <input type="checkbox" class="custom-control-input" id="live-view" aria-labelledby="live-view-label" />
-      <label class="custom-control-label" for="live-view" title="Toggle Live View"
-        id="live-view-label">Live&nbsp;View</label>
-    </div>
-    <div class="custom-control custom-switch switch">
       <input type="checkbox" class="custom-control-input" id="show-trails" aria-labelledby="show-trails-label" />
       <label class="custom-control-label" for="show-trails" title="Toggle Show Trails"
         id="show-trails-label">Show&nbsp;Trails</label>
@@ -173,59 +168,17 @@ SPDX-License-Identifier: Apache-2.0
           </h6>
           <div class="card-image">
             {% if user.is_superuser %}
-            <a class="snapshot-image" topic="scenescape/cmd/camera/{{ s.sensor_id }}"
-              href="{% url 'cam_calibrate' s.id %}" id="cam_calibrate_{{ s.id }}">
-              <video width=329 height=184 id="video" topic="{{ s.sensor_id }}" autoplay playsinline></video>
-            </a>
-            {% else %}
-            <a class="snapshot-image" topic="scenescape/cmd/camera/{{ s.sensor_id }}" id="cam_calibrate_{{ s.id }}">
-              <video width=329 height=184 id="video" topic="{{ s.sensor_id }}" autoplay playsinline></video>
-            </a>
-            {% endif %}
-          </div>
-          <div class="card-body hide-live">
-            <table class="table table-sm">
-              <tr>
-                <th>ID</th>
-                <td class="small sensor-id">{{ s.sensor_id }}</td>
-              </tr>
-              <!-- Disabled for performance reasons
-              <tr>
-                <th>Updated</th>
-                <td class="small" id="updated-{{ s.sensor_id }}">--</td>
-              </tr>
-              -->
-            </table>
-            {% if user.is_superuser %}
-            <div class="text-right">
-              <a class="btn btn-secondary btn-sm" href="{% url 'cam_calibrate' s.id %}" title="Manage {{ s.name }}"><i
-                  class="bi bi-wrench"></i></a>
-              <a class="btn btn-secondary btn-sm" href="{% url 'cam_delete' s.id %}" title="Delete {{ s.name }}"><i
-                  class="bi bi-trash"></i></a>
-            </div>
-            {% endif %}
-          </div>
-        </div>
-        {% endif %}
-        {% endfor %}
-
-        <!-- WebRTC stream -->
-        {% for s in scene.sensor_set.all|dictsort:"name" %}
-        {% if s.type == "camera" %}
-        <div class="card count-item camera-card">
-          <h6 class="card-header">
-            <span class="float-right rate" id="rate-{{ s.sensor_id }}">--</span>
-            {{ s.name }}-WebRTC
-          </h6>
-          <div class="card-image">
-            {% if user.is_superuser %}
             <a class="snapshot-image" href="{% url 'cam_calibrate' s.id %}" id="cam_calibrate_{{ s.id }}">
-              <video width=329 height=184 id="video" topic="{{ s.sensor_id }}" autoplay playsinline></video>
+              <video width=329 height=184 id="video" topic="{{ s.sensor_id }}" autoplay playsinline
+                poster="/static/images/offline.png">
+                <img src="/static/images/offline.png" alt="Camera {{ s.name }} WebRTC unavailable">
+              </video>
             </a>
             {% else %}
-            <a class="snapshot-image" topic="scenescape/cmd/camera/{{ s.sensor_id }}" id="cam_calibrate_{{ s.id }}">
-              <video width=329 height=184 id="video" topic="{{ s.sensor_id }}" autoplay playsinline></video>
-
+            <a class="snapshot-image" id="cam_calibrate_{{ s.id }}">
+              <video width=329 height=184 id="video" topic="{{ s.sensor_id }}" autoplay playsinline>
+                <img src="/static/images/offline.png" alt="Camera {{ s.name }} WebRTC unavailable">
+              </video>
             </a>
             {% endif %}
           </div>
@@ -254,10 +207,6 @@ SPDX-License-Identifier: Apache-2.0
         </div>
         {% endif %}
         {% endfor %}
-        <!-- End WebRTC stream -->
-        <!-- <video width=329 height=184 id="whepVideo" topic="cam" autoplay playsinline></video>
-        <video width=329 height=184 id="video" topic="cam" autoplay playsinline></video> -->
-        <!-- <div id="message"></div> -->
         {% else %}
         {% endif %}
       </div>

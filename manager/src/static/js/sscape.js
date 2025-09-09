@@ -364,6 +364,16 @@ function openWebRTCStream() {
         onTrack: (evt) => {
           video.srcObject = evt.streams[0];
         },
+        onError: (evt) => {
+          console.log('Video error for topic:', video.getAttribute('topic'));
+          console.log(evt);
+          // Hide video and show fallback image
+          video.style.display = 'none';
+          const fallbackImg = video.querySelector('img');
+          if (fallbackImg) {
+            fallbackImg.style.display = 'block';
+          }
+        }
       });
       readers.push(reader);
     });

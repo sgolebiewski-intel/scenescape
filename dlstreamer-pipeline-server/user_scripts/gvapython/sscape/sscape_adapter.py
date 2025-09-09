@@ -240,15 +240,15 @@ class PostInferenceDataPublish:
         original_image_base64 = gvametadata['original_image_base64']
       self.buildObjData(gvametadata)
 
-      if self.is_publish_image:
-        self.buildImgData(annotated_img, frame, True, original_image_base64)
-        # self.client.publish(f"scenescape/image/camera/{self.cameraid}", json.dumps(annotated_img))
-        self.is_publish_image = False
+      # if self.is_publish_image:
+      #   self.buildImgData(annotated_img, frame, True, original_image_base64)
+      #   self.client.publish(f"scenescape/image/camera/{self.cameraid}", json.dumps(annotated_img))
+      #   self.is_publish_image = False
 
       if self.is_publish_calibration_image:
         if not unannotated_img:
           self.buildImgData(unannotated_img, frame, False, original_image_base64)
-        # self.client.publish(f"scenescape/image/calibration/camera/{self.cameraid}", json.dumps(unannotated_img))
+        self.client.publish(f"scenescape/image/calibration/camera/{self.cameraid}", json.dumps(unannotated_img))
         self.is_publish_calibration_image = False
 
       if self.cam_auto_calibrate:
@@ -258,7 +258,7 @@ class PostInferenceDataPublish:
         unannotated_img['calibrate'] = True
         if self.cam_auto_calibrate_intrinsics:
           unannotated_img['intrinsics'] = self.cam_auto_calibrate_intrinsics
-        # self.client.publish(f"scenescape/image/calibration/camera/{self.cameraid}", json.dumps(unannotated_img))
+        self.client.publish(f"scenescape/image/calibration/camera/{self.cameraid}", json.dumps(unannotated_img))
 
       self.client.publish(f"scenescape/data/camera/{self.cameraid}", json.dumps(self.frame_level_data))
       frame.add_message(json.dumps(self.frame_level_data))
