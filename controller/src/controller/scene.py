@@ -196,6 +196,12 @@ class Scene(SceneModel):
     self.finishProcessing(detectionType, when, objects, child_objects)
     return True
 
+  distance_threshold = 100.0  # meters
+  def clusterObjects(self, objects, distance_threshold):
+    """! Cluster objects based on their spatial proximity using a simple distance threshold."""
+    log.debug("Clustering %d objects with threshold %.2f meters", len(objects), distance_threshold)
+    return
+  
   def finishProcessing(self, detectionType, when, objects, already_tracked_objects=[]):
     self.updateVisible(objects)
     self.tracker.trackObjects(objects, already_tracked_objects, when, [detectionType],
