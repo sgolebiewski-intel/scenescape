@@ -70,20 +70,6 @@ services:
     ports:
       - "5432:5432"
 
-  # mysqlserver:
-  #   image: mysql:8.0
-  #   environment:
-  #     MYSQL_DATABASE: scenescape
-  #     MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-  #     MYSQL_USER: scenescape
-  #     MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-  #   networks:
-  #     - scenescape
-  #   volumes:
-  #     - vol-db:/var/lib/mysql
-  #   ports:
-  #     - "3306:3306"
-
   web:
     image: scenescape-manager:${VERSION:-latest}
     init: true
