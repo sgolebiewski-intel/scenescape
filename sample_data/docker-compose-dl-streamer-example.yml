@@ -103,7 +103,6 @@ services:
       retries: 10
       start_period: 10s
     environment:
-      - EXAMPLEDB=exampledb.tar.bz2
       - SUPASS
     cap_add:
       - SYS_ADMIN

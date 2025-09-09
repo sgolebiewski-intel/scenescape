@@ -35,8 +35,8 @@ services:
     command: webserver --dbhost pgserver --dbtype postgres --dbport 5432 --broker broker.scenescape.intel.com --brokerauth /run/secrets/browser.auth --brokerrootcert /run/secrets/certs/scenescape-ca.pem
     healthcheck:
       test: "curl --insecure -X GET https://web.scenescape.intel.com:443/api/v1/database-ready | grep 'true'"
-      interval: 10s
-      timeout: 120s
+      interval: 5s
+      timeout: 60s
       retries: 10
       start_period: 10s
     environment:
@@ -65,8 +65,7 @@ services:
       - controller.auth
       - browser.auth
       - calibration.auth
-    restart: always
-    pids_limit: 1000
+    restart: on-failue
 
 volumes:
   vol-media:
