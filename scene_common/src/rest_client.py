@@ -592,11 +592,10 @@ class RESTClient:
     return self._delete(f"calibrationmarker/{uid}")
 
   def importScene(self, zip_file_path):
-    """Uploads a ZIP file to /api/v1/import-scene/"""
     if not os.path.exists(zip_file_path):
       raise ValueError(f"ZIP file does not exist: {zip_file_path}")
 
-    endpoint = "api/v1/import-scene/"
+    endpoint = "import-scene/"
     with open(zip_file_path, "rb") as f:
       files = {"zipFile": (os.path.basename(zip_file_path), f)}
       # _create will handle headers and auth

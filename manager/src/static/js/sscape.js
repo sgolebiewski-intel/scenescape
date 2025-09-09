@@ -21,7 +21,6 @@ import {
   pixelsToMeters,
   checkWebSocketConnection,
   updateElements,
-  importScene,
 } from "/static/js/utils.js";
 import { plot } from "/static/js/marks.js";
 import { setupChildScene } from "/static/js/childscene.js";
@@ -1471,14 +1470,17 @@ $(document).ready(function () {
       const showError = (messages) => {
         errorList.innerHTML = "";
         warningContainer.style.display = "none";
-        if (Array.isArray(messages)) {
-          messages.forEach((msg) =>
-            errorList.insertAdjacentHTML("beforeend", `<li>${msg}</li>`)
-          );
-        } else {
-          errorList.insertAdjacentHTML("beforeend", `<li>${messages}</li>`);
+
+        for (const key in messages) {
+          if (Array.isArray(messages[key])) {
+            messages[key].forEach((msg) => {
+              errorList.insertAdjacentHTML("beforeend", `<li>${msg}</li>`);
+            });
+          } else {
+            errorList.insertAdjacentHTML("beforeend", `<li>${messages[key]}</li>`);
+          }
+          errorContainer.style.display = "block";
         }
-        errorContainer.style.display = "block";
       };
 
       const showWarnings = async (warnings, restClient) => {
@@ -1486,13 +1488,17 @@ $(document).ready(function () {
         for (const key in warnings) {
           if (Array.isArray(warnings[key])) {
             for (const msg of warnings[key]) {
-              const messageText = msg[0];
+              console.log(msg)
+              let messageText = "";
+
+              if (msg[0] && (msg[0]['name'] || msg[0]['sensor_id'])) {
+                messageText = msg[0]['name'] ? msg[0]['name'][0] : msg[0]['sensor_id'][0];
+              }
               if (
                 messageText.includes("orphaned camera") ||
-                messageText.includes("orphaned sensor")
+                messageText.includes("sensor with this Sensor ID already exists")
               ) {
-                const isCamera = messageText.includes("camera");
-
+                const isCamera = key === "cameras"
                 const userConfirmed = confirm(
                   `Do you want to orphan "${msg[1].name}" to the imported scene?`
                 );
@@ -1561,17 +1567,9 @@ $(document).ready(function () {
         });
 
         importSpinner.style.display = "none";
-
-        if (!response.ok) {
-          const text = await response.text();
-          showError(`Failed to import scene: ${response.status} ${text}`);
-          return;
-        }
-
         const result = await response.json();
-
-        if (result.scene && result.scene.detail) {
-          showError(result.scene.detail);
+        if (result.scene) {
+          showError(result.scene);
           return;
         }
 

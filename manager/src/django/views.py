@@ -351,17 +351,6 @@ class SceneImportView(SuperUserCheck, CreateView):
   template_name = "scene/scene_import.html"
   success_url = reverse_lazy('index')
 
-  def form_valid(self, form):
-    response = super().form_valid(form)
-
-    # Get uploaded file path
-    zip_instance = self.object
-    zip_file = zip_instance.zipFile
-    zip_path = zip_file.path
-
-    scene = ImportScene(zip_path)
-    return response
-
 class SceneImportAPIView(APIView):
   def post(self, request, *args, **kwargs):
     if "zipFile" not in request.FILES:
@@ -375,11 +364,10 @@ class SceneImportAPIView(APIView):
     if not os.path.exists(zip_path):
       return Response({"error": f"Uploaded file not found at {zip_path}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    scene = ImportScene(zip_path)
+    user_token = request.auth.key if hasattr(request.auth, "key") else str(request.auth)
+    scene = ImportScene(zip_path, user_token)
     coroutine = scene.loadScene()
     errors = asyncio.run(coroutine)
-
-    print(errors)
     return Response(errors, status=status.HTTP_201_CREATED)
 
 #Singleton Sensor CRUD

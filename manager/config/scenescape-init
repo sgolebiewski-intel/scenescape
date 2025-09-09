@@ -200,7 +200,7 @@ elif [ "$DBTYPE" = "mysql" ]; then
     PORT=${DBPORT:-3306}
 else
     echo "Unsupported DBTYPE: $DBTYPE"
-    exit 1
+    DBTYPE=""
 fi
 
 sed -i -E "s|'ENGINE': '[^']*'|'ENGINE': '$ENGINE'|; \
@@ -233,61 +233,58 @@ fi
 
 export -n DBPASS SUPASS
 
-cd ${MANAGERDIR}
-echo Waiting for database
-./manage.py waitfordb
-
-CREATEDB=0
-MIGRATIONS=${DBROOT}/migrations/__init__.py
-if [ ! -e ${MIGRATIONS} ] ; then
-    CREATEDB=1
-fi
-
-if [ ${CREATEDB} = 1 ] ; then
-    mkdir -p ${DBROOT}/migrations
-    touch ${MIGRATIONS}
-    echo "Checking if database is empty..."
-    if ! ./manage.py showmigrations | grep -q '\[X\]'; then
-        echo "Database is empty — running initial migrations..."
-        ./manage.py makemigrations manager
-        ./manage.py migrate
+if [ -n "$DBTYPE" ]; then
+    cd ${MANAGERDIR}
+    CREATEDB=0
+    MIGRATIONS=${DBROOT}/migrations/__init__.py
+    if [ ! -e ${MIGRATIONS} ] ; then
+        CREATEDB=1
     fi
-fi
-
-./manage.py updatedbstatus --not-ready
-find -L ${RUNSECRETS} -name "*.auth" -print0 | xargs -0 ./manage.py createuser --skip-existing
-echo ''
-echo '#############'
-echo "Adding django admin"
-echo '#############'
-
-if ! sudo -u ${WSUSER} -E -H ./manage.py shell -c \
-    "from django.contrib.auth import get_user_model; \
-     User = get_user_model(); \
-     exit(0) if User.objects.filter(username='admin').exists() else exit(1)"; then
-
-    DJANGO_SUPERUSER_PASSWORD="${SUPASS}" sudo -u ${WSUSER} -E -H \
-        ./manage.py createsuperuser \
-        --no-input \
-        --username=admin \
-        --email=admin@domain.com
-fi
-
-if [ ${CREATEDB} = 1 ] ; then
-    if [ -n "$EXAMPLEDB" ]; then
-        echo ''
-        echo '#############'
-        echo "Preloading example"
-        echo '#############'
-        echo ''
-        tar -C ${DBROOT}/media -xf $SAMPLEDATADIR/$EXAMPLEDB
-        echo "EXAMPLEDB is configured: $SAMPLEDATADIR/$EXAMPLEDB"
-        ./manage.py loaddata ${DBROOT}/media/data.json
-        rm -f ${DBROOT}/media/data.json ${DBROOT}/media/meta.json
+    if [ ${CREATEDB} = 1 ] ; then
+        mkdir -p ${DBROOT}/migrations
+        touch ${MIGRATIONS}
+        echo "Checking if database is empty..."
+        if ! ./manage.py showmigrations | grep -q '\[X\]'; then
+            echo "Database is empty — running initial migrations..."
+            ./manage.py makemigrations manager
+            ./manage.py migrate
+        fi
     fi
-fi
 
-./manage.py updatedbstatus --ready
+    ./manage.py updatedbstatus --not-ready
+    find -L ${RUNSECRETS} -name "*.auth" -print0 | xargs -0 ./manage.py createuser --skip-existing
+    echo ''
+    echo '#############'
+    echo "Adding django admin"
+    echo '#############'
+
+    if ! sudo -u ${WSUSER} -E -H ./manage.py shell -c \
+        "from django.contrib.auth import get_user_model; \
+        User = get_user_model(); \
+        exit(0) if User.objects.filter(username='admin').exists() else exit(1)"; then
+
+        DJANGO_SUPERUSER_PASSWORD="${SUPASS}" sudo -u ${WSUSER} -E -H \
+            ./manage.py createsuperuser \
+            --no-input \
+            --username=admin \
+            --email=admin@domain.com
+    fi
+
+    if [ ${CREATEDB} = 1 ] ; then
+        if [ -n "$EXAMPLEDB" ]; then
+            echo ''
+            echo '#############'
+            echo "Preloading example"
+            echo '#############'
+            echo ''
+            tar -C ${DBROOT}/media -xf $SAMPLEDATADIR/$EXAMPLEDB
+            echo "EXAMPLEDB is configured: $SAMPLEDATADIR/$EXAMPLEDB"
+            ./manage.py loaddata ${DBROOT}/media/data.json
+            rm -f ${DBROOT}/media/data.json ${DBROOT}/media/meta.json
+        fi
+    fi
+    ./manage.py updatedbstatus --ready
+fi
 
 WAITPID=""
 

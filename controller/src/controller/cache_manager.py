@@ -1,26 +1,86 @@
 # SPDX-FileCopyrightText: (C) 2024 - 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
+import json
+from pathlib import Path
+
 from controller.scene import Scene
 from scene_common import log
-from scene_common.rest_client import RESTClient
 from scene_common.timestamp import get_epoch_time
+from scene_common.rest_client import RESTClient
 
 REFRESH_TIME = 60
 
 class CacheManager:
-  def __init__(self, rest_url, rest_auth, root_cert, tracker_config_data):
+  def __init__(self, data_source, rest_url=None, rest_auth=None,
+             root_cert=None, tracker_config_data=None):
     self.cached_child_transforms_by_uid = {}
     self.camera_parameters = {}
-    self.tracker_config_data = tracker_config_data
-    self.rest = RESTClient(rest_url, rootcert=root_cert, auth=rest_auth)
+    self.tracker_config_data = tracker_config_data or {}
+    self.cached_scenes_by_uid = {}
+    self._cached_scenes_by_cameraID = {}
+    self._cached_scenes_by_sensorID = {}
+
+    if data_source:
+      if isinstance(data_source, (str, Path)):
+        self.data_source = [Path(data_source)]
+      else:
+        self.data_source = [Path(p) for p in data_source]
+
+    if rest_url and rest_auth:
+      self.rest = RESTClient(rest_url, rootcert=root_cert, auth=rest_auth)
+
+    elif all(p.suffix == ".json" for p in self.data_source):
+      self.rest = None
+      log.info("[JSON mode]...")
+      self.refreshScenes()
+
+    else:
+      raise ValueError(
+        "Invalid configuration: must provide .zip file(s) with rest_url/rest_auth, "
+        "or .json file(s) as data_source"
+      )
     return
 
-  def getAssets(self):
-    return self.rest.getAssets({})
-
   def getChildScenes(self, scene_uid):
-    return self.rest.getChildScene({'parent': scene_uid})
+    if self.rest:
+      return self.rest.getChildScene({'parent': scene_uid})
+
+    results = []
+    scenes = self._loadScenesFromFile()
+    def _extract_children(scene):
+      for child in scene.get("children", []):
+        link = child.get("link")
+        if link and link.get("parent") == scene_uid:
+          results.append(link)
+        _extract_children(child)
+
+    for scene in scenes:
+      _extract_children(scene)
+    return {'results': results}
+
+  def _loadScenesFromFile(self):
+    scenes = []
+    for path in self.data_source:
+      if path.suffix != ".json" or not path.exists():
+        continue
+      with open(path, "r") as f:
+        data = json.load(f)
+
+      if isinstance(data, dict):
+        if "results" in data and isinstance(data["results"], list):
+          scenes.extend(data["results"])
+        elif "uid" in data:
+          scenes.append(data)
+      elif isinstance(data, list):
+        scenes.extend(data)
+    return scenes
+
+  def getAssets(self):
+    if self.rest:
+      return self.rest.getAssets({})
+    log.info("[JSON mode] getAssets not supported")
+    return []
 
   def refreshScenes(self):
     if not hasattr(self, 'cached_scenes_by_uid') or self.cached_scenes_by_uid is None:
@@ -28,12 +88,15 @@ class CacheManager:
     self._cached_scenes_by_cameraID = {}
     self._cached_scenes_by_sensorID = {}
 
-    result = self.rest.getScenes(None)
-    if 'results' not in result:
-      log.error("Failed to get results, error code: ", result.statusCode)
-      return
+    if self.rest:
+      result = self.rest.getScenes(None)
+      if 'results' not in result:
+        log.error("Failed to get results, error code: ", result.statusCode)
+        return
+      found = result['results']
+    else:
+      found = self._loadScenesFromFile()
 
-    found = result['results']
     old = set(self.cached_scenes_by_uid.keys())
     new = set(x['uid'] for x in found)
     deleted = old - new
@@ -43,9 +106,11 @@ class CacheManager:
     for scene_data in found:
       self._refreshCameras(scene_data)
       if len(self.tracker_config_data):
-        scene_data["tracker_config"] = [self.tracker_config_data["max_unreliable_time"],
-                                      self.tracker_config_data["non_measurement_time_dynamic"],
-                                      self.tracker_config_data["non_measurement_time_static"]]
+        scene_data["tracker_config"] = [
+          self.tracker_config_data["max_unreliable_time"],
+          self.tracker_config_data["non_measurement_time_dynamic"],
+          self.tracker_config_data["non_measurement_time_static"]
+        ]
         scene_data["persist_attributes"] = self.tracker_config_data.get("persist_attributes", {})
 
       uid = scene_data['uid']
@@ -64,6 +129,8 @@ class CacheManager:
     return
 
   def _refreshCameras(self, scene_data):
+    if not self.rest:
+      return
     for camera in scene_data.get('cameras', []):
       update_data = {}
       supported_distortion_values = ('k1','k2','p1', 'p2', 'k3')
@@ -109,11 +176,14 @@ class CacheManager:
               self.camera_parameters[camera]['resolution'] = [width, height]
               self.updateCamera(scene.cameras[camera])
 
-    if intrinsics_changed or distortion_changed:
+    if (intrinsics_changed or distortion_changed) and self.rest:
       self.refreshScenes()
     return
 
   def updateCamera(self, cam):
+    if not self.rest:
+      log.info(f"[JSON mode] Ignoring updateCamera for {cam.cameraID}")
+      return
     if cam.cameraID in self.camera_parameters:
       params = self.camera_parameters[cam.cameraID]
       intrinsics = params.get('intrinsics')

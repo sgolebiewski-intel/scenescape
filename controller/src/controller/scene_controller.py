@@ -26,7 +26,7 @@ class SceneController:
 
   def __init__(self, rewrite_bad_time, rewrite_all_time, max_lag, mqtt_broker,
                mqtt_auth, rest_url, rest_auth, client_cert, root_cert, ntp_server,
-               tracker_config_file, schema_file, visibility_topic):
+               tracker_config_file, schema_file, visibility_topic, data_source):
     self.cert = client_cert
     self.root_cert = root_cert
     self.rewrite_bad_time = rewrite_bad_time
@@ -51,7 +51,7 @@ class SceneController:
     self.pubsub.onConnect = self.onConnect
     self.pubsub.connect()
 
-    self.cache_manager = CacheManager(rest_url, rest_auth, root_cert, self.tracker_config_data)
+    self.cache_manager = CacheManager(data_source, rest_url, rest_auth, root_cert, self.tracker_config_data)
 
     self.visibility_topic = visibility_topic
     log.info(f"Publishing camera visibility info on ${self.visibility_topic} topic.")
