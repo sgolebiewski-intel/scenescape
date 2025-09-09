@@ -94,12 +94,20 @@ class CameraIntrinsics:
         fy = fx
     return fy, fx
 
-  def pinholeUndistort(self, image):
-    """Undistort image using pinhole camera model"""
+  def pinholeUndistort(self, image, alpha=1.0):
+    """Undistort image using pinhole camera model
+
+    @param alpha: Free scaling parameter (0=crop out invalid pixels, 1=keep all pixels)
+                  - alpha=0: Same as GStreamer cameraundistort alpha=0 (cropped)
+                  - alpha=1: Same as GStreamer cameraundistort alpha=1 (full with black corners)
+    """
     if np.any(self.distortion != 0):
       h, w = image.shape[:2]
+      new_camera_matrix, roi = cv2.getOptimalNewCameraMatrix(
+        self.intrinsics, self.distortion, (w, h), alpha, (w, h))
+
       map_x, map_y = cv2.initUndistortRectifyMap(
-        self.intrinsics, self.distortion, None, self.intrinsics, (w, h), 5)
+        self.intrinsics, self.distortion, None, new_camera_matrix, (w, h), cv2.CV_16SC2)
       image_undistort = cv2.remap(image, map_x, map_y, cv2.INTER_LINEAR)
 
       return image_undistort

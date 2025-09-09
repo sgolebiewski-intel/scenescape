@@ -737,11 +737,12 @@ def main():
               vdata.cam.sendImageForCalibration = False
               topic = PubSub.formatTopic(PubSub.IMAGE_CALIBRATE,
                                          camera_id=vdata.cam.mqttID)
+              undistorted_unannotated_frame = vdata.cam.intrinsics.pinholeUndistort(unannotated_frame)
               if hasattr(vdata.cam, 'autocalibrate') and vdata.cam.autocalibrate:
                 vdata.cam.autocalibrate = False
                 publishImage(topic, unannotated_frame, vdata, client, ts, {'calibrate': True})
               else:
-                publishImage(topic, unannotated_frame, vdata, client, ts)
+                publishImage(topic, undistorted_unannotated_frame, vdata, client, ts)
           if args.window:
             cv2.imshow(vdata.cam.mqttID, annotated_frame)
 
