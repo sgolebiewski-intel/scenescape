@@ -1477,7 +1477,10 @@ $(document).ready(function () {
               errorList.insertAdjacentHTML("beforeend", `<li>${msg}</li>`);
             });
           } else {
-            errorList.insertAdjacentHTML("beforeend", `<li>${messages[key]}</li>`);
+            errorList.insertAdjacentHTML(
+              "beforeend",
+              `<li>${messages[key]}</li>`,
+            );
           }
           errorContainer.style.display = "block";
         }
@@ -1488,19 +1491,23 @@ $(document).ready(function () {
         for (const key in warnings) {
           if (Array.isArray(warnings[key])) {
             for (const msg of warnings[key]) {
-              console.log(msg)
+              console.log(msg);
               let messageText = "";
 
-              if (msg[0] && (msg[0]['name'] || msg[0]['sensor_id'])) {
-                messageText = msg[0]['name'] ? msg[0]['name'][0] : msg[0]['sensor_id'][0];
+              if (msg[0] && (msg[0]["name"] || msg[0]["sensor_id"])) {
+                messageText = msg[0]["name"]
+                  ? msg[0]["name"][0]
+                  : msg[0]["sensor_id"][0];
               }
               if (
                 messageText.includes("orphaned camera") ||
-                messageText.includes("sensor with this Sensor ID already exists")
+                messageText.includes(
+                  "sensor with this Sensor ID already exists",
+                )
               ) {
-                const isCamera = key === "cameras"
+                const isCamera = key === "cameras";
                 const userConfirmed = confirm(
-                  `Do you want to orphan "${msg[1].name}" to the imported scene?`
+                  `Do you want to orphan "${msg[1].name}" to the imported scene?`,
                 );
                 if (userConfirmed) {
                   try {
@@ -1511,7 +1518,10 @@ $(document).ready(function () {
                         { scene: msg[1].scene },
                       );
                     } else {
-                      let sensorData = { scene: msg[1].scene, center: msg[1].center };
+                      let sensorData = {
+                        scene: msg[1].scene,
+                        center: msg[1].center,
+                      };
                       if (msg[1].area === "circle") {
                         sensorData.radius = msg[1].radius;
                         sensorData.area = msg[1].area;
@@ -1522,27 +1532,27 @@ $(document).ready(function () {
                       }
                       updateResponse = await restClient.updateSensor(
                         msg[1].name,
-                        sensorData
+                        sensorData,
                       );
                     }
                     console.log("Update successful:", updateResponse);
                   } catch (err) {
                     warningList.insertAdjacentHTML(
                       "beforeend",
-                      `<li>Failed to orphan: ${messageText}</li>`
+                      `<li>Failed to orphan: ${messageText}</li>`,
                     );
                   }
                 } else {
                   warningList.insertAdjacentHTML(
                     "beforeend",
-                    `<li>${messageText}</li>`
+                    `<li>${messageText}</li>`,
                   );
                   warningContainer.style.display = "block";
                 }
               } else {
                 warningList.insertAdjacentHTML(
                   "beforeend",
-                  `<li>${messageText}</li>`
+                  `<li>${messageText}</li>`,
                 );
                 warningContainer.style.display = "block";
               }
@@ -1585,14 +1595,12 @@ $(document).ready(function () {
 
         // Redirect or refresh after successful import
         window.location.href = window.location.origin;
-
       } catch (error) {
         importSpinner.style.display = "none";
         showError(error);
       }
     };
   }
-
 
   if (exportScene) {
     exportScene.onclick = async function () {
