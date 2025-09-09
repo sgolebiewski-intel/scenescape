@@ -204,6 +204,7 @@ class Scene(SceneModel):
   
   def finishProcessing(self, detectionType, when, objects, already_tracked_objects=[]):
     self.updateVisible(objects)
+    self.clusterObjects(objects, self.distance_threshold)
     self.tracker.trackObjects(objects, already_tracked_objects, when, [detectionType],
                               self.ref_camera_frame_rate,
                               self.max_unreliable_time,
