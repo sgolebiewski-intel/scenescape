@@ -87,6 +87,7 @@ function initializeCalibrationSettings() {
     camera_calibration.initializeCamCanvas(
       $("#camera_img_canvas")[0],
       $("#camera_img").attr("src"),
+      $("#video")[0],
     );
     camera_calibration.initializeViewport(
       $("#map_canvas_3D")[0],

@@ -72,13 +72,8 @@ SPDX-License-Identifier: Apache-2.0
         {% endif %}
 
         <div class="cameraCalContainer">
-          <!-- <img
-              id="camera_img"
-              class="noselect"
-              src="{% static 'images/offline.png' %}"
-              alt="Camera Offline"
-            /> -->
-          <video id="video" topic="{{ s.sensor_id }}" autoplay playsinline poster="/static/images/offline.png">
+          <img id="camera_img" class="noselect" src="{% static 'images/offline.png' %}" alt="Camera Offline" />
+          <video id="video" topic="atag-qcam1" autoplay playsinline hidden poster="/static/images/offline.png">
             <img src="/static/images/offline.png" alt="Camera {{ s.name }} WebRTC unavailable">
           </video>
           <canvas id="camera_img_canvas" class="cameraCal border"></canvas>

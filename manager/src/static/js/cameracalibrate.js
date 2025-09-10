@@ -81,8 +81,8 @@ export class ConvergedCameraCalibration {
     });
   }
 
-  initializeCamCanvas(canvasElement, imageSrc) {
-    this.camCanvas = new CamCanvas(canvasElement, imageSrc);
+  initializeCamCanvas(canvasElement, imageSrc, video) {
+    this.camCanvas = new CamCanvas(canvasElement, imageSrc, video);
     // FIXME: Find a better way to do these event listeners which require interacting with both
     // the camCanvas and viewport
     this.camCanvas.canvas.addEventListener("mouseup", (event) => {
@@ -641,6 +641,7 @@ export class ConvergedCameraCalibration {
   }
 
   updateCalibrationViews(image, cameraMatrix, distCoeffs) {
+    // Pass video source
     this.camCanvas.updateImageSrc(image);
     this.updateCameraOpticalCenter(this.camCanvas.getImageSize(), cameraMatrix);
     this.getCameraPositionAndRotation(cameraMatrix, distCoeffs);

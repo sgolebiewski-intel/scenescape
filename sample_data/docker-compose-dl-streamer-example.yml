@@ -63,31 +63,17 @@ services:
     pids_limit: 1000
 
   mediaserver:
-    image: bluenviron/mediamtx:1.11.3
+    image: bluenviron/mediamtx:1.14.0
     container_name: mediamtx-server
-    environment:
-      - MTX_LOGLEVEL=info
-      - MTX_RTSP=yes
-      - MTX_RTMP=no
-      - MTX_SRT=no
-      - MTX_RTMP=no
-      - MTX_HLS=no
-      - MTX_SRT=no
-      - MTX_WEBRTC=yes
-      - MTX_WEBRTCTRACKGATHERTIMEOUT=10s
-      - MTX_WEBRTCADDRESS=:8889
-      - MTX_WEBRTCLOCALTCPADDRESS=:8189
-      - MTX_WEBRTCICESERVERS2_0_URL=turn:10.123.233.203:3478
-      - MTX_WEBRTCICESERVERS2_0_USERNAME=user
-      - MTX_WEBRTCICESERVERS2_0_PASSWORD=password
-      - MTX_WEBRTCADDITIONALHOSTS="10.123.233.203,mediamtx.scenescape.intel.com,mediamtx-proxy.scenescape.intel.com"
-      # - MTX_WEBRTCENCRYPTION=yes
-      # - MTX_WEBRTCSERVERKEY=/run/secrets/certs/scenescape-mediamtx.key
-      # - MTX_WEBRTCSERVERCERT=/run/secrets/certs/scenescape-mediamtx.crt
     ports:
       - "8889:8889"
       - "8889:8889/udp"
       - "8189:8189"
+      - "9997:9997"
+      - "8554:8554"
+    configs:
+      - source: mediamtx-config
+        target: /mediamtx.yml
     secrets:
       - source: root-cert
         target: /usr/local/share/ca-certificates/scenescape-ca.pem
@@ -278,7 +264,6 @@ services:
       - mediaserver
     restart: always
     pids_limit: 1000
-
   retail-cams:
     image: linuxserver/ffmpeg:version-8.0-cli
     command: -nostdin -re -stream_loop -1 -i /workspace/media/apriltag-cam1.ts -re -stream_loop -1 -i /workspace/media/apriltag-cam2.ts -map 0:v -c copy -f rtsp -rtsp_transport tcp rtsp://mediaserver:8554/retail-cam1 -map 1:v -c copy -f rtsp -rtsp_transport tcp rtsp://mediaserver:8554/retail-cam2
@@ -455,6 +440,8 @@ configs:
     file: ./dlstreamer-pipeline-server/queuing-config.json
   person-detection-queing-config:
     file: ./dlstreamer-pipeline-server/model-proc-files/person-detection-retail-0013.json
+  mediamtx-config:
+    file: ./sample_data/mediamtx.yml
   nginx-config:
     file: ./sample_data/nginx.conf
 

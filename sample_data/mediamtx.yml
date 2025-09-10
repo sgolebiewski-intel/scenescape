@@ -1,0 +1,39 @@
+logLevel: info
+api: yes
+
+# RTSP
+rtsp: yes
+
+# WebRTC
+webrtc: yes
+webrtcAddress: :8889
+webrtcTrackGatherTimeout: 2s
+webrtcLocalTCPAddress: :8189
+webrtcICEServers2:
+  - url: turn:10.123.233.203:3478
+    username: user
+    password: password
+webrtcAdditionalHosts:
+  - 10.123.233.203
+  - mediamtx.scenescape.intel.com
+  - mediamtx-proxy.scenescape.intel.com
+
+paths:
+  # # example:
+  # queuing-cam1:
+  #   source: publisher
+  # queuing-cam2:
+  #   source: publisher
+  # retail-cam1:
+  #   source: publisher
+  # retail-cam2:
+  #   source: publisher
+
+  # Settings under path "all_others" are applied to all paths that
+  # do not match another entry.
+  all_others:
+
+# Turn off other protocols
+rtmp: no
+srt: no
+hls: no

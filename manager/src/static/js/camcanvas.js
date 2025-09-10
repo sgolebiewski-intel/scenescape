@@ -17,10 +17,11 @@ import {
 } from "/static/js/constants.js";
 
 class CamCanvas {
-  constructor(canvas, initialImageSrc) {
+  constructor(canvas, initialImageSrc, video) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.image = new Image();
+    this.video = video;
 
     this.calibrationPoints = [];
     this.calibrationPointNames = [];
@@ -43,6 +44,10 @@ class CamCanvas {
     this.image.onload = () => {
       this.handleImageLoad();
     };
+
+    if (video) {
+      this.startVideoRendering();
+    }
 
     this.initializeEventListeners();
     this.updateImageSrc(initialImageSrc);
@@ -204,6 +209,9 @@ class CamCanvas {
     this.ctx.translate(this.panX, this.panY);
     this.ctx.scale(this.scale, this.scale);
     this.ctx.drawImage(this.image, 0, 0, width, height);
+    // Draw using video
+    this.ctx.drawImage(video, 0, 0, width, height);
+
     for (const point of this.calibrationPoints) {
       this.drawPoint(
         point.x * this.camScaleFactor,
@@ -213,6 +221,34 @@ class CamCanvas {
       );
     }
     this.ctx.restore();
+  }
+
+  startVideoRendering() {
+    if (!this.video) return;
+
+    const renderFrame = () => {
+      if (this.video.readyState >= this.video.HAVE_CURRENT_DATA) {
+        // Update canvas size based on video dimensions
+        const aspectRatio = this.video.videoWidth / this.video.videoHeight;
+        this.camScaleFactor = this.canvas.clientWidth / this.video.videoWidth;
+        this.calibrationPointSize = (this.canvas.clientWidth * CALIBRATION_POINT_SCALE) / this.scale;
+
+        let newWidth = this.canvas.clientWidth;
+        let newHeight = this.canvas.clientWidth / aspectRatio;
+
+        this.drawImage(newWidth, newHeight);
+      }
+      requestAnimationFrame(renderFrame);
+    };
+
+    this.video.addEventListener('loadedmetadata', () => {
+      renderFrame();
+    });
+
+    // Start immediately if video is already loaded
+    if (this.video.readyState >= this.video.HAVE_METADATA) {
+      renderFrame();
+    }
   }
 
   handleImageLoad() {

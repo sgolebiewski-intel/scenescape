@@ -7,12 +7,12 @@
 # to ts files so that gstreamer pipeline can keep running the files
 # in infinite loop without having to deallocate buffers
 
-docker pull intel/intel-optimized-ffmpeg:latest
+docker pull linuxserver/ffmpeg:version-8.0-cli
 
 DIRNAME=${PWD}
 SAMPLE_DATA_DIRECTORY=${DIRNAME}/sample_data
 FFMPEG_DIR="/app/data"
-FFMPEG_IMAGE="intel/intel-optimized-ffmpeg:latest"
+FFMPEG_IMAGE="linuxserver/ffmpeg:version-8.0-cli"
 EXTENSION=${1:-mp4}
 PATTERN="*.${EXTENSION}"
 
@@ -26,7 +26,7 @@ for mfile in "$SAMPLE_DATA_DIRECTORY"/$PATTERN; do
     if [ -f $tsfile ]; then
         echo "skipping $basefile as $tsfile is available already"
     else
-        ffmpegcmd="/opt/build/bin/ffmpeg -i ${FFMPEG_DIR}/${basefile}.${EXTENSION} -c copy ${FFMPEG_DIR}/${basefile}.ts"
+        ffmpegcmd="/opt/build/bin/ffmpeg -i ${FFMPEG_DIR}/${basefile}.${EXTENSION} -c:v libx264 -preset veryfast -tune zerolatency -bf 0 ${FFMPEG_DIR}/${basefile}.ts"
         cmd="$DOCKER_RUN_CMD_PREFIX -c '$ffmpegcmd'"
         eval $cmd
     fi
