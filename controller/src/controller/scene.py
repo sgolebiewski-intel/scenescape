@@ -202,7 +202,7 @@ class Scene(SceneModel):
     log.info("Clustering %d objects with threshold %.2f meters" % (len(objects), distance_threshold))
     clustered = []
     for obj in objects:
-      clustered.append([obj])
+      clustered.append(obj)
     objects[:] = clustered
     return
   
