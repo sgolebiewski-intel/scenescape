@@ -33,7 +33,7 @@ camcalibration:
   image: scenescape-camcalibration
 # percebro - deprecated # TODO update kubeclient code to restore the dynamic camera calibration
 kubeclient:
-  enabled: false
+  enabled: true
 retail:
   repository: docker.io/intel/dlstreamer-pipeline-server
   pullPolicy: IfNotPresent
@@ -136,7 +136,7 @@ mqttService:
 
 # Other parameters
 certdomain: ""
-supass: ""
+supass: "admin"
 dbroot: ""
 debug: false
 chartdebug: false
