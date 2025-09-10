@@ -196,10 +196,10 @@ class Scene(SceneModel):
     self.finishProcessing(detectionType, when, objects, child_objects)
     return True
 
-  distance_threshold = 10.0  # meters
   def clusterObjects(self, objects, distance_threshold):
     """Cluster objects based on their spatial proximity using a simple distance threshold."""
     log.debug("Clustering %d objects with threshold %.2f meters" % (len(objects), distance_threshold))
+    distance_threshold = 1  # meters
     clustered = []
     objects_count = len(objects)
     close_pairs = []
