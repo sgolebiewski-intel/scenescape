@@ -199,7 +199,7 @@ class Scene(SceneModel):
   distance_threshold = 10.0  # meters
   def clusterObjects(self, objects, distance_threshold):
     """Cluster objects based on their spatial proximity using a simple distance threshold."""
-    log.info("Clustering %d objects with threshold %.2f meters" % (len(objects), distance_threshold))
+    log.debug("Clustering %d objects with threshold %.2f meters" % (len(objects), distance_threshold))
     clustered = []
     for obj in objects:
       clustered.append(obj)
