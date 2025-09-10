@@ -196,38 +196,10 @@ class Scene(SceneModel):
     self.finishProcessing(detectionType, when, objects, child_objects)
     return True
 
-  distance_threshold = 1.0  # meters
+  distance_threshold = 10.0  # meters
   def clusterObjects(self, objects, distance_threshold):
     """Cluster objects based on their spatial proximity using a simple distance threshold."""
     log.info("Clustering %d objects with threshold %.2f meters" % (len(objects), distance_threshold))
-    # Only cluster objects of type 'person'
-    clustered = []
-    used = set()
-    for i, obj in enumerate(objects):
-      if getattr(obj, 'type', None) != 'person' or i in used:
-        continue
-      group = [obj]
-      for j in range(i + 1, len(objects)):
-        other = objects[j]
-        if getattr(other, 'type', None) != 'person' or j in used:
-          continue
-        dist = np.linalg.norm(np.array(obj.sceneLoc.asNumpyCartesian) - np.array(other.sceneLoc.asNumpyCartesian))
-        if dist < distance_threshold:
-          group.append(other)
-          used.add(j)
-      if len(group) > 1:
-        # Average sceneLoc
-        locs = np.array([o.sceneLoc.asNumpyCartesian for o in group])
-        avg_loc = np.mean(locs, axis=0)
-        # Use the first object as representative, update its sceneLoc
-        obj.sceneLoc = Point(avg_loc)
-        clustered.append(obj)
-        used.add(i)
-      else:
-        clustered.append(obj)
-        used.add(i)
-    # Replace objects with clustered list
-    objects[:] = clustered
     return
   
   def finishProcessing(self, detectionType, when, objects, already_tracked_objects=[]):
