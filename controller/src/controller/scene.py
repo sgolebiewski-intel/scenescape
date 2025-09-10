@@ -201,9 +201,18 @@ class Scene(SceneModel):
     """Cluster objects based on their spatial proximity using a simple distance threshold."""
     log.debug("Clustering %d objects with threshold %.2f meters" % (len(objects), distance_threshold))
     clustered = []
-    for obj in objects:
-      clustered.append(obj)
-    objects[:] = clustered
+    objects_count = len(objects)
+    close_pairs = []
+    if objects_count >= 2:
+      for i in range(objects_count):
+        for j in range(i + 1, objects_count):
+          if objects[i].category == objects[j].category:
+            dist = np.sqrt((objects[i].sceneLoc.as2Dxy.x - objects[j].sceneLoc.as2Dxy.x)**2 + 
+                          (objects[i].sceneLoc.as2Dxy.y - objects[j].sceneLoc.as2Dxy.y)**2)
+            if dist < distance_threshold:
+              close_pairs.append((i, j, dist, objects[i].category))
+        clustered.append(objects[i])
+      objects[:] = clustered
     return
 
   def finishProcessing(self, detectionType, when, objects, already_tracked_objects=[]):
