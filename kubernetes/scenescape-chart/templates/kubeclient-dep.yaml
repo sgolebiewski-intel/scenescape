@@ -48,9 +48,9 @@ spec:
           - name: HELM_REPO
             value: {{ .Values.repository }}
           - name: HELM_IMAGE
-            value: {{ .Values.camera.image }}
+            value: {{ .Values.kubeclient.vaPipeline.image }}
           - name: HELM_TAG
-            value: {{ .Chart.AppVersion | quote }}
+            value: {{ .Values.kubeclient.vaPipeline.tag }}
           {{- with .Values.imagePullSecrets }}
           {{- range $index, $pullSecret := . }}
           - name: KUBERNETES_PULL_SECRET_{{ $index }}
