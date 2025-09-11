@@ -1491,13 +1491,13 @@ $(document).ready(function () {
         for (const key in warnings) {
           if (Array.isArray(warnings[key])) {
             for (const msg of warnings[key]) {
-              console.log(msg);
               let messageText = "";
+              let message = msg[0];
 
-              if (msg[0] && (msg[0]["name"] || msg[0]["sensor_id"])) {
-                messageText = msg[0]["name"]
-                  ? msg[0]["name"][0]
-                  : msg[0]["sensor_id"][0];
+              if (message && (message["name"] || message["sensor_id"])) {
+                messageText = message["name"]
+                  ? message["name"][0]
+                  : message["sensor_id"][0];
               }
               if (
                 messageText.includes("orphaned camera") ||

@@ -446,7 +446,7 @@ class SceneController:
     return
 
   def updateObjectClasses(self):
-    results = self.cache_manager.getAssets()
+    results = self.cache_manager.data_source.getAssets()
     if results and 'results' in results:
       for scene in self.scenes:
         scene.tracker.updateObjectClasses(results['results'])
@@ -522,7 +522,7 @@ class SceneController:
         need_subscribe.add((PubSub.formatTopic(PubSub.DATA_SENSOR, sensor_id=sensor),
                             self.handleSensorMessage))
       if hasattr(scene, 'children'):
-        child_scenes = self.cache_manager.getChildScenes(scene.uid)
+        child_scenes = self.cache_manager.data_source.getChildScenes(scene.uid)
 
         for info in child_scenes.get('results', []):
           if info['child_type'] == 'local':

@@ -41,12 +41,11 @@ from manager.forms import CamCalibrateForm, ROIForm, SingletonForm, SingletonDet
 from scene_common.options import *
 from scene_common.scene_model import SceneModel
 from scene_common.transform import applyChildTransform
-from scene_common.scene_import import ImportScene
+from manager.scene_import import ImportScene
 from manager.validators import add_form_error, validate_uuid
 from scene_common import log
 from manager.models import PubSubACL
 from django.contrib.auth.models import User
-
 
 # Imports for REST API
 import threading

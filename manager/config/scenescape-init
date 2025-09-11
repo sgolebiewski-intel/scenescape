@@ -277,8 +277,11 @@ if [ -n "$DBTYPE" ]; then
             echo "Preloading example"
             echo '#############'
             echo ''
-            tar -C ${DBROOT}/media -xf $SAMPLEDATADIR/$EXAMPLEDB
-            echo "EXAMPLEDB is configured: $SAMPLEDATADIR/$EXAMPLEDB"
+            ls -l ${WORKSPACE}
+            mkdir -p ${DBROOT}/media
+            chown ${WSUSER} ${DBROOT}/media
+            tar -C ${DBROOT}/media -xf $EXAMPLEDB
+            echo "EXAMPLEDB is configured: $EXAMPLEDB"
             ./manage.py loaddata ${DBROOT}/media/data.json
             rm -f ${DBROOT}/media/data.json ${DBROOT}/media/meta.json
         fi
