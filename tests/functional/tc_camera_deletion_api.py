@@ -16,12 +16,12 @@ MAX_ATTEMPTS = 3
 class CameraDeletionTest(FunctionalTest):
   def __init__(self, testName, request, recordXMLAttribute):
     super().__init__(testName, request, recordXMLAttribute)
-    
+
     self.existingSceneUID = self.params['scene_id']
     self.newSceneName = "Automated_Scene_Camera_Deletion"
     self.newCameraName = "Automated_Camera1"
     self.newCameraId = "Automated_ID_Camera1"
-    
+
     self.rest = RESTClient(self.params['resturl'], rootcert=self.params['rootcert'])
     assert self.rest.authenticate(self.params['user'], self.params['password'])
     return
@@ -42,7 +42,7 @@ class CameraDeletionTest(FunctionalTest):
 
   def testCameraDeletion(self):
     """! Checks that a camera which is not attached to a scene can be deleted.
-    
+
     Steps:
       * Create a temporary scene
       * Create an orphan camera (not attached to any scene)
@@ -52,7 +52,7 @@ class CameraDeletionTest(FunctionalTest):
       * Cleanup: delete temporary scene
     """
     log.info(f"Executing: {TEST_NAME}")
-    
+
     try:
       # Make sure that the SceneScape is up and running
       log.info("Make sure that the SceneScape is up and running")
@@ -67,7 +67,7 @@ class CameraDeletionTest(FunctionalTest):
       # Step 2: Create orphan camera by creating it in temp scene then deleting the scene
       log.info(f"Creating camera: {self.newCameraName} in temporary scene")
       newCamera = self.rest.createCamera({
-        'name': self.newCameraName, 
+        'name': self.newCameraName,
         'sensor_id': self.newCameraId,
         'scene': tempSceneUID
       })
@@ -105,7 +105,7 @@ class CameraDeletionTest(FunctionalTest):
       log.info("Verifying camera is deleted")
       allCameras = self.rest.getCameras({})
       assert allCameras, (allCameras.statusCode, allCameras.errors)
-      
+
       # Check that deleted camera is not in the list
       deletedCamera = self._getCameraByName(allCameras['results'], self.newCameraName)
       assert deletedCamera is None, f"Camera {self.newCameraName} should be deleted but still found in camera list"
@@ -123,7 +123,7 @@ class CameraDeletionTest(FunctionalTest):
         self.rest.deleteScene(tempSceneUID)
       except:
         pass  # Scene might already be deleted
-      
+
       self.recordTestResult()
 
     return

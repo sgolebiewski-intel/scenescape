@@ -17,11 +17,11 @@ MAX_ATTEMPTS = 3
 class DeleteSensorSceneTest(FunctionalTest):
   def __init__(self, testName, request, recordXMLAttribute):
     super().__init__(testName, request, recordXMLAttribute)
-    
+
     self.testSceneName = "Test_Scene_For_Sensor_Deletion"
-    self.testSensorName = "Sensor_0" 
+    self.testSensorName = "Sensor_0"
     self.testSensorId = "test_sensor"
-    
+
     self.rest = RESTClient(self.params['resturl'], rootcert=self.params['rootcert'])
     assert self.rest.authenticate(self.params['user'], self.params['password'])
     return
@@ -29,12 +29,12 @@ class DeleteSensorSceneTest(FunctionalTest):
   def _createTestScene(self):
     """Create a test scene for sensor testing"""
     log.info(f"Creating test scene: {self.testSceneName}")
-    
+
     sceneData = {
       'name': self.testSceneName,
       'scale': 1000  # pixels per meter
     }
-    
+
     scene = self.rest.createScene(sceneData)
     assert scene, (scene.statusCode, scene.errors)
     return scene['uid']
@@ -42,7 +42,7 @@ class DeleteSensorSceneTest(FunctionalTest):
   def _createTestSensor(self, sceneUID):
     """Create a test sensor in the given scene"""
     log.info(f"Creating test sensor: {self.testSensorName} in scene: {sceneUID}")
-    
+
     # Create a simple rectangular sensor covering some area
     sensorData = {
       'scene': sceneUID,
@@ -51,12 +51,12 @@ class DeleteSensorSceneTest(FunctionalTest):
       'area': 'poly',
       'points': [
         [0.0, 0.0],
-        [100.0, 0.0], 
+        [100.0, 0.0],
         [100.0, 100.0],
         [0.0, 100.0]
       ]
     }
-    
+
     sensor = self.rest.createSensor(sensorData)
     assert sensor, (sensor.statusCode, sensor.errors)
     return sensor['uid']
@@ -64,23 +64,23 @@ class DeleteSensorSceneTest(FunctionalTest):
   def _verifySensorExists(self, sensorName):
     """Verify that sensor exists in the sensor list"""
     log.info(f"Verifying sensor {sensorName} exists")
-    
+
     sensors = self.rest.getSensors({})
     assert sensors, (sensors.statusCode, sensors.errors)
-    
+
     for sensor in sensors['results']:
       if sensor['name'] == sensorName:
         return True, sensor['uid']
-    
+
     return False, None
 
   def _verifySensorOrphaned(self, sensorUID):
     """Verify that sensor is orphaned (scene is None)"""
     log.info(f"Verifying sensor {sensorUID} is orphaned")
-    
+
     sensor = self.rest.getSensor(sensorUID)
     assert sensor, (sensor.statusCode, sensor.errors)
-    
+
     return 'scene' not in sensor or sensor['scene'] is None
 
   def _cleanupTestScene(self, sceneUID):
@@ -103,7 +103,7 @@ class DeleteSensorSceneTest(FunctionalTest):
 
   def testDeleteSensorScene(self):
     """! Test that sensor can still be deleted after the scene the sensor was attached to is deleted.
-    
+
     Steps:
       * Create a test scene
       * Create a sensor in that scene
@@ -114,10 +114,10 @@ class DeleteSensorSceneTest(FunctionalTest):
     """
     log.info(f"Executing: {TEST_NAME}")
     log.info("Test that sensors are not deleted when the parent scene is deleted")
-    
+
     sceneUID = None
     sensorUID = None
-    
+
     try:
       # Make sure that the SceneScape is up and running
       log.info("Make sure that the SceneScape is up and running")
@@ -174,14 +174,7 @@ class DeleteSensorSceneTest(FunctionalTest):
 
     return
 
-def test_del_sensor_scene_main(request, record_xml_attribute):
+def test_del_sensor_scene(request, record_xml_attribute):
   test = DeleteSensorSceneTest(TEST_NAME, request, record_xml_attribute)
   test.testDeleteSensorScene()
   assert test.exitCode == 0
-  return test.exitCode
-
-def main():
-  return test_del_sensor_scene_main(None, None)
-
-if __name__ == "__main__":
-  os._exit(main() or 0)
