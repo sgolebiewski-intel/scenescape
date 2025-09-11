@@ -315,9 +315,15 @@ class Viewport extends THREE.Scene {
     // Re-enable the projection if it has been disabled by clearing calibration points
   }
 
-  projectImage(image, cameraMtx) {
+  projectImage(image, cameraMtx, video) {
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const dataURL = canvas.toDataURL('image/png');
     if (this.sceneMesh !== null) {
-      this.textureLoader.load(image, (texture) => {
+      this.textureLoader.load(dataURL, (texture) => {
         this.projectionCamera.aspect =
           texture.image.width / texture.image.height;
         this.projectionCamera.fov = THREE.MathUtils.radToDeg(

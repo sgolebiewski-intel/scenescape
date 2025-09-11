@@ -98,7 +98,7 @@ export class ConvergedCameraCalibration {
     });
   }
 
-  initializeViewport(canvas, scale, sceneID, authToken) {
+  initializeViewport(canvas, scale, sceneID, video, authToken) {
     const gltfLoader = new GLTFLoader();
     const renderer = new THREE.WebGLRenderer({
       canvas: canvas,
@@ -113,6 +113,7 @@ export class ConvergedCameraCalibration {
       gltfLoader,
       renderer,
     );
+    this.video = video;
     this.viewport = viewport;
 
     viewport
@@ -554,7 +555,9 @@ export class ConvergedCameraCalibration {
     this.projectionImage.onload = () => {
       this.projectionCanvas.width = this.projectionImage.width;
       this.projectionCanvas.height = this.projectionImage.height;
-      this.projectionCtx.drawImage(this.projectionImage, 0, 0);
+      //this.projectionCtx.drawImage(this.projectionImage, 0, 0);
+      // Draw using video
+      this.projectionCtx.drawImage(this.video, 0, 0);
       const distortedImage = cv.imread(this.projectionCanvas);
 
       const h = distortedImage.rows;
@@ -617,7 +620,8 @@ export class ConvergedCameraCalibration {
       this.viewport.setProjectionVisibility(false);
       return;
     }
-    this.viewport.projectImage(image, cameraMatrix);
+
+    this.viewport.projectImage(image, cameraMatrix, this.video);
   }
 
   updateCameraOpticalCenter(resolution, cameraMatrix) {
@@ -641,7 +645,6 @@ export class ConvergedCameraCalibration {
   }
 
   updateCalibrationViews(image, cameraMatrix, distCoeffs) {
-    // Pass video source
     this.camCanvas.updateImageSrc(image);
     this.updateCameraOpticalCenter(this.camCanvas.getImageSize(), cameraMatrix);
     this.getCameraPositionAndRotation(cameraMatrix, distCoeffs);

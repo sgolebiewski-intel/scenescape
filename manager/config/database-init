@@ -146,7 +146,6 @@ BROKERROOTCERT=${BROKERROOTCERT:-${RUNSECRETS}/scenescape-ca.pem}
 BROKERAUTH=${BROKERAUTH:-${RUNSECRETS}/controller.auth}
 if [ -e ${BROKERAUTH} -a -e ${BROKERROOTCERT} ] ; then
     AUTH=($(python3 -c "import sys, json; auth=json.load(sys.stdin); print(auth['user'], auth['password'])" < ${BROKERAUTH}))
-    echo $AUTH
     mosquitto_pub --tls-version tlsv1.3 --cafile ${BROKERROOTCERT} -h ${HOST} -p ${PORT} \
                 -u ${AUTH[0]} -P ${AUTH[1]} -t scenescape/cmd/database -m "update" &
 fi

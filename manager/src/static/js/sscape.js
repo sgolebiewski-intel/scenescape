@@ -264,7 +264,7 @@ async function checkBrokerConnections() {
             .hide();
         }
       } else if (topic.includes(IMAGE_CALIBRATE)) {
-        //updateCalibrationView(msg);
+        updateCalibrationView(msg);
       } else if (topic.includes(DATA_CAMERA)) {
         var id = topic.slice(topic.lastIndexOf("/") + 1);
         $("#rate-" + id).text(msg.rate + " FPS");

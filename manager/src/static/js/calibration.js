@@ -93,6 +93,7 @@ function initializeCalibrationSettings() {
       $("#map_canvas_3D")[0],
       $("#scale").val(),
       $("#scene").val(),
+      $("#video")[0],
       `Token ${$("#auth-token").val()}`,
     );
 
