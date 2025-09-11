@@ -17,7 +17,7 @@ import {
 } from "/static/js/constants.js";
 
 class CamCanvas {
-  constructor(canvas, initialImageSrc, video) {
+  constructor(canvas, video) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.image = new Image();
@@ -50,7 +50,6 @@ class CamCanvas {
     }
 
     this.initializeEventListeners();
-    this.updateImageSrc(initialImageSrc);
   }
 
   getVideoSize() {
@@ -262,9 +261,6 @@ class CamCanvas {
     this.drawImage(newWidth, newHeight);
   }
 
-  updateImageSrc(base64Image) {
-    this.image.src = base64Image;
-  }
 
   resetCameraView() {
     this.scale = 1;
