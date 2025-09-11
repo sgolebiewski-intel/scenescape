@@ -245,11 +245,11 @@ class PostInferenceDataPublish:
       #   self.client.publish(f"scenescape/image/camera/{self.cameraid}", json.dumps(annotated_img))
       #   self.is_publish_image = False
 
-      if self.is_publish_calibration_image:
-        if not unannotated_img:
-          self.buildImgData(unannotated_img, frame, False, original_image_base64)
-        self.client.publish(f"scenescape/image/calibration/camera/{self.cameraid}", json.dumps(None))
-        self.is_publish_calibration_image = False
+      # if self.is_publish_calibration_image:
+      #   if not unannotated_img:
+      #     self.buildImgData(unannotated_img, frame, False, original_image_base64)
+      #   self.client.publish(f"scenescape/image/calibration/camera/{self.cameraid}", json.dumps(unannotated_img))
+      #   self.is_publish_calibration_image = False
 
       if self.cam_auto_calibrate:
         self.cam_auto_calibrate = False

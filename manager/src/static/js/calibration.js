@@ -127,21 +127,21 @@ function initializeCalibrationSettings() {
 }
 
 function updateCalibrationView(msg) {
-  const image = "data:image/jpeg;base64," + msg.image;
-  const cameraMatrix = [
-    [$("#id_intrinsics_fx").val(), 0, $("#id_intrinsics_cx").val()],
-    [0, $("#id_intrinsics_fy").val(), $("#id_intrinsics_cy").val()],
-    [0, 0, 1],
-  ];
-  const distCoeffs = [
-    $("#id_distortion_k1").val(),
-    $("#id_distortion_k2").val(),
-    $("#id_distortion_p1").val(),
-    $("#id_distortion_p2").val(),
-    $("#id_distortion_k3").val(),
-  ];
-  camera_calibration.updateCalibrationViews(image, cameraMatrix, distCoeffs);
-  $("#snapshot").trigger("click");
+  //const image = "data:image/jpeg;base64," + msg.image;
+  // const cameraMatrix = [
+  //   [$("#id_intrinsics_fx").val(), 0, $("#id_intrinsics_cx").val()],
+  //   [0, $("#id_intrinsics_fy").val(), $("#id_intrinsics_cy").val()],
+  //   [0, 0, 1],
+  // ];
+  // const distCoeffs = [
+  //   $("#id_distortion_k1").val(),
+  //   $("#id_distortion_k2").val(),
+  //   $("#id_distortion_p1").val(),
+  //   $("#id_distortion_p2").val(),
+  //   $("#id_distortion_k3").val(),
+  // ];
+  // camera_calibration.updateCalibrationViews(cameraMatrix, distCoeffs);
+  // $("#snapshot").trigger("click");
 }
 
 function handleAutoCalibrationPose(msg) {

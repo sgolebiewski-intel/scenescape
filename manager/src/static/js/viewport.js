@@ -315,7 +315,45 @@ class Viewport extends THREE.Scene {
     // Re-enable the projection if it has been disabled by clearing calibration points
   }
 
-  projectImage(image, cameraMtx, video) {
+  // projectImage(cameraMtx, video) {
+  //   // const canvas = document.createElement('canvas');
+  //   // canvas.width = video.videoWidth;
+  //   // canvas.height = video.videoHeight;
+  //   // const ctx = canvas.getContext('2d');
+  //   // console.log("drawing image to canvas")
+  //   // ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  //   // const dataURL = canvas.toDataURL('image/png');
+  //   console.log(video.videoWidth + "  " + video.videoHeight);
+  //   const texture = new THREE.VideoTexture(video);
+  //   if (this.sceneMesh !== null) {
+  //     //   this.textureLoader.load(dataURL, (texture) => {
+  //     this.projectionCamera.aspect =
+  //       texture.image.width / texture.image.height;
+  //     this.projectionCamera.fov = THREE.MathUtils.radToDeg(
+  //       2 * Math.atan(texture.image.height / (2 * cameraMtx[1][1])),
+  //     );
+  //     this.projectionCamera.updateProjectionMatrix();
+  //     if (this.projectedMaterial === null) {
+  //       [this.projectedMaterial, this.mesh] =
+  //         this.drawObject.createProjectionMaterial(
+  //           this.projectionCamera,
+  //           this.sceneMesh,
+  //           texture,
+  //         );
+  //       this.projectedMaterial.opacity = this.initialOpacity;
+  //       this.add(this.mesh);
+  //     } else {
+  //       this.projectedMaterial.texture = texture;
+  //       this.projectedMaterial.project(this.mesh);
+  //     }
+  //     this.setProjectionVisibility(true);
+  //     //   });
+  //   }
+  // }
+
+
+  projectImage(cameraMtx, video) {
+    console.log("Projecting image")
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;

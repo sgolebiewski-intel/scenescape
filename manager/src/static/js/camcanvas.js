@@ -53,8 +53,8 @@ class CamCanvas {
     this.updateImageSrc(initialImageSrc);
   }
 
-  getImageSize() {
-    return [this.image.width, this.image.height];
+  getVideoSize() {
+    return [this.video.videoWidth, this.video.videoHeight];
   }
 
   initializeEventListeners() {

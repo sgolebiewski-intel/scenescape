@@ -152,6 +152,7 @@ export class ConvergedCameraCalibration {
           }
         });
       });
+    this.startVideoProjection();
   }
 
   #calculateDeterminant(points) {
@@ -550,78 +551,78 @@ export class ConvergedCameraCalibration {
     }
   }
 
-  undistortAndProjectImage(image, cameraMatrix, distCoeffs) {
-    this.projectionImage.src = image;
-    this.projectionImage.onload = () => {
-      this.projectionCanvas.width = this.projectionImage.width;
-      this.projectionCanvas.height = this.projectionImage.height;
-      //this.projectionCtx.drawImage(this.projectionImage, 0, 0);
-      // Draw using video
-      this.projectionCtx.drawImage(this.video, 0, 0);
-      const distortedImage = cv.imread(this.projectionCanvas);
+  undistortAndProjectImage(cameraMatrix, distCoeffs) {
+    // this.projectionImage.src = image;
+    // this.projectionImage.onload = () => {
+    this.projectionCanvas.width = this.video.videoWidth;
+    this.projectionCanvas.height = this.video.videoHeight;
 
-      const h = distortedImage.rows;
-      const w = distortedImage.cols;
+    //this.projectionCtx.drawImage(this.projectionImage, 0, 0);
+    // Draw using video
+    this.projectionCtx.drawImage(this.video, 0, 0);
+    const distortedImage = cv.imread(this.projectionCanvas);
 
-      const map_x = new cv.Mat();
-      const map_y = new cv.Mat();
-      const cameraMatrixMat = cv.matFromArray(
-        3,
-        3,
-        cv.CV_64F,
-        cameraMatrix.flat(),
-      );
-      const distCoeffsMat = cv.matFromArray(1, 5, cv.CV_64F, distCoeffs.flat());
-      // 3x3 identity matrix
-      const identityMatrix = cv.matFromArray(
-        3,
-        3,
-        cv.CV_64F,
-        [1, 0, 0, 0, 1, 0, 0, 0, 1],
-      );
-      cv.initUndistortRectifyMap(
-        cameraMatrixMat,
-        distCoeffsMat,
-        identityMatrix,
-        cameraMatrixMat,
-        new cv.Size(w, h),
-        5,
-        map_x,
-        map_y,
-      );
-      const undistortedImage = new cv.Mat();
-      cv.remap(distortedImage, undistortedImage, map_x, map_y, cv.INTER_LINEAR);
+    const h = distortedImage.rows;
+    const w = distortedImage.cols;
 
-      // Put undistorted image on canvas to use with projection later
-      const imageData = new ImageData(
-        new Uint8ClampedArray(undistortedImage.data),
-        undistortedImage.cols,
-        undistortedImage.rows,
-      );
-      this.projectionCtx.putImageData(imageData, 0, 0);
+    const map_x = new cv.Mat();
+    const map_y = new cv.Mat();
+    const cameraMatrixMat = cv.matFromArray(
+      3,
+      3,
+      cv.CV_64F,
+      cameraMatrix.flat(),
+    );
+    const distCoeffsMat = cv.matFromArray(1, 5, cv.CV_64F, distCoeffs.flat());
+    // 3x3 identity matrix
+    const identityMatrix = cv.matFromArray(
+      3,
+      3,
+      cv.CV_64F,
+      [1, 0, 0, 0, 1, 0, 0, 0, 1],
+    );
+    cv.initUndistortRectifyMap(
+      cameraMatrixMat,
+      distCoeffsMat,
+      identityMatrix,
+      cameraMatrixMat,
+      new cv.Size(w, h),
+      5,
+      map_x,
+      map_y,
+    );
+    const undistortedImage = new cv.Mat();
+    cv.remap(distortedImage, undistortedImage, map_x, map_y, cv.INTER_LINEAR);
 
-      this.projectImage(
-        this.projectionCanvas.toDataURL("image/jpeg"),
-        cameraMatrix,
-      );
+    // Put undistorted image on canvas to use with projection later
+    const imageData = new ImageData(
+      new Uint8ClampedArray(undistortedImage.data),
+      undistortedImage.cols,
+      undistortedImage.rows,
+    );
+    this.projectionCtx.putImageData(imageData, 0, 0);
 
-      distortedImage.delete();
-      undistortedImage.delete();
-      map_x.delete();
-      map_y.delete();
-      cameraMatrixMat.delete();
-      distCoeffsMat.delete();
-      identityMatrix.delete();
-    };
+    this.projectImage(
+      cameraMatrix,
+    );
+
+    distortedImage.delete();
+    undistortedImage.delete();
+    map_x.delete();
+    map_y.delete();
+    cameraMatrixMat.delete();
+    distCoeffsMat.delete();
+    identityMatrix.delete();
+    // };
   }
 
-  projectImage(image, cameraMatrix) {
+  projectImage(cameraMatrix) {
     if (this.projectionEnabled === false) {
       this.viewport.setProjectionVisibility(false);
       return;
     }
 
-    this.viewport.projectImage(image, cameraMatrix, this.video);
+    this.viewport.projectImage(cameraMatrix, this.video);
   }
 
   updateCameraOpticalCenter(resolution, cameraMatrix) {
@@ -644,14 +645,53 @@ export class ConvergedCameraCalibration {
     }
   }
 
-  updateCalibrationViews(image, cameraMatrix, distCoeffs) {
-    this.camCanvas.updateImageSrc(image);
-    this.updateCameraOpticalCenter(this.camCanvas.getImageSize(), cameraMatrix);
-    this.getCameraPositionAndRotation(cameraMatrix, distCoeffs);
-    if (distCoeffs.some((coeff) => coeff !== 0)) {
-      this.undistortAndProjectImage(image, cameraMatrix, distCoeffs);
-    } else {
-      this.projectImage(image, cameraMatrix);
+  // updateCalibrationViews(cameraMatrix, distCoeffs) {
+  //   this.updateCameraOpticalCenter(this.camCanvas.getVideoSize(), cameraMatrix);
+  //   this.getCameraPositionAndRotation(cameraMatrix, distCoeffs);
+  //   if (distCoeffs.some((coeff) => coeff !== 0)) {
+  //     this.undistortAndProjectImage(cameraMatrix, distCoeffs);
+  //   } else {
+  //     this.projectImage(cameraMatrix);
+  //   }
+  // }
+
+  startVideoProjection() {
+
+    const renderFrame = () => {
+      if (this.video.readyState >= this.video.HAVE_CURRENT_DATA) {
+        // Project the current video frame
+        const cameraMatrix = [
+          [$("#id_intrinsics_fx").val(), 0, $("#id_intrinsics_cx").val()],
+          [0, $("#id_intrinsics_fy").val(), $("#id_intrinsics_cy").val()],
+          [0, 0, 1],
+        ];
+        const distCoeffs = [
+          $("#id_distortion_k1").val(),
+          $("#id_distortion_k2").val(),
+          $("#id_distortion_p1").val(),
+          $("#id_distortion_p2").val(),
+          $("#id_distortion_k3").val(),
+        ];
+        this.updateCameraOpticalCenter(this.camCanvas.getVideoSize(), cameraMatrix);
+        this.getCameraPositionAndRotation(cameraMatrix, distCoeffs);
+
+
+        if (distCoeffs.some((coeff) => coeff !== 0)) {
+
+          this.undistortAndProjectImage(cameraMatrix, distCoeffs);
+        } else {
+
+          this.projectImage(cameraMatrix);
+        }
+
+      }
+      requestAnimationFrame(renderFrame);
+    };
+    this.video.addEventListener('loadedmetadata', () => {
+      renderFrame();
+    });
+    if (this.video.readyState >= this.video.HAVE_METADATA) {
+      renderFrame();
     }
   }
 }

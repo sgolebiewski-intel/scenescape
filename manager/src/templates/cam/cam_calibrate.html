@@ -99,9 +99,10 @@ SPDX-License-Identifier: Apache-2.0
           {% endif %}
 
           <div class="cameraCalContainer">
-            <video id="video" topic="queuing-cam1" style="visibility:hidden; width:0; height:0;" autoplay playsinline poster="/static/images/offline.png">
-              <img src="/static/images/offline.png" alt="Camera {{ s.name }} WebRTC unavailable">
+            <video id="video" topic="{{ caminst.sensor_id }}-raw" style="visibility:hidden; width:0; height:0;" autoplay playsinline poster="/static/images/offline.png">
+              <img src="/static/images/offline.png" alt="Camera {{ caminst.name }} WebRTC unavailable">
             </video>
+
             {% comment %} <img
               id="camera_img"
               class="noselect"
