@@ -136,7 +136,7 @@ mqttService:
 
 # Other parameters
 certdomain: ""
-supass: "admin"
+supass: ""
 dbroot: ""
 debug: false
 chartdebug: false
