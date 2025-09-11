@@ -138,7 +138,11 @@ _functional-tests: \
   add-orphaned-cameras \
   api-large-strings \
   auto-calibration \
+  camera-deletion-api \
+  camera-intrinsics-api \
   child-scenes \
+  delete-sensor-scene-api \
+  delete-sensors-api \
   geospatial-ingest-publish \
   mqtt-auth \
   mqtt-cert \

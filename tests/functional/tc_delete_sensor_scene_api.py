@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# SPDX-FileCopyrightText: (C) 2022 - 2025 Intel Corporation
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
 import os
@@ -81,7 +81,7 @@ class DeleteSensorSceneTest(FunctionalTest):
     sensor = self.rest.getSensor(sensorUID)
     assert sensor, (sensor.statusCode, sensor.errors)
     
-    return sensor['scene'] is None
+    return 'scene' not in sensor or sensor['scene'] is None
 
   def _cleanupTestScene(self, sceneUID):
     """Delete the test scene"""

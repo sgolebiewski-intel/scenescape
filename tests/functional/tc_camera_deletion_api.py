@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# SPDX-FileCopyrightText: (C) 2022 - 2025 Intel Corporation
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
 import os
@@ -83,7 +83,7 @@ class CameraDeletionTest(FunctionalTest):
       log.info("Verifying camera is now orphan")
       cameraCheck = self.rest.getCamera(cameraUID)
       assert cameraCheck, (cameraCheck.statusCode, cameraCheck.errors)
-      assert cameraCheck['scene'] is None, "Camera should be orphan after scene deletion"
+      assert 'scene' not in cameraCheck or cameraCheck['scene'] is None, "Camera should be orphan after scene deletion"
 
       # Step 5: Attach orphan camera to existing test scene
       log.info(f"Attaching orphan camera to scene: {self.existingSceneUID}")
