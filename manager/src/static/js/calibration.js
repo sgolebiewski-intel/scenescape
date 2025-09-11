@@ -9,22 +9,14 @@ import {
   IMAGE_CALIBRATE,
   SYS_AUTOCALIB_STATUS,
 } from "/static/js/constants.js";
-import { updateElements } from "/static/js/utils.js";
 import { ConvergedCameraCalibration } from "/static/js/cameracalibrate.js";
 
 var calibration_strategy;
-var advanced_calibration_fields = [];
 const camera_calibration = new ConvergedCameraCalibration();
 window.camera_calibration = camera_calibration;
 
 function initializeCalibration(client, scene_id) {
   document.getElementById("lock_distortion_k1").style.visibility = "hidden";
-  advanced_calibration_fields = $("#kubernetes-fields").val().split(",");
-  updateElements(
-    advanced_calibration_fields.map((e) => e + "_wrapper"),
-    "hidden",
-    true,
-  );
 
   calibration_strategy = document.getElementById("calib_strategy").value;
 
@@ -163,11 +155,6 @@ function setMqttForCalibration(client) {
     APP_NAME + IMAGE_CALIBRATE + $("#sensor_id").val(),
   );
   document.getElementById("lock_distortion_k1").style.visibility = "visible";
-  updateElements(
-    advanced_calibration_fields.map((e) => e + "_wrapper"),
-    "hidden",
-    false,
-  );
 }
 
 export {
