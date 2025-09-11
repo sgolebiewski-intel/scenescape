@@ -19,8 +19,8 @@ class CameraIntrinsicsTest(FunctionalTest):
     super().__init__(testName, request, recordXMLAttribute)
 
     self.existingSceneUID = self.params['scene_id']
-    self.testCameraName = "Automated_Camera_Intrinsics"
-    self.testCameraId = "Auto_Intrinsics_Camera"
+    self.testCameraName = "Camera_Intrinsics"
+    self.testCameraId = "Camera_Intrinsics"
 
     self.rest = RESTClient(self.params['resturl'], rootcert=self.params['rootcert'])
     assert self.rest.authenticate(self.params['user'], self.params['password'])
@@ -41,18 +41,12 @@ class CameraIntrinsicsTest(FunctionalTest):
     cameraData = {
       'name': self.testCameraName,
       'sensor_id': self.testCameraId,
+      'scene': self.existingSceneUID,
       'intrinsics': {
         'fx': 800.0,
         'fy': 800.0,
         'cx': 320.0,
         'cy': 240.0
-      },
-      'distortion': {
-        'k1': 0.0,
-        'k2': 0.0,
-        'p1': 0.0,
-        'p2': 0.0,
-        'k3': 0.0
       }
     }
 
