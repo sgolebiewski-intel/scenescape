@@ -269,7 +269,7 @@ export class ConvergedCameraCalibration {
         fixIntrinsics: fixIntrinsics,
         intrinsics: intrinsicData,
         distortion: distortionData,
-        imageSize: this.camCanvas.getImageSize(),
+        imageSize: this.camCanvas.getVideoSize(),
       };
 
       $.ajax({

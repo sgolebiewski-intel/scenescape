@@ -136,28 +136,7 @@ async function checkBrokerConnections() {
 
       $("#mqtt_status").addClass("connected");
 
-      // Capture thumbnail snapshots
-      if ($(".snapshot-image").length) {
-        client.subscribe(APP_NAME + IMAGE_CAMERA + "+");
-
-        $(".snapshot-image").each(function () {
-          client.publish($(this).attr("topic"), "getimage");
-        });
-
-        $("input#live-view").on("change", function () {
-          if ($(this).is(":checked")) {
-            $(".snapshot-image").each(function () {
-              client.publish($(this).attr("topic"), "getimage");
-            });
-            $("#cameras-tab").click(); // Select the cameras tab
-            $(".camera-card").addClass("live-view");
-            // $(".hide-live").hide();
-          } else {
-            $(".camera-card").removeClass("live-view");
-            // $(".hide-live").show();
-          }
-        });
-      } else if ($("#auto-camcalibration").length) {
+      if ($("#auto-camcalibration").length) {
         var auto_topic =
           APP_NAME + DATA_AUTOCALIB_CAM_POSE + $("#sensor_id").val();
         client.subscribe(auto_topic);
