@@ -153,6 +153,11 @@ _functional-tests: \
   scene-import \
   sensors-send-events \
   vdms-similarity-search \
+  additional-floor-plans-api \
+  calibrate-all-sensor-types-api \
+  different-formats-maps-api \
+  persistence-on-page-navigate-api \
+  persistence-on-restart-api \
 
 non-functional-tests:
 	$(MAKE) -Otarget _$@ SUPASS=$(SUPASS) -k

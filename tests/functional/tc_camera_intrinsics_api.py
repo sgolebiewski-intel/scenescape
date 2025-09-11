@@ -43,7 +43,6 @@ class CameraIntrinsicsTest(FunctionalTest):
     cameraData = {
       'name': self.testCameraName,
       'sensor_id': self.testCameraId,
-      'scene': self.existingSceneUID,
       'intrinsics': {
         'fx': 800.0,
         'fy': 800.0,
@@ -155,6 +154,7 @@ class CameraIntrinsicsTest(FunctionalTest):
       assert self.sceneScapeReady(MAX_ATTEMPTS, MAX_CONTROLLER_WAIT)
 
       # Step 1: Create test camera
+      log.info("Creating test camera for intrinsics testing")
       cameraUID = self._setupTestCamera()
 
       # Step 2: Test first set of parameter updates (similar to "top_save" button)
