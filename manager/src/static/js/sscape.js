@@ -315,12 +315,10 @@ function openWebRTCStream() {
       const reader = new MediaMTXWebRTCReader({
         url: new URL('whep', 'https://' + window.location.host + ':8443/' + topic + '/'),
         onTrack: (evt) => {
-          console.log(evt);
           video.srcObject = evt.streams[0];
         },
         onError: (evt) => {
-          console.log('Video error for topic:', video.getAttribute('topic'));
-          console.log(evt);
+          console.log('Video error for topic:', video.getAttribute('topic'), evt);
           // Hide video and show fallback image
           video.style.display = 'none';
           const fallbackImg = video.querySelector('img');
