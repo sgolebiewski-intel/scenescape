@@ -30,7 +30,6 @@ import {
   registerAutoCameraCalibration,
   manageCalibrationState,
   initializeCalibrationSettings,
-  updateCalibrationView,
   handleAutoCalibrationPose,
 } from "/static/js/calibration.js";
 
@@ -219,32 +218,6 @@ async function checkBrokerConnections() {
         }
       } else if (topic.includes("singleton")) {
         plotSingleton(msg);
-      } else if (topic.includes(IMAGE_CAMERA)) {
-        // // Use native JS since jQuery.load() pukes on data URI's
-        // if ($(".snapshot-image").length) {
-        //   var id = topic.split("camera/")[1];
-
-        //   img = document.getElementById(id);
-        //   if (img !== undefined && img !== null) {
-        //     img.setAttribute("src", "data:image/jpeg;base64," + msg.image);
-        //   }
-
-        //   if ($("input#live-view").is(":checked")) {
-        //     client.publish(APP_NAME + CMD_CAMERA + id, "getimage");
-        //   }
-
-        //   // If ID contains special characters, selector $("#" + id) fails
-        //   $("[id='" + id + "']")
-        //     .stop()
-        //     .show()
-        //     .css("opacity", 1)
-        //     .animate({ opacity: 0.6 }, 5000, function () { })
-        //     .prevAll(".cam-offline")
-        //     .hide();
-        // }
-      } else if (topic.includes(IMAGE_CALIBRATE)) {
-        // To be removed after change trigger to video stream
-        // updateCalibrationView(msg);
       } else if (topic.includes(DATA_CAMERA)) {
         var id = topic.slice(topic.lastIndexOf("/") + 1);
         $("#rate-" + id).text(msg.rate + " FPS");
@@ -342,6 +315,7 @@ function openWebRTCStream() {
       const reader = new MediaMTXWebRTCReader({
         url: new URL('whep', 'https://' + window.location.host + ':8443/' + topic + '/'),
         onTrack: (evt) => {
+          console.log(evt);
           video.srcObject = evt.streams[0];
         },
         onError: (evt) => {
@@ -1725,6 +1699,8 @@ $(document).ready(function () {
     setColorForAllROIs();
   });
 
+  openWebRTCStream();
+
   // Operations to take after images are loaded
   $(".content").imagesLoaded(function () {
     // Camera calibration interface
@@ -1922,7 +1898,7 @@ $(document).ready(function () {
     setColorForAllROIs();
   });
 
-  openWebRTCStream();
+
 
   // MQTT management (see https://github.com/mqttjs/MQTT.js)
   if ($("#broker").length != 0) {

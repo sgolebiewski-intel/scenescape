@@ -103,12 +103,6 @@ SPDX-License-Identifier: Apache-2.0
               <img src="/static/images/offline.png" alt="Camera {{ caminst.name }} WebRTC unavailable">
             </video>
 
-            {% comment %} <img
-              id="camera_img"
-              class="noselect"
-              src="{% static 'images/offline.png' %}"
-              alt="Camera Offline"
-            /> {% endcomment %}
             <canvas id="camera_img_canvas" class="cameraCal border"></canvas>
             {% if caminst.scene.thumbnail %}
               <img

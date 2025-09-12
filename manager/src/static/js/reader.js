@@ -423,7 +423,7 @@ class MediaMTXWebRTCReader {
 
     const direction = 'recvonly';
     this.pc.addTransceiver('video', { direction });
-    this.pc.addTransceiver('audio', { direction });
+    //this.pc.addTransceiver('audio', { direction });
 
     this.pc.onicecandidate = (evt) => this.#onLocalCandidate(evt);
     this.pc.onconnectionstatechange = () => this.#onConnectionState();

@@ -136,6 +136,7 @@ export class ConvergedCameraCalibration {
         }
 
         animate();
+        this.startVideoProjection();
       })
       .then(() => {
         viewport.initializeEventListeners();
@@ -152,7 +153,7 @@ export class ConvergedCameraCalibration {
           }
         });
       });
-    this.startVideoProjection();
+
   }
 
   #calculateDeterminant(points) {
@@ -644,16 +645,6 @@ export class ConvergedCameraCalibration {
       this.isResolutionUpdated = true;
     }
   }
-
-  // updateCalibrationViews(cameraMatrix, distCoeffs) {
-  //   this.updateCameraOpticalCenter(this.camCanvas.getVideoSize(), cameraMatrix);
-  //   this.getCameraPositionAndRotation(cameraMatrix, distCoeffs);
-  //   if (distCoeffs.some((coeff) => coeff !== 0)) {
-  //     this.undistortAndProjectImage(cameraMatrix, distCoeffs);
-  //   } else {
-  //     this.projectImage(cameraMatrix);
-  //   }
-  // }
 
   startVideoProjection() {
 
