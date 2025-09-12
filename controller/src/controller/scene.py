@@ -199,7 +199,7 @@ class Scene(SceneModel):
     return True
   
   distance_threshold = 1  # meters
-  def clusterObjects(self, objects, distance_threshold):
+  def _clusterObjects(self, objects, distance_threshold):
     """Cluster objects based on their spatial proximity using a simple distance threshold."""
     log.debug("Clustering %d objects with threshold %.2f meters" % (len(objects), distance_threshold))
     clustered = []
@@ -213,13 +213,16 @@ class Scene(SceneModel):
                           (objects[i].sceneLoc.as2Dxy.y - objects[j].sceneLoc.as2Dxy.y)**2)
             if dist < distance_threshold:
               close_pairs.append((i, j, dist, objects[i].category))
+              objects[i].sceneLoc = objects[i].sceneLoc.midpoint(objects[j].sceneLoc)
+              del objects[j]
+              objects_count -= 1
         clustered.append(objects[i])
       objects[:] = clustered
     return
 
-  def finishProcessing(self, detectionType, when, objects, already_tracked_objects=[]):
-    self.updateVisible(objects)
-    self.clusterObjects(objects, self.distance_threshold)
+  def _finishProcessing(self, detectionType, when, objects, already_tracked_objects=[]):
+    self._updateVisible(objects)
+    self._clusterObjects(objects, self.distance_threshold)
     self.tracker.trackObjects(objects, already_tracked_objects, when, [detectionType],
                               self.ref_camera_frame_rate,
                               self.max_unreliable_time,
