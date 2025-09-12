@@ -210,12 +210,9 @@ class Scene(SceneModel):
         for j in range(i + 1, objects_count):
           if objects[i].category == objects[j].category:
             dist = np.sqrt((objects[i].sceneLoc.as2Dxy.x - objects[j].sceneLoc.as2Dxy.x)**2 + 
-                          (objects[i].sceneLoc.as2Dxy.y - objects[j].sceneLoc.as2Dxy.y)**2)
+                           (objects[i].sceneLoc.as2Dxy.y - objects[j].sceneLoc.as2Dxy.y)**2)
             if dist < distance_threshold:
               close_pairs.append((i, j, dist, objects[i].category))
-              objects[i].sceneLoc = objects[i].sceneLoc.midpoint(objects[j].sceneLoc)
-              del objects[j]
-              objects_count -= 1
         clustered.append(objects[i])
       objects[:] = clustered
     return
