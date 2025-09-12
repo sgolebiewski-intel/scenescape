@@ -1,4 +1,4 @@
-# Using Deep Learning Streamer Pipeline Server with Intel® SceneScape
+# Using Deep Learning Streamer Pipeline Server with Intel® Edge Spatial Intelligence
 
 - [Getting Started](#getting-started)
 - [Enable Re-ID](#enable-reidentification)
@@ -7,14 +7,14 @@
 
 ## Getting Started
 
-Following are the step-by-step instructions for enabling the out-of-box scenes in SceneScape to leverage DLStreamer Pipeline Server for Video Analytics.
+Following are the step-by-step instructions for enabling the out-of-box scenes in Edge Spatial Intelligence to leverage DLStreamer Pipeline Server for Video Analytics.
 
 1. **Model Requirements:**
    Ensure the OMZ model `person-detection-retail-0013` is present in `<scenescape_dir>/model_installer/models/intel/`.
 
-2. **Start SceneScape DLStreamer-based demo:**
+2. **Start Edge Spatial Intelligence DLStreamer-based demo:**
 
-   If this is the first time running SceneScape, run:
+   If this is the first time running Edge Spatial Intelligence, run:
 
    ```sh
    make && make demo
@@ -26,7 +26,7 @@ Following are the step-by-step instructions for enabling the out-of-box scenes i
    ./deploy.sh
    ```
 
-   If you have already deployed SceneScape use:
+   If you have already deployed Edge Spatial Intelligence use:
 
    ```sh
    docker compose down --remove-orphans
@@ -75,13 +75,13 @@ Following are the step-by-step instructions for enabling person reidentification
 
    Repeat the same step but with [retail-config-reid.json](./retail-config-reid.json) to enable reid for the **Retail** scene.
 
-   If this is the first time running SceneScape, run:
+   If this is the first time running Edge Spatial Intelligence, run:
 
    ```sh
    ./deploy.sh
    ```
 
-   If you have already deployed SceneScape use:
+   If you have already deployed Edge Spatial Intelligence use:
 
    ```sh
    docker compose down queuing-video retail-video scene

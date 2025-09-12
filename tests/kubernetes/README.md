@@ -1,4 +1,4 @@
-# Tests for SceneScape on Kubernetes
+# Tests for Edge Spatial Intelligence on Kubernetes
 
 Run Kubernetes tests on a Docker test host against our local Kind testing setup or a remote Kubernetes cluster.
 
@@ -22,22 +22,22 @@ make -C kubernetes clean-all # to clear all kubernetes infra after you are done
 # install SS on Kubernetes with tests.enabled: true in values.yaml, wait until all pods are ready
 # prepare docker test host on the same network
 # copy kubeconfig to docker test host
-# execute the test cases on a remote cluster with scenescape installed with tests enabled
+# execute the test cases on a remote cluster with Edge Spatial Intelligence installed with tests enabled
 KUBECONFIG=/home/ubuntu/config make -C tests out-of-box SUPASS=change_me KUBERNETES=1 KUB_CLUSTER_FRP_ADDRESS=192.168.122.42 KUB_CLUSTER_FRP_PORT=7000
 # Variables to set
 KUBECONFIG=<absolute-path-to-remote-cluster-kubeconfig>
 KUB_CLUSTER_FRP_ADDRESS=<ip-of-frps-service>
 KUB_CLUSTER_FRP_PORT=<port-of-frps-service>
 KUB_CLUSTER_FRP_SECRET_KEY=<frps-secret-key>
-CERT_KUB_BROKER_URL=<broker-cert-url> # in the format broker.<namespace> where ns is the ns in where scenescape is installed
-CERT_KUB_WEB_URL=<web-cert-url> # in the format web.<namespace> where ns is the ns in where scenescape is installed
+CERT_KUB_BROKER_URL=<broker-cert-url> # in the format broker.<namespace> where ns is the ns in where Edge Spatial Intelligence is installed
+CERT_KUB_WEB_URL=<web-cert-url> # in the format web.<namespace> where ns is the ns in where Edge Spatial Intelligence is installed
 ```
 
 # How it works
 
 The kubernetes `runtest`, which will be run when `make -C tests` is started with `KUBERNETES=1` does the following:
 
-- expects SceneScape to be running in validation mode on a Kubernetes cluster with `tests.enabled: true`
+- expects Edge Spatial Intelligence to be running in validation mode on a Kubernetes cluster with `tests.enabled: true`
   - this will start one FRP server (frps) and multiple FRP client (frpc) containers to proxy pod ports
   - require an additional `init-tests` image to copy our test database into our pgserver pod to run tests against
 - uses `kubectl` which uses the kubeconfig defined by the `KUBECONFIG` environment variable to connect to a cluster (local or remote) to manage PVCs and deployments

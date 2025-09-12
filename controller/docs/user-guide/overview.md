@@ -36,7 +36,7 @@ To deploy the scene controller service, refer to the [Get started](get-started.m
 
 ### Tracker Configuration
 
-This section is intended to guide users and developers on how to enable the use of time-based parameters during the deployment of Scenescape.
+This section is intended to guide users and developers on how to enable the use of time-based parameters during the deployment of Edge Spatial Intelligence.
 
 - **How to enable time-based parameters for tracker**:
 
@@ -115,7 +115,7 @@ Re-launching the Scene Controller is necessary if one or multiple camera frame r
 
 ## Architecture
 
-![SceneScape architecture diagram](images/architecture.png)
+![Edge Spatial Intelligence architecture diagram](images/architecture.png)
 
 Figure 1: Architecture Diagram
 

@@ -23,11 +23,11 @@ We welcome contributions! Check out our [Contributing Guide](./CONTRIBUTING.md) 
 
 ## License
 
-Intel® SceneScape repository is licensed under [APACHE 2.0 LICENSE](./LICENSES/Apache-2.0.txt).
+Intel® Edge Spatial Intelligence repository is licensed under [APACHE 2.0 LICENSE](./LICENSES/Apache-2.0.txt).
 
 ## Disclaimers
 
-Depending on your deployment, Intel® SceneScape may utilize FFmpeg and/or GStreamer.
+Depending on your deployment, Intel® Edge Spatial Intelligence may utilize FFmpeg and/or GStreamer.
 
 FFmpeg is an open source project licensed under LGPL and GPL. See [https://www.ffmpeg.org/legal.html](https://www.ffmpeg.org/legal.html). You are solely responsible for determining if your use of FFmpeg requires any additional licenses. Intel is not responsible for obtaining any such licenses, nor liable for any licensing fees due, in connection with your use of FFmpeg.
 

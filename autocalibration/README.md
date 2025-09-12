@@ -1,4 +1,4 @@
-# Using Intel® SceneScape's Camera Calibration Service
+# Using Intel® Edge Spatial Intelligence's Camera Calibration Service
 
 ## Documentation
 

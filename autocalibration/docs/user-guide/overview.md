@@ -30,7 +30,7 @@ To deploy the auto calibration service, refer to the [Get started](get-started.m
 
 ## Architecture
 
-![Intel® SceneScape architecture diagram](images/architecture.png)
+![Intel® Edge Spatial Intelligence architecture diagram](images/architecture.png)
 
 _Figure 1: Architecture Diagram_
 

@@ -1,4 +1,4 @@
-# Using Intel® SceneScape's Scene Controller Service
+# Using Intel® Edge Spatial Intelligence's Scene Controller Service
 
 ## Documentation
 
