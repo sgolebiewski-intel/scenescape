@@ -1,6 +1,6 @@
-# How to Configure Spatial Analytics in Intel® SceneScape
+# How to Configure Spatial Analytics in Intel® Edge Spatial Intelligence
 
-This guide provides step-by-step instructions to set up and use Regions of Interest (ROIs) and Tripwires in Intel® SceneScape. By completing this guide, you will:
+This guide provides step-by-step instructions to set up and use Regions of Interest (ROIs) and Tripwires in Intel® Edge Spatial Intelligence. By completing this guide, you will:
 
 - Understand the differences between Regions of Interest and Tripwires
 - Learn how to configure ROIs and Tripwires through the UI
@@ -10,7 +10,7 @@ This guide provides step-by-step instructions to set up and use Regions of Inter
 
 ## Prerequisites
 
-Follow the steps in [Getting-Started-Guide.md](./Getting-Started-Guide.md) to bring up an instance of SceneScape with out-of-box demo scenes.
+Follow the steps in [Getting-Started-Guide.md](./Getting-Started-Guide.md) to bring up an instance of Edge Spatial Intelligence with out-of-box demo scenes.
 
 ## Steps to Configure Regions of Interest
 
@@ -25,7 +25,7 @@ Follow the steps in [Getting-Started-Guide.md](./Getting-Started-Guide.md) to br
 
 #### Create a Region of Interest
 
-1. Log in to Intel® SceneScape.
+1. Log in to Intel® Edge Spatial Intelligence.
 2. Click on a scene.
 3. Click on the `Regions` tab below the scene map view.
 4. Click `New Region` button to create a region.
@@ -435,7 +435,7 @@ By default, Regions of Interest trigger events when the center point of each obj
 
 #### Create a Tripwire
 
-1. Log in to Intel® SceneScape.
+1. Log in to Intel® Edge Spatial Intelligence.
 2. Click on a scene.
 3. Click on the `Tripwires` tab below the scene map view.
 4. Click `New Tripwire` to create a tripwire.
@@ -552,4 +552,4 @@ Figure 2: Tripwire creation flow
 ## Supporting Resources
 
 - [How to visualize regions](How-to-visualize-regions.md)
-- [Intel® SceneScape README](https://github.com/open-edge-platform/scenescape/blob/main/README.md)
+- [Intel® Edge Spatial Intelligence README](https://github.com/open-edge-platform/scenescape/blob/main/README.md)

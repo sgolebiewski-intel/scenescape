@@ -1,12 +1,12 @@
-# How to Use Environmental and Attribute Sensor Types in Intel® SceneScape
+# How to Use Environmental and Attribute Sensor Types in Intel® Edge Spatial Intelligence
 
-This guide provides step-by-step instructions to integrate and use environmental and attribute sensor types in Intel® SceneScape. By completing this guide, you will:
+This guide provides step-by-step instructions to integrate and use environmental and attribute sensor types in Intel® Edge Spatial Intelligence. By completing this guide, you will:
 
 - Understand the differences between environmental and attribute sensors.
-- Learn how to configure and publish sensor data to Intel® SceneScape.
+- Learn how to configure and publish sensor data to Intel® Edge Spatial Intelligence.
 - Verify that sensor data is properly associated with tracked scene objects.
 
-This task is important for enhancing your scene graph with real-world sensor data, enabling deeper insights from environmental context and object-specific attributes. If you're new to Scene Graphs or Intel® SceneScape, see [Integrating Cameras and Sensors](How-to-integrate-cameras-and-sensors.md).
+This task is important for enhancing your scene graph with real-world sensor data, enabling deeper insights from environmental context and object-specific attributes. If you're new to Scene Graphs or Intel® Edge Spatial Intelligence, see [Integrating Cameras and Sensors](How-to-integrate-cameras-and-sensors.md).
 
 ---
 
@@ -14,11 +14,11 @@ This task is important for enhancing your scene graph with real-world sensor dat
 
 Before you begin, ensure the following:
 
-- **Access and Permissions**: When using Intel® SceneScape secure broker for publishing sensor data, refer to [user access controls](https://github.com/open-edge-platform/scenescape/blob/main/manager/config/user_access_config.json) and [access levels](https://github.com/open-edge-platform/scenescape/blob/main/scene_common/src/options.py).
+- **Access and Permissions**: When using Intel® Edge Spatial Intelligence secure broker for publishing sensor data, refer to [user access controls](https://github.com/open-edge-platform/scenescape/blob/main/manager/config/user_access_config.json) and [access levels](https://github.com/open-edge-platform/scenescape/blob/main/scene_common/src/options.py).
 
 If you're new to these concepts, see:
 
-- [Intel® SceneScape README](https://github.com/open-edge-platform/scenescape/blob/main/README.md)
+- [Intel® Edge Spatial Intelligence README](https://github.com/open-edge-platform/scenescape/blob/main/README.md)
 - [MQTT Intro](https://mqtt.org/getting-started/)
 
 ---
@@ -36,7 +36,7 @@ If you're new to these concepts, see:
 
 #### Create the Sensor
 
-1. Log in to Intel® SceneScape.
+1. Log in to Intel® Edge Spatial Intelligence.
 2. Click on a scene.
 3. Click on `Sensors` at the bottom of the scene.
 4. Click `New Sensor` to create a sensor.
@@ -77,7 +77,7 @@ Check the scene graph for objects within the sensor region:
 
 #### Create the Sensor
 
-1. Log in to Intel® SceneScape.
+1. Log in to Intel® Edge Spatial Intelligence.
 2. Click on a scene.
 3. Click on `Sensors` at the bottom of the scene.
 4. Click `New Sensor` to create a sensor.
@@ -110,4 +110,4 @@ Check updates for the target object:
 ## Supporting Resources
 
 - [How to visualize regions](How-to-visualize-regions.md)
-- [Intel® SceneScape README](https://github.com/open-edge-platform/scenescape/blob/main/README.md)
+- [Intel® Edge Spatial Intelligence README](https://github.com/open-edge-platform/scenescape/blob/main/README.md)

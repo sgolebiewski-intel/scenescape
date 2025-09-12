@@ -5,7 +5,7 @@ swagger: "2.0"
 info:
   description: "REST API Spec"
   version: "0.5"
-  title: "SceneScape REST API"
+  title: "Edge Spatial Intelligence REST API"
   license:
     name: License
     url: "https://github.com/open-edge-platform/scenescape/blob/main/LICENSES/Apache-2.0.txt"

@@ -1,6 +1,6 @@
-# How to Create and Manage a Scene Hierarchy in Intel® SceneScape
+# How to Create and Manage a Scene Hierarchy in Intel® Edge Spatial Intelligence
 
-A hierarchy of scenes can be created using a parent-child relationship, enabling scene analytics from multiple scenes—whether on the [same system](#steps-to-add-a-local-child-scene) or [different systems in same network](#steps-to-add-a-remote-child-scene) running Intel® SceneScape—to be visualized within a single parent scene. This hierarchy is not limited to a single level of relationship; it can be scaled upwards, allowing for multi-level parent-child configurations. By subscribing to the parent scene's events, you can observe the base analytics (such as regions of interest, tripwires, and sensors) of the parent scene, along with the transformed base analytics of all its child scenes, directly within the parent scene.
+A hierarchy of scenes can be created using a parent-child relationship, enabling scene analytics from multiple scenes—whether on the [same system](#steps-to-add-a-local-child-scene) or [different systems in same network](#steps-to-add-a-remote-child-scene) running Intel® Edge Spatial Intelligence—to be visualized within a single parent scene. This hierarchy is not limited to a single level of relationship; it can be scaled upwards, allowing for multi-level parent-child configurations. By subscribing to the parent scene's events, you can observe the base analytics (such as regions of interest, tripwires, and sensors) of the parent scene, along with the transformed base analytics of all its child scenes, directly within the parent scene.
 
 This guide provides step-by-step instructions to add local and remote child scenes, configure connections, and manage object tracking and update fidelity in a scene hierarchy. By completing this guide, you will:
 
@@ -8,11 +8,11 @@ This guide provides step-by-step instructions to add local and remote child scen
 - Configure secure communication between systems.
 - Tune retrack and temporal fidelity options.
 
-This task is essential for managing distributed scenes in Intel® SceneScape deployments.
+This task is essential for managing distributed scenes in Intel® Edge Spatial Intelligence deployments.
 
 ## Prerequisites
 
-- **Installed Dependencies**: Intel® SceneScape deployed on both systems.
+- **Installed Dependencies**: Intel® Edge Spatial Intelligence deployed on both systems.
 - **Network Access**: Verify systems can resolve each other's IP/hostname.
 - **Permissions**: Ensure access to modify `docker-compose.yml` and certificates.
 
@@ -20,7 +20,7 @@ This task is essential for managing distributed scenes in Intel® SceneScape dep
 
 ## Steps to Add a Local Child Scene
 
-1. **Launch the Intel® SceneScape UI and Log In**.
+1. **Launch the Intel® Edge Spatial Intelligence UI and Log In**.
 2. Navigate to the parent scene.
 3. Click the **Children** tab under the scene map.
 4. Click **+ Link Child Scene**.
@@ -100,7 +100,7 @@ scp parent:/path-to-scenescape-repo/manager/secrets/certs/scenescape-ca.pem ./ma
  make -C tools/certificates/ deploy-certificates IP_SAN=<child_ip> CERTPASS=<random-string-used-in-parent>
 ```
 
-Then restart Intel® SceneScape:
+Then restart Intel® Edge Spatial Intelligence:
 
 ```bash
 ./deploy.sh
@@ -108,8 +108,8 @@ Then restart Intel® SceneScape:
 
 ### 3. Link Remote Child
 
-1. Open the child system's Intel® SceneScape UI and copy the MQTT credentials.
-2. Open the parent system's Intel® SceneScape UI.
+1. Open the child system's Intel® Edge Spatial Intelligence UI and copy the MQTT credentials.
+2. Open the parent system's Intel® Edge Spatial Intelligence UI.
 3. Go to the **Children** tab in parent scene.
 4. Click **+ Link Child Scene**.
 5. Select `Remote` as child type and enter:

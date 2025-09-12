@@ -1,18 +1,18 @@
-# How to Manually Calibrate Cameras in Intel® SceneScape
+# How to Manually Calibrate Cameras in Intel® Edge Spatial Intelligence
 
-This guide provides step-by-step instructions to manually calibrate cameras in Intel® SceneScape. By completing this guide, you will:
+This guide provides step-by-step instructions to manually calibrate cameras in Intel® Edge Spatial Intelligence. By completing this guide, you will:
 
 - Configure camera intrinsic parameters using `docker-compose.yml`.
 - Use 2D UI tools to align views with map data.
 - Understand advanced calibration options such as focal length estimation.
 
-This task is essential for accurate spatial positioning and analytics in Intel® SceneScape. If you’re new to Intel® SceneScape, see [Intel® SceneScape README](https://github.com/open-edge-platform/scenescape/blob/main/README.md).
+This task is essential for accurate spatial positioning and analytics in Intel® Edge Spatial Intelligence. If you’re new to Intel® Edge Spatial Intelligence, see [Intel® Edge Spatial Intelligence README](https://github.com/open-edge-platform/scenescape/blob/main/README.md).
 
 ## Prerequisites
 
 Before You Begin, ensure the following:
 
-- **Installed Dependencies**: Intel® SceneScape deployed by running `./deploy.sh`.
+- **Installed Dependencies**: Intel® Edge Spatial Intelligence deployed by running `./deploy.sh`.
 
 - **Access and Permissions**: Ensure you have appropriate access to edit configuration files or interact with the UI.
 
@@ -20,7 +20,7 @@ Before You Begin, ensure the following:
 
 ### 1. Calibrate Using 2D User Interface
 
-1. Log in to Intel® SceneScape.
+1. Log in to Intel® Edge Spatial Intelligence.
 2. You will be presented with a Scenes page. Click on a scene.
 3. Once a scene clicked, click on a camera to calibrate.
 4. You will see 2 view ports, a camera view port and map view port. Both view ports will have at least four matched point sets.
@@ -65,7 +65,7 @@ _Figure 1: Computed Camera Intrinsics_
 
 ### 3. Calibration Best Practices
 
-When calibrating cameras in Intel® SceneScape, follow these best practices for optimal results:
+When calibrating cameras in Intel® Edge Spatial Intelligence, follow these best practices for optimal results:
 
 - **Distribute Points Evenly**: Place calibration points across the entire field of view, not just in one area.
   ![Evenly Distributed Calibration Points](images/ui/goodcalibpoints.png)
@@ -89,4 +89,4 @@ For challenging scenes, consider using physical calibration targets in the envir
 ## Supporting Resources
 
 - [Step-by-step guide to 3D camera calibration](How-to-use-3D-UI.md#step-3-calibrate-the-camera)
-- [Intel® SceneScape README](https://github.com/open-edge-platform/scenescape/blob/main/README.md)
+- [Intel® Edge Spatial Intelligence README](https://github.com/open-edge-platform/scenescape/blob/main/README.md)

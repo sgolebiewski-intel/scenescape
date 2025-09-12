@@ -1,6 +1,6 @@
 # How to Enable Re-identification Using Visual Similarity Search
 
-This guide provides step-by-step instructions to enable or disable re-identification (ReID) using visual similarity search in a Intel® SceneScape deployment. By completing this guide, you will:
+This guide provides step-by-step instructions to enable or disable re-identification (ReID) using visual similarity search in a Intel® Edge Spatial Intelligence deployment. By completing this guide, you will:
 
 - Enable re-identification using a visual database and feature-matching model.
 - Understand how to track and evaluate unique object identities across frames.
@@ -16,7 +16,7 @@ Before you begin, ensure the following:
 
 - **Docker** is installed and configured.
 - You have access to modify the `docker-compose.yml` file in your deployment.
-- You are familiar with scene and camera configuration in Intel® SceneScape.
+- You are familiar with scene and camera configuration in Intel® Edge Spatial Intelligence.
 
 ---
 
@@ -48,7 +48,7 @@ vdms:
 
 For information on VDMS, visit the official documentation: https://intellabs.github.io/vdms/.
 
-SceneScape leverages VDMS to store object vector embeddings for the purpose of reidentifying an object using visual features.
+Edge Spatial Intelligence leverages VDMS to store object vector embeddings for the purpose of reidentifying an object using visual features.
 
 2. **Uncomment VDMS dependency in scene config**
    Uncomment the `vdms` dependency:
@@ -86,7 +86,7 @@ This reidentification-specific configuration uses a vision pipeline that include
    docker compose up
    ```
 
-**Expected Result**: Intel® SceneScape starts with ReID enabled and begins assigning UUIDs based on visual similarity.
+**Expected Result**: Intel® Edge Spatial Intelligence starts with ReID enabled and begins assigning UUIDs based on visual similarity.
 
 ---
 
@@ -127,14 +127,14 @@ retail-config:
    docker compose up --build
    ```
 
-**Expected Result**: Intel® SceneScape runs without ReID and no visual feature matching is performed.
+**Expected Result**: Intel® Edge Spatial Intelligence runs without ReID and no visual feature matching is performed.
 
 ---
 
 ## Evaluating Re-identification Performance
 
 - **Track Unique IDs**:\
-  Intel® SceneScape publishes `unique_detection_count` via MQTT under the scene category topic. Each object includes an `id` field (UUID) for tracking.
+  Intel® Edge Spatial Intelligence publishes `unique_detection_count` via MQTT under the scene category topic. Each object includes an `id` field (UUID) for tracking.
 
 - **UI Support**:\
   UUID display in the 3D UI is planned for future releases.

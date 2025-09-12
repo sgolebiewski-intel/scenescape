@@ -1,9 +1,9 @@
-# How to Autocalibrate Cameras using Visual Features in Intel® SceneScape
+# How to Autocalibrate Cameras using Visual Features in Intel® Edge Spatial Intelligence
 
-This guide provides step-by-step instructions to calibrate cameras in Intel® SceneScape using markerless methods with raw RGBD data from Polycam. By completing this guide, you will:
+This guide provides step-by-step instructions to calibrate cameras in Intel® Edge Spatial Intelligence using markerless methods with raw RGBD data from Polycam. By completing this guide, you will:
 
 - Capture and export valid Polycam datasets.
-- Set up markerless camera calibration in Intel® SceneScape.
+- Set up markerless camera calibration in Intel® Edge Spatial Intelligence.
 - Validate and adjust camera pose via 3D UI.
 
 This task is essential for developers who want to simplify calibration by using RGBD scans rather than physical markers.
@@ -15,7 +15,7 @@ Before You Begin, ensure the following:
 - **Device Requirements**: Use an iOS device with LiDAR (iPad Pro 2020+, iPhone 12 Pro+).
 - **Polycam Requirements**: Use LiDAR or ROOM mode in [Polycam](https://apps.apple.com/us/app/polycam-3d-scanner-lidar-360/id1532482376).
 - **Developer Mode**: Enable Developer Mode in the app settings to expose raw data export.
-- **SceneScape Installation**: Installed and running on the host machine.
+- **Edge Spatial Intelligence Installation**: Installed and running on the host machine.
 
 ## Steps to Calibrate Using Markerless Camera Calibration
 
@@ -33,10 +33,10 @@ The exported ZIP will contain:
 - `mesh_info.json`
 - `keyframes/` (with images, cameras, depth, and confidence maps)
 
-### 2. Configure Scene in Intel® SceneScape
+### 2. Configure Scene in Intel® Edge Spatial Intelligence
 
-1. Copy the Polycam ZIP dataset to the Intel® SceneScape host machine.
-2. Open Intel® SceneScape and either:
+1. Copy the Polycam ZIP dataset to the Intel® Edge Spatial Intelligence host machine.
+2. Open Intel® Edge Spatial Intelligence and either:
    - Update an existing scene, or
    - Create a new scene using the `raw.glb` file in the _Map_ field.
 
@@ -87,11 +87,11 @@ _Figure 4: Visualize and save calibrated camera pose._
 
 ## Future Enhancements
 
-- Intel® SceneScape will support more dataset formats beyond Polycam.
+- Intel® Edge Spatial Intelligence will support more dataset formats beyond Polycam.
 - Dataset registration and calibration will be optimized for speed.
 
 ## Supporting Resources
 
 - [Polycam Website](https://poly.cam)
 - [Live Scene Camera Guidelines](How-to-create-new-scene.md#camera-selection-considerations)
-- [SceneScape 3D UI Docs](How-to-use-3D-UI.md)
+- [Edge Spatial Intelligence3D UI Docs](How-to-use-3D-UI.md)

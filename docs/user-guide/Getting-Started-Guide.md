@@ -1,4 +1,4 @@
-# Getting Started with Intel® SceneScape
+# Getting Started with Intel® Edge Spatial Intelligence
 
 - **Time to Complete:** 30-45 minutes
 
@@ -43,21 +43,21 @@ docker --version
 docker run hello-world
 ```
 
-### Step 2: Download and extract code of a Intel® SceneScape release:
+### Step 2: Download and extract code of a Intel® Edge Spatial Intelligence release:
 
 > **Note:** These operations must be executed when logged in as a standard (non-root) user. **Do NOT use root or sudo.**
 
-1.  Download the Intel® SceneScape software archive from https://github.com/open-edge-platform/scenescape/releases.
+1.  Download the Intel® Edge Spatial Intelligence software archive from https://github.com/open-edge-platform/scenescape/releases.
 
-2.  Extract the Intel® SceneScape archive on the target Ubuntu system. Change directories to the extracted Intel® SceneScape folder.
+2.  Extract the Intel® Edge Spatial Intelligence archive on the target Ubuntu system. Change directories to the extracted Intel® Edge Spatial Intelligence folder.
     ```bash
     cd scenescape-<version>/
     ```
-3.  When downloading older Scenescape releases, follow instructions in `Getting-Started-Guide` specific to that version.
+3.  When downloading older Edge Spatial Intelligence releases, follow instructions in `Getting-Started-Guide` specific to that version.
 
-#### Alternatively, get the Intel® SceneScape source code
+#### Alternatively, get the Intel® Edge Spatial Intelligencesource code
 
-1. Clone the SceneScape repository:
+1. Clone the Edge Spatial Intelligence repository:
 
 ```bash
 git clone https://github.com/open-edge-platform/scenescape.git
@@ -76,7 +76,7 @@ git tag
 git checkout <tag-version>
 ```
 
-### Step 3: Build Intel® SceneScape container images
+### Step 3: Build Intel® Edge Spatial Intelligence container images
 
 Build container images:
 
@@ -94,7 +94,7 @@ Optionally, the number of jobs can be adjusted by setting the `JOBS` variable, e
 make JOBS=1
 ```
 
-### Step 4 (Optional): Build dependency list of Intel® SceneScape container images
+### Step 4 (Optional): Build dependency list of Intel® Edge Spatial Intelligence container images
 
 ```bash
 make list-dependencies
@@ -102,9 +102,9 @@ make list-dependencies
 
 This step generates dependency lists. Two separate files are created for system packages and Python packages per each microservice image.
 
-### Step 5: Deploy Intel® SceneScape demo to the target system
+### Step 5: Deploy Intel® Edge Spatial Intelligence demo to the target system
 
-Before deploying the demo of Intel® SceneScape for the first time, please set the environment variable SUPASS with the super user password for logging into Intel® SceneScape.
+Before deploying the demo of Intel® Edge Spatial Intelligence for the first time, please set the environment variable SUPASS with the super user password for logging into Intel® Edge Spatial Intelligence.
 Important: This should be different than the password for your system user.
 
 ```bash
@@ -117,7 +117,7 @@ make demo
 
 ### Step 6: Verify a successful deployment
 
-If you are running remotely, connect using `"https://<ip_address>"` or `"https://<hostname>"`, using the correct IP address or hostname of the remote Intel® SceneScape system. If accessing on a local system use `"https://localhost"`. If you see a certificate warning, click the prompts to continue to the site. For example, in Chrome click "Advanced" and then "Proceed to &lt;ip_address> (unsafe)".
+If you are running remotely, connect using `"https://<ip_address>"` or `"https://<hostname>"`, using the correct IP address or hostname of the remote Intel® Edge Spatial Intelligence system. If accessing on a local system use `"https://localhost"`. If you see a certificate warning, click the prompts to continue to the site. For example, in Chrome click "Advanced" and then "Proceed to &lt;ip_address> (unsafe)".
 
 > **Note:** These certificate warnings are expected due to the use of a self-signed certificate for initial deployment purposes. This certificate is generated at deploy time and is unique to the instance.
 
@@ -143,28 +143,28 @@ $ docker compose up -d
 
 ## Summary
 
-Intel® SceneScape was downloaded, built and deployed onto a fresh Ubuntu system. Using the web user interface, Intel® SceneScape provides two scenes by default that can be explored running from stored video data.
-![SceneScape WebUI Homepage](images/ui/homepage.png)
+Intel® Edge Spatial Intelligence was downloaded, built and deployed onto a fresh Ubuntu system. Using the web user interface, Intel® Edge Spatial Intelligence provides two scenes by default that can be explored running from stored video data.
+![Edge Spatial Intelligence WebUI Homepage](images/ui/homepage.png)
 
-> **Note:** The “Documentation” menu option allows you to view Intel® SceneScape HTML version of the documentation in the browser.
+> **Note:** The “Documentation” menu option allows you to view Intel® Edge Spatial Intelligence HTML version of the documentation in the browser.
 
 ## Next Steps
 
-### Learn how to use Intel® SceneScape
+### Learn how to use Intel® Edge Spatial Intelligence
 
 - **Basic UI Tutorial**
-  - [Tutorial](Tutorial.md): Follow examples to become familiar with the core functionality of Intel® SceneScape.
+  - [Tutorial](Tutorial.md): Follow examples to become familiar with the core functionality of Intel® Edge Spatial Intelligence.
 
 - **How to use 3D UI**
-  - [How to use 3D UI](How-to-use-3D-UI.md): Explore Intel® SceneScape powerful 3D UI
+  - [How to use 3D UI](How-to-use-3D-UI.md): Explore Intel® Edge Spatial Intelligence powerful 3D UI
 
-- **How to Integrate Cameras and Sensors into Intel® SceneScape**
-  - [How to Integrate Cameras and Sensors into Intel® SceneScape](How-to-integrate-cameras-and-sensors.md): Step-by-step guide to basic data flow
+- **How to Integrate Cameras and Sensors into Intel® Edge Spatial Intelligence**
+  - [How to Integrate Cameras and Sensors into Intel® Edge Spatial Intelligence](How-to-integrate-cameras-and-sensors.md): Step-by-step guide to basic data flow
 
-### Build a Scene in Scenescape
+### Build a Scene in Edge Spatial Intelligence
 
 - **How to Create and Configure a New Scene**
-  - [How to Create and Configure a New Scene](How-to-create-new-scene.md): Step-by-step guide on how to create a live scene in Intel® SceneScape
+  - [How to Create and Configure a New Scene](How-to-create-new-scene.md): Step-by-step guide on how to create a live scene in Intel® Edge Spatial Intelligence
 
 - **How to use sensor types**
   - [How to use Sensor types](How-to-use-sensor-types.md): Step-by-step guide to getting started with sensor types.
@@ -181,7 +181,7 @@ Intel® SceneScape was downloaded, built and deployed onto a fresh Ubuntu system
 - **How to configure spatial analytics**
   - [How to Configure Spatial Analytics](How-to-configure-spatial-analytics.md): Step-by-step guide to set up and use Regions of Interest (ROIs) and Tripwires.
 
-### Learn how to calibrate cameras for Intel® SceneScape
+### Learn how to calibrate cameras for Intel® Edge Spatial Intelligence
 
 - **How to manually calibrate cameras**
   - [How to manually calibrate cameras](How-to-manually-calibrate-cameras.md): Step-by-step guide to performing Manual Camera Calibration.
@@ -200,13 +200,13 @@ Intel® SceneScape was downloaded, built and deployed onto a fresh Ubuntu system
 - **How to enable reidentification**
   - [How to enable reidentification](How-to-enable-reidentification.md): Step-by-step guide to enable reidentification.
 
-- **How to create a Geti trained AI models and integrate it with Intel® SceneScape.**
-  - [Geti AI model integration](How-to-integrate-geti-trained-model.md): Step-by-step guide for integrating a Geti trained AI model with Intel® SceneScape.
+- **How to create a Geti trained AI models and integrate it with Intel® Edge Spatial Intelligence.**
+  - [Geti AI model integration](How-to-integrate-geti-trained-model.md): Step-by-step guide for integrating a Geti trained AI model with Intel® Edge Spatial Intelligence.
 
 ## Additional Resources
 
 - [Get Help](support.md): Troubleshooting steps, FAQs, and resources to help you resolve common issues
 
-- [How to upgrade Intel Scenescape](How-to-upgrade.md): Step-by-step guide for upgrading from an older version of Intel® SceneScape.
+- [How to upgrade Intel Edge Spatial Intelligence](How-to-upgrade.md): Step-by-step guide for upgrading from an older version of Intel® Edge Spatial Intelligence.
 
-- [Hardening Guide for Custom TLS](hardening-guide.md): Optimizing security posture for a Intel® SceneScape installation
+- [Hardening Guide for Custom TLS](hardening-guide.md): Optimizing security posture for a Intel® Edge Spatial Intelligence installation

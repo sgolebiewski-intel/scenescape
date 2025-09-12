@@ -1,12 +1,12 @@
-# How to Use AprilTag Camera Calibration in Intel® SceneScape
+# How to Use AprilTag Camera Calibration in Intel® Edge Spatial Intelligence
 
-This guide provides a step-by-step process for calibrating cameras in Intel® SceneScape using fiducial markers (AprilTags). This method ensures accurate tracking by estimating camera poses based on known marker positions.
+This guide provides a step-by-step process for calibrating cameras in Intel® Edge Spatial Intelligence using fiducial markers (AprilTags). This method ensures accurate tracking by estimating camera poses based on known marker positions.
 
 By following this guide, you will:
 
 - Select and place AprilTags correctly.
 - Generate a scene floor plan with markers visible.
-- Configure Intel® SceneScape to auto-calibrate using AprilTags.
+- Configure Intel® Edge Spatial Intelligence to auto-calibrate using AprilTags.
 - (Optionally) Add a 3D map for scene visualization.
 
 This calibration method is ideal for fixed camera setups requiring precise positional accuracy.
@@ -18,8 +18,8 @@ This calibration method is ideal for fixed camera setups requiring precise posit
 Before You Begin, ensure the following:
 
 - **Camera Setup**: Cameras placed with a clear view of the scene.
-- **Scene Created**: Add cameras in Intel® SceneScape and set the detection model to `-m apriltag`.
-- **SceneScape Installation**: Installed and running.
+- **Scene Created**: Add cameras in Intel® Edge Spatial Intelligence and set the detection model to `-m apriltag`.
+- **Edge Spatial Intelligence Installation**: Installed and running.
 
 > **Note**: To switch from the default person detection model, replace `retail` with `apriltag` in `docker-compose.yml`.
 
@@ -80,7 +80,7 @@ _Figure 2: Export top-down orthographic scene view._
 
 ### 5. Configure Scene and Calibrate
 
-1. Open Intel® SceneScape and edit the scene.
+1. Open Intel® Edge Spatial Intelligence and edit the scene.
 2. Upload the orthographic image and enter the scale (pixels-per-meter).
 3. Set Calibration Type to `Apriltag`.
 4. Enter the physical size of the tags.
@@ -117,7 +117,7 @@ camcalibration:
   restart: on-failure
 ```
 
-6. Restart Intel® SceneScape:
+6. Restart Intel® Edge Spatial Intelligence:
 
 ```bash
 docker compose down

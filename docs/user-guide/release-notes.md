@@ -4,7 +4,7 @@ May 2025
 
 ## New in this release
 
-This release refactors Intel® SceneScape into components, such that:
+This release refactors Intel® Edge Spatial Intelligence into components, such that:
 
 - scene controller, scene manager and auto calibration docker images can be built independently.
 - functionality will work with third party mqtt broker and third party time synchornization service.
@@ -18,7 +18,7 @@ This release refactors Intel® SceneScape into components, such that:
 
 Leaves the system vulnerable to a DDoS attack where the malicious agent repeatedly attempts logging in.
 
-_Workaround_: Do not share the Intel® SceneScape URL with untrusted parties.
+_Workaround_: Do not share the Intel® Edge Spatial Intelligence URL with untrusted parties.
 
 **2. Markerless camera calibration may not correctly calibrate the camera pose**
 
@@ -48,7 +48,7 @@ Several "undefined secret file" messages may be shown on startup, but the system
 
 This is normal for USB cameras, and the message can be ignored.
 
-**7. When deploying Intel® SceneScape on a system with a zfs filesystem, container startup is slow**
+**7. When deploying Intel® Edge Spatial Intelligence on a system with a zfs filesystem, container startup is slow**
 
 _Workaround_: Change the docker storage driver from the default 'overlay2' to 'zfs'.
 
@@ -60,7 +60,7 @@ _Workaround_: Rename files to remove any unicode characters prior to uploading.
 
 During testing, a very rare scenario was discovered where GLB files were repeatedly created, resulting in significant disk usage.
 
-_Mitigation:_ Do not utilize an untrusted network for your Intel® SceneScape deployment, and carefully manage the credentials for accessing the system within your organization. If the situation is encountered, stop the Intel® SceneScape containers and contact your Intel representative for support.
+_Mitigation:_ Do not utilize an untrusted network for your Intel® Edge Spatial Intelligence deployment, and carefully manage the credentials for accessing the system within your organization. If the situation is encountered, stop the Intel® Edge Spatial Intelligence containers and contact your Intel representative for support.
 
 **10. Sensor regions do not publish to the `scenescape/data` topic**
 
@@ -76,9 +76,9 @@ _Mitigation:_ Utilize the scenescape/event/tripwire topic for subscribing to tri
 
 **12. Issues are encountered when running in a virtual machine (VM)**
 
-Various issues may be encountered when running within virtual machines, including performance, access to hardware, networking, and more. Intel® SceneScape is currently not validated for operating within a virtual machine (VM).
+Various issues may be encountered when running within virtual machines, including performance, access to hardware, networking, and more. Intel® Edge Spatial Intelligence is currently not validated for operating within a virtual machine (VM).
 
-_Mitigation:_ Running Intel® SceneScape in a VM is not recommended, but there are some best practices for mitigating related issues. Contact Intel technical support if running in a VM is absolutely required.
+_Mitigation:_ Running Intel® Edge Spatial Intelligence in a VM is not recommended, but there are some best practices for mitigating related issues. Contact Intel technical support if running in a VM is absolutely required.
 
 **13. Access for Users in UI and REST API restricted to Superuser status**
 
@@ -100,7 +100,7 @@ _Mitigation_: Only use the model directory uploader webpage via the browser. As 
 
 During the Docker build process, packages are installed from public repositories. Intel has no control over the public repositories. Specific versions of packages might be removed by the owners at any time, which may break the Docker image build. The Docker build targets the latest available versions of software packages from the public repositories while keeping the same major version.
 
-Between Intel® SceneScape releases, it is possible that packages in public apt repositories get upgraded to newer versions. Although it is possible for these upgraded software packages to work without issues with the current Intel® SceneScape 1.3.0 release, you assume all risks associated with the use of the upgraded packages. Compatibility was tested using the versions mentioned in "Package versions" file.
+Between Intel® Edge Spatial Intelligence releases, it is possible that packages in public apt repositories get upgraded to newer versions. Although it is possible for these upgraded software packages to work without issues with the current Intel® Edge Spatial Intelligence 1.3.0 release, you assume all risks associated with the use of the upgraded packages. Compatibility was tested using the versions mentioned in "Package versions" file.
 
 Note: Performance varies by use, configuration and other factors. Learn more at
 [www.Intel.com/PerformanceIndex](http://www.intel.com/PerformanceIndex).

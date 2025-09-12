@@ -1,22 +1,22 @@
-# How to Upgrade Intel® SceneScape
+# How to Upgrade Intel® Edge Spatial Intelligence
 
-This guide provides step-by-step instructions to upgrade your Intel® SceneScape deployment to a new version. By completing this guide, you will:
+This guide provides step-by-step instructions to upgrade your Intel® Edge Spatial Intelligence deployment to a new version. By completing this guide, you will:
 
 - Migrate configuration and data directories.
-- Deploy the latest version of Intel® SceneScape.
+- Deploy the latest version of Intel® Edge Spatial Intelligence.
 - Validate and troubleshoot common upgrade issues.
 
-This task is essential for maintaining access to the latest features and fixes in Intel® SceneScape while preserving existing data and services.
+This task is essential for maintaining access to the latest features and fixes in Intel® Edge Spatial Intelligence while preserving existing data and services.
 
 ## Prerequisites
 
 Before You Begin, ensure the following:
 
-- You have an existing Intel® SceneScape v1.3.0 installation with directories `db/`, `media/`, `migrations/`, `secrets/`, `model_installer/models/`, and a `docker-compose.yml` file.
+- You have an existing Intel® Edge Spatial Intelligence v1.3.0 installation with directories `db/`, `media/`, `migrations/`, `secrets/`, `model_installer/models/`, and a `docker-compose.yml` file.
 
-# How to Upgrade Intel® SceneScape from v1.3.0
+# How to Upgrade Intel® Edge Spatial Intelligence from v1.3.0
 
-1. **Checkout latest SceneScape sources**:
+1. **Checkout latest Edge Spatial Intelligence sources**:
 
    ```bash
    git checkout main
@@ -44,7 +44,7 @@ Before You Begin, ensure the following:
 
 ## Model Management During Upgrade
 
-Starting from 1.4.0 version, Intel® SceneScape stores models in Docker volumes instead of the host filesystem. This provides several benefits:
+Starting from 1.4.0 version, Intel® Edge Spatial Intelligence stores models in Docker volumes instead of the host filesystem. This provides several benefits:
 
 - **Automatic Preservation**: Models are automatically preserved during upgrades as Docker volumes persist across container recreations.
 - **No Manual Copy Required**: You no longer need to manually copy `model_installer/models/` during upgrades.

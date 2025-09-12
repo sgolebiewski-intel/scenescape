@@ -1,12 +1,12 @@
-# How to Use the Intel® SceneScape 3D UI for Camera Calibration
+# How to Use the Intel® Edge Spatial Intelligence 3D UI for Camera Calibration
 
-This guide provides step-by-step instructions to use the Intel® SceneScape 3D UI to manage and calibrate cameras in a 3D scene. By completing this guide, you will:
+This guide provides step-by-step instructions to use the Intel® Edge Spatial Intelligence 3D UI to manage and calibrate cameras in a 3D scene. By completing this guide, you will:
 
 - Navigate the 3D UI.
 - Add, modify, or delete cameras.
 - Calibrate cameras interactively within a 3D scene.
 
-This task is important for developers or customers using Intel® SceneScape to visually manage and align camera data with 3D environments. If you're new to Intel® SceneScape, see the [Intel® SceneScape README](https://github.com/open-edge-platform/scenescape/blob/main/README.md).
+This task is important for developers or customers using Intel® Edge Spatial Intelligence to visually manage and align camera data with 3D environments. If you're new to Intel® Edge Spatial Intelligence, see the [Intel® Edge Spatial Intelligence README](https://github.com/open-edge-platform/scenescape/blob/main/README.md).
 
 ---
 
@@ -14,7 +14,7 @@ This task is important for developers or customers using Intel® SceneScape to v
 
 Before you begin:
 
-- **SceneScape Installed**: Intel® SceneScape must be installed and accessible via your browser.
+- **Edge Spatial Intelligence Installed**: Intel® Edge Spatial Intelligence must be installed and accessible via your browser.
 - **3D Scene Loaded**: A glTF/GLB file should be uploaded and attached to a scene.
 - **Permissions**: Ensure you have permissions to create or modify camera data.
 
@@ -24,7 +24,7 @@ Before you begin:
 
 ### Step 1: Launch the 3D UI
 
-1. Log in to Intel® SceneScape.
+1. Log in to Intel® Edge Spatial Intelligence.
 2. On the homepage, identify a scene and click its `3D` button
    ![Homepage](images/ui/homepage.png)
 3. You will be directed to the 3D UI view.
@@ -87,4 +87,4 @@ Before you begin:
 
 ## Supporting Resources
 
-- [Intel® SceneScape README](https://github.com/open-edge-platform/scenescape/blob/main/README.md)
+- [Intel® Edge Spatial Intelligence README](https://github.com/open-edge-platform/scenescape/blob/main/README.md)

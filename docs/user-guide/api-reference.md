@@ -16,7 +16,7 @@ docker pull swaggerapi/swagger-ui
 
 ## 2. Run the Swagger UI container
 
-Use a configuration that loads the Intel® SceneScape `docs/user-guide/api-docs/api.yaml` definitions.
+Use a configuration that loads the Intel® Edge Spatial Intelligence `docs/user-guide/api-docs/api.yaml` definitions.
 
 General Syntax:
 
@@ -32,7 +32,7 @@ Example:
 docker run -p 80:8080 --user $(id -u):$(id -g) -e SWAGGER_JSON=/mnt/api.yaml -v ~/scenescape/docs/user-guide/api-docs:/mnt swaggerapi/swagger-ui
 ```
 
-Note: Ensure that for the -v option to use the correct path to where Intel® SceneScape repository was cloned (`~/scenescape/` in the example above).
+Note: Ensure that for the -v option to use the correct path to where Intel® Edge Spatial Intelligence repository was cloned (`~/scenescape/` in the example above).
 
 ## 3. View API docs via a browser
 
@@ -42,7 +42,7 @@ Navigate to (http://localhost)
 
 It should look something like this example:
 
-![Example Intel® SceneScape REST API as seen in Browser](images/SceneScape_REST_API_swagger_example_view.png "Example")
+![Example Intel® Edge Spatial Intelligence REST API as seen in Browser](images/edge-spatial-intelligence-rest-api-swagger-example-view.png "Example")
 
 ## For additional information on Swagger UI installation to view the API, please see:
 

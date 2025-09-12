@@ -1,40 +1,40 @@
-# Intel® SceneScape Hardening Guide
+# Intel® Edge Spatial Intelligence Hardening Guide
 
 # 1: Introduction
 
 ## Scope
 
-This guide outlines the important security considerations for deploying, configuring, and operating Intel® SceneScape, and describes some of the steps that system integrators can take to optimize the security posture of their Intel® SceneScape installation.
+This guide outlines the important security considerations for deploying, configuring, and operating Intel® Edge Spatial Intelligence, and describes some of the steps that system integrators can take to optimize the security posture of their Intel® Edge Spatial Intelligence installation.
 
-Chapter 2 describes the primary network trust boundary around Intel® SceneScape, including a list of the network ports opened by Intel® SceneScape and the purpose of each port.
+Chapter 2 describes the primary network trust boundary around Intel® Edge Spatial Intelligence, including a list of the network ports opened by Intel® Edge Spatial Intelligence and the purpose of each port.
 
-Chapter 3 describes the secrets and security assets created by Intel® SceneScape, including account passwords, keys, and TLS certificates, and some considerations for protecting those assets.
+Chapter 3 describes the secrets and security assets created by Intel® Edge Spatial Intelligence, including account passwords, keys, and TLS certificates, and some considerations for protecting those assets.
 
 Chapter 4 describes the MQTT broker authentication and authorization flow in more detail, describing the centralized authentication system as well as the ACL functionality to restrict topic access to specific users.
 
-Chapter 5 includes some notes for configuring the Apache modules bundled with Intel® SceneScape.
+Chapter 5 includes some notes for configuring the Apache modules bundled with Intel® Edge Spatial Intelligence.
 
-Chapters 6 and 7 list general suggestions and vetted external resources for hardening the Docker container runtime and Linux host system respectively. One of the main security design objectives of Intel® SceneScape is that its underlying software components come securely configured out of the box. Furthermore, Intel® SceneScape itself is designed to require minimal configuration during and after deployment. As such, the most important part of securing an Intel® SceneScape installation is actually securing the computer platforms atop which Intel® SceneScape is deployed.
+Chapters 6 and 7 list general suggestions and vetted external resources for hardening the Docker container runtime and Linux host system respectively. One of the main security design objectives of Intel® Edge Spatial Intelligence is that its underlying software components come securely configured out of the box. Furthermore, Intel® Edge Spatial Intelligence itself is designed to require minimal configuration during and after deployment. As such, the most important part of securing an Intel® Edge Spatial Intelligence installation is actually securing the computer platforms atop which Intel® Edge Spatial Intelligence is deployed.
 
-Chapter 8 discusses security features and improvements planned for upcoming releases of Intel® SceneScape.
+Chapter 8 discusses security features and improvements planned for upcoming releases of Intel® Edge Spatial Intelligence.
 
 ## Audience
 
-The intended audience for this document is system integrators and engineers who are responsible for defining, implementing, and validating an Intel® SceneScape installation.
+The intended audience for this document is system integrators and engineers who are responsible for defining, implementing, and validating an Intel® Edge Spatial Intelligence installation.
 
 # 2: Secure Networking Configuration
 
 ## Network trust boundary
 
-The services comprising an Intel® SceneScape deployment communicate with one another over the network. By design, the container network used for internal communication is a trusted network, considered to be inside a trust boundary.
+The services comprising an Intel® Edge Spatial Intelligence deployment communicate with one another over the network. By design, the container network used for internal communication is a trusted network, considered to be inside a trust boundary.
 
 This means that, while most internal communication is still TLS-encrypted, internal services like the PostgreSQL database and the NTP server should not be exposed to clients outside the container network. The default Docker Compose deployment configuration does not expose these services to the outside, and the deployment configuration should not be modified to expose them.
 
-The only Intel® SceneScape ports which should be exposed outside the boundary of the container network are enumerated in the following section.
+The only Intel® Edge Spatial Intelligence ports which should be exposed outside the boundary of the container network are enumerated in the following section.
 
-## Ports used by Intel® SceneScape
+## Ports used by Intel® Edge Spatial Intelligence
 
-The following table summarizes the network ports exposed by Intel® SceneScape’s services.
+The following table summarizes the network ports exposed by Intel® Edge Spatial Intelligence’s services.
 
 | Port | Service   | Purpose                                                                                 |
 | ---- | --------- | --------------------------------------------------------------------------------------- |
@@ -43,19 +43,19 @@ The following table summarizes the network ports exposed by Intel® SceneScape�
 
 # 3: Secret creation and management
 
-## Intel® SceneScape TLS overview
+## Intel® Edge Spatial Intelligence TLS overview
 
-Intel® SceneScape uses TLS for server authentication and to encrypt communication between services.
+Intel® Edge Spatial Intelligence uses TLS for server authentication and to encrypt communication between services.
 
-For demonstration and testing purposes, the out-of-box `deploy.sh` script creates a self-signed root certificate authority (CA) and uses that CA to issue certificates for the web server and the MQTT broker. In a production situation, certificates should be signed by a CA trusted by the systems running Intel® SceneScape.
+For demonstration and testing purposes, the out-of-box `deploy.sh` script creates a self-signed root certificate authority (CA) and uses that CA to issue certificates for the web server and the MQTT broker. In a production situation, certificates should be signed by a CA trusted by the systems running Intel® Edge Spatial Intelligence.
 
 **Intel does not provide certificates.** The self-signed certificates produced by the out-of-box `deploy.sh` script are not intended for production use. Certificate and key management are the responsibility of the customer.
 
-The following sections detail the certificate generation process, including some technical information about the TLS keys and certificates produced by Intel® SceneScape deployment scripts.
+The following sections detail the certificate generation process, including some technical information about the TLS keys and certificates produced by Intel® Edge Spatial Intelligence deployment scripts.
 
 ## Generating self-signed trust chain
 
-The following `make` command is used by the `deploy.sh` script to generate the self-signed trust chain for Intel® SceneScape:
+The following `make` command is used by the `deploy.sh` script to generate the self-signed trust chain for Intel® Edge Spatial Intelligence:
 
 ```
 make -C ./tools/certificates CERTPASS="${CERTPASS}"
@@ -80,13 +80,13 @@ CERTPASS|CA key password. Used to protect and later unlock the self-signed trust
 
 By default, the built-in certificate generation tooling produces a trust chain composed of a self-signed root CA which issues certificates for each service. However, if your organization uses its own trust root, the certificate generation tooling can also produce CSRs that can be signed by your CA.
 
-To generate CSRs, run the following command from the root Intel® SceneScape directory:
+To generate CSRs, run the following command from the root Intel® Edge Spatial Intelligence directory:
 
 ```
 make -C ./tools/certificates deploy-csr
 ```
 
-A CSR will be generated for each service and placed in the secrets directory, which defaults to `manager/secrets/` in the Intel® SceneScape repository but can be set with the SECRETSDIR variable.
+A CSR will be generated for each service and placed in the secrets directory, which defaults to `manager/secrets/` in the Intel® Edge Spatial Intelligence repository but can be set with the SECRETSDIR variable.
 
 Note that the parameters of these certificates are specified in `certificates/Makefile` and `certificates/openssl.cnf`. The following section gives an overview of the parameters used. Your CA may have different requirements for certificate parameters, which can be accomplished by modifying the relevant configuration or generation commands.
 
@@ -98,17 +98,17 @@ Note that the parameters of these certificates are specified in `certificates/Ma
 - Service certificates are issued with a lifetime of 360 days (1 year).
 - Service certificates are issued with a DNS X509v3 Subject Alternative Name matching the CN of the certificate, and additionally with an IP Address X509v3 SAN if specified.
 
-![SceneScape certificate flow](images/hardening/certflow.png)
+![Edge Spatial Intelligence certificate flow](images/hardening/certflow.png)
 
-## Intel® SceneScape Passwords
+## Intel® Edge Spatial Intelligence Passwords
 
 Upon first executing the `deploy.sh` script, the user will be informed about the superuser (SUPASS) password generated. This password is used by the web server for authentication. When accessing the web interface, the default superuser login is "admin" and then the SUPASS entered at deployment is used as the password. This password can be changed using the Admin panel once logged in to the system, and additional users can be added.
 
-The deploy script will also create additional passwords, keys, and certificates. All will be stored under the path `manager/secrets`, which is created during the building step. These secrets are unique to the current Intel® SceneScape instance.
+The deploy script will also create additional passwords, keys, and certificates. All will be stored under the path `manager/secrets`, which is created during the building step. These secrets are unique to the current Intel® Edge Spatial Intelligence instance.
 
 It is the system integrator’s responsibility to manage access to the file system and the data in the `manager/secrets` folder.
 
-Note that if multiple systems or virtual machines need to connect a given Intel® SceneScape instance, those systems must also utilize the same authentication mechanisms and credentials. The `manager/secrets` folder or the appropriate data (such as MQTT credentials) must be available on the container or system that is connecting to Intel® SceneScape.
+Note that if multiple systems or virtual machines need to connect a given Intel® Edge Spatial Intelligence instance, those systems must also utilize the same authentication mechanisms and credentials. The `manager/secrets` folder or the appropriate data (such as MQTT credentials) must be available on the container or system that is connecting to Intel® Edge Spatial Intelligence.
 
 ### Django
 
@@ -137,7 +137,7 @@ Alternatively, the `DATABASE_PASSWORD` can be set by the customer by setting a `
 
 ### MQTT broker service accounts
 
-The Intel® SceneScape Mosquitto MQTT broker requires clients to authenticate with their username and password before connecting. Intel® SceneScape components which need to access the broker internally are provisioned service accounts at deploy time.
+The Intel® Edge Spatial Intelligence Mosquitto MQTT broker requires clients to authenticate with their username and password before connecting. Intel® Edge Spatial Intelligence components which need to access the broker internally are provisioned service accounts at deploy time.
 
 The JSON credential files `*.auth` are generated during execution of the `build-all` and `build-secrets` make targets or when running `deploy.sh`. The code to generate them resides in the top level `Makefile`. At runtime, the `scenescape-init` script reads these files and creates users matching these credentials in the Django accounts system. Broker authentication then happens against the Django database via the web API.
 
@@ -149,13 +149,13 @@ The table below shows which files are created, the usernames of the service acco
 | browser.auth     | webuser     | Web UI client-side access  |
 | calibration.auth | calibration | Camera calibration service |
 
-For more information about security of the Mosquitto broker in Intel® SceneScape, including information about the ACL functionality, see the next chapter. For Mosquitto documentation, see: https://mosquitto.org/documentation/.
+For more information about security of the Mosquitto broker in Intel® Edge Spatial Intelligence, including information about the ACL functionality, see the next chapter. For Mosquitto documentation, see: https://mosquitto.org/documentation/.
 
 # 4: Mosquitto authentication, authorization, and ACLs
 
-To authenticate to the broker and establish a connection, users must supply their username and password. Internally, the Mosquitto authentication plugin will call the Intel® SceneScape REST API endpoint `api/v1/auth`, which queries the database and allows broker access if the credentials are correct.
+To authenticate to the broker and establish a connection, users must supply their username and password. Internally, the Mosquitto authentication plugin will call the Intel® Edge Spatial Intelligence REST API endpoint `api/v1/auth`, which queries the database and allows broker access if the credentials are correct.
 
-The Intel® SceneScape broker also uses the Mosquitto Access Control List (ACL) functionality, for fine-grained topic-level permissions. For each topic, each user account has one of four varying access levels, as described in the table below.
+The Intel® Edge Spatial Intelligence broker also uses the Mosquitto Access Control List (ACL) functionality, for fine-grained topic-level permissions. For each topic, each user account has one of four varying access levels, as described in the table below.
 
 | Level | Description                                        |
 | ----- | -------------------------------------------------- |
@@ -172,9 +172,9 @@ The system service accounts as described in the prior section have a default set
 
 ## mod_reqtimeout configuration
 
-Intel® Scenescape's Apache web server comes preinstalled with the `mod_reqtimeout` plugin, which performs simple DoS attack mitigation, including prevention of the slow loris attack type and other DoS attacks which seek to tie up connection resources on the web server. `mod_reqtimeout` has some tunable parameters which may need to be modified for your environment.
+Intel® Edge Spatial Intelligence's Apache web server comes preinstalled with the `mod_reqtimeout` plugin, which performs simple DoS attack mitigation, including prevention of the slow loris attack type and other DoS attacks which seek to tie up connection resources on the web server. `mod_reqtimeout` has some tunable parameters which may need to be modified for your environment.
 
-_Note:_ While Apache `mod_reqtimeout` provides a basic level of robustness, if your Intel® Scenescape installation will be exposed to the open internet, you'll likely need additional protection such as a web application firewall (WAF) or dynamic load balancer (DLB) in front of the web interface.
+_Note:_ While Apache `mod_reqtimeout` provides a basic level of robustness, if your Intel® Edge Spatial Intelligence installation will be exposed to the open internet, you'll likely need additional protection such as a web application firewall (WAF) or dynamic load balancer (DLB) in front of the web interface.
 
 The `mod_reqtimeout` tunables can be changed via the `RequestReadTimeout` directive in `apache2.conf`. The directive syntax is as follows:
 
@@ -247,7 +247,7 @@ CIS Benchmarks usually include a Level 1 and Level 2 Profile.
 - Level 1 is a baseline hardened configuration which is intended to be “practical and prudent” and to provide a clear security benefit without significantly inhibiting the utility of the underlying platform.
 - Level 2 is an extension of Level 1, not a standalone profile. Level 2 is intended for environments or use cases where security is paramount, but applying Level 2 recommendations may inhibit the utility or performance of the platform.
 
-In general, we recommend applying recommendations from the Level 1 profile, as Level 2 recommendations may prevent Intel® SceneScape from working as intended.
+In general, we recommend applying recommendations from the Level 1 profile, as Level 2 recommendations may prevent Intel® Edge Spatial Intelligence from working as intended.
 
 For benchmarks which contain multiple types of profiles, such as the CIS Ubuntu Linux 22.04 LTS benchmark, we recommend applying the Level 1 Server profile.
 
@@ -255,7 +255,7 @@ For benchmarks which contain multiple types of profiles, such as the CIS Ubuntu 
 
 The CIS Benchmark guides for Linux distributions are comprehensive and detailed enough that applying the recommendations by hand would be a significant administrative burden.
 
-If your enterprise already uses a configuration management system, talk to your IT administrators about applying the CIS recommendations to systems hosting Intel® SceneScape. Your configuration management system may come with CIS Benchmark configurations, or you may be able to license them from the Center for Internet Security.
+If your enterprise already uses a configuration management system, talk to your IT administrators about applying the CIS recommendations to systems hosting Intel® Edge Spatial Intelligence. Your configuration management system may come with CIS Benchmark configurations, or you may be able to license them from the Center for Internet Security.
 
 If you don’t already have a configuration management system in place, the following options may be of interest to you.
 
@@ -275,4 +275,4 @@ https://ubuntu.com/security/certifications/docs/usg
 
 ## Improved auditing and logging
 
-​In a future update, Intel® SceneScape will have improved auditing/logging tools for better deployment observability, SIEM ingestion, etc.
+​In a future update, Intel® Edge Spatial Intelligence will have improved auditing/logging tools for better deployment observability, SIEM ingestion, etc.

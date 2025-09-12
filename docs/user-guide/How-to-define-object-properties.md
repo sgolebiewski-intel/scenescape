@@ -1,10 +1,10 @@
 # How to Define Object Properties
 
-The Object Library allows you to configure various properties for object categories in SceneScape. This guide walks through the process of defining and customizing object properties.
+The Object Library allows you to configure various properties for object categories in Edge Spatial Intelligence. This guide walks through the process of defining and customizing object properties.
 
 ## Working with the Object Library
 
-1. Navigate to the SceneScape homepage.
+1. Navigate to the Edge Spatial Intelligence homepage.
 2. Click on the Object Library link in the top navigation bar.
 
 ### Add a New Object

@@ -1,18 +1,18 @@
-# How to Integrate Intel® Geti™ AI Models with Intel® SceneScape
+# How to Integrate Intel® Geti™ AI Models with Intel® Edge Spatial Intelligence
 
-This guide provides step-by-step instructions to train and integrate a custom AI model using the Intel® Geti™ platform with Intel® SceneScape. By completing this guide, you will:
+This guide provides step-by-step instructions to train and integrate a custom AI model using the Intel® Geti™ platform with Intel® Edge Spatial Intelligence. By completing this guide, you will:
 
 - Train and export a custom AI model from Intel® Geti™.
-- Integrate the model into the Intel® SceneScape pipeline.
+- Integrate the model into the Intel® Edge Spatial Intelligence pipeline.
 - Validate inference results visually.
 
-This task is important for deploying and validating custom vision models in production scenarios using Intel® SceneScape. If you’re new to Intel® Geti™, review [Intel® Geti™](https://geti.intel.com)
+This task is important for deploying and validating custom vision models in production scenarios using Intel® Edge Spatial Intelligence. If you’re new to Intel® Geti™, review [Intel® Geti™](https://geti.intel.com)
 
 ## Prerequisites
 
 Before You Begin, ensure the following:
 
-- **Dependencies Installed**: Docker, Docker Compose, and required Geti/SceneScape files.
+- **Dependencies Installed**: Docker, Docker Compose, and required Geti/Edge Spatial Intelligence files.
 - **Permissions**: Sufficient system access to configure files and run Docker containers.
 
 This guide assumes familiarity with basic machine learning and Docker concepts. If needed, see:
@@ -60,16 +60,16 @@ This guide assumes familiarity with basic machine learning and Docker concepts. 
      - `requirements.txt`
 
 2. **Configuring DLStreamer Pipeline Server with new Geti Model**
-   Follow documentation [here](https://github.com/open-edge-platform/edge-ai-libraries/blob/main/microservices/dlstreamer-pipeline-server/docs/user-guide/get-started.md) to use the newly trained Geti model with gvadetect and the [How to Configure DLStreamer Video Pipline](How-to-configure-dlstreamer-video-pipeline.md) to configure the entire pipeline for enabling ingestion by SceneScape.
+   Follow documentation [here](https://github.com/open-edge-platform/edge-ai-libraries/blob/main/microservices/dlstreamer-pipeline-server/docs/user-guide/get-started.md) to use the newly trained Geti model with gvadetect and the [How to Configure DLStreamer Video Pipline](How-to-configure-dlstreamer-video-pipeline.md) to configure the entire pipeline for enabling ingestion by Edge Spatial Intelligence.
 
-3. **Deploy Intel® SceneScape**:
+3. **Deploy Intel® Edge Spatial Intelligence**:
 
    ```bash
    docker compose down --remove-orphans
    docker compose up -d
    ```
 
-   Log into the Intel® SceneScape UI and verify that bounding boxes appear correctly.
+   Log into the Intel® Edge Spatial Intelligence UI and verify that bounding boxes appear correctly.
    ![Verify object detection inference](images/geti/verify-model-ui.png)
 
 ## Supporting Resources
