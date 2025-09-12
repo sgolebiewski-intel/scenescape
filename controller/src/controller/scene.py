@@ -213,7 +213,12 @@ class Scene(SceneModel):
                            (objects[i].sceneLoc.as2Dxy.y - objects[j].sceneLoc.as2Dxy.y)**2)
             if dist < distance_threshold:
               close_pairs.append((i, j, dist, objects[i].category))
-        clustered.append(objects[i])
+      for i in range(len(close_pairs)):
+        log.debug("Close pair %d: Obj %d and Obj %d, Distance: %.2f meters, Category: %s" %
+                 (i, close_pairs[i][0], close_pairs[i][1], close_pairs[i][2], close_pairs[i][3]))
+        temp_object = objects[close_pairs[i][0]]
+        temp_object.sceneLoc = Point((objects[close_pairs[i][0]].sceneLoc + objects[close_pairs[i][1]].sceneLoc) / 2)
+        clustered.append(temp_object)
       objects[:] = clustered
     return
 
