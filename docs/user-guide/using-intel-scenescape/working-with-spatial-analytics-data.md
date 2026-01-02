@@ -13,8 +13,6 @@ This guide provides comprehensive information for developers who want to build a
 7. [Code Examples](#code-examples)
 8. [Conclusion](#conclusion)
 
----
-
 ## Overview
 
 Intel® SceneScape's spatial analytics system enables you to receive real-time notifications when objects interact with predefined virtual areas and boundaries within monitored scenes. The system supports various sensor modalities including cameras, lidar, radar, and other detection technologies. This guide focuses on consuming these events to build dynamic applications.
@@ -48,8 +46,6 @@ The sensor-agnostic architecture ensures spatial analytics continue working reli
 - **Smart City Applications**: Optimize traffic flow, manage public spaces
 
 This guide focuses on consuming spatial analytics event data. ROIs and Tripwires are created through the Intel® SceneScape UI or REST API—see the [How to Configure Spatial Analytics](../building-a-scene/how-to-configure-spatial-analytics.md) guide for setup instructions.
-
----
 
 ## Understanding ROIs and Tripwires
 
@@ -97,8 +93,6 @@ Tripwires are virtual lines defined within a scene's physical space that detect 
 - **UUID**: Unique identifier for the tripwire
 - **Name**: Human-readable name for the tripwire
 - **Points**: Array of exactly 2 (x, y) coordinates defining the line endpoints in scene world coordinates
-
----
 
 ## Authentication
 
@@ -191,8 +185,6 @@ export MQTT_USER="dedicated-mqtt-user"    # Production MQTT account
 export MQTT_PASS="dedicated-mqtt-password"
 ```
 
----
-
 ## Discovering Existing ROIs and Tripwires via API
 
 Before subscribing to events, discover what ROIs and Tripwires exist in your scenes using the REST API. While this information is available through the Intel® SceneScape UI, the API provides complete configuration details, structured metadata, and immediate access without waiting for events.
@@ -277,8 +269,6 @@ curl -k -H "Authorization: Token $SCENESCAPE_TOKEN" \
   https://$SCENESCAPE_HOST/api/v1/tripwire/{tripwire_id}
 ```
 
----
-
 ## MQTT Event Topics and Data Flow
 
 Intel® SceneScape uses MQTT for real-time event delivery. Understanding the topic structure is crucial for building reactive applications.
@@ -357,8 +347,6 @@ client.subscribe(all_tripwires_topic)
 all_events_topic = "scenescape/event/+/+/+/+"
 client.subscribe(all_events_topic)
 ```
-
----
 
 ## Event Data Structures
 
@@ -610,8 +598,6 @@ scenescape/data/region/{scene_id}/{region_id}/{object_type}
 **Use Case**: Subscribe to these topics when you need continuous tracking of object movement and properties within a region, rather than just entry/exit notifications.
 
 **Calculating Dwell Time for Active Objects**: To calculate how long an object has been in a region while it's still present, you must use these streaming data topics, not the event topics. Each object contains a `regions` field with the entry timestamp. Calculate current dwell time by subtracting the `entered` timestamp from the current time. This is essential for applications that need to detect when objects have waited too long in a region before they exit - event topics only provide dwell time after an object has already left the region.
-
----
 
 ## Code Examples
 
@@ -898,9 +884,7 @@ export MQTT_USER="dedicated-mqtt-user"
 export MQTT_PASS="dedicated-mqtt-password"
 ```
 
-**Note:** WebSocket MQTT works out-of-the-box with standard HTTPS port 443, while direct MQTT requires exposing additional ports.
-
----
+> **Note:** WebSocket MQTT works out-of-the-box with standard HTTPS port 443, while direct MQTT requires exposing additional ports.
 
 ## Conclusion
 
