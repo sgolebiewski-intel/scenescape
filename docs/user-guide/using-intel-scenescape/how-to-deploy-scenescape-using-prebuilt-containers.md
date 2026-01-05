@@ -41,15 +41,15 @@ autocalibration:
 - **Skip preloading:** Do not set the `EXAMPLEDB` environment variable.
 - **Preload database:** Set the `EXAMPLEDB` environment variable to the path of your database tar file and ensure the folder is mounted. Example:
 
-```yaml
-web:
-  image: docker.io/intel/scenescape-manager:latest
-  environment:
-    - EXAMPLEDB=/home/scenescape/SceneScape/sample_data/exampledb.tar.bz2
-    - SUPASS=<password>
-  volumes:
-    - vol-sample-data:/home/scenescape/SceneScape/sample_data
-```
+  ```yaml
+  web:
+    image: docker.io/intel/scenescape-manager:latest
+    environment:
+      - EXAMPLEDB=/home/scenescape/SceneScape/sample_data/exampledb.tar.bz2
+      - SUPASS=<password>
+    volumes:
+      - vol-sample-data:/home/scenescape/SceneScape/sample_data
+  ```
 
 ## 4. Start Services
 

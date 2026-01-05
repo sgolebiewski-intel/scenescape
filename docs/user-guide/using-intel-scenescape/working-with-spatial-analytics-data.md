@@ -658,7 +658,11 @@ for t in tripwires["results"]:
     print(f"  {t['name']} ({t['uid']})")
 ```
 
-**Run:** `python3 discover.py`
+**Run:**
+
+```bash
+python3 discover.py
+```
 
 ### Step 2: Listen to Live Events
 
@@ -721,7 +725,11 @@ client.connect(os.environ["SCENESCAPE_HOST"], 443, 60)
 client.loop_forever()
 ```
 
-**Run:** `python3 listen.py`
+**Run:**
+
+```bash
+python3 listen.py
+```
 
 ### Step 3: JavaScript Web Example
 
@@ -793,7 +801,13 @@ client.loop_forever()
 </html>
 ```
 
-**Run:** `python3 -m http.server 8000` then open http://&lt;your-server-ip&gt;:8000 in your browser
+**Run:**
+
+```bash
+python3 -m http.server 8000
+```
+
+Then, open `http://<your-server-ip>:8000` in your browser
 
 **Important:** Replace `YOUR_SCENESCAPE_HOST` and `YOUR_SUPASS` with your actual values:
 

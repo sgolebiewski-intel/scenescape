@@ -320,11 +320,9 @@ The "id" should match the topic, which in this case would be:
 **Singleton sample code**
 See [singleton.py](https://github.com/open-edge-platform/scenescape/blob/release-2025.2/tools/singleton.py) for a sample of publishing random values to a singleton topic. You can run this sample by providing the required arguments from within an Intel® SceneScape container or adapt it to run in your own code.
 
-Here is its help output from inside a container:
+> **Note:** Ensure that the broker service is running.
 
-> **Notes:**
->
-> - Ensure that the broker service is running.
+Here is its help output from inside a container:
 
 ```text
 ~/scenescape$ docker run --rm -it --init --privileged --network <network_name> -v "$(pwd)":/workspace --tty -v /run/secrets/root-cert:/certs/scenescape-ca.pem:ro scenescape bash
