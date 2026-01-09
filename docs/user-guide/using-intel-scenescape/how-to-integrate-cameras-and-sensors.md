@@ -65,7 +65,7 @@ All sensor and camera messages share two properties: timestamp and ID.
    > **Notes:**
    >
    > - Publishing data using an ID that has not been provisioned will result in a "Camera not in database" error and the data being discarded.
-   > - If a scene with cameras or sensors is deleted, those sensors will be "orphaned." They can be added back to a scene by editing them from the camera or    sensor lists.
+   > - If a scene with cameras or sensors is deleted, those sensors will be "orphaned." They can be added back to a scene by editing them from the camera or sensor lists.
 
 2. **Timestamps**
    Timestamps are in ISO 8601 UTC format. Time synchronization is an entire discipline of its own, but since Intel® SceneScape scene controller must merge various sources of data the following two principles are paramount:
@@ -125,7 +125,7 @@ All sensor and camera messages share two properties: timestamp and ID.
    }
    ```
 
-   > **Note:** Bounding boxes are in normalized image space. For more information on how to transform pixel-based bounding boxes, see    [convert-object-detections-to-normalized-image-space.md](convert-object-detections-to-normalized-image-space.md).
+   > **Note:** Bounding boxes are in normalized image space. For more information on how to transform pixel-based bounding boxes, see [convert-object-detections-to-normalized-image-space.md](convert-object-detections-to-normalized-image-space.md).
 
 2. **3D Detections from Cameras and Other Sensors**
    Sometimes sensors and AI models provide 3D detections instead of 2D detections. 3D detections may be directly measured by sensors (e.g. GPS), inferred from 2D data (e.g. monocular images), and/or inferred from 3D data (e.g. point clouds). In those cases a 3D bounding box (i.e. cuboid) can be provided like in the example below:
@@ -138,21 +138,13 @@ All sensor and camera messages share two properties: timestamp and ID.
        {
          "category": "person",
          "translation": [
-           1.8509220689711061,
-           -1.1447132184500803,
-           15.646203419777198
+           1.8509220689711061, -1.1447132184500803, 15.646203419777198
          ],
          "rotation": [
-           0.0007493523329913518,
-           0.003771683635429448,
-           0.05213021598136364,
+           0.0007493523329913518, 0.003771683635429448, 0.05213021598136364,
            0.9986328922358665
          ],
-         "size": [
-           0.5,
-           0.5,
-           2.0
-         ],
+         "size": [0.5, 0.5, 2.0],
          "bounding_box": {
            "x": 1.8509220689711061,
            "y": -1.1447132184500803,
@@ -166,21 +158,13 @@ All sensor and camera messages share two properties: timestamp and ID.
        {
          "category": "car",
          "translation": [
-           1.8509220689711061,
-           -1.1447132184500803,
-           15.646203419777198
+           1.8509220689711061, -1.1447132184500803, 15.646203419777198
          ],
          "rotation": [
-           0.0007493523329913518,
-           0.003771683635429448,
-           0.05213021598136364,
+           0.0007493523329913518, 0.003771683635429448, 0.05213021598136364,
            0.9986328922358665
          ],
-         "size": [
-           0.5,
-           0.5,
-           2.0
-         ],
+         "size": [0.5, 0.5, 2.0],
          "bounding_box": {
            "x": 1.8509220689711061,
            "y": -1.1447132184500803,
@@ -230,9 +214,9 @@ Other metadata associated with each detection can also be tagged on the object a
       "hat": {
         "confidence": 0.9123,
         "value": true
-         }
       }
-   ]
+    }
+  ]
 }
 ```
 
